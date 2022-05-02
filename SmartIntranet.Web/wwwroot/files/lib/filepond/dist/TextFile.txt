@@ -1,0 +1,16 @@
+﻿    <!-- jquery file upload Frame work -->
+    @*    <link href="~/files/assets/pages/jquery.filer/css/jquery.filer.css" type="text/css" rel="stylesheet" />
+        <link href="~/files/assets/pages/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css" type="text/css" rel="stylesheet" />*@
+    @*    <link href="~/files/lib/filepond/dist/filepond.min.css" type="text/css" rel="stylesheet" />
+        <link href="~/files/lib/filepond/dist/filepond-plugin-image-preview.min.css" type="text/css" rel="stylesheet" />
+    *@
+
+
+
+
+
+    @*<script src="~/files/lib/filepond/dist/filepond.min.js"></script>
+    <script src="~/files/lib/filepond/dist/filepond-plugin-file-encode.min.js"></script>
+    <script src="~/files/lib/filepond/dist/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="~/files/lib/filepond/dist/filepond-plugin-image-exif-orientation.min.js"></script>
+    <script src="~/files/lib/filepond/dist/filepond-plugin-image-preview.min.js"></script>*@

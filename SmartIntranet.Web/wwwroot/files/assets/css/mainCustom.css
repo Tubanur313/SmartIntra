@@ -1,0 +1,48 @@
+.main-signin-form {
+    padding: 1rem;
+}
+
+    .main-signin-form .form-group {
+        margin-bottom: 1.5em;
+    }
+
+    .main-signin-form label.floatLabel {
+        position: absolute;
+        left: 19px;
+        /*top: 12px;*/
+        color: #999;
+        font-size: 16px;
+        display: inline-block;
+        padding: 0 10px;
+        font-weight: 400;
+        background-color: rgba(255,255,255,0);
+    }
+
+    .main-signin-form label.floatLabel {
+        top: -12px;
+        background-color: rgb(255 255 255);
+        font-size: 14px;
+        z-index: 3;
+    }
+
+    .main-signin-form .form-control:focus {
+        border-color: inherit;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+form.is-readonly .btn-save {
+    display: none;
+}
+
+form.is-readonly input[disabled], form.is-readonly textarea[disabled] {
+    cursor: text;
+    background-color: #fff;
+    border-color: transparent;
+    outline-color: transparent;
+    box-shadow: none;
+}
+
+form.is-editing .btn-edit {
+    display: none;
+}
