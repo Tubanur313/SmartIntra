@@ -6,7 +6,7 @@
         <div class="media">
             <div class="media-body b-b-theme social-client-description">
                 <div class="chat-header text-success">
-                    @disc.IntranetUser.FullName  /
+                    @disc.IntranetUser.FirstName+@disc.IntranetUser.LastName  /
                     @(disc.IntranetUser.Company == null ? "Təyin Olunmayıb" : disc.IntranetUser.Company.Name)/
                     @(disc.IntranetUser.Department == null ? "Təyin Olunmayıb" : disc.IntranetUser.Department.Name)/
                     @(disc.IntranetUser.Position == null ? "Təyin Olunmayıb" : disc.IntranetUser.Position.Name)

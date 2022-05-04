@@ -46,7 +46,7 @@
                                 if (item.IntranetUserId != ViewBag.signInUserId)
                                 {
                                     <li class="d-flex justify-content-between mb-2">
-                                        <span> @item.IntranetUser.FullName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
+                                        <span> @item.IntranetUser.FirstName+@item.IntranetUser.LastName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
                                         <div class="d-flex justify-content-between">
                                             <div class="checkbox-fade fade-in-danger ml-2">
                                                 <label>
@@ -61,11 +61,11 @@
                                 else
                                 {
                                     <li class="d-flex justify-content-between mb-2">
-                                        <span> @item.IntranetUser.FullName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
+                                        <span> @item.IntranetUser.FirstName+@item.IntranetUser.LastName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
                                         <div class="d-flex justify-content-between">
                                             <div class="checkbox-fade fade-in-danger ml-2">
                                                 <label>
-                                                    <span onclick="removeUserConfirm(@item.Id,`@item.IntranetUser.FullName`,`@Url.Action("Delete","Watchers")`,this)" class="cr">
+                                                    <span onclick="removeUserConfirm(@item.Id,`@item.IntranetUser.FirstName+@item.IntranetUser.LastName`,`@Url.Action("Delete","Watchers")`,this)" class="cr">
                                                         <i class="cr-icon icofont icofont-ui-close txt-primary"></i>
                                                     </span>
                                                 </label>

@@ -11,8 +11,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
         {
             builder.HasKey(I => I.Id);
             builder.Property(I => I.Id).UseIdentityColumn();
-            builder.Property(I => I.FullName).IsRequired();
-            builder.Property(I => I.FirsName).IsRequired();
+            //builder.Property(I => I.FullName).IsRequired();
+            builder.Property(I => I.FirstName).IsRequired();
             builder.Property(I => I.LastName).IsRequired();
             builder.Property(I => I.Picture).HasDefaultValue("default.png");
             builder.Property(I => I.IsDeleted).HasDefaultValue(false);

@@ -241,8 +241,8 @@ namespace SmartIntranet.Web.Controllers
                     "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
                     "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
                     //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                    "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FullName + "</p>" +
-                    "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
+                    "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FirstName + ticket.Employee.LastName + "</p>" +
+                    "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FirstName + ticket.Supporter.LastName + "</p>" +
                     "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
                     "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
                     "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
@@ -260,8 +260,8 @@ namespace SmartIntranet.Web.Controllers
             "<a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a>" +
            "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
            //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-           "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FullName + "</p>" +
-           "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
+           "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FirstName + ticket.Employee.LastName + "</p>" +
+           "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FirstName + ticket.Supporter.LastName + "</p>" +
            "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
            "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
            "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
@@ -280,7 +280,7 @@ namespace SmartIntranet.Web.Controllers
                    "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
                    "<p><strong>" + "Status : </strong>" + ticket.StatusType.GetDisplayName() + "</p>" +
                    //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                   "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FullName + "</p>" +
+                   "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FirstName + ticket.Employee.LastName + "</p>" +
                    //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
                    "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
                    "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
@@ -298,7 +298,7 @@ namespace SmartIntranet.Web.Controllers
                 "<h3><a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a></h3>" +
                 "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
                 //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FullName + "</p>" +
+                "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.FirstName + "</p>" +
                 //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
                 "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
                 "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +

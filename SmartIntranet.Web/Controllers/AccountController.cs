@@ -209,7 +209,7 @@ namespace SmartIntranet.Web.Controllers
                 }
                 update.UpdateByUserId = GetSignInUserId();
                 update.UpdateDate = DateTime.Now;
-                update.FirsName = user.FirsName;
+                update.FirstName = user.FirstName;
                 update.LastName = user.LastName;
                 update.Email = user.Email;
                 update.PhoneNumber = user.PhoneNumber;

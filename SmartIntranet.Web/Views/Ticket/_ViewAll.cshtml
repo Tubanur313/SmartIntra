@@ -52,7 +52,7 @@
                                             @(ticket.Employee.Company == null ? "Təyin Olunmayıb" : ticket.Employee.Company.Name)/
                                             @(ticket.Employee.Department == null ? "Təyin Olunmayıb" : ticket.Employee.Department.Name)/
                                             @(ticket.Employee.Position == null ? "Təyin Olunmayıb" : ticket.Employee.Position.Name)">
-                                            @ticket.Employee.FullName
+                                            @ticket.Employee.FirstName+@ticket.Employee.LastName
 
                                         </td>
                                         @if (ticket.Supporter is null)
@@ -69,7 +69,7 @@
                                             @(ticket.Supporter.Company == null ? "Təyin Olunmayıb" : ticket.Supporter.Company.Name)/
                                             @(ticket.Supporter.Department == null ? "Təyin Olunmayıb" : ticket.Supporter.Department.Name)/
                                             @(ticket.Supporter.Position == null ? "Təyin Olunmayıb" : ticket.Supporter.Position.Name)">
-                                                @ticket.Supporter.FullName
+                                                @ticket.Supporter.FirstName+@ticket.Supporter.LastName
                                             </td>
                                         }
 
