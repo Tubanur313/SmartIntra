@@ -1,0 +1,269 @@
+﻿@model AppUserAddDto
+
+@{
+    Layout = null;
+}
+<link href="~/files/assets/pages/advance-elements/css/bootstrap-datetimepicker.css" />
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs  tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab"
+                   href="#home1" role="tab">Şəxsi Məlumatlar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#profile1" role="tab">Fayllar</a>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
+            <div class="tab-content tabs card-block">
+                <div class="tab-pane active" id="home1" role="tabpanel">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Ad: </label>
+                                <input type="text" class="form-control" asp-for="FirstName" autocomplete="off">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Soyad: </label>
+                                <input type="text" class="form-control" asp-for="LastSurname" autocomplete="off">
+                                <span asp-validation-for="LastSurname" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Email: </label>
+                                <input type="email" class="form-control" asp-for="Email" autocomplete="off">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">Şifrə:</label>
+                                <input type="password" class="form-control" asp-for="Password">
+                                <span class="messages"></span>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Tel: </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PhoneNumber" autocomplete="off">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkət: </label>
+                                <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.companies)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şöbə: </label>
+                                <select disabled name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.departments)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Vəzifə: </label>
+                                <select disabled name="select" asp-for="PositionId" name="PositionId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.position)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="PositionId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="profile1" role="tabpanel">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                            Şəkil Yüklə
+                                            <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6  col-lg-6 col-sm-6">
+                                        <div class="border text-center pt-2">
+                                            <div class="pt-0">
+                                                <label class="floatLabel">Mövcüd Şəkil:</label>
+                                                <img src="~/uploads/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-6 col-sm-6">
+                                        <div id="lview" style="display:none!important;">
+                                            <div class="border text-center pt-2">
+                                                <div class="pt-0">
+                                                    <label class="floatLabel">Yeni Şəkil:</label>
+                                                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button type="submit" id="sub-btn" class="btn btn-primary m-b-0  btn-block">
+                            Təsdiqlə
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!-- Mask js -->
+<script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+<!-- cust-validation js -->
+<script src="~/files/lib/cust_ajax/cust-validation.js"></script>
+
+<script>
+        $(document).ready(function () {
+            $("#Profile").change(function (e) {
+            if($('.file-name').isImage())
+            {
+                $("#lview").show();
+                $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+            }
+            else
+            {
+                toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
+            }
+            });
+            $('#file-upload').change(function() {
+            var file = $('#file-upload')[0].files[0].name;
+            $('#uploaded').removeClass("d-none").text(file);
+            });
+            //phone number masking
+            $.mask.definitions['9'] = '';
+            $.mask.definitions['_'] = '[0-9]';
+            $("#PhoneNumber").on("focus",function(){
+                 $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
+            });
+      $(document).on('change','#CompanyId', function(){
+            var _id = $(this).val();
+            $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetDepartment","Account")',
+                data: {
+                    companyId: _id,
+                },
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#DepartmentId").empty();
+                    var html = "";
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}"> 
+                        ${[response[i].name]}</option>`
+                    }
+                    if(response.length>0)
+                    {
+                        $("#DepartmentId").prop('disabled', false);
+                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    }
+                    else{
+                         $("#DepartmentId").prop('disabled', false);
+                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                        $("#DepartmentId").prop('disabled', false);
+                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+                });
+            });
+       $(document).on('change','#DepartmentId', function(){
+            var _id = $(this).val();
+            $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetPosition","Account")',
+                data: {
+                    departmentId: _id,
+                },
+                success: function (response)
+                {
+                    if (response.error == true)
+                    {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#PositionId").empty();
+                    var html = "";
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                        ${[response[i].name]}</option>`
+                    }
+                    if(response.length>0)
+                    {
+                        $("#PositionId").prop('disabled', false);
+                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    }
+                    else{
+                         $("#PositionId").prop('disabled', false);
+                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+           });
+        });
+    });
+</script>
+@await Html.PartialAsync("_ValidationScriptsPartial")

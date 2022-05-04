@@ -1,0 +1,111 @@
+﻿@model TicketWathcersDto
+@{
+    Layout = null;
+}
+<head>
+    <!-- Select 2 css -->
+    <link rel="stylesheet" href="~/files/bower_components2/select2/dist/css/select2.min.css" />
+    <!-- Multi Select css -->
+    <link rel="stylesheet" type="text/css"
+          href="~/files/bower_components2/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components2/multiselect/css/multi-select.css" />
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/uploadPrevView.css" />
+</head>
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <form asp-action="Watchers">
+            <input hidden class="form-control" asp-for="Id" autocomplete="off">
+            <div class="row">
+                <div id="ConfirmedId" class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Nəzarətçilər: </label>
+                        <select name="select" asp-for="AppUserWatcherId" name="AppUserWatcherId" data-placeholder="    Seçim edin" class="form-control js-example-basic-single col-sm-12"
+                                multiple="multiple">
+                            @foreach (AppUserDetailsDto item in ViewBag.users)
+                            {
+                                <option value="@item.Id">@item.FullName | @item.Company | @item.Department | @item.Position</option>
+                            }
+
+                        </select>
+                        <span asp-validation-for="AppUserWatcherId" class="text-danger"></span>
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="offset-2 col-sm-8">
+                    <div class="form-group">
+
+
+                        <ul class="">
+
+                            @foreach (var item in Model.Watchers)
+                            {
+                                if (item.IntranetUserId != ViewBag.signInUserId)
+                                {
+                                    <li class="d-flex justify-content-between mb-2">
+                                        <span> @item.IntranetUser.FullName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="checkbox-fade fade-in-danger ml-2">
+                                                <label>
+                                                    <span class="cr displayMessage2">
+                                                        <i class="cr-icon icofont icofont-ui-close txt-primary dell2"></i>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="d-flex justify-content-between mb-2">
+                                        <span> @item.IntranetUser.FullName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="checkbox-fade fade-in-danger ml-2">
+                                                <label>
+                                                    <span onclick="removeUserConfirm(@item.Id,`@item.IntranetUser.FullName`,`@Url.Action("Delete","Watchers")`,this)" class="cr">
+                                                        <i class="cr-icon icofont icofont-ui-close txt-primary"></i>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                        Təsdiqlə
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+<!-- Select 2 js -->
+<script type="text/javascript" src="~/files/bower_components2/select2/dist/js/select2.full.min.js">
+
+</script>
+<!-- Multiselect js -->
+<script type="text/javascript" src="~/files/bower_components2/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="~/files/bower_components2/multiselect/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="~/files/assets/js/jquery.quicksearch.js"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="~/files/assets/pages/advance-elements/select2-custom.js"></script>
+<script>
+    $(".displayMessage2").each(()=>{
+        $(this).on("click",(e)=>{
+            if(e.target.classList.contains("dell2")){
+             toastr.error("Bu əməliyyat üçün icazəniz yoxdur", "Xəta!");
+            }
+        });
+    });
+</script>

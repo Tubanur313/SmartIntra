@@ -16,8 +16,8 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public DateTime? DeadLineStart { get; set; }
         public DateTime? DeadLineEnd { get; set; }
         public bool Confirmed { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public int CategoryTicketId { get; set; }
+        public CategoryTicket CategoryTicket { get; set; }
         public PriorityType PriorityType { get; set; }
         public StatusType StatusType { get; set; }
         public int EmployeeId { get; set; }

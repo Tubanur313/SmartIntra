@@ -8,6 +8,7 @@ namespace SmartIntranet.Entities.Concrete.Membership
 {
     public class IntranetUser : IdentityUser<int>, IStatus, ICreatedByUser, IUpdateByUserId, IDeleteByUser
     {
+        public string FullName { get; set; }
         public string FirsName { get; set; }
         public string LastName { get; set; }
         public string Picture { get; set; } 

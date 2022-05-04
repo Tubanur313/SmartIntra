@@ -14,10 +14,12 @@ namespace SmartIntranet.DataAccess.Interfaces
         Task<List<Ticket>> GetListedBySignInUserIdAsync(int userId);
         Task<List<Ticket>> GetListedBySignInUserIdAsync(int userId, int categoryId, StatusType statusType);
         Task<List<Ticket>> GetNonRedirectedAsync();
-        Task<List<Ticket>> GetNonRedirectedAsync(int categoryId, StatusType statusType);
+        Task<List<Ticket>> GetNonRedirectedAsync(int categoryId, StatusType statusType, int companyId);
         Task<Ticket> FindAllIncludeForInfoAsync(int id);
         Task<Ticket> FindForConfirmAsync(int id);
         Task<Ticket> FindForWatchersAsync(int id);
         Task<Ticket> FindForCheckingsAsync(int id);
+        Task<List<Ticket>> GetForAdminAsync();
+        Task<List<Ticket>> GetForAdminAsync(int categoryId, StatusType statusType, int companyId);
     }
 }

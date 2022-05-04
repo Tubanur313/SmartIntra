@@ -1,0 +1,114 @@
+﻿@model AppRoleClaimsDto
+@{
+    Layout = null;
+    var name = string.IsNullOrWhiteSpace(Model.Role.Name);
+}
+
+
+        <div class="row">
+
+            <div class="col-sm-12 col-lg-12">
+               
+                        <table id="order-table1"
+                               class="table table-striped table-bordered nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                </tr>
+                            </thead>
+                         <tbody id = "alert-sw_1">
+                                @foreach (var claim in Model.Claims)
+                                {
+                                    <tr>
+                                        <td class="row-identifier text-center">
+                                            <div class="checkbox-fade fade-in-primary d-">
+                                                <label>
+                                                    <input class="permissions"  id="policy-@claim.Item1" data-claim-name="@claim.Item1" type="checkbox" @(claim.Item2 ? "checked" : "") value="">
+                                                    <span class="cr">
+                                                        <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            @*<input id="policy-@claim.Item1" data-claim-name="@claim.Item1" type="checkbox" @(claim.Item2 ? "checked" : "") />*@
+                                        </td>
+                                        <td><label for="policy-@claim.Item1">@claim.Item1</label></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+            </div>
+
+        </div>
+
+
+
+    <!-- Custom js -->
+    <script type="text/javascript" src="~/files/assets/js/script.js"></script>
+    <script>
+    $(document).ready(function () {
+     
+                $('#order-table1').DataTable({
+            "paging": true,
+            "ordering": true,
+            "bLengthChange": true,
+            "info": true,
+            "searching": true
+        });
+
+          
+
+    $("#alert-sw_1").on("change", ".permissions",function(e){
+
+              let claimName = $(e.currentTarget).data('claim-name');
+              let selected = $(e.currentTarget).is(':checked');
+              let roleId = @Model.Role.Id;
+
+              let message = `'@name'-roluna ${claimName} imtiyazi vermek istediyinizden eminsiniz?`;
+
+              if(selected == false)
+              {
+                  message = `'@name'-rolundan ${claimName} imtiyazi almaq istediyinizden eminsiniz?`;
+              }
+
+
+              swal({
+                title: "Diqqət!",
+                text: message,
+                icon: "warning",
+                buttons: ['Xeyr', 'Bəli']
+            })
+                .then(willDelete => {
+                    if (willDelete) {
+                        $.ajaxSettings.autoReload=false;
+                        $.ajax({
+                            url: '@Url.Action("SetClaim")',
+                            type: 'get',
+                            data: {claimName,roleId,selected},
+                            contentType: 'application/x-www-form-urlencoded',
+                            dataType:'json',
+                            success: function (response) {
+
+                            if (response.error == false) {
+                                toastr.success(response.message,'Icra edildi');
+                            }
+                            else{
+                                $(e.currentTarget).prop('checked',!selected);
+                                toastr.warning(response.message,'Diqqet');
+                            }}
+                      });
+                    }
+                    else{
+                        $(e.currentTarget).prop('checked',!selected);
+                    }
+                })
+
+    });
+    });
+    </script>

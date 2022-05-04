@@ -1,0 +1,232 @@
+﻿@model AppUserProfileUpdateDto
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<link rel="stylesheet" href="~/files/lib/file-input-tower/dist/tower-file-input.css" />
+<link rel="stylesheet" href="~/files/lib/toastr.js/toastr.min.css" />
+<style>
+    .is-disabled {
+        pointer-events: none;
+        opacity: 0.9;
+        border: 1px solid white;
+    }
+
+</style>
+
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Şəxsi Kabinet</h4>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Page-header end -->
+<!-- Page-body start -->
+<div class="page-body">
+    <!--profile cover start-->
+    <!--profile cover end-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tab-pane"
+                 id="contacts"
+                 role="tabpanel">
+                <div class="row">
+                    <div class="col-xl-3">
+                        <!-- user contact card left side start -->
+                       @* <div class="card">
+
+                            <div class="card-block">
+
+                                <div class="row">
+                                   
+                                    <div class="col-md-12  col-lg-12 col-sm-12">
+                                        
+                                        <div class="pt-0">
+                                            <div class="tower-file">
+                                                <input type="file" id="demoInput4">
+                                                <label for="demoInput4" class="tower-file-button">
+                                                    <span class="mdi mdi-upload"><i class="fa-solid fa-camera"></i></span>
+                                                </label>
+                                                <div class="tower-file-details">
+                                                    <div class="tower-input-preview-container">
+                                                        <div class="tower-input-preview-wrapper">
+                                                            <img src="~/profile/@Model.AppUserImageDto.Picture" alt="Default Avatar" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                   
+                                </div>
+
+                            </div>
+                        </div>*@
+                        <div class="card">
+
+                            <div class="card-block">
+                                <ul class="nav nav-tabs md-tabs tabs-left b-none" style="width: 200px;"
+                                    role="tablist">
+                                    <li class="nav-item" style="display: flex; justify-content: space-between;">
+                                        <a class="nav-link" data-toggle="tab"
+                                           href="#home5" role="tab">
+                                            <i class="icofont icofont-info-square  p-r-25 p-l-25"></i>Şəxsi Məlumatlar
+                                        </a>
+                                        <div class="slide"></div>
+                                    </li>
+
+                                    <li class="nav-item" style="display: flex; justify-content: space-between;">
+                                        <a class="nav-link" data-toggle="tab"
+                                           href="#profile5" role="tab">
+                                            <i class="icofont icofont-key-hole p-r-25 p-l-25"></i>Şifrə Yeniləmə
+                                        </a>
+                                        <div class="slide"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xl-9">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!-- contact data table card start -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div>
+                                            <h1 class="card-header-text" style=" color: #01a9ac;">
+                                                Şəxsi Məlumatlar
+                                            </h1>
+                                        </div>
+                                        <div>
+                                            @*<button type="button" class="btn btn-default btn-edit js-edit">Edit</button>
+                                                <button type="button" class="btn btn-default btn-save js-save">Save</button>*@
+                                        </div>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="tab-content  pt-0">
+                                            <div class="tab-pane active" id="home5"
+                                                 role="tabpanel">
+                                                @await Component.InvokeAsync("ProfileEdit")
+                                                @*@await Html.PartialAsync("Prof", Model.AppUserProfileDto)*@
+                                            </div>
+                                            <div class="tab-pane pt-0" id="profile5" role="tabpanel">
+
+                                                @*@await Html.PartialAsync("Pass", Model.AppUserPassDto)*@
+                                                @await Component.InvokeAsync("ProfilePassEdit")
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- contact data table card end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- tab content end -->
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<!-- Mask js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="~/files/lib/file-input-tower/dist/tower-file-input.js"></script>
+    <!-- sweet alert js -->
+  <script type="text/javascript" src="~/files/lib/sweetalert/sweetalert.min.js"></script>
+    <script type="text/javascript" src="~/files/assets/js/classie.js"></script>
+    <!-- Toastr js -->
+    <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+    $("#Profile").change(function (e) {
+        $("#lview").show();
+        $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+    });
+
+    });
+
+</script>
+<script>
+    $(document).ready(function($) {
+              //phone number masking
+              $.mask.definitions['9'] = '';
+              $.mask.definitions['_'] = '[0-9]';
+              $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
+
+
+
+              $('#demoInput4').fileInput({
+                 iconClass: 'mdi mdi-fw mdi-upload'
+              });
+
+
+              $("#demoInput4").on('change', function (e) {
+                  e.preventDefault();
+                        var formdata = new FormData();
+                        var _image = $('#demoInput4')[0].files[0];
+                        var _id = @Model.AppUserImageDto.Id;
+                        formdata.append('profile', _image);
+
+                       swal({
+                           title: `Diqqət`,
+                           text: `Yenilənsin?`,
+                           icon: "warning",
+                           buttons: ["Xeyr", "Bəli"],
+                           dangerMode: true,
+                       }).then((willDelete) => {
+                           if (willDelete) {
+                               $.ajax({
+                                   type: 'post',
+                                   url: '@Url.ActionLink("ImageUpdate","User")',
+                                   data: formdata,
+                                   async: false,
+                                   cache: false,
+                                   contentType: false,
+                                   processData: false,
+                                   success: function (response) {
+                                       //sorgu ugurla neticelenende
+                                       if (response.error == true) {
+
+                                           toastr.error(response, "Xəta baş verdi!");
+                                           return;
+                                       }
+                                    
+                                       toastr.success(response,"Uğur!");
+                                        setTimeout(function () {
+                                         window.location.reload();
+                                     }, 1000)
+                                   },
+                                   error: function (response) {
+                                       //sorgu ugursuz neticelenende
+
+                                       toastr.error(response, "Xəta!");
+                                   }
+                               });
+                           }else{
+                                     toastr.success('Əməliyat datandırıldı');
+                                        setTimeout(function () {
+                                         window.location.reload();
+                                     }, 1000)
+                           }
+                       });
+
+              })
+
+   });
+
+
+
+</script>

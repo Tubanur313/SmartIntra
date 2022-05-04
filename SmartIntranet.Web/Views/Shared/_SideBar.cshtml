@@ -1,0 +1,131 @@
+﻿<nav class="pcoded-navbar">
+    <div class="pcoded-inner-navbar main-menu">
+        <ul class="pcoded-item pcoded-left-item">
+            @if (User.HasAccess("category.list"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon"><i class="feather icon-sidebar"></i></span>
+                        <span class="pcoded-mtext">Ticket Konfiqurasiyalar</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="category" asp-action="list">
+                                <span class="pcoded-mtext">Kateqoriya</span>
+                            </a>
+                        </li>
+
+
+                        <li class="">
+                            <a asp-controller="checklist" asp-action="list">
+                                <span class="pcoded-mtext">Checklist</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a asp-controller="SmtpEmail" asp-action="index">
+                                <span class="pcoded-mtext">SMTP Mail Server</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+            @if (User.HasAccess("account.list"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon"><i class="feather icon-sidebar"></i></span>
+                        <span class="pcoded-mtext">Ticket Akkount</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+
+                        <li class="">
+                            <a asp-controller="account" asp-action="list">
+                                <span class="pcoded-mtext">Akkount</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-controller="role" asp-action="list">
+                                <span class="pcoded-mtext">Rollar</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-controller="company" asp-action="list">
+                                <span class="pcoded-mtext">Şirkət</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-controller="department" asp-action="list">
+                                <span class="pcoded-mtext">Şöbə</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-controller="position" asp-action="list">
+                                <span class="pcoded-mtext">Vəzifə</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+            @if (User.HasAccess("ticket.list"))
+            {
+                <li class="pcoded-hasmenu pcoded-trigger" @*dropdown-icon="style1" subitem-icon="style1"*@>
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon"><i class="feather icon-sidebar"></i></span>
+                        <span class="pcoded-mtext">Ticket</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+
+                        @if (User.HasAccess("ticket.admin"))
+                        {
+                            <li class="">
+                                <a asp-controller="ticket" asp-action="admin">
+                                    <span class="pcoded-mtext">Ticketlər</span>
+                                </a>
+                            </li>
+                        }
+                        <li class="">
+                            <a asp-controller="ticket" asp-action="NonRedirect">
+                                <span class="pcoded-mtext">Yönlənməyən Ticket Siyahısı</span>
+                            </a>
+                        </li>
+                        @if (User.HasAccess("ticket.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="ticket" asp-action="list">
+                                    <span class="pcoded-mtext">Ticket Siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("ticket.watched"))
+                        {
+                            <li class="">
+                                <a asp-controller="ticket" asp-action="watched">
+                                    <span class="pcoded-mtext">Nəzarət Ticket Siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("ticket.confirmed"))
+                        {
+                            <li class="">
+                                <a asp-controller="ticket" asp-action="confirmed">
+                                    <span class="pcoded-mtext">Təsdiq Ticket siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @* @if (User.HasAccess("order.list"))
+                            {
+                            <li class="">
+                            <a asp-controller="order" asp-action="list">
+                            <span class="pcoded-mtext">Sifarişlər</span>
+                            </a>
+                            </li>
+                            }*@
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>

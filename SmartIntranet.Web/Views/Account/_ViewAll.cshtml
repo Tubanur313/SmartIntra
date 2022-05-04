@@ -1,0 +1,114 @@
+﻿@model IEnumerable<AppUserListDto>
+
+<div class="page-body">
+    <div class="row">
+        <!-- Left column start -->
+        <div class="col-lg-12 col-xl-12">
+            <!-- Job description card start -->
+            <div class="card">
+                <div class="card-block contact-details">
+                    <div class="data_table_main table-responsive dt-responsive">
+                        <table id="simpletable"
+                               class="table table-striped table-bordered nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Ad Soyad</th>
+                                    <th>Vəzifə</th>
+                                    <th>Status</th>
+                                    @if (User.HasAccess("account.add"))
+                                    {
+                                        <th class="text-center">
+                                            <button onclick="showInPopup('@Url.Action("Add","Account",null,Context.Request.Scheme)','Əməkdaş əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var account in Model)
+                                {
+
+                                    <tr>
+
+                                        <td>
+                                            @account.FullName
+                                        </td>
+                                        @if (account.Position != null)
+                                        {
+                                            <td> @(account.Position.Company.Name!=null?account.Position.Company.Name:"Təyin edilməyib")/ @(account.Position.Department.Name!=null?account.Position.Department.Name:"Təyin edilməyib")/ @(account.Position.Name!=null?account.Position.Name:"Təyin edilməyib")</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>Təyin edilməyib</td>
+                                        }
+                                        <td><span class="badge badge-@(account.IsDeleted? "warning" : "success")">@(account.IsDeleted ? "Inactive" : "Active" )</span></td>
+                                        <td class="dropdown text-center">
+                                            <button type="button"
+                                                class="btn
+                                                btn-outline-info
+                                                @*dropdown-toggle*@"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="fa fa-list-ul"></i>
+                                            </button>
+                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                @if (User.HasAccess("account.update"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopup('@Url.Action("Update","Account",new {id=account.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-warning">
+                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                            Yenilə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("account.newpassword"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopup('@Url.Action("NewPassword","Account",new {id=account.Id},Context.Request.Scheme)','Şifrə Yenilə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-secondary">
+                                                            <i class="fas fa-fingerprint text-secondary p-r-15"></i>
+                                                            Şifrə Yenilə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("account.permission"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopup('@Url.Action("Permission","Account",new {id=account.Id},Context.Request.Scheme)','İcazə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-primary">
+                                                            <i class="icofont icofont-key text-primary p-r-15 "></i>
+                                                            İcazə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("account.delete"))
+                                                {
+                                                    <li>
+                                                        <button onclick="removeItem(@account.Id,`@account.FullName`,`@Url.Action("Delete","Account").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                            Sil
+                                                        </button>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </td>
+
+
+                                    </tr>
+
+                                }
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

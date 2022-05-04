@@ -1,0 +1,113 @@
+﻿<script type="text/javascript"
+    src="~/files/bower_components2/jquery/dist/jquery.min.js"></script>
+<!-- Required Jquery -->
+<script type="text/javascript"
+        src="~/files/bower_components2/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/popper.js/dist/umd/popper.min.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap date-time-picker js -->
+<script type="text/javascript"
+        src="~/files/assets/pages/advance-elements/moment-with-locales.min.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript"
+        src="~/files/assets/pages/advance-elements/bootstrap-datetimepicker.min.js"></script>
+<!-- Date-range picker js -->
+<script type="text/javascript"
+        src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Date-dropper js -->
+<script type="text/javascript"
+        src="~/files/bower_components2/datedropper/datedropper.min.js"></script>
+<!-- data-table js -->
+<script src="~/files/bower_components2/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/files/bower_components2/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/files/assets/pages/data-table/js/jszip.min.js"></script>
+<script src="~/files/assets/pages/data-table/js/pdfmake.min.js"></script>
+<script src="~/files/assets/pages/data-table/js/vfs_fonts.js"></script>
+<script src="~/files/bower_components2/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/files/bower_components2/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/files/assets/pages/data-table/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/files/bower_components2/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/files/bower_components2/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<script src="~/files/assets/pages/data-table/js/data-table-custom.js"></script>
+<script src="~/files/assets/js/site.js"></script>
+<!-- jquery slimscroll js -->
+<script type="text/javascript"
+        src="~/files/bower_components2/jquery-slimscroll/jquery.slimscroll.js"></script>
+<!-- modernizr js -->
+<script type="text/javascript"
+        src="~/files/bower_components2/modernizr/modernizr.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/modernizr/feature-detects/css-scrollbars.js"></script>
+
+<!-- i18next.min.js -->
+<script type="text/javascript" src="~/files/bower_components2/i18next/i18next.min.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/i18next-xhr-backend/i18nextXHRBackend.min.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js"></script>
+<script type="text/javascript" src="~/files/bower_components2/jquery-i18next/jquery-i18next.min.js"></script>
+
+<!-- Animaton-->
+<script type="text/javascript" src="~/files/assets/js/animation.js"></script>
+<!-- Sweetalert-->
+<script src="~/files/lib/sweetalert/sweetalert.min.js"></script>
+@*<script src="~/files/lib/limonte-sweetalert2/sweetalert2.min.js"></script>*@
+<!-- Toastr js -->
+<script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
+
+<!-- Custom js -->
+<script src="~/files/assets/js/pcoded.min.js"></script>
+<script src="~/files/assets/js/vartical-layout.min.js"></script>
+<script src="~/files/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script type="text/javascript" src="~/files/assets/js/script.js"></script>
+<!-- Tree view js -->
+<script type="text/javascript" src="~/files/bower_components2/jstree/dist/jstree.min.js"></script>
+<script type="text/javascript" src="~/files/assets/pages/treeview/jquery.tree.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(function () {
+            var a = '@TempData["success"]';
+            var b = '@TempData["error"]';
+            if (a != '')
+                toastr.success(a,"Uğur !");
+            if (b != '')
+                toastr.error(b,"Xəta !");
+
+        });
+
+    });
+
+</script>
+<script type="text/javascript">
+    //$(window).on('load', function () {
+    //    var $container = $('.filter-container');
+    //    $container.isotope({
+    //        filter: '*',
+    //        animationOptions: {
+    //            duration: 750,
+    //            easing: 'linear',
+    //            queue: false
+    //        }
+    //    });
+    //    var $grid = $('.default-grid').isotope({
+    //        itemSelector: '.default-grid-item',
+    //        masonry: {}
+    //    });
+    //});
+
+        //    $( document ).ajaxComplete(function() {
+        //// Required for Bootstrap tooltips in DataTables
+        //$('[data-toggle="tooltip"]').tooltip({
+        //    "html": true,
+        //    "delay": {"show": 1000, "hide": 0},
+        //});
+    //});
+
+</script>

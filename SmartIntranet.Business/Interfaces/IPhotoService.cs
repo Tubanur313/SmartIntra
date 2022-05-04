@@ -7,6 +7,6 @@ namespace SmartIntranet.Business.Interfaces
 {
     public interface IPhotoService : IGenericService<Photo>
     {
-
+        Task<List<Photo>> GetAllByTicketAsync(int ticketId);
     }
 }

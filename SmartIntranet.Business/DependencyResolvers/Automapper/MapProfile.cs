@@ -3,6 +3,7 @@ using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
+using SmartIntranet.DTO.DTOs.CategoryTicketDto;
 using SmartIntranet.DTO.DTOs.CheckListDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.ConfirmTicketUserDto;
@@ -138,6 +139,8 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<Discussion, DiscussionUpdateDto>();
             CreateMap<DiscussionListDto, Discussion>();
             CreateMap<Discussion, DiscussionListDto>();
+            CreateMap<DiscussionListSecondDto, Discussion>();
+            CreateMap<Discussion, DiscussionListSecondDto>();
             #endregion
 
             #region Entrance <-> EntranceDto

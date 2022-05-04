@@ -22,5 +22,6 @@ namespace SmartIntranet.DTO.DTOs.PositionDto
         public Department Department { get; set; }
         public int? CompanyId { get; set; }
         public Company Company { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

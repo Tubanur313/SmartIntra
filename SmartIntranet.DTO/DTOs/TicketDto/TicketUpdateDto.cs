@@ -18,8 +18,8 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public IEnumerable<int> AppUserWatcherId { get; set; }
         public IEnumerable<int> ConfirmTicketUserId { get; set; }
         public string OrderIds { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public int CategoryTicketId { get; set; }
+        public CategoryTicket CategoryTicket { get; set; }
         public PriorityType PriorityType { get; set; }
         public StatusType StatusType { get; set; }
         public ICollection<TicketCheckList> TicketCheckLists { get; set; }

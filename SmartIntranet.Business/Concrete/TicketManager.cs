@@ -37,11 +37,11 @@ namespace SmartIntranet.Business.Concrete
         public async Task<Ticket> FindForConfirmAsync(int id)
         {
             return await _ticketDal.FindForConfirmAsync(id);
-        }  
+        }
         public async Task<Ticket> FindForWatchersAsync(int id)
         {
             return await _ticketDal.FindForWatchersAsync(id);
-        } 
+        }
         public async Task<Ticket> FindForCheckingsAsync(int id)
         {
             return await _ticketDal.FindForCheckingsAsync(id);
@@ -62,10 +62,19 @@ namespace SmartIntranet.Business.Concrete
             return await _ticketDal.GetNonRedirectedAsync();
         }
 
-        public async Task<List<Ticket>> GetNonRedirectedAsync( int categoryId, StatusType statusType)
+        public async Task<List<Ticket>> GetNonRedirectedAsync(int categoryId, StatusType statusType, int companyId)
         {
-            return await _ticketDal.GetNonRedirectedAsync( categoryId , statusType);
+            return await _ticketDal.GetNonRedirectedAsync(categoryId, statusType, companyId);
         }
 
+        public async Task<List<Ticket>> GetForAdminAsync()
+        {
+            return await _ticketDal.GetForAdminAsync();
+        }
+
+        public async Task<List<Ticket>> GetForAdminAsync(int categoryId, StatusType statusType, int companyId)
+        {
+            return await _ticketDal.GetForAdminAsync(categoryId, statusType, companyId);
+        }
     }
 }

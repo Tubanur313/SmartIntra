@@ -1,0 +1,25 @@
+﻿@model AppUserInfoDto
+
+<ul class="nav-right">
+
+    <li>
+        <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.Id">
+            <i class="feather icon-user"></i> Şəxsi Kabinet
+        </a>
+    </li>
+    @*  <li>
+        <a href="email-inbox.html">
+        <i class="feather icon-mail"></i> My Messages
+        </a>
+        </li>
+        <li>
+        <a href="auth-lock-screen.html">
+        <i class="feather icon-lock"></i> Lock Screen
+        </a>
+        </li>*@
+    <li>
+        <a asp-action="SignOut" asp-controller="User">
+            <i class="feather icon-log-out"></i> Çıxış et
+        </a>
+    </li>
+</ul>

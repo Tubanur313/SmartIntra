@@ -1,0 +1,282 @@
+﻿@model List<OrderListDto>
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+
+        <div id="table" ticket-Id="@ViewBag.ticketId" class="overflow-hidden">
+
+            <table id="purchasing" class="table table-bordered table-responsive-md table-striped text-center">
+                <thead>
+                    <tr>
+                        <th class="text-center">Məhsul </th>
+                        <th class="text-center">Ö/V</th>
+                        <th class="text-center">Say </th>
+                        <th class="text-center">Vahid qiymət <br /> (ƏDV xaric)</th>
+                        <th class="text-center">Cəmi<br />(vergi xaric) </th>
+                        <th class="text-center">Vergi <br />növü</th>
+                        <th class="text-center">Yekun<br /> (V/D)</th>
+                        <th class="text-center">Satıcı </th>
+                        <th class="text-center">Qeydlər</th>
+                        <th class="text-center">
+                            <span class="table-add float-right mb-3 mr-2">
+                                <a href="#!" class="text-success"><i class="fas fa-plus fa-2x" style="position: absolute;right: 63px;top: 23px;" aria-hidden="true"></i></a>
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="generated">
+                    @foreach (OrderListDto order in Model)
+                    {
+                        <tr class="editTable" value-id="@order.Id">
+                            <td><textarea style="width: 110px;" name="Product" id="Product">@order.Product</textarea> </td>
+                            <td><textarea style="width: 110px;" name="Currency" id="Product">@order.Currency</textarea> </td>
+                            <td><textarea style="width: 110px;" name="Quantity" id="Quantity">@order.Quantity</textarea> </td>
+                            <td><textarea style="width: 110px;" name="WithoutVat" id="WithoutVat">@order.WithoutVat</textarea> </td>
+                            <td><textarea style="width: 110px;" name="TotalWithoutTax" id="TotalWithoutTax">@order.TotalWithoutTax</textarea> </td>
+                            <td><textarea style="width: 110px;" name="TaxType" id="TaxType">@order.TaxType</textarea> </td>
+                            <td><textarea style="width: 110px;" name="Total" id="Total">@order.Total</textarea> </td>
+                            <td><textarea style="width: 110px;" name="Seller" id="Seller">@order.Seller</textarea> </td>
+                            <td><textarea style="width: 110px;" name="Description" id="Description">@order.Description</textarea> </td>
+                            <td>
+                                <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="8"></th>
+                        <th>Ümumi məbləğ: </th>
+                        <th class="disable"><input id="GrandTotal" name="GrandTotal" value="@ViewBag.GrandTotal" /></th>
+                    </tr>
+                </tfoot>
+            </table>
+            <button type="submit" ticket-id="@Model" id="change-file" class="btn btn-danger btn-round">Faylı Yenilə</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+                                const $tableID = $('#table');
+                            const $BTN = $('#export-btn');
+                            const $EXPORT = $('#export');
+         const newTr = `<tr class="editTable" value-id="" >
+                <td><textarea style="width: 110px;" name="Product" id="Product"></textarea> </td>
+                <td><textarea style="width: 110px;" name="Currency" id="Currency"></textarea> </td>
+                <td><textarea style="width: 110px;" name="Quantity" id="Quantity"></textarea> </td>
+                <td><textarea style="width: 110px;" name="WithoutVat" id="WithoutVat"></textarea> </td>
+                <td><textarea style="width: 110px;" name="TotalWithoutTax" id="TotalWithoutTax"></textarea> </td>
+                <td><textarea style="width: 110px;" name="TaxType" id="TaxType"></textarea> </td>
+                <td><textarea style="width: 110px;" name="Total" id="Total" (oninput)="validateValue(event)">0</textarea> </td>
+                <td><textarea style="width: 110px;" name="Seller" id="Seller"></textarea> </td>
+                <td><textarea style="width: 110px;" name="Description" id="Description"></textarea> </td>
+                     <td>
+                       <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
+                     </td>
+                   </tr>`;
+
+                   $('.table-add').on('click', 'i', () => {
+                         $('#generated').prepend(newTr);
+                   });
+
+                   $tableID.on('click', '.table-remove', function () {
+                       var id = $(this).parent().parent().attr('value-id');
+                          $(this).parents('tr').detach();
+                      $.ajax({
+                        type: 'get',
+                        url: '@Url.ActionLink("Delete","Order")',
+                        datatype: 'json',
+                        data: {
+                          id: id
+                        },
+                        success: function (response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta baş verdi!");
+                            return;
+                        }
+                          toastr.success(response.message, "Uğurla Silindi!");
+                        },
+                        error: function (response) {
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    });
+                   });
+                   $tableID.on('click', '.table-up', function () { const $row = $(this).parents('tr'); if
+                   ($row.index() === 0) { return; } $row.prev().before($row.get(0)); }); $tableID.on('click',
+                   '.table-down', function () { const $row = $(this).parents('tr');
+                   $row.next().after($row.get(0)); });
+                   jQuery.fn.pop= [].pop;
+                   jQuery.fn.shift = [].shift;
+                   $BTN.on('click', () =>
+                   {
+                       const $rows = $tableID.find('tr:not(:hidden)');
+                       const headers = [];
+                       const data = [];
+                   $($rows.shift()).find('th:not(:empty)').each(function () {
+                   headers.push($(this).text().toLowerCase()); });
+                   $rows.each(function () { const $td = $(this).find('td'); const h = {};
+                   headers.forEach((header, i) => { h[header] = $td.eq(i).text(); }); data.push(h); });
+                  $EXPORT.text(JSON.stringify(data));
+                   });
+                   (function ($) {
+                $.fn.getFormData = function (addProperties) {
+                    let tempt = this;
+                    var data = {};
+                    $(tempt).find('textarea[name]').each(function (index, item) {
+                        data[item.name] = item.value;
+                    })
+                    data = $.extend(data, addProperties);
+                    return data;
+                }
+            })(jQuery);
+
+            //add all orders to send
+            $(document).on("change",".editTable",function(e){
+              var  $this  = $(this);
+              var ticketId =  $( "#table" ).attr('ticket-Id')
+              console.log(ticketId);
+
+              if($this.attr('value-id') === ""){
+                   let data =  $this.getFormData({
+                       TicketId : ticketId
+                   });
+                   let count = 0;
+                   for (let i = 0; i < Object.values(data).length; i++) {
+                       if(Object.values(data)[i]===''){
+                                count++
+                       }
+                   }
+                   if(count < 9){
+                       $('.table-add').css("pointer-events", "auto");
+                      $.ajax({
+                        type: 'get',
+                        url: '@Url.ActionLink("Add","Order")',
+                        datatype: 'json',
+                        data: data,
+                        success: function (response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta baş verdi!");
+                            return;
+                        }
+                          toastr.success(response.message, "Uğurla Yükləndi!");
+                          $this.attr('value-id',response);
+                        },
+                        error: function (response) {
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    });
+                   }else{
+                        toastr.error("Xanalar boş ola bilməz", "Xəta!");
+                         $('.table-add').css("pointer-events", "none");
+                   }
+              }
+              else
+              {
+                   let id = $this.attr('value-id')
+                   let data =  $this.getFormData({
+                        Id: id
+                   });
+
+                   let count = 0;
+                   for (let i = 0; i < Object.values(data).length; i++) {
+                       if(Object.values(data)[i]===''){
+                                count++
+                       }
+                   }
+                   if(count < 9){
+                       $('.table-add').css("pointer-events", "auto");
+                      $.ajax({
+                        type: 'get',
+                        url: '@Url.ActionLink("Update","Order")',
+                        datatype: 'json',
+                        data: data,
+                        success: function (response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta baş verdi!");
+                            return;
+                        }
+                          //toastr.success(response.message, "Uğurla Yükləndi!");
+                          //$this.attr('value-id',response);
+                        },
+                        error: function (response) {
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    });
+                   }else{
+                        toastr.error("Xanalar boş ola bilməz", "Xəta!");
+                        $('.table-add').css("pointer-events", "none");
+                   }
+              }
+
+            });
+                    function validateValue(event){
+                const elem = event.target;
+                const value = elem.value;
+                const numVal = value.replace(/\D/,"");
+                elem.value = numVal;
+            }
+            //orders to send to ticket
+            $(document).on("click","#confirm-id",function(e){
+                var Ids = new Array();
+                $(".editTable").each(function(){
+                   var id= $(this).attr('value-id');
+                    Ids.push(id);
+                });
+                 $("#OrderIds").val(JSON.stringify(Ids));
+            }); 
+            //orders to send to ticket
+            $(document).on("click","#change-file",function(e){
+                var ticketId =  $( "#table" ).attr('ticket-Id');
+                    $.ajax({
+                        type: 'get',
+                        url: '@Url.ActionLink("OrderUpdate","ticket")',
+                        datatype: 'json',
+                        data: ({
+                            ticketId:ticketId
+                        }),
+                        success: function (response) {
+                        },
+                        error: function (response) {
+                         }
+                    });
+                });
+
+        // Total price
+        $("#generated").on("mouseover",function(){
+                    var r = 0;
+          $("textarea[name='Total']:visible").each(function( index ) {
+
+
+             if(parseFloat($(this).val()) === NaN){
+             r+= 0;
+             }
+             else{
+             r+= parseFloat($(this).val());
+             }
+          });
+            $("#GrandTotal").val(parseFloat(r).toFixed(2));
+                var gTotal = $("#GrandTotal").val();
+    var ticketId =  $( "#table" ).attr('ticket-Id');
+    $.ajax({
+    type: 'get',
+    url: '@Url.ActionLink("GrandTotal","ticket")',
+    datatype: 'json',
+    data: ({
+    gTotal :gTotal,
+    ticketId:ticketId
+    }),
+    success: function (response) {
+    },
+    error: function (response) {
+    }
+    });
+    });
+
+    });
+</script>
+
+
+

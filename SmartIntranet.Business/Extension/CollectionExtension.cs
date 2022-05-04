@@ -21,6 +21,7 @@ using SmartIntranet.DTO.DTOs.NewsDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
+using SmartIntranet.DTO.DTOs.CategoryTicketDto;
 
 namespace SmartIntranet.Business.Extension
 {

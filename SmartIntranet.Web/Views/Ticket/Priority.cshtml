@@ -1,0 +1,30 @@
+﻿@model TicketPriorityDto
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <form asp-action="Priority">
+            <div class="form-group">
+                <input hidden class="form-control" asp-for="Id" autocomplete="off">
+                <label class="floatLabel">  Status: </label>
+                <select name="select" asp-for="PriorityType" name="PriorityType" class="form-control">
+                    <option value="" selected hidden>Seçim edin</option>
+                    @foreach (PriorityType type in @Enum.GetValues(typeof(StatusType)))
+                    {
+                        <option value="@type">@type.GetDisplayName()</option>
+                    }
+
+                </select>
+                <span asp-validation-for="PriorityType" class="text-danger"></span>
+            </div>
+            <div class="col-sm-12 d-flex justify-content-between">
+                <button type="submit" id="confirm-id" class="btn btn-primary m-b-0 btn-block">
+                    Təsdiqlə
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,257 @@
+﻿@model IEnumerable<TicketListDto>
+
+<div class="page-body">
+    <div class="row">
+        <!-- Left column start -->
+        <div class="col-lg-12 col-xl-12">
+            <!-- Job description card start -->
+            <div class="card">
+                <div class="card-block contact-details">
+                    <div class="data_table_main table-responsive dt-responsive" style="min-height: 400px;align-items: center;">
+                        <table id="simpletable"
+                               class="table
+                     table-striped
+                     table-bordered
+                     nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Nömrə</th>
+                                    <th>Başlıq</th>
+                                    <th>Ticket Açan</th>
+                                    <th>Yönləndirilib</th>
+                                    <th>Status</th>
+                                    <th>Prioritet</th>
+                                    <th>Kateqoriya</th>
+                                    <th>Tarix</th>
+                                    <th>Deadline</th>
+                                    @if (User.HasAccess("ticket.add"))
+                                    {
+                                        <th class="text-center">
+                                            <button onclick="showInPopup('@Url.Action("Add","Ticket",null,Context.Request.Scheme)','Ticket əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                                        </th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody id="tickets">
+                                @foreach (var ticket in Model)
+                                {
+                                    <tr data-toggle="tooltip"
+                                    data-html="true"
+                                    data-placement="right" title="Ətraflı: @Html.Raw(ticket.Description)">
+                                        <td>
+                                            #@ticket.Id
+                                        </td>
+                                        <td data-toggle="tooltip"
+                                        data-html="true"
+                                        data-placement="top" title="@ticket.Title">
+                                            @ticket.Title.Substring(0, ticket.Title.Length / 2) ...
+                                        </td>
+                                        <td data-toggle="tooltip"
+                                        data-html="true"
+                                        data-placement="top" title="
+                                            @(ticket.Employee.Company == null ? "Təyin Olunmayıb" : ticket.Employee.Company.Name)/
+                                            @(ticket.Employee.Department == null ? "Təyin Olunmayıb" : ticket.Employee.Department.Name)/
+                                            @(ticket.Employee.Position == null ? "Təyin Olunmayıb" : ticket.Employee.Position.Name)">
+                                            @ticket.Employee.FullName
+
+                                        </td>
+                                        @if (ticket.Supporter is null)
+                                        {
+                                            <td>
+                                                @("Təyin Olunmayıb")
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td data-toggle="tooltip"
+                                        data-html="true"
+                                        data-placement="top" title="
+                                            @(ticket.Supporter.Company == null ? "Təyin Olunmayıb" : ticket.Supporter.Company.Name)/
+                                            @(ticket.Supporter.Department == null ? "Təyin Olunmayıb" : ticket.Supporter.Department.Name)/
+                                            @(ticket.Supporter.Position == null ? "Təyin Olunmayıb" : ticket.Supporter.Position.Name)">
+                                                @ticket.Supporter.FullName
+                                            </td>
+                                        }
+
+                                        @switch (ticket.StatusType)
+                                        {
+                                            case StatusType.Open:
+                                                <td><span class="badge badge-info">@StatusType.Open.GetDisplayName()</span></td>
+                                                break;
+                                            case StatusType.Pause:
+                                                <td><span class="badge badge-success">@StatusType.Pause.GetDisplayName()</span></td>
+                                                break;
+                                            case StatusType.Close:
+                                                <td><span class="badge badge-danger">@StatusType.Close.GetDisplayName()</span></td>
+                                                break;
+                                        }
+                                        @switch (ticket.PriorityType)
+                                        {
+                                            case PriorityType.High:
+                                                <td><span class="badge badge-danger">@PriorityType.High.GetDisplayName()</span></td>
+                                                break;
+                                            case PriorityType.Normal:
+                                                <td><span class="badge badge-success">@PriorityType.Normal.GetDisplayName()</span></td>
+                                                break;
+                                            case PriorityType.Low:
+                                                <td><span class="badge badge-info">@PriorityType.Low.GetDisplayName()</span></td>
+                                                break;
+                                        }
+                                        @if (ticket.CategoryTicket.Name.Split(" ").Count() > 1)
+                                        {
+                                            <td>@ticket.CategoryTicket.Name.Split(" ")[0] ...</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@ticket.CategoryTicket.Name.Split(" ")[0]</td>
+                                        }
+                                        <td>@ticket.OpenDate.Value.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-center">
+                                            <span class="badge badge-@(((ticket.DeadLineEnd - DateTime.Now).Value.Days  <= 3 && Convert.ToDateTime("0001-01-01") != Convert.ToDateTime(ticket.DeadLineEnd.ToString()))?"danger":"info")">
+                                                @( ticket.DeadLineEnd ==null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(ticket.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : ticket.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
+                                            </span>
+                                        </td>
+                                        <td class="dropdown text-center">
+                                            <button type="button"
+                                                class="btn
+                                                btn-outline-info
+                                                @*dropdown-toggle*@"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="fa fa-list-ul"></i>
+                                            </button>
+                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                @if (User.HasAccess("ticket.info"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupInfo('@Url.Action("Info","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Məlumat')"
+                                                        class="btn  btn-default waves-effect md-trigger text-info">
+                                                            <i class="icofont icofont-info-circle text-info  p-r-15"></i>
+                                                            Məlumat
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.category")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupSm('@Url.Action("Category","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Kateqoriya')"
+                                                        class="btn  btn-default waves-effect md-trigger text-info">
+                                                            <i class="icofont icofont-navigation-menu text-info  p-r-15"></i>
+                                                            Kateqoriya
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.status"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupSm('@Url.Action("Status","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Status')"
+                                                        class="btn  btn-default waves-effect md-trigger text-inverse">
+                                                            <i class="icofont icofont-spinner-alt-4 text-inverse  p-r-15"></i>
+                                                            Status
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.priority")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupSm('@Url.Action("Priority","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Priority')"
+                                                        class="btn  btn-default waves-effect md-trigger text-inverse">
+                                                            <i class="icofont icofont-bubble-up text-inverse  p-r-15"></i>
+                                                            Öncəllik
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.redirect")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupMd('@Url.Action("Redirect","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Yönləndirmə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-primary ">
+                                                            <i class="icofont icofont-stylish-right text-primary   p-r-15"></i>
+                                                            Yönləndirmə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.confirm")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupLg('@Url.Action("Confirm","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Təsdiqləmə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-success ">
+                                                            <i class="icofont icofont-toggle-off text-success   p-r-15"></i>
+                                                            Təsdiqləmə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.watchers")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupLg('@Url.Action("Watchers","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Nəzarətçi')"
+                                                        class="btn  btn-default waves-effect md-trigger text-warning ">
+                                                            <i class="icofont icofont-user-alt-1 text-warning   p-r-15"></i>
+                                                            Nəzarətçi
+                                                        </button>
+                                                    </li>
+                                                } 
+                                                @if (User.HasAccess("ticket.checklist")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupLg('@Url.Action("checklist","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Yoxlamalar')"
+                                                        class="btn  btn-default waves-effect md-trigger text-warning ">
+                                                            <i class="icofont icofont-user-search text-warning   p-r-15"></i>
+                                                            Yoxlamalar
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.orders") && ticket.CategoryTicket.TicketType==TicketType.Purchasing && ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopup('@Url.Action("orders","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Sifarişlər')"
+                                                        class="btn  btn-default waves-effect md-trigger text-primary ">
+                                                            <i class="icofont icofont-tasks text-primary   p-r-15"></i>
+                                                            Sifarişlər
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("ticket.delete")&& ticket.StatusType==StatusType.Open)
+                                                {
+                                                    <li>
+                                                        <button onclick="removeItem(@ticket.Id,`@ticket.Title`,`@Url.Action("Delete","Ticket").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                            Sil
+                                                        </button>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                }
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Nömrə</th>
+                                    <th>Başlıq</th>
+                                    <th>Ticket Açan</th>
+                                    <th>Yönləndirilib</th>
+                                    <th>Prioritet</th>
+                                    <th>Status</th>
+                                    <th>Kateqoriya</th>
+                                    <th>Açılan Tarix</th>
+                                    <th>Son Tarix</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

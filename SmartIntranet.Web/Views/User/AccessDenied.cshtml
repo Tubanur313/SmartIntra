@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <meta charset="utf-8">
+    <title>404 Error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Birkod">
+    <!-- ================= Favicons ================== -->
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!-- ============== Resources style ============== -->
+    <link href="~/files/extra-pages/404/1/css/style.css" rel="stylesheet" />
+</head>
+
+
+<body class="bubble">
+    <canvas id="canvasbg"></canvas>
+    <canvas id="canvas"></canvas>
+    <!-- Your logo on the top left -->
+    <a asp-action="info" asp-controller="news" class="logo-link" title="back home">
+        <img src="~/files/assets/images/common/sr-group-logo.png" class="logo" style="width: 200px;" alt="srgroupco" />
+        @*<img src="~/files/assets/images/common/sr-group-logo.png" />*@
+    </a>
+    <div class="content">
+        <div class="content-box">
+            <div class="big-content">
+                <!-- Main squares for the content logo in the background -->
+                <div class="list-square">
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                </div>
+                <!-- Main lines for the content logo in the background -->
+                <div class="list-line">
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                </div>
+                <!-- The animated searching tool -->
+                <i class="fa fa-search color" aria-hidden="true"></i>
+                <!-- div clearing the float -->
+                <div class="clear"></div>
+            </div>
+            <!-- Your text -->
+            <h1>Oops! 404 Error.</h1>
+            <p>
+                Ola bilsin sizin bu səhifəyə baxmaq hüququnuz yoxdur.
+                <br> Xəta ilə bağlı IT şöbəyə ticket açın.
+            </p>
+        </div>
+    </div>
+   
+
+        <script src="~/files/extra-pages/404/1/js/bubble.js"></script>
+        <script src="~/files/extra-pages/404/1/js/bootstrap.min.js"></script>
+        <script src="~/files/extra-pages/404/1/js/jquery.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;    }
+}
+@model AppRoleUpdateDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+            <div class="tab-content tabs card-block">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floatLabel">  Ad: </label>
+                            <input type="text" class="form-control" asp-for="Name" autocomplete="off">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <span class="messages"></span>
+                        </div>
+                    </div>
+                </div>
+               @* <div class="row">
+                    <div class="col-sm-12 col-md-6 form-group ">
+                        <div class="form-radio">
+
+                            <div class="radio radio-inline">
+                                <label for="True">
+                                    <input type="radio" id="True" value="True" asp-for="IsActive"
+                                           checked="checked">
+                                    <i class="helper"></i>Active
+                                </label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <label for="False">
+                                    <input type="radio" id="False" value="False" asp-for="IsActive">
+                                    <i class="helper"></i>InActive
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>*@
+                <div class="form-group row">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                            Təsdiqlə
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+@await Html.PartialAsync("_ValidationScriptsPartial")

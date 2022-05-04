@@ -1,0 +1,238 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;    }
+}
+@model AppUserUpdateDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs  tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab"
+                   href="#home1" role="tab">General Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#profile1" role="tab">Upload</a>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
+            <div class="tab-content tabs card-block">
+                <div class="tab-pane active" id="home1"
+                     role="tabpanel">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Ad: </label>
+                                <input type="text" class="form-control" asp-for="FirstName" autocomplete="off">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Soyad: </label>
+                                <input type="text" class="form-control" asp-for="LastName" autocomplete="off">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Email: </label>
+                                <input type="email" class="form-control" asp-for="Email" autocomplete="off">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Tel: </label>
+                                <input type="text" class="form-control" asp-for="PhoneNumber" autocomplete="off">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkət: </label>
+                                <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
+
+                                    @foreach (var item in ViewBag.companies)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şöbə: </label>
+                                <select name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
+
+                                    @foreach (var item in ViewBag.departments)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Vəzifə: </label>
+                            <select name="select" asp-for="PositionId" name="PositionId" class="form-control">
+
+                                @foreach (var item in ViewBag.position)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                            <span asp-validation-for="PositionId" class="text-danger"></span>
+                        </div>
+                       
+                    </div>
+                   
+                </div>
+                <div class="tab-pane" id="profile1" role="tabpanel">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                            Logo Yüklə
+                                            <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6  col-lg-6 col-sm-6">
+                                        @if (@Model.Picture != null)
+                                        {
+                                            <div class="border text-center pt-2">
+                                                <div class="pt-0">
+                                                    <label class="floatLabel">Current Logo:</label>
+                                                    <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="@Model.FullName" />
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="border text-center pt-2">
+                                                <div class="pt-0">
+                                                    <label class="floatLabel">Mövcud Avatar:</label>
+                                                    <img src="~/profile/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-6 col-sm-6">
+                                        <div id="lview" style="display:none!important;">
+                                            <div class="border text-center pt-2">
+                                                <div class="pt-0">
+                                                    <label class="floatLabel">Yeni Avatar:</label>
+                                                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6 col-xl-6">
+                                <div class="file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                    Fayl Yüklə
+                                    <input id="file-upload" type="file" name="pdf" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                                        text/plain, application/pdf" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
+                                </div>
+                                <h4 class="sub-title">Fayllar</h4>
+                                <div class="tags_add" style="display: inline-grid;">
+                                    <label id="uploaded" class="badge badge-success"></label>
+                                    <div class="bootstrap-tagsinput">
+                                        @foreach (var pdf in ViewBag.docs)
+                                        {
+                                            <span class="tag label label-info">
+                                                @pdf.CreatedDate <a onclick="removeUserDocs(@pdf.Id,`@pdf.CreatedDate`,`@Url.Action("DeleteUserContract","Account").ToString()`,this)" class="text-danger" data-role="remove"> </a>
+                                            </span>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                            Təsdiqlə
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+    <!-- Mask js -->
+    <script type="text/javascript" src="~/files/lib/mask.js/jquery.mask.min.js"></script>
+<!-- delete_ajax-->
+<script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Profile").change(function (e) {
+
+
+            $("#lview").show();
+            $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+        });
+
+                //PhoneNumber mask
+
+         $("#PhoneNumber")
+         .mask("+(999) 99 999-99-99", 
+         {clearMaskOnLostFocus: false,placeholder: "+(994) __ ___-__-__"});
+    });
+            $('#file-upload').change(function() {
+
+        var file = $('#file-upload')[0].files[0].name;
+
+        $('#uploaded').removeClass("d-none").text(file);
+
+        });
+</script>

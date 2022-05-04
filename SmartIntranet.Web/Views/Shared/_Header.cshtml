@@ -1,0 +1,42 @@
+﻿<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+<nav class="navbar header-navbar pcoded-header">
+    <div class="navbar-wrapper">
+
+        <div class="navbar-logo">
+            <a class="mobile-menu" id="mobile-collapse" href="#!">
+                <i class="feather icon-menu"></i>
+            </a>
+            <a asp-controller="ticket" asp-action="list">
+                <img class="ml-1 img-fluid" src="~/files/assets/images/common/sr-gr-logo.png" alt="Theme-Logo" style="opacity: .8; background-color: #c2c7d0; border-radius: 50%;width:30px;" />
+                <strong class="ml-2">SR Group Co.</strong>
+            </a>
+            <a class="mobile-options">
+                <i class="feather icon-more-horizontal"></i>
+            </a>
+        </div>
+
+        <div class="navbar-container">
+            <ul class="nav-left">
+                <li>
+                    <a href="#!" onclick="javascript:toggleFullScreen()">
+                        <i class="feather icon-maximize full-screen"></i>
+                    </a>
+                </li>
+            </ul>
+            @await Component.InvokeAsync("Profile")
+        </div>
+    </div>
+</nav>
+

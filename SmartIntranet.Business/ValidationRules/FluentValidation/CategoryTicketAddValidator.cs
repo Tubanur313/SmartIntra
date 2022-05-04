@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SmartIntranet.DTO.DTOs.CategoryDto;
+using SmartIntranet.DTO.DTOs.CategoryTicketDto;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {

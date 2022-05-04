@@ -1,0 +1,112 @@
+﻿@model DepartmentAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Ad: </label>
+                        <input type="text" class="form-control" asp-for="Name" autocomplete="off">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Təsvir: </label>
+                        <input type="text" class="form-control" asp-for="Description">
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Şirkət: </label>
+                        <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.companies)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CompanyId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">Üst Şöbə: </label>
+                        <select name="select" disabled asp-for="ParentId" name="ParentId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.departments)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+
+<script class="removable">
+    $( document ).ready(function() {
+             $(document).on('change','#CompanyId', function(){
+            var _id = $(this).val();
+                    $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetDepartment","Department")',
+                data: {
+                    companyId: _id,
+                },
+                success: function (response) {
+
+                    if (response.error == true) {
+                        
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#ParentId").empty();
+                    var html = "";
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                        ${[response[i].name]}</option>`
+                    }
+                    if(response.length>0)
+                    {
+                        $("#ParentId").prop('disabled', false);
+                        $("#ParentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    }
+                    else{
+                        $("#ParentId").prop('disabled', true);
+                        $("#ParentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`+ html);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+         });
+    });
+</script>

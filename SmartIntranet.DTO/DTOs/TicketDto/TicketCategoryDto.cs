@@ -5,7 +5,7 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
     public class TicketCategoryDto
     {
         public int Id { get; set; }
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public int CategoryTicketId { get; set; }
+        public CategoryTicket CategoryTicket { get; set; }
     }
 }

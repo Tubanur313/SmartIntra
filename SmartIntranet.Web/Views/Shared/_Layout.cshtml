@@ -1,0 +1,135 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <partial name="_HeadLinks" />
+    @RenderSection("CustomCss", required: false)
+</head>
+<body>
+    <partial name="_Loader" />
+    <div id="pcoded" class="pcoded">
+        <div class="pcoded-overlay-box"></div>
+        <div class="pcoded-container navbar-wrapper">
+            <partial name="_Header" />
+            <partial name="_RightBar" />
+            <div class="pcoded-main-container">
+                <div class="pcoded-wrapper">
+                    <partial name="_SideBar" />
+                    <div class="pcoded-content">
+                        <div class="pcoded-inner-content">
+                            <!-- Main-body start -->
+                            <div class="main-body">
+                                <div class="page-wrapper">
+                                    @RenderBody()
+                                </div>
+                            </div>
+                            <div class="modal" tabindex="-1" role="dialog" id="form-modal">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title"></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="loaderbody" id="loaderbody">
+                                <div class="loader"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <partial name="_FootScripts" />
+    @RenderSection("ProfileJs", required: false)
+    @RenderSection("CrudJs", required: false)
+    @*      <script language="javascript">
+        document.onmousedown = disableclick;
+        status = "Right Click Disabled";
+        function disableclick(e) {
+        if (event.button == 2) {
+        alert(status);
+        return false;
+        }
+        }
+        </script>
+        <script>
+
+        $(document).keypress("u", function (e) {
+        if (e.ctrlKey) {
+        return false;
+        }
+        else {
+        return true;
+        }
+        });
+
+        </script>*@
+    @*    <script>
+        // disable right click
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.onkeydown = function (e) {
+
+        // disable F12 key
+        if (e.keyCode == 123) {
+        return false;
+        }
+
+        // disable I key
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+        return false;
+        }
+
+        // disable J key
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+        return false;
+        }
+
+        // disable U key
+        if (e.ctrlKey && e.keyCode == 85) {
+        return false;
+        }
+        }
+
+        </script>*@
+        <script>
+    $("#searchId").on("click",function(e){
+          var input =  document.querySelector("#search").value.trim();
+
+    if (input != null && input!=''){
+    console.log(input)
+                $.ajax({
+                type: 'post',
+                url: `@Url.Action("Search","Ticket")`,
+                datatype: 'json',
+                data: { id:input },
+                success: function (response) {
+                    if (response.error == true) {
+
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                },
+                error: function (response) {
+ 
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+          }
+    })
+
+</script>
+</body>
+</html>
+
+
