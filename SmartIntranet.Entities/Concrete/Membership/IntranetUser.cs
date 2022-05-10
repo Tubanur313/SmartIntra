@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SmartIntranet.Core.Entities.Abstract;
+using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.Entities.Concrete.Membership
 {

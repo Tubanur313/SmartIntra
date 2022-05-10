@@ -4,6 +4,12 @@ using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories;
 using SmartIntranet.DataAccess.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using SmartIntranet.Core.Utilities.FileUploader;
+using SmartIntranet.Business.Concrete.IntraTicket;
+using SmartIntranet.Business.Concrete.Intranet;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.Business.Concrete.Membership;
+using SmartIntranet.Business.Interfaces.IntraTicket;
 
 namespace SmartIntranet.Business.Containers.MicrosoftIoC
 {

@@ -1,4 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
+﻿using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Interfaces

@@ -24,6 +24,8 @@ using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
 using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Linq;
@@ -53,20 +55,27 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<IntranetRole, AppRoleUpdateDto>();
             #endregion
 
+            #region UserContractFile<->UserContractDto
+            CreateMap<UserContractAddDto, UserContractFile>();
+            CreateMap<UserContractFile, UserContractAddDto>();
+            CreateMap<UserContractListDto, UserContractFile>();
+            CreateMap<UserContractFile, UserContractListDto>();
+
+            #endregion
+
             #region AppUser <-> AppUserDto
             CreateMap<AppUserAddDto, IntranetUser>();
             //.ForMember(u => u.FullName, opt => opt.MapFrom(src => src.Name + " " + src.Surname));
-            CreateMap<IntranetUser, AppUserAddDto>();
+            CreateMap<IntranetUser, AppUserAddDto>(); 
+
             CreateMap<AppUserListDto, IntranetUser>();
             CreateMap<IntranetUser, AppUserListDto>();
+
             CreateMap<AppUserPassDto, IntranetUser>();
             CreateMap<IntranetUser, AppUserPassDto>();
 
             CreateMap<AppUserInfoDto, IntranetUser>();
             CreateMap<IntranetUser, AppUserInfoDto>();
-
-            CreateMap<AppUserImageDto, IntranetUser>();
-            CreateMap<IntranetUser, AppUserImageDto>();
 
             CreateMap<AppUserSignInDto, IntranetUser>();
             CreateMap<IntranetUser, AppUserSignInDto>();
@@ -75,10 +84,22 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<IntranetUser, AppUserProfileDto>();
 
             CreateMap<AppUserUpdateDto, IntranetUser>();
-                //.ForMember(u => u.FullName, opt => opt.MapFrom(src => src.Name + " " + src.Surname));
+            //.ForMember(u => u.FullName, opt => opt.MapFrom(src => src.Name + " " + src.Surname));
             CreateMap<IntranetUser, AppUserUpdateDto>();
-                //.ForMember(u => u.Name, opt => opt.MapFrom(src => src.FullName.Split(' ', StringSplitOptions.None).FirstOrDefault()))
-                //.ForMember(u => u.Surname, opt => opt.MapFrom(src => src.FullName.Split(' ', StringSplitOptions.None).LastOrDefault()));
+            //.ForMember(u => u.Name, opt => opt.MapFrom(src => src.FullName.Split(' ', StringSplitOptions.None).FirstOrDefault()))
+            //.ForMember(u => u.Surname, opt => opt.MapFrom(src => src.FullName.Split(' ', StringSplitOptions.None).LastOrDefault()));
+
+            CreateMap<AppUserClaimsDto, IntranetUser>();
+            CreateMap<IntranetUser, AppUserClaimsDto>();
+
+            CreateMap<AppRoleClaimsDto, IntranetRole>();
+            CreateMap<IntranetRole, AppRoleClaimsDto>();
+
+            CreateMap<AppUserImageDto, IntranetUser>();
+            CreateMap<IntranetUser, AppUserImageDto>();
+
+            CreateMap<AppUserContactListDto, IntranetUser>();
+            CreateMap<IntranetUser, AppUserContactListDto>();
 
             #endregion
 
@@ -100,6 +121,30 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<CategoryTicket, CategoryTicketUpdateDto>();
             #endregion
 
+            #region  Category <-> CategoryListDto
+            CreateMap<CategoryAddDto, Category>();
+            CreateMap<Category, CategoryAddDto>();
+            CreateMap<CategoryListDto, Category>();
+            CreateMap<Category, CategoryListDto>();
+            CreateMap<CategoryUpdateDto, Category>();
+            CreateMap<Category, CategoryUpdateDto>();
+            #endregion
+
+            #region  CategoryNews <-> CategoryNewsDto
+            CreateMap<CategoryNewsListDto, CategoryNews>();
+            CreateMap<CategoryNews, CategoryNewsListDto>();
+            CreateMap<CategoryNewsAddDto, CategoryNews>();
+            CreateMap<CategoryNews, CategoryNewsAddDto>();
+            CreateMap<CategoryNewsUpdateDto, CategoryNews>();
+            CreateMap<CategoryNews, CategoryNewsUpdateDto>()
+                .ForMember(d => d.Title, opt => opt.MapFrom(src => src.News.Title))
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.News.Id))
+                .ForMember(d => d.NewsId, opt => opt.MapFrom(src => src.NewsId))
+                .ForMember(d => d.Description, opt => opt.MapFrom(src => src.News.Description))
+                .ForMember(d => d.IsDeleted, opt => opt.MapFrom(src => src.News.IsDeleted));
+
+            #endregion
+
             #region Vacancy-VacancytDto
             CreateMap<VacancyAddDto, Vacancy>();
             CreateMap<Vacancy, VacancyAddDto>();
@@ -109,6 +154,7 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<Vacancy, VacancyUpdateDto>();
 
             #endregion
+            
             #region CheckList <-> CheckListDto
             CreateMap<CheckListAddDto, CheckList>();
             CreateMap<CheckList, CheckListAddDto>();
@@ -202,6 +248,7 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<Ticket, TicketListDto>();
             CreateMap<Ticket, TicketCategoryDto>();
             #endregion
+            
             #region Watcher <-> WatcherDto
             CreateMap<WatcherAddDto, Watcher>();
             CreateMap<Watcher, WatcherAddDto>();
@@ -250,21 +297,6 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<CategoryUpdateDto, Category>();
             CreateMap<Category, CategoryUpdateDto>();
             #endregion  
-
-            #region  CategoryNews <-> CategoryNewsDto
-            CreateMap<CategoryNewsListDto, CategoryNews>();
-            CreateMap<CategoryNews, CategoryNewsListDto>();
-            CreateMap<CategoryNewsAddDto, CategoryNews>();
-            CreateMap<CategoryNews, CategoryNewsAddDto>();
-            CreateMap<CategoryNewsUpdateDto, CategoryNews>();
-            CreateMap<CategoryNews, CategoryNewsUpdateDto>()
-                .ForMember(d => d.Title, opt => opt.MapFrom(src => src.News.Title))
-                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.News.Id))
-                .ForMember(d => d.NewsId, opt => opt.MapFrom(src => src.NewsId))
-                .ForMember(d => d.Description, opt => opt.MapFrom(src => src.News.Description))
-                .ForMember(d => d.IsActive, opt => opt.MapFrom(src => src.News.IsDeleted));
-
-            #endregion
 
             #region  News <-> NewsDto
             CreateMap<NewsAddDto, News>();

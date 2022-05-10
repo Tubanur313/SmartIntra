@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Entities.Concrete;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using SmartIntranet.Core.Entities.Enum;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {

@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.Intranet;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,6 @@ namespace SmartIntranet.DTO.DTOs.CategoryNewsDto
         public List<int> CategoriesId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

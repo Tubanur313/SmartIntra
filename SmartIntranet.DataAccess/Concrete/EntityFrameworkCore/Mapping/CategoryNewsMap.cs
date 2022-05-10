@@ -1,9 +1,6 @@
-﻿using SmartIntranet.Entities.Concrete;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
@@ -17,7 +14,6 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Id).UseIdentityColumn();
 
             builder.HasIndex(I => new { I.NewsId, I.CategoryId }).IsUnique();
-
 
         }
 

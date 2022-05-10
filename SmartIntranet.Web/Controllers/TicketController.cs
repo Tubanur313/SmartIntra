@@ -11,6 +11,9 @@ using MimeKit;
 using MimeKit.Text;
 using Newtonsoft.Json;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Business.Interfaces.IntraTicket;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.FileUploader;
@@ -27,7 +30,7 @@ using SmartIntranet.DTO.DTOs.TicketCheckListDto;
 using SmartIntranet.DTO.DTOs.TicketDto;
 using SmartIntranet.DTO.DTOs.TicketOrderDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
-using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
@@ -98,7 +101,7 @@ namespace SmartIntranet.Web.Controllers
         private async Task<string> ExportToPdf(int ticketId)
         {
 
-            var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(x => x.TicketId == ticketId);
+            var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(ticketId);
 
             int pdfRowIndex = 1;
             string filename = "OrderDetails-" + DateTime.Now.ToString("dd-MM-yyyy hh_mm_s_tt");

@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Collections.Generic;
 
 namespace SmartIntranet.DTO.DTOs.TicketDto

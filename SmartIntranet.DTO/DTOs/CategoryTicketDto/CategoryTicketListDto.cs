@@ -2,6 +2,7 @@
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Entities.Concrete.Membership;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 
 namespace SmartIntranet.DTO.DTOs.CategoryTicketDto
 {

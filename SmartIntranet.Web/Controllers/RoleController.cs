@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Business.Provider;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;

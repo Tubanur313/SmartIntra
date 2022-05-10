@@ -1,8 +1,9 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
+﻿using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping;
+using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
 {

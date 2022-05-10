@@ -2,13 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DTO.DTOs.CheckListDto;
-using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 

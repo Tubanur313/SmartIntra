@@ -6,6 +6,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.EmailDto;
 using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;

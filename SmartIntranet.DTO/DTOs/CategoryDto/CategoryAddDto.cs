@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.Intranet;
 using System;
 
 

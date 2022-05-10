@@ -1,7 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SmartIntranet.Entities.Concrete.IntraTicket;
 
 namespace SmartIntranet.DTO.DTOs.TicketOrderDto
 {
