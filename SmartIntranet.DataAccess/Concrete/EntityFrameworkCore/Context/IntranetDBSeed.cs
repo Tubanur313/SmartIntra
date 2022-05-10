@@ -172,7 +172,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                 {
                     UserName = "MahirTahiroghlu",
                     Email = "mahir.tahiroghlu@srgroupco.com",
-                    //FullName = "Mahir Tahiroglu",
+                    FirstName = "Mahir",
+                    LastName = "Tahiroglu",
                     Picture = "Default.png",
                     //CompanyId = 1,
                     //DepartmentId = 1,
@@ -184,7 +185,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                 {
                     UserName = "SuperAdmin",
                     Email = "tahiroglumahir@gmail.com",
-                    //FullName = "Super Admin",
+                    FirstName = "Mahir",
+                    LastName = "Tahiroglu",
                     Picture = "Default.png",
                     //CompanyId = 1,
                     //DepartmentId = 1,

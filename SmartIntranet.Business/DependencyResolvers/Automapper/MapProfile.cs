@@ -23,7 +23,6 @@ using SmartIntranet.DTO.DTOs.TicketOrderDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
@@ -40,7 +39,7 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<IntranetUser, AppUserClaimsDto>();
             CreateMap<IntranetRole, AppRoleClaimsDto>();
             CreateMap<IntranetUser, AppUserDetailsDto>()
-              //.ForMember(d => d.FullName, opt => opt.MapFrom(src => src.FullName))
+              .ForMember(u => u.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
               .ForMember(d => d.Company, opt => opt.MapFrom(src => src.Company.Name))
               .ForMember(d => d.Department, opt => opt.MapFrom(src => src.Department.Name))
               .ForMember(d => d.Position, opt => opt.MapFrom(src => src.Position.Name));
@@ -65,7 +64,6 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
 
             #region AppUser <-> AppUserDto
             CreateMap<AppUserAddDto, IntranetUser>();
-            //.ForMember(u => u.FullName, opt => opt.MapFrom(src => src.Name + " " + src.Surname));
             CreateMap<IntranetUser, AppUserAddDto>(); 
 
             CreateMap<AppUserListDto, IntranetUser>();
