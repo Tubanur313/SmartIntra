@@ -1,0 +1,45 @@
+﻿@model List<NewsListDto>
+@{
+    ViewData["Title"] = "Əməkdaş Siyahısı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<!-- Page-header start -->
+<div class="page-header">
+    <div class="row justify-content-between">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Xəbərlərin Siyahısı</h4>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<!-- Page-header end -->
+<!-- Page body start -->
+<div id="view-all">
+    @await Html.PartialAsync("_ViewAll", Model)
+</div>
+
+<div class="modal slideInDown animated" tabindex="-1" role="dialog" id="form-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
+                    <i class="icofont icofont-ui-close mr-0"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+@section CrudJs{
+    <!-- delete_ajax-->
+    <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+}

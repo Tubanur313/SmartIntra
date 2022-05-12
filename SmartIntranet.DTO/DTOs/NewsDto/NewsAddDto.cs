@@ -16,9 +16,6 @@ namespace SmartIntranet.DTO.DTOs.NewsDto
         public bool IsDeleted { get; set; }
         public int? AppUserId { get; set; }
         public IntranetUser AppUser { get; set; }
-        public int? CategoryId { get; set; }
-        public Category Category { get; set; }
-        
-
+        public List<int> CategoriesId { get; set; }
     }
 }

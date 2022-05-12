@@ -33,7 +33,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "checkList.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _checkListService.GetAllAsync(x => x.IsDeleted == false);
+            var model = await _checkListService.GetAllAsync(x => !x.IsDeleted);
             if (model.Count > 0)
             {
                 return View(_map.Map<List<CheckListListDto>>(model));

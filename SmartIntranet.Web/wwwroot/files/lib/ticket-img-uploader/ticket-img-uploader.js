@@ -10,6 +10,7 @@ $(document).ready(function () {
 
     var fileArr = [];
     $("#files").change(function () {
+        
         // check if fileArr length is greater than 0
         if (fileArr.length > 0) fileArr = [];
 
