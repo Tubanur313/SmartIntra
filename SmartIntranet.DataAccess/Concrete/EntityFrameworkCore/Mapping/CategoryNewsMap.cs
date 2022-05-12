@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartIntranet.Entities.Concrete.Intranet;
+using System;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
@@ -15,6 +16,14 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 
             builder.HasIndex(I => new { I.NewsId, I.CategoryId }).IsUnique();
 
+            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
+
+            builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
+            builder.Property(I => I.DeleteDate).HasDefaultValue(null);
+            builder.Property(I => I.UpdateDate).HasDefaultValue(null);
+            builder.Property(I => I.UpdateByUserId).HasDefaultValue(null);
+            builder.Property(I => I.CreatedByUserId).HasDefaultValue(null);
+            builder.Property(I => I.DeleteByUserId).HasDefaultValue(null);
         }
 
         

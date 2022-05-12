@@ -14,7 +14,7 @@
                                 <tr>
                                     <th>Ad Soyad</th>
                                     <th>Vəzifə</th>
-                                    <th>Status</th>
+                                    <th>Dərəcə</th>
                                     @if (User.HasAccess("account.add"))
                                     {
                                         <th class="text-center">
@@ -30,7 +30,7 @@
                                     <tr>
 
                                         <td>
-                                            @account.FullName
+                                            @account.FirstName @account.LastName
                                         </td>
                                         @if (account.Position != null)
                                         {
@@ -41,7 +41,7 @@
                                         {
                                             <td>Təyin edilməyib</td>
                                         }
-                                        <td><span class="badge badge-@(account.IsDeleted? "warning" : "success")">@(account.IsDeleted ? "Inactive" : "Active" )</span></td>
+                                        <td>@(account.GradeId!=null?account.Grade.GradeName:"Təyin edilməyib")</td>
                                         <td class="dropdown text-center">
                                             <button type="button"
                                                 class="btn
@@ -96,14 +96,17 @@
 
                                             </ul>
                                         </td>
-
-
                                     </tr>
-
                                 }
                             </tbody>
-
-
+                            <tfoot>
+                                <tr>
+                                    <th>Ad Soyad</th>
+                                    <th>Vəzifə</th>
+                                    <th>Dərəcə</th>
+                                    <th class="text-center">-----</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

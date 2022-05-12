@@ -17,11 +17,11 @@ using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers
 { [Authorize]
-    public class CategoryTicketTicketController : BaseIdentityController
+    public class CategoryTicketController : BaseIdentityController
     {
         private readonly ICategoryTicketService _CategoryTicketService;
         private readonly IAppUserService _userService;
-        public CategoryTicketTicketController(
+        public CategoryTicketController(
             IMapper map,
             ICategoryTicketService CategoryTicketService,
             IAppUserService userService,

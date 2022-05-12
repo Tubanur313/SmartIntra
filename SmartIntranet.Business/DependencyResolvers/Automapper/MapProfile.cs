@@ -199,8 +199,6 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #region Photo <-> PhotoDto
             CreateMap<PhotoAddDto, Photo>();
             CreateMap<Photo, PhotoAddDto>();
-            CreateMap<PhotoUpdateDto, Photo>();
-            CreateMap<Photo, PhotoUpdateDto>();
             CreateMap<PhotoListDto, Photo>();
             CreateMap<Photo, PhotoListDto>();
             #endregion

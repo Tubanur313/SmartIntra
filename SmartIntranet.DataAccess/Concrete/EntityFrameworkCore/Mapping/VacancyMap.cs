@@ -23,17 +23,18 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I=>I.City).HasMaxLength(100);
             builder.Property(I=>I.Address).HasMaxLength(200);
             builder.Property(I=>I.Email).HasMaxLength(100);
+            builder.HasOne(s => s.Company)
+                   .WithMany(s => s.Vacancies)
+                   .HasForeignKey(s => s.CompanyId).OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
+
             builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateByUserId).HasDefaultValue(null);
             builder.Property(I => I.CreatedByUserId).HasDefaultValue(null);
             builder.Property(I => I.DeleteByUserId).HasDefaultValue(null);
-            builder.HasOne(s => s.Company)
-                   .WithMany(s => s.Vacancies)
-                   .HasForeignKey(s => s.CompanyId).OnDelete(DeleteBehavior.Restrict);
-            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
-
         }
     }
 }

@@ -10,14 +10,8 @@ namespace SmartIntranet.DTO.DTOs.NewsDto
     public class NewsListDto
     {
         public int Id { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
+        public bool IsDeleted { get; set; }
         public string Title { get; set; }
-        public bool IsActive { get; set; }
         public string Description { get; set; }
         public virtual ICollection<NewsFile> NewsFiles { get; set; }
         public int? AppUserId { get; set; }

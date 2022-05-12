@@ -17,6 +17,7 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public DateTime? CloseDate { get; set; }
         public DateTime? DeadLineEnd { get; set; }
         public DateTime? UpdateDate { get; set; }
+        public bool IsDeleted { get; set; }
         public bool Confirmed { get; set; }
         public IEnumerable<int> CheckListId { get; set; }
         public IEnumerable<int> AppUserWatcherId { get; set; }

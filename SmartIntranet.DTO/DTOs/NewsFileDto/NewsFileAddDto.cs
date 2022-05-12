@@ -12,12 +12,6 @@ namespace SmartIntranet.DTO.DTOs.NewsFileDto
         public string Name { get; set; }
         public int? NewsId { get; set; }
         public News News { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; } 
-        public int? UpdateByUserId { get; set; }
-        public DateTime? UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

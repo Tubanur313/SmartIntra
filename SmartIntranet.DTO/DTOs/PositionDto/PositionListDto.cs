@@ -12,17 +12,10 @@ namespace SmartIntranet.DTO.DTOs.PositionDto
         public int? ParentId { get; set; }
         public Position Parent { get; set; }
         public string Name { get; set; }
-        public bool IsActive { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
+        public bool IsDeleted { get; set; }
         public int? DepartmentId { get; set; }
         public Department Department { get; set; }
         public int? CompanyId { get; set; }
         public Company Company { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }

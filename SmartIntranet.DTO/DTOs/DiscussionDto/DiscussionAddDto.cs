@@ -9,7 +9,6 @@ namespace SmartIntranet.DTO.DTOs.DiscussionDto
     {
         public string Content { get; set; }
         public int? TicketId { get; set; }
-        //public List<IFormFile> Uploads { get; set; }
-        //public string Uploads { get; set; }
+
     }
 }

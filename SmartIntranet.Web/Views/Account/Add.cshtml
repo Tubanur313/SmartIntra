@@ -34,8 +34,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Soyad: </label>
-                                <input type="text" class="form-control" asp-for="LastSurname" autocomplete="off">
-                                <span asp-validation-for="LastSurname" class="text-danger"></span>
+                                <input type="text" class="form-control" asp-for="LastName" autocomplete="off">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
                         </div>
@@ -93,8 +93,6 @@
                                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
                             </div>
                         </div>
-
-
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəzifə: </label>
@@ -107,6 +105,26 @@
 
                                 </select>
                                 <span asp-validation-for="PositionId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Dərəcə: </label>
+                                <select name="select" asp-for="GradeId" name="GradeId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.grades)
+                                    {
+                                        <option value="@item.Id">@item.GradeName</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="GradeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Doğum Tarixi: </label>
+                            <div class="form-group">
+                                <input asp-for="Birthday" type="date" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -205,7 +223,7 @@
                     $("#DepartmentId").empty();
                     var html = "";
                     for (var i in response) {
-                        html += `<option value="${[response[i].id]}"> 
+                        html += `<option value="${[response[i].id]}">
                         ${[response[i].name]}</option>`
                     }
                     if(response.length>0)

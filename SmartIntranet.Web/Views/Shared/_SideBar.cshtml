@@ -1,70 +1,68 @@
 ﻿<nav class="pcoded-navbar">
     <div class="pcoded-inner-navbar main-menu">
         <ul class="pcoded-item pcoded-left-item">
-            @if (User.HasAccess("category.list"))
-            {
-                <li class="pcoded-hasmenu">
-                    <a href="javascript:void(0)">
-                        <span class="pcoded-micon"><i class="feather icon-sidebar"></i></span>
-                        <span class="pcoded-mtext">Ticket Konfiqurasiyalar</span>
-                    </a>
-                    <ul class="pcoded-submenu">
-                        <li class="">
-                            <a asp-controller="category" asp-action="list">
-                                <span class="pcoded-mtext">Kateqoriya</span>
-                            </a>
-                        </li>
-
-
-                        <li class="">
-                            <a asp-controller="checklist" asp-action="list">
-                                <span class="pcoded-mtext">Checklist</span>
-                            </a>
-                        </li>
-
-                        <li class="">
-                            <a asp-controller="SmtpEmail" asp-action="index">
-                                <span class="pcoded-mtext">SMTP Mail Server</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-            }
             @if (User.HasAccess("account.list"))
             {
                 <li class="pcoded-hasmenu">
                     <a href="javascript:void(0)">
-                        <span class="pcoded-micon"><i class="feather icon-sidebar"></i></span>
-                        <span class="pcoded-mtext">Ticket Akkount</span>
+                        <span class="pcoded-micon">
+                            <i class="feather icon-layers"></i>
+                        </span>
+                        <span class="pcoded-mtext">HR Modul</span>
+
                     </a>
                     <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="account" asp-action="List">
+                                <span class="pcoded-mtext">Əməkdaş Siyahısı</span>
+                            </a>
+                        </li>
+                        @if (User.HasAccess("company.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="company" asp-action="List">
+                                    <span class="pcoded-mtext">Şirkət Siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("department.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="department" asp-action="List">
+                                    <span class="pcoded-mtext">Şöbə Siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("position.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="position" asp-action="List">
+                                    <span class="pcoded-mtext">Vəzifə Siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("grade.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="grade" asp-action="List">
+                                    <span class="pcoded-mtext">Dərəcə Siyahısı</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("role.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="role" asp-action="list">
+                                    <span class="pcoded-mtext">Rollar</span>
+                                </a>
+                            </li>
+                        }
 
-                        <li class="">
-                            <a asp-controller="account" asp-action="list">
-                                <span class="pcoded-mtext">Akkount</span>
+                        @*<li class="">
+                            <a asp-controller="account" asp-action="Info">
+                            <span class="pcoded-mtext">Permission</span>
                             </a>
-                        </li>
-                        <li class="">
-                            <a asp-controller="role" asp-action="list">
-                                <span class="pcoded-mtext">Rollar</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a asp-controller="company" asp-action="list">
-                                <span class="pcoded-mtext">Şirkət</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a asp-controller="department" asp-action="list">
-                                <span class="pcoded-mtext">Şöbə</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a asp-controller="position" asp-action="list">
-                                <span class="pcoded-mtext">Vəzifə</span>
-                            </a>
-                        </li>
+                            </li>*@
 
                     </ul>
                 </li>
@@ -115,6 +113,23 @@
                                 </a>
                             </li>
                         }
+                        <li class="">
+                            <a asp-controller="CategoryTicket" asp-action="list">
+                                <span class="pcoded-mtext">Kateqoriya</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a asp-controller="checklist" asp-action="list">
+                                <span class="pcoded-mtext">Checklist</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a asp-controller="SmtpEmail" asp-action="index">
+                                <span class="pcoded-mtext">SMTP Mail Server</span>
+                            </a>
+                        </li>
                         @* @if (User.HasAccess("order.list"))
                             {
                             <li class="">

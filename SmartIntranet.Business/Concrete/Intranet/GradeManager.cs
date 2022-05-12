@@ -1,11 +1,6 @@
 ﻿using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete.Intranet
 {

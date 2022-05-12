@@ -1,0 +1,45 @@
+﻿@model GradeAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
+            <div class="tab-content tabs card-block">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="floatLabel">  Ad: </label>
+                            <input type="text" class="form-control" asp-for="GradeName" autocomplete="off">
+                            <span asp-validation-for="GradeName" class="text-danger"></span>
+                            <span class="messages"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="floatLabel">  Təsvir: </label>
+                            <input type="text" class="form-control" asp-for="Description">
+                            <span class="messages"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                            Təsdiqlə
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+@await Html.PartialAsync("_ValidationScriptsPartial")
+

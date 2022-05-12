@@ -13,13 +13,7 @@ namespace SmartIntranet.DTO.DTOs.NewsDto
         public string Title { get; set; }
         public string Description { get; set; }
         public virtual ICollection<NewsFile> NewsFiles { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public int? AppUserId { get; set; }
         public IntranetUser AppUser { get; set; }
         public int? CategoryId { get; set; }

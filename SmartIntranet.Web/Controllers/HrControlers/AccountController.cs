@@ -13,6 +13,7 @@ using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
+using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
@@ -20,13 +21,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     [Authorize]
     public class AccountController : BaseIdentityController
     {
         private readonly IAppUserService _userService;
         private readonly ICompanyService _companyService;
+        private readonly IGradeService _gradeService;
         private readonly IFileManager _upload;
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
@@ -36,6 +38,7 @@ namespace SmartIntranet.Web.Controllers
             IMapper map,
             IAppUserService userService,
             ICompanyService companyService,
+            IGradeService gradeService,
             IFileManager upload,
             IDepartmentService departmentService,
             IPositionService positionService,
@@ -48,6 +51,7 @@ namespace SmartIntranet.Web.Controllers
         {
             _userService = userService;
             _companyService = companyService;
+            _gradeService = gradeService;
             _upload = upload;
             _departmentService = departmentService;
             _positionService = positionService;
@@ -117,11 +121,13 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Add()
         {
             ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.grades = _map
+                .Map<List<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<DepartmentListDto>>(await _departmentService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.position = _map
-                .Map<List<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<PositionListDto>>(await _positionService.GetAllAsync(x => !x.IsDeleted));
 
             return View();
         }
@@ -144,7 +150,7 @@ namespace SmartIntranet.Web.Controllers
                 }
 
                 IntranetUser appUser = _map.Map<IntranetUser>(model);
-                appUser.UserName = CreateUsername.FixUsername(model.FirstName + "." + model.LastSurname);
+                appUser.UserName = CreateUsername.FixUsername(model.FirstName + "." + model.LastName);
                 appUser.CreatedByUserId=GetSignInUserId();
                 var result = await _userManager.CreateAsync(appUser, model.Password);
                 if (result.Succeeded)
@@ -165,7 +171,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.update")]
         public async Task<IActionResult> Update(int Id)
         {
-            var data = _map.Map<AppUserUpdateDto>(await _userService.FindByIdAsync(Id));
+            var data = _map.Map<AppUserUpdateDto>(await _userService.FindByUserAllInc(Id));
             if (data is null)
             {
                 TempData["error"] = " Məlumat tapılmadı";
@@ -173,18 +179,20 @@ namespace SmartIntranet.Web.Controllers
             }
             ViewBag.companies = _map
                 .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => x.IsDeleted == false));
+                .GetAllAsync(x => !x.IsDeleted));
 
             ViewBag.departments = _map
                 .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false
+                .GetAllAsync(x => !x.IsDeleted
                 && x.CompanyId == data.CompanyId));
 
             ViewBag.position = _map
                 .Map<List<PositionListDto>>(await _positionService
-               .GetAllAsync(x => x.IsDeleted == false
+                .GetAllAsync(x => !x.IsDeleted
                 && x.CompanyId == data.CompanyId
                 && x.DepartmentId == data.DepartmentId));
+            ViewBag.grades = _map
+                .Map<List<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
             return View(data);
         }
         [HttpPost]
@@ -214,6 +222,8 @@ namespace SmartIntranet.Web.Controllers
                 update.LastName = user.LastName;
                 update.Email = user.Email;
                 update.PhoneNumber = user.PhoneNumber;
+                update.Birthday = user.Birthday;
+                update.GradeId = user.GradeId;
                 update.CompanyId = user.CompanyId;
                 update.DepartmentId = user.DepartmentId;
                 update.PositionId = user.PositionId;

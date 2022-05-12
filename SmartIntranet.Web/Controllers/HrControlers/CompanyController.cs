@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class CompanyController : BaseIdentityController
     {
@@ -39,7 +39,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "company.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _companyService.GetAllAsync(x => x.IsDeleted == false);
+            var model = await _companyService.GetAllAsync(x => !x.IsDeleted);
             if (model.Count > 0)
             {
                 return View(_map.Map<List<CompanyListDto>>(model));
@@ -51,7 +51,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Add()
         {
             ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
             return View();
         }
         [HttpPost]

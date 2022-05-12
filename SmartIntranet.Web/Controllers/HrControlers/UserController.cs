@@ -22,7 +22,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class UserController : BaseIdentityController
     {

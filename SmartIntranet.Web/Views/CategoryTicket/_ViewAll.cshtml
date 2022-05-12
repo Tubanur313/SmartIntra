@@ -22,10 +22,10 @@
                                     <th>Dəstək</th>
                                     <th>Ticket Növü</th>
                                     @*<th>Dəstək</th>*@
-                                    @if (User.HasAccess("category.add"))
+                                    @if (User.HasAccess("CategoryTicket.add"))
                                     {
                                         <th class="text-center">
-                                            <button onclick="showInPopup('@Url.Action("Add","Category",null,Context.Request.Scheme)','Kateqoriya əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                                            <button onclick="showInPopup('@Url.Action("Add","CategoryTicket",null,Context.Request.Scheme)','Ticket Kateqoriya əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
                                         </th>
                                     }
                                 </tr>
@@ -52,7 +52,7 @@
                                         }
                                         @if (!(category.Supporter is null))
                                         {
-                                            <td> @category.Supporter.FirstName+@category.Supporter.LastName</td>
+                                            <td> @category.Supporter.FirstName @category.Supporter.LastName</td>
                                         }
                                         else
                                         {
@@ -74,20 +74,20 @@
                                                 <i class="fa fa-list-ul"></i>
                                             </button>
                                             <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                @if (User.HasAccess("category.update"))
+                                                @if (User.HasAccess("CategoryTicket.update"))
                                                 {
                                                     <li>
-                                                        <button onclick="showInPopup('@Url.Action("Update","Category",new {id=category.Id},Context.Request.Scheme)','Yenilə')"
+                                                        <button onclick="showInPopup('@Url.Action("Update","CategoryTicket",new {id=category.Id},Context.Request.Scheme)','Yenilə')"
                                                         class="btn  btn-default waves-effect md-trigger text-warning">
                                                             <i class="icofont  icofont-edit text-warning  p-r-15"></i>
                                                             Yenilə
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("category.delete"))
+                                                @if (User.HasAccess("CategoryTicket.delete"))
                                                 {
                                                     <li>
-                                                        <button onclick="removeItem(@category.Id,`@category.Name`,`@Url.Action("Delete","Category").ToString()`)"
+                                                        <button onclick="removeItem(@category.Id,`@category.Name`,`@Url.Action("Delete","CategoryTicket").ToString()`)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
                                                             <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
                                                             Sil

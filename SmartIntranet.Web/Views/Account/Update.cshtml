@@ -49,7 +49,7 @@
                                 <span class="messages"></span>
                             </div>
                         </div>
-              
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Tel: </label>
@@ -101,24 +101,26 @@
                                 <span asp-validation-for="PositionId" class="text-danger"></span>
                             </div>
                         </div>
-                       @* <div class="col-sm-6">
-                            <div class="form-radio form-group">
-                                <div class="radio radio-inline">
-                                    <label for="True">
-                                        <input type="radio" id="True" value="True" asp-for="IsDeleted"
-                                               checked="checked">
-                                        <i class="helper"></i> Deactive
-                                    </label>
-                                </div>
-                                <div class="radio radio-inline">
-                                    <label for="False">
-                                        <input type="radio" id="False" value="False" asp-for="IsDeleted">
-                                        <i class="helper"></i> Active
-                                    </label>
-                                </div>
-                            </div>
-                        </div>*@
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Dərəcə: </label>
+                                <select name="select" asp-for="GradeId" name="GradeId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.grades)
+                                    {
+                                        <option value="@item.Id">@item.GradeName</option>
+                                    }
 
+                                </select>
+                                <span asp-validation-for="GradeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Doğum Tarixi: </label>
+                            <div class="form-group">
+                                <input asp-for="Birthday" type="date" class="form-control">
+                            </div>
+                        </div>
                     </div>
 
 
@@ -139,7 +141,7 @@
                                         <div class="border text-center pt-2">
                                             <div class="pt-0">
                                                 <label class="floatLabel">Mövcüd Şəkil:</label>
-                                                <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                                <img src="~/uploads/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
                                             </div>
                                         </div>
                                     </div>
