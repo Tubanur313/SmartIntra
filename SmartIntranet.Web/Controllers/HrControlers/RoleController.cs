@@ -26,10 +26,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly RoleManager<IntranetRole> _roleManager;
 
         public RoleController(IntranetContext db, RoleManager<IntranetRole> roleManager, UserManager<IntranetUser> userManager,
-            IMapper mapper,
+            IMapper map,
             IAppRoleService roleService,
             IHttpContextAccessor httpContextAccessor,
-            SignInManager<IntranetUser> signInManager) : base(userManager, httpContextAccessor, signInManager, mapper)
+            SignInManager<IntranetUser> signInManager) : base(userManager, httpContextAccessor, signInManager, map)
         {
             _db = db;
             _roleService = roleService;
@@ -67,7 +67,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 model.CreatedByUserId = GetSignInUserId();
                 model.IsActive = true;
                 await _roleManager.CreateAsync(_map.Map<IntranetRole>(model));
-                //await _roleService.AddAsync(_mapper.Map<IntranetRole>(model));
+                //await _roleService.AddAsync(_map.Map<IntranetRole>(model));
                 TempData["success"] = Messages.Add.Added;
                 return RedirectToAction("List");
 

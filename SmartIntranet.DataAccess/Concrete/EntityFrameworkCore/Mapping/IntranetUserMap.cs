@@ -15,7 +15,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.FirstName).IsRequired();
             builder.Property(I => I.LastName).IsRequired();
             builder.Property(I => I.Picture).HasDefaultValue("default.png");
-            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
+            builder.Property(I => I.IsDeleted);
 
 
 

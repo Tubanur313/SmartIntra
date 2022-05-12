@@ -1,0 +1,180 @@
+﻿@model NewsUpdateDto
+@{
+    Layout = null;
+}
+<head>
+    <!-- Select 2 css -->
+    <link rel="stylesheet" href="~/files/bower_components2/select2/dist/css/select2.min.css" />
+    <!-- Multi Select css -->
+    <link rel="stylesheet" type="text/css"
+          href="~/files/bower_components2/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components2/multiselect/css/multi-select.css" />
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/uploadPrevView.css" />
+    
+    <!-- img-upload -->
+    <link rel="stylesheet" type="text/css" href="~/files/lib/ticket-img-uploader/ticket-img-uploader.css" />
+</head>
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs  tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab"
+                   href="#home1" role="tab">Məlumatlar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#profile1" role="tab">Fayllar</a>
+            </li>
+
+        </ul>
+        <form asp-action="Update">
+            <div class="tab-content tabs card-block">
+                <div class="tab-pane active" id="home1" role="tabpanel">
+                    <input hidden class="form-control" asp-for="Id" autocomplete="off">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Başlıq: </label>
+                                <input type="text" class="form-control" asp-for="Title" autocomplete="off">
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Kateqoriya Siyahı: </label>
+                                <select class="js-example-responsive" asp-for="CategoriesId" name="CategoriesId" data-placeholder="    Seçim edin" class="form-control js-example-basic-single col-sm-12"
+                                        multiple="multiple" style="width:75%;">
+                                    @foreach (var item in ViewBag.categories)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CategoriesId" class="text-danger"></span>
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus" dir="ltr" style="width: 332px;">
+                                    <span class="selection">
+                                        <span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1">
+                                            <ul class="select2-selection__rendered">
+
+                                                @foreach (var item in Model.CategoryNews)
+                                                {
+                                                    <li class="select2-selection__choice">
+                                                        @item.Category.Name
+                                                        <span onclick="removeNewsCategory(@item.Id,@item.CategoryId,`@item.Category.Name`,`@Url.Action("DeleteCategoryFromCategoryNews","News")`,this)" class="select2-selection__choice__remove" role="presentation">×</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>  Məzmun: </label>
+                                <textarea type="text" class="form-control" asp-for="Description"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="profile1" role="tabpanel">
+                    <div class="col-md-12">
+                        <div id="upload-files" class="panel-heading">
+                            <h3 class="">Fayl Yüklə</h3>
+                        </div>
+                        <div id="formData" method="POST" class="form-group" enctype="multipart/form-data">
+
+                            <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                            <input hidden="hidden" type="file" name="files" id="files" multiple class="form-control">
+                            <input type="hidden" asp-for="Id" />
+
+                            <div class="form-group row mt-3">
+                                <div class="col-sm-12 d-flex justify-content-between">
+                                    <button type="button" id="sub-btn" class="btn btn-primary m-b-0 disable btn-block">
+                                        Yüklə
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="row">
+                                <div id="loadspin" class="d-none col-xl-12 col-md-4 col-sm-6 " style="position: absolute;z-index: 1;background: #ffffffb5;width: 100%;height: 50%;">
+                                    <div class="loader-block" style="position: absolute;left: 45%;top: 40%;">
+                                        <svg id="loader2" viewBox="0 0 100 100">
+                                            <circle id="circle-loader2" cx="50" cy="50" r="45"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="col-sm-2">
+                                    </div>
+                                    <div class="col-sm-10">
+
+                                        <div class="form-group">
+                                            <div id="image_preview" class="row" @*style="width:100%;"*@>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                        Təsdiqlə
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+<!-- Select 2 js -->
+<script type="text/javascript" src="~/files/bower_components2/select2/dist/js/select2.full.min.js">
+
+</script>
+<!-- Multiselect js -->
+<script type="text/javascript" src="~/files/bower_components2/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="~/files/bower_components2/multiselect/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="~/files/assets/js/jquery.quicksearch.js"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="~/files/assets/pages/advance-elements/select2-custom.js"></script>
+<!-- ckeditor js -->
+<script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
+<!-- ticket img upload js -->
+<script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
+<script>
+    $(document).ready(function () {
+        $.validator.setDefaults({ ignore:''});
+        CKEDITOR.replace('Description');
+        $("form").on("submit",function(e){
+                var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
+        if( !(Description)){
+             toastr.error("Məzmun boş ola bilməz","Diqqət !");
+             e.preventDefault();
+        }
+        });
+    });
+</script>

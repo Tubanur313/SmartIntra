@@ -14,7 +14,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Name).IsRequired();
             builder.Property(I => I.Description).HasColumnType("ntext");
 
-            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
+            builder.Property(I => I.IsDeleted);
 
             builder.HasOne(s => s.Company)
                    .WithMany(s => s.Departments)

@@ -36,7 +36,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 
 
 
-            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
+            builder.Property(I => I.IsDeleted);
 
             builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);

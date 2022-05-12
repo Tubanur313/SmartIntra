@@ -18,9 +18,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(nf => nf.AppUser)
                 .Include(nf => nf.CategoryNews)
                 .ThenInclude(nf => nf.Category)
-                .Where(nf => !nf.IsDeleted)
-                .Where(nf => nf.Id == id)
-                .FirstAsync();
+                .Where(nf => !nf.IsDeleted && nf.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<News>> GetAllWithIncludeAsync()

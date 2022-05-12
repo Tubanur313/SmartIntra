@@ -19,9 +19,7 @@
         }
         else {
             return true;
-
         }
-
     }
 })(jQuery);
 

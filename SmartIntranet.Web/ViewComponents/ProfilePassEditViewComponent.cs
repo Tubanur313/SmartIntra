@@ -16,17 +16,17 @@ namespace SmartIntranet.Web.ViewComponents
     {
 
         private readonly UserManager<IntranetUser> _userManager;
-        private readonly IMapper _mapper;
-        public ProfilePassEditViewComponent(UserManager<IntranetUser> userManager,IAppUserService appUserService, IMapper mapper)
+        private readonly IMapper _map;
+        public ProfilePassEditViewComponent(UserManager<IntranetUser> userManager,IAppUserService appUserService, IMapper map)
         {
             _userManager = userManager;
-            _mapper = mapper;
+            _map = map;
         }
 
         public IViewComponentResult Invoke()
         {
             var identityUserName = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            var model = _mapper.Map<AppUserPassDto>(identityUserName);
+            var model = _map.Map<AppUserPassDto>(identityUserName);
             return View(model);
         }
     }

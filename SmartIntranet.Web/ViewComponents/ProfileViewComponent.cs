@@ -10,17 +10,17 @@ namespace SmartIntranet.Web.ViewComponents
     public class ProfileViewComponent : ViewComponent
     {
         private readonly UserManager<IntranetUser> _userManager;
-        private readonly IMapper _mapper;
-        public ProfileViewComponent(UserManager<IntranetUser> userManager, IMapper mapper)
+        private readonly IMapper _map;
+        public ProfileViewComponent(UserManager<IntranetUser> userManager, IMapper map)
         {
             _userManager = userManager;
-            _mapper = mapper;
+            _map = map;
         }
 
         public IViewComponentResult Invoke()
         {
             var identityUserName = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            var model = _mapper.Map<AppUserInfoDto>(identityUserName);
+            var model = _map.Map<AppUserInfoDto>(identityUserName);
             return View(model);
         }
     }
