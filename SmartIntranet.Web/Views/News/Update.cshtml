@@ -13,7 +13,8 @@
     <link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/files/assets/css/jquery.mCustomScrollbar.css">
     <link rel="stylesheet" type="text/css" href="~/files/assets/css/uploadPrevView.css" />
-    
+    <!-- lightbox Fremwork -->
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components2/lightbox2/dist/css/lightbox.min.css">
     <!-- img-upload -->
     <link rel="stylesheet" type="text/css" href="~/files/lib/ticket-img-uploader/ticket-img-uploader.css" />
 </head>
@@ -21,14 +22,19 @@
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs  tabs" role="tablist">
+        <ul class="nav nav-tabs  md-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
-                   href="#home1" role="tab">Məlumatlar</a>
+                   href="#home1" role="tab">
+                    <i class="icofont icofont-home"></i> &nbsp; Məlumatlar
+                </a>
+                <div class="slide"></div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab"
-                   href="#profile1" role="tab">Fayllar</a>
+                        <li class="nav-item">
+                <a class="nav-link " data-toggle="tab" href="#profile1" role="tab">
+                    <i class="icofont icofont-files"></i>&nbsp; Fayllar
+                </a>
+                <div class="slide"></div>
             </li>
 
         </ul>
@@ -93,39 +99,47 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="profile1" role="tabpanel">
-                    <div class="col-md-12">
-                        <div id="upload-files" class="panel-heading">
-                            <h3 class="">Fayl Yüklə</h3>
-                        </div>
-                        <div id="formData" method="POST" class="form-group" enctype="multipart/form-data">
-
-                            <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
-                            <input hidden="hidden" type="file" name="files" id="files" multiple class="form-control">
-                            <input type="hidden" asp-for="Id" />
-
-                            <div class="form-group row mt-3">
-                                <div class="col-sm-12 d-flex justify-content-between">
-                                    <button type="button" id="sub-btn" class="btn btn-primary m-b-0 disable btn-block">
-                                        Yüklə
-                                    </button>
+                    <div class="page-body gallery-page">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-block">
+                                        <div class="row">
+                                            @foreach (var photo in Model.NewsFiles)
+                                            {
+                                                <div class="col-lg-2 col-sm-2">
+                                                    <div class="thumbnail">
+                                                        <div class="thumb">
+                                                            <a href="~/news/@photo.Name"
+                                                           data-lightbox="2" data-title="@photo.Name">
+                                                                <img src="~/news/@photo.Name"
+                                                                 alt="" class="img-fluid img-thumbnail">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="form-group">
                         <div class="panel panel-primary">
-                            <div class="row">
-                                <div id="loadspin" class="d-none col-xl-12 col-md-4 col-sm-6 " style="position: absolute;z-index: 1;background: #ffffffb5;width: 100%;height: 50%;">
-                                    <div class="loader-block" style="position: absolute;left: 45%;top: 40%;">
-                                        <svg id="loader2" viewBox="0 0 100 100">
-                                            <circle id="circle-loader2" cx="50" cy="50" r="45"></circle>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="panel-body">
 
-                                    <div class="col-sm-2">
+                            <div class="panel-heading">
+                                <h3 class="">Fayl Yüklə</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                                            <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-10">
-
+                                    <div class="col-sm-12">
                                         <div class="form-group">
                                             <div id="image_preview" class="row" @*style="width:100%;"*@>
                                             </div>
@@ -163,8 +177,11 @@
 <script type="text/javascript" src="~/files/assets/pages/advance-elements/select2-custom.js"></script>
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
+<!-- cust-validation js -->
+<script src="~/files/lib/cust_ajax/cust-validation.js"></script>
 <!-- ticket img upload js -->
 <script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
+<script type="text/javascript" src="~/files/bower_components2/lightbox2/dist/js/lightbox.min.js"></script>
 <script>
     $(document).ready(function () {
         $.validator.setDefaults({ ignore:''});
@@ -176,5 +193,9 @@
              e.preventDefault();
         }
         });
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        })
     });
-</script>
+</script>   
