@@ -10,6 +10,7 @@ namespace SmartIntranet.DTO.DTOs.NewsDto
     public class NewsAddDto
     {
         public int Id { get; set; }
+        public int? AppUserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public virtual ICollection<NewsFile> NewsFiles { get; set; }

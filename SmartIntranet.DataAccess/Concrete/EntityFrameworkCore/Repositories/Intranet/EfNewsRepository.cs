@@ -29,6 +29,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(nf=>nf.NewsFiles)
                 .Include(nf => nf.AppUser)
                 .Include(nf => nf.CategoryNews)
+                .ThenInclude(nf => nf.Category)
                 .Where(nf => !nf.IsDeleted)
                 .OrderByDescending(c => c.CreatedDate)
                 .ToListAsync();
@@ -41,6 +42,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(nf => nf.NewsFiles)
                 .Include(nf => nf.AppUser)
                 .Include(nf => nf.CategoryNews)
+                .ThenInclude(nf => nf.Category)
                 .Where(nf => nf.DeleteByUserId==null && !nf.IsDeleted)
                 .OrderByDescending(c => c.CreatedDate)
                 .ToListAsync();

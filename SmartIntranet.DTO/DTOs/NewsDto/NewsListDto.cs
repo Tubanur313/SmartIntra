@@ -14,6 +14,7 @@ namespace SmartIntranet.DTO.DTOs.NewsDto
         public string Title { get; set; }
         public string Description { get; set; }
         public virtual ICollection<NewsFile> NewsFiles { get; set; }
+        public virtual ICollection<CategoryNews> CategoryNews { get; set; }
         public int? AppUserId { get; set; }
         public IntranetUser AppUser { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -1,0 +1,144 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.DTO.DTOs.CategoryDto;
+using SmartIntranet.DTO.DTOs.CompanyDto;
+using SmartIntranet.DTO.DTOs.VacancyDto;
+using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.Membership;
+using SmartIntranet.Web.Controllers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Intranet.Web.Controllers
+{
+    public class VacancyController : BaseIdentityController
+    {
+        private readonly IVacancyService _vacancyService;
+        private readonly ICompanyService _companyService;
+
+        public VacancyController(UserManager<IntranetUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            SignInManager<IntranetUser> signInManager,
+            IMapper map,
+            IVacancyService vacancyService,
+            ICompanyService companyService
+            ) : base(userManager, httpContextAccessor, signInManager,map)
+        {
+            _vacancyService = vacancyService;
+            _companyService = companyService;
+        }
+        [HttpGet]
+        [Authorize(Policy = "vacancy.info")]
+        public async Task<IActionResult> Info()
+        {
+            var model = await _vacancyService.GetAllWithIncludeAsync();
+            if (model.Count > 0)
+            {
+                return View(_map.Map<List<VacancyListDto>>(model));
+            }
+            return View(new List<VacancyListDto>());
+        }
+        [HttpGet]
+        [Authorize(Policy = "vacancy.detail")]
+        public IActionResult Detail(int id)
+        {
+            return View(_map.Map<VacancyListDto>(_vacancyService.FindByIdIncAsync(id)));
+        }
+        [HttpGet]
+        [Authorize(Policy = "category.list")]
+        public async Task<IActionResult> List()
+        {
+            var model = await _vacancyService.GetAllWithIncludeAsync();
+            if (model.Count > 0)
+            {
+                return View(_map.Map<List<VacancyListDto>>(model));
+            }
+            return View(new List<VacancyListDto>());
+        }
+        [HttpGet]
+        [Authorize(Policy = "category.add")]
+        public async Task<IActionResult> Add()
+        {
+            ViewBag.companies = _map
+                .Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+
+            return View();
+        }
+        [HttpPost]
+        [Authorize(Policy = "vacancy.add")]
+        public async Task<IActionResult> Add(VacancyAddDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var image = await _companyService.FindByIdAsync(model.CompanyId);
+                var add = _map.Map<Vacancy>(model);
+                add.StartDate = DateTime.Now;
+                add.ImagePath = image.LogoPath;
+                add.CreatedByUserId = GetSignInUserId();
+                if (await _vacancyService.AddReturnEntityAsync(add) is null)
+                {
+                    TempData["error"] = Messages.Add.notAdded;
+                    return RedirectToAction("List");
+                }
+                TempData["success"] = Messages.Add.Added;
+                return RedirectToAction("List");
+            }
+            else
+            {
+                TempData["error"] = Messages.Error.notComplete;
+                return RedirectToAction("List");
+            }
+        }
+        [HttpGet]
+        [Authorize(Policy = "vacancy.update")]
+        public async Task<IActionResult> Update(int id)
+        {
+            var data = _map.Map<VacancyUpdateDto>(await _vacancyService.FindByIdAsync(id));
+            if (data is null)
+            {
+                TempData["error"] = Messages.Error.notFound;
+                return RedirectToAction("List");
+            }
+            ViewBag.companies = _map
+                .Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            return View(data);
+        }
+        [HttpPost]
+        [Authorize(Policy = "vacancy.update")]
+        public async Task<IActionResult> Update(VacancyAddDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _vacancyService.FindByIdAsync(model.Id);
+                var update = _map.Map<Vacancy>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+
+                await _vacancyService.UpdateAsync(update);
+                TempData["success"] = Messages.Update.Updated;
+                return RedirectToAction("List");
+            }
+            TempData["error"] = Messages.Error.notComplete;
+            return RedirectToAction("List");
+        }
+        [Authorize(Policy = "vacancy.delete")]
+        public async Task Delete(int id)
+        {
+            var delete = await _vacancyService.FindByIdAsync(id);
+            delete.IsDeleted = true;
+            delete.DeleteByUserId = GetSignInUserId();
+            delete.DeleteDate = DateTime.Now;
+            await _vacancyService.UpdateAsync(delete);
+        }
+    }
+}

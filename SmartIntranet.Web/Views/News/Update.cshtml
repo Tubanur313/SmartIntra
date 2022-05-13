@@ -38,7 +38,7 @@
             </li>
 
         </ul>
-        <form asp-action="Update">
+        <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
             <div class="tab-content tabs card-block">
                 <div class="tab-pane active" id="home1" role="tabpanel">
                     <input hidden class="form-control" asp-for="Id" autocomplete="off">
@@ -136,7 +136,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
-                                            <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
+                                            <input hidden="hidden" type="file" name="uploads" id="files" accept="image/*" multiple class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-sm-12">

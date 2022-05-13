@@ -20,8 +20,6 @@ namespace SmartIntranet.DTO.DTOs.VacancyDto
         public DateTime EndDate { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public bool IsDeleted { get; set; }
         public int CompanyId { get; set; }
-        public Company Company { get; set; }
     }
 }

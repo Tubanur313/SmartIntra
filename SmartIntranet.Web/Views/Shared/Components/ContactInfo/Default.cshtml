@@ -1,0 +1,51 @@
+﻿@model ICollection<AppUserContactListDto>
+
+<div class="card">
+    <div class="card-block pb-0">
+        <div class="input-group input-group-button input-group-primary mb-0">
+            <input id="myInput" type="text" class="form-control" placeholder="Axtar" data-list=".livesearch" name="search-highlight"  autocomplete="off">
+@*            <button class="btn btn-default input-group-addon" id="basic-addon1">
+                <i class="icofont icofont-search-alt-1"></i>
+            </button>*@
+        </div>
+    </div>
+    <div class="users-list">
+@*        <div class="card-header">
+            <h5 class="card-header-text">
+                Activity Ticker
+            </h5>
+        </div>*@
+
+            <ul class="livesearch card-blocks user-boxs">
+        @foreach (var acc in Model)
+        {
+                <li class=" medias m-b-10">
+                    <a class="media-left" href="#!">
+                        <img class="media-object  img-radius rounded-circle"
+                         style=" height: 50px; width: 70px;"
+                         src="~/profile/@(acc.Picture!="default.png"?acc.Picture:"default.png")"
+                         alt="@acc.Picture"
+                         data-toggle="tooltip"
+                         data-placement="left" title="
+
+                         @(acc.Company!=null?acc.Company.Name:"Təyin edilməyib") / 
+                         @(acc.Department!=null?acc.Department.Name:"Təyin edilməyib") / 
+                         @(acc.Position!=null?acc.Position.Name:"Təyin edilməyib")">
+                    </a>
+                    <div class="media-body pt-0">
+                        <small class="chat-header">
+                            @acc.Name @acc.Surname
+                        </small>
+                        <div class="text-muted social-designation" style="display:grid;">
+                            <small> @acc.Email</small>
+                            <small> @acc.PhoneNumber</small>
+                        </div>
+
+                    </div>
+                </li>
+        }
+            </ul>
+
+
+    </div>
+</div>

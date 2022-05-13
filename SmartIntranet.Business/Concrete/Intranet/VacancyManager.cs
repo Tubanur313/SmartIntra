@@ -30,5 +30,10 @@ namespace SmartIntranet.Business.Concrete.Intranet
         {
             return _vacancyDal.FindByIdIncAsync(id);
         }
+
+        public async Task<List<Vacancy>> GetAllWithIncludeAsync()
+        {
+            return await _vacancyDal.GetAllWithIncludeAsync();
+        }
     }
 }

@@ -1,0 +1,129 @@
+﻿@model IEnumerable<VacancyListDto>
+
+<!-- Data Table Css -->
+<!-- <link rel="stylesheet" type="text/css" href="../files/assets/pages/data-table/css/jquery.dataTables.min.css"> -->
+<link rel="stylesheet" type="text/css" href="~/files/bower_components2/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="~/files/assets/pages/data-table/css/buttons.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/files/bower_components2/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css">
+
+
+
+<div class="page-body">
+    <div class="row">
+        <!-- Left column start -->
+        <div class="col-lg-12 col-xl-12">
+            <!-- Job description card start -->
+            <div class="card">
+                <div class="card-block contact-details">
+                    <div class="data_table_main table-responsive dt-responsive">
+                        <table id="simpletable"
+                               class="table table-striped table-bordered nowrap">
+                            <thead>
+                                <tr>
+                                    <th>Başlıq</th>
+                                    <th>Şirkət</th>
+                                    <th>Maaş</th>
+                                    <th>Şəhər</th>
+                                    <th>İş saatı</th>
+                                    <th>Ünvan</th>
+                                    @*<th>Email</th>*@
+                                    @*<th>Başlama</th>*@
+                                    <th>Bitmə vaxtı</th>
+                                    <th class="text-center">
+                                        @if (User.HasAccess("Vacancy.add"))
+                                        {
+                                            <button onclick="showInPopup('@Url.Action("Add","Vacancy",null,Context.Request.Scheme)','Vakansiya əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                                        }
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var Vacancy in Model)
+                                {
+
+                                    <tr>
+                                        <td data-toggle="tooltip"
+                                        data-html="true"
+                                        data-placement="left" title="@Html.Raw(Vacancy.PosDesc)">
+                                            @Vacancy.Title
+                                        </td>
+                                        <td>@(Vacancy.CompanyId!=0?Vacancy.Company.Name:"Təyin edilməyib")</td>
+                                        <td>@Vacancy.Salary</td>
+                                        <td>@Vacancy.City</td>
+                                        <td>@Vacancy.Occupations</td>
+                                        <td>@Vacancy.Address</td>
+                                        @*<td>@Vacancy.Email</td>*@
+                                        <td>@Vacancy.EndDate.ToString("dd-MM-yyyy")</td>
+
+                                        <td class="dropdown text-center">
+                                            <button type="button"
+                                                class="btn
+                                                btn-outline-info
+                                                @*dropdown-toggle*@"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="fa fa-list-ul"></i>
+                                            </button>
+                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                @if (User.HasAccess("Vacancy.update"))
+                                                {
+                                                    <li>
+
+                                                        <button onclick="showInPopup('@Url.Action("Update","Vacancy",new {id=Vacancy.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-warning">
+                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                            Yenilə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("Vacancy.delete"))
+                                                {
+                                                    <li>
+                                                        <button onclick="removeItem(@Vacancy.Id,`@Vacancy.Title`,`@Url.Action("Delete","Vacancy").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                            Sil
+                                                        </button>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Başlıq</th>
+                                    <th>Şirkət</th>
+                                    <th>Maaş</th>
+                                    <th>Şəhər</th>
+                                    <th>İş saatı</th>
+                                    <th>Ünvan</th>
+                                    @*<th>Email</th>
+                                        <th>Başlama</th>*@
+                                    <th>Bitmə vaxtı</th>
+                                    <th class="text-center">-----</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>        <!-- Job description card end -->
+        </div>
+    </div>
+
+</div>
+@*<script>
+    $(document).ready(function () {
+    $('#order-table3').DataTable({
+    "paging": true,
+    "ordering": true,
+    "bLengthChange": true,
+    "info": true,
+    "searching": true
+    });
+    });
+    </script>*@

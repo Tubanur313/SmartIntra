@@ -37,7 +37,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.Users
-                .Where(x => x.IsDeleted == false)
+                .Where(x => !x.IsDeleted)
                 .Include(x => x.Grade)
                 .Include(x => x.Company)
                 .Include(y => y.Department)
@@ -49,7 +49,13 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         public async Task<List<IntranetUser>> GetAllIncludeAsync(Expression<Func<IntranetUser, bool>> filter)
         {
             using var context = new IntranetContext();
-            return await context.Users.Where(filter).Include(x => x.Grade).Include(x => x.Company).Include(y => y.Department).Include(z => z.Position).Where(filter).ToListAsync();
+            return await context.Users
+                .Include(x => x.Grade)
+                .Include(x => x.Company)
+                .Include(y => y.Department)
+                .Include(z => z.Position)
+                .Where(filter)
+                .ToListAsync();
 
         }
 

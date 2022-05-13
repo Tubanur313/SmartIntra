@@ -1,0 +1,100 @@
+﻿@model List<VacancyListDto>
+@{
+    ViewData["Title"] = "Info";
+}
+
+<!-- Page-header start -->
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Vakansiyalar</h4>
+                    <span>Aktual vakansiya məlumatları </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="row">
+
+        @foreach (var vac in Model)
+        {
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="media">
+                            <a class="media-left media-middle" href="#">
+                                <img class="media-object img-60"
+                                 src="~/uploads/@vac.Company.LogoPath"
+                                 alt="Generic placeholder image">
+                            </a>
+                            <div class="media-body media-middle">
+                                <div class="company-name">
+                                    <p>
+                                        @vac.Title
+                                    </p>
+                                    <span class="text-muted f-14">
+                                        @vac.StartDate.ToString("dd-MM-yyyy")
+                                    </span>
+                                </div>
+                                @if ((DateTime.Now - vac.StartDate).Days < 7)
+                                {
+                                    <div class="job-badge">
+                                        <label class="label bg-primary">Yeni</label>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-block">
+                        <div class="job-meta-data"><i class="icofont icofont-location-pin"></i>@vac.City</div>
+                        <div class="job-meta-data"><i class="icofont icofont-bag-alt"></i>@vac.Occupations</div>
+                        <div class="job-meta-data"><i class="icofont icofont-ui-clock"></i>@vac.EndDate.ToString("dd-MM-yyyy")</div>
+
+                        <div class="text-right">
+                            <a asp-controller="vacancy" asp-action="detail" asp-route-id="@vac.Id"
+                                class="btn btn-primary waves-effect waves-light btn-sm">
+                                Müraciət edin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section CrudJs{
+<!-- Select 2 js -->
+<script type="text/javascript"
+        src="~/files/bower_components2/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript"
+        src="~/files/assets/js/jquery.quicksearch.js"></script>
+<!--<script type="text/javascript" src="../files/assets/pages/advance-elements/select2-custom.js"></script>-->
+<!-- isotope js -->
+<script src="~/files/assets/pages/isotope/jquery.isotope.js"></script>
+<script src="~/files/assets/pages/isotope/isotope.pkgd.min.js"></script>
+<script type="text/javascript">
+    $(window).on('load', function () {
+        var $container = $('.filter-container');
+        $container.isotope({
+            filter: '*',
+            animationOptions: {
+                duration: 750,
+                easing: 'linear',
+                queue: false
+            }
+        });
+        var $grid = $('.default-grid').isotope({
+            itemSelector: '.default-grid-item',
+            masonry: {}
+        });
+    });
+
+</script>
+
+}

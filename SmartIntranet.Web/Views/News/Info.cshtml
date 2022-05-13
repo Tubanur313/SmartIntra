@@ -1,1 +1,347 @@
-﻿
+﻿@model ICollection<NewsListDto>
+@{
+    ViewData["Title"] = "Info";
+}
+@section CustomCss{
+<link rel="stylesheet" type="text/css" href="~/files/assets/css/dateAnimation.css" />
+<link rel="stylesheet" type="text/css" href="~/files/lib/slick-carousel/slick.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<style>
+    #sections {
+        word-wrap: break-word;
+    }
+
+    .moretext {
+        display: none;
+    }
+</style>
+<style>
+    .addReadMore.showlesscontent .SecSec,
+    .addReadMore.showlesscontent .readLess {
+        display: none;
+    }
+
+    .addReadMore.showmorecontent .readMore {
+        display: none;
+    }
+
+    .addReadMore .readMore,
+    .addReadMore .readLess {
+        font-weight: bold;
+        margin-left: 2px;
+        color: cadetblue;
+        cursor: pointer;
+    }
+
+    .addReadMoreWrapTxt.showmorecontent .SecSec,
+    .addReadMoreWrapTxt.showmorecontent .readLess {
+        display: block;
+    }
+</style>
+}
+<!-- Page-header start -->
+<div>
+</div>
+<!-- Page-header end -->
+<!-- Page-body start -->
+<div class="page-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div>
+                <div class="content   social-timeline">
+                    <div class="">
+                        <div class="row">
+
+                            <div class="col-xl-9      col-lg-8  col-md-8  col-lg-offset-3">
+
+                                <div class="row">
+                                    <div class="col-md-12  timeline-dot">
+                                        <div class="bg-white p-relative">
+                                            <div class="md-float-material card-block  user-box">
+
+                                                @foreach (var news in Model)
+                                                {
+                                                    if (news.NewsFiles.Count != 0)
+                                                    {
+                                                        <div class="row p-t-10 p-b-10">
+                                                            <div class="col-lg-3 col-md-6 col-sm-12 news-slide">
+
+                                                                @foreach (var photo in news.NewsFiles)
+                                                                {
+                                                                    <a href="#">
+                                                                        <img src="~/news/@(photo.Name!=null?photo.Name:"default.png")"
+                                                                 class="img-fluid width-100 m-b-20"
+                                                                 alt="img-edit">
+                                                                    </a>
+                                                                }
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-6 col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="media   m-b-10">
+                                                                            <div class="media-body" style="display: flex; justify-content: space-between;">
+                                                                                <div class="chat-header">
+                                                                                    <h2>
+                                                                                        @news.Title
+                                                                                    </h2>
+                                                                                </div>
+                                                                                <div class="social-designation">
+                                                                                    <div class="d-flex mb-2">
+
+                                                                                        <a class="media-left" href="#!" style="padding-right: 15px;">
+                                                                                            <img class="media-object rounded-circle
+                                                                                                img-radius" src="~/profile/@news.AppUser.Picture" style=" height: 40px; width: 40px;">
+                                                                                        </a>
+                                                                                        <span class="text-muted mt-3">
+                                                                                            @news.AppUser.FirstName @news.AppUser.LastName
+
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <span class="text-muted">
+
+                                                                                        @news.CreatedDate.ToString("dd-MM-yyyy / hh:mm")
+                                                                                    </span>
+                                                                                    <div>
+                                                                                        @if (news.CategoryNews.Count > 0)
+                                                                                        {
+                                                                                            foreach (var categ in news.CategoryNews)
+                                                                                            {
+                                                                                                <span class="badge badge-info">@categ.Category.Name</span>
+                                                                                            }
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-xs-6">
+                                                                            <div id="sections">
+                                                                                @if (news.Description != null)
+                                                                                {
+                                                                                    <div class="article">
+                                                                                        <span class="lesstext">
+                                                                                            @*@(Html.Raw($"<p>{Html.Raw(news.Description).ToString().Substring(0,100)}... </p>"))*@
+                                                                                        </span>
+                                                                                        <span class="moretext">
+                                                                                            @Html.Raw(news.Description)
+                                                                                        </span>
+                                                                                    </div>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p>İnformasiya mövcud deyil</p>
+                                                                                }
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-xs-6 edit-right text-right">
+                                                                            <button class="moreless-button btn btn-outline-light text-dark">Ətraflı</button>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="row p-t-10 p-b-10">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="media   m-b-10">
+                                                                            <div class="media-body" style="display: flex; justify-content: space-between;">
+                                                                                <div class="chat-header">
+                                                                                    <h2>
+                                                                                        @news.Title
+                                                                                    </h2>
+                                                                                </div>
+                                                                                <div class="social-designation">
+                                                                                    <div class="d-flex mb-2">
+
+                                                                                        <a class="media-left" href="#!" style="padding-right: 15px;">
+                                                                                            <img class="media-object rounded-circle
+                                                                                                img-radius" src="~/profile/@news.AppUser.Picture" style=" height: 40px; width: 40px;">
+                                                                                        </a>
+                                                                                        <span class="text-muted mt-3">
+                                                                                            @news.AppUser.FirstName @news.AppUser.LastName
+
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <span class="text-muted">
+                                                                                        @news.CreatedDate.ToString("dd-MM-yyyy / hh:mm")
+                                                                                    </span>
+                                                                                    <div>
+                                                                                        @if (news.CategoryNews.Count > 0)
+                                                                                        {
+                                                                                            foreach (var categ in news.CategoryNews)
+                                                                                            {
+                                                                                               <span class="badge badge-info">@categ.Category.Name</span>
+                                                                                            }
+                                                                                        }
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-xs-6">
+                                                                            <div id="sections">
+                                                                                @if (news.Description != null)
+                                                                                {
+                                                                                    <div class="article">
+                                                                                        <span class="lesstext">
+                                                                                            @*@(Html.Raw($"<p>{Html.Raw(news.Description).ToString().Substring(0,100)}... </p>"))*@
+                                                                                        </span>
+                                                                                        <span class="moretext">
+                                                                                            @Html.Raw(news.Description)
+                                                                                        </span>
+                                                                                    </div>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <p>İnformasiya mövcud deyil</p>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-xs-6 edit-right text-right">
+                                                                            <button class="moreless-button btn btn-outline-light text-dark">Ətraflı</button>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                    }
+
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Friends tab end -->
+                                <!-- Row end -->
+                            </div>
+                            <div class="col-xl-3 col-lg-4 col-md-4" style="position: fixed; right: 0; width: 329px;">
+                                @*style="position:fixed;right:0;"*@
+                                <vc:contact-info></vc:contact-info>
+                                @*@await Component.InvokeAsync("ContactInfo")*@
+                                <div data-toggle="tooltip"
+                                     data-placement="right" title="üzərinə kliklə" class="calendar-bottom">
+                                    <div class="signboard outer">
+                                        <div class="signboard front inner anim04c">
+                                            <li class="year anim04c">
+                                                <span></span>
+                                            </li>
+                                            <ul class="calendarMain anim04c">
+                                                <li class="month anim04c">
+                                                    <span></span>
+                                                </li>
+                                                <li class="date anim04c">
+                                                    <span></span>
+                                                </li>
+                                                <li class="day anim04c">
+                                                    <span></span>
+                                                </li>
+                                            </ul>
+                                            <li class="clock minute anim04c">
+                                                <span></span>
+                                            </li>
+                                            <li class="calendarNormal date2 anim04c">
+                                                <span></span>
+                                            </li>
+                                        </div>
+                                        <div class="signboard left inner anim04c">
+                                            <li class="clock hour anim04c">
+                                                <span></span>
+                                            </li>
+                                            <li class="calendarNormal day2 anim04c">
+                                                <span></span>
+                                            </li>
+                                        </div>
+                                        <div class="signboard right inner anim04c">
+                                            <li class="clock second anim04c">
+                                                <span></span>
+                                            </li>
+                                            <li class="calendarNormal month2 anim04c">
+                                                <span></span>
+                                            </li>
+                                        </div>
+                                    </div>
+                                    <!-- main codes end -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page-body end -->
+@section CrudJs{
+<script type="text/javascript" src="~/files/bower_components2/lightbox2/dist/js/lightbox.js"></script>
+<!-- Bootstrap date-time-picker js -->
+<script type="text/javascript" src="~/files/assets/pages/advance-elements/moment-with-locales.min.js"></script>
+<script type="text/javascript"
+        src="~/files/bower_components2/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript"
+        src="~/files/assets/pages/advance-elements/bootstrap-datetimepicker.min.js"></script>
+<!-- Date-range picker js -->
+<script type="text/javascript"
+        src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Date-dropper js -->
+<script type="text/javascript" src="~/files/bower_components2/datedropper/datedropper.min.js"></script>
+<script type="text/javascript" src="~/files/assets/js/dateAnimation.js"></script>
+
+<!-- Hide show HideSeek js -->
+<script type="text/javascript" src="~/files/lib/hideseek/jquery.hideseek.min.js"></script>
+
+<!-- slick js -->
+<script type="text/javascript" src="~/files/lib/slick-carousel/slick.min.js"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="~/files/assets/pages/social-timeline/social.js"></script>
+<script type="text/javascript" src="~/files/assets/pages/wall/wall.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#myInput').hideseek({
+            highlight: true,
+            navigation: true,
+            nodata: 'Əməkdaş tapılmadı !'
+        });
+
+        $('.news-slide').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 2000,
+            dots: false,
+            prevArrow: false,
+            nextArrow: false
+        });
+
+
+        $(".moreless-button").each(function () {
+
+            $(this).click(function () {
+
+                $(this).parent().parent().find('.moretext').toggle();
+
+                if ($(this).text() == "Ətraflı") {
+                     $(this).parent().parent().find('.lesstext').hide();
+                    $(this).html("<i class='fa-solid fa-angle-up'></i>")
+                } else {
+                      $(this).parent().parent().find('.lesstext').show();
+                    $(this).text("Ətraflı")
+                }
+            });
+        });
+    });
+</script>
+}

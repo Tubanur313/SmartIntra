@@ -17,7 +17,7 @@
                                 <tr>
                                     <th>Başlıq</th>
                                     <th>Əlavə edən</th>
-                                    @*<th>Kateqoriya</th>*@
+                                    <th>Kateqoriya</th>
                                     <th>Yaranma Tarixi</th>
                                     <th class="text-center">
                                         @if (User.HasAccess("news.add"))
@@ -49,7 +49,23 @@
                                                 Təyin edilməyib
                                             </td>
                                         }
-
+                                        <td>
+                                            @if (news.CategoryNews.Count > 0)
+                                            {
+                                                foreach (var categ in news.CategoryNews)
+                                                {
+                                                    <span class="ml-1">
+                                                        @categ.Category.Name 
+                                                    </span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    Təyin edilməyib
+                                                </span>
+                                            }
+                                        </td>
                                         <td>@news.CreatedDate.ToString("dd-MM-yyyy")</td>
                                         @if (!news.IsDeleted)
                                         {
@@ -110,7 +126,7 @@
 
                                     <th>Başlıq</th>
                                     <th>Əlavə edən</th>
-                                    @*<th>Kateqoriya</th>*@
+                                    <th>Kateqoriya</th>
                                     <th>Yaranma Tarixi</th>
                                     <th class="text-center">-----</th>
                                 </tr>

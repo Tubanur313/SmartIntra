@@ -84,6 +84,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             if (ModelState.IsValid)
             {
                 var add = _map.Map<News>(model);
+                add.AppUserId = GetSignInUserId();
                 add.CreatedByUserId = GetSignInUserId();
                 var result = await _newsService.AddReturnEntityAsync(add);
                 if (result.Id == 0)
@@ -214,6 +215,16 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             }
             TempData["error"] = Messages.Error.notComplete;
             return RedirectToAction("List");
+        }
+        
+        [Authorize(Policy = "news.delete")]
+        public async Task Delete(int id)
+        {
+            var delete = await _newsService.FindByIdAsync(id);
+            delete.DeleteByUserId = GetSignInUserId();
+            delete.DeleteDate = DateTime.Now;
+            delete.IsDeleted = true;
+            await _newsService.UpdateAsync(delete);
         }
     }
 }

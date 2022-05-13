@@ -155,12 +155,41 @@
                             <a asp-controller="News" asp-action="List">
                                 <span class="pcoded-mtext">Xəbər Siyahısı</span>
                             </a>
+                        </li>  
+                        <li class="">
+                            <a asp-controller="News" asp-action="Info">
+                                <span class="pcoded-mtext">Xəbərlər</span>
+                            </a>
                         </li>
                         <li class="">
                             <a asp-controller="Category" asp-action="list">
                                 <span class="pcoded-mtext">Kateqoriya</span>
                             </a>
                         </li>
+                    </ul>
+                </li>
+
+            }
+             @if (User.HasAccess("vacancy.list"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon">
+                            <i class="icofont icofont-newspaper"></i>
+                        </span>
+                        <span class="pcoded-mtext">Vakansiya</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="vacancy" asp-action="List">
+                                <span class="pcoded-mtext">Vakansiya Siyahısı</span>
+                            </a>
+                        </li> 
+                        <li class="">
+                            <a asp-controller="vacancy" asp-action="info">
+                                <span class="pcoded-mtext">Vakansiya Siyahısı</span>
+                            </a>
+                        </li>  
                     </ul>
                 </li>
 
