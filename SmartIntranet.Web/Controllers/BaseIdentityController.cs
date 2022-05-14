@@ -52,48 +52,5 @@ namespace SmartIntranet.Web.Controllers
                 ModelState.AddModelError("", item.Description);
             }
         }
-        protected async Task<string> AddFile(string root, IFormFile file)
-        {
-            string imageName = Guid.NewGuid() + Path.GetFileNameWithoutExtension(file.FileName)
-                + Path.GetExtension(file.FileName);
-            string path = Path.Combine(Directory.GetCurrentDirectory(), root + imageName);
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return imageName;
-        }
-        protected string AddResizedImage(string root, IFormFile file)
-        {
-            string imageName = Guid.NewGuid()
-                + Path.GetExtension(file.FileName);
-            string path = Path.Combine(Directory.GetCurrentDirectory(), root + imageName);
-            using (var image = Image.Load(file.OpenReadStream()))
-            {
-                string newSize = ImageResize(image, 600, 600);
-                string[] sizeArray = newSize.Split(",");
-                image.Mutate(i => i.Resize(Convert.ToInt32(sizeArray[1]), Convert.ToInt32(sizeArray[0])));
-                image.Save(path);
-            }
-
-            return imageName;
-        }
-        protected string ImageResize(Image img, int MaxWidth, int MaxHeight)
-        {
-            if (img.Width > MaxWidth || img.Height > MaxHeight)
-            {
-                double widthratio = (double)img.Width / (double)MaxWidth;
-                double heightratio = (double)img.Height / (double)MaxHeight;
-                double ratio = Math.Max(widthratio, heightratio);
-                int newWidth = (int)(img.Width / ratio);
-                int newHeight = (int)(img.Height / ratio);
-                return newHeight.ToString() + "," + newWidth.ToString();
-            }
-            else
-            {
-                return img.Height.ToString() + "," + img.Width.ToString();
-            }
-        }
     }
 }

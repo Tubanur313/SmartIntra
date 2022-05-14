@@ -31,8 +31,23 @@
     </div>*@
 
     <div class="row">
-        
-       
+        <div class="col-sm-6">
+            <div class="form-group is-disabled">
+                <label class="floatLabel">  Ad: </label>
+                <input type="text" class="form-control" asp-for="FirstName" disabled autocomplete="off">
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <span class="messages"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group is-disabled">
+                <label class="floatLabel">  Soyad: </label>
+                <input type="text" class="form-control" asp-for="LastName" disabled autocomplete="off">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+                <span class="messages"></span>
+            </div>
+
+        </div>
         <div class="col-sm-6">
             <div class="form-group " >
                 <label class="floatLabel">  Email: </label>
@@ -49,15 +64,15 @@
                 <span class="messages"></span>
             </div>
         </div>
-       @* <div class="col-sm-6">
+        <div class="col-sm-6">
             <div class="form-group">
                 <label class="floatLabel">  Ünvan: </label>
                 <input type="text" class="form-control" asp-for="Address" placeholder="Yaşadığı ünvan" autocomplete="off">
                 <span class="messages"></span>
             </div>
 
-        </div>*@
-       @* <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6">
             <div class="form-group ">
                 <label class="floatLabel">  Tel: </label>
                 <input type="text"  class="form-control" asp-for="PhoneNumber" autocomplete="off">
@@ -65,7 +80,7 @@
                 <span class="messages"></span>
             </div>
 
-        </div>*@
+        </div>
         <div class="col-sm-6">
             <div class="form-group is-disabled">
                 <label class="floatLabel">  Şöbə: </label>
@@ -81,20 +96,52 @@
                 <span class="messages"></span>
             </div>
         </div>
-        
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="floatLabel">  Doğum tarixi: </label>
+                <input type="date" class="form-control" asp-for="Birthday" disabled autocomplete="off">
+                <span class="messages"></span>
+            </div>
+        </div>
 
-       
+        @if (Model.UserContractFiles.Count>0)
+       {
+                   <div class="col-sm-6">
+            <div class="form-group">
+                <label class="">  Müqavilə: </label>
+                <div class="card">
+
+                    <ul class="basic-list list-icons">
+                        @foreach (var item in Model.UserContractFiles)
+                        {
+                            <li class="mt-1 ml-3">
+                                <i class="fa-solid fa-file-arrow-down text-primary" style="font-size: 22px;">
+                                    <a href="~/userContractDocs/@item.FilePath" download
+                                   style="padding-left: 16px;">
+
+                                        @item.CreatedDate.Value.ToString("yyyy-MM-dd-mm-ss")
+                                    </a>
+                                </i>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+       }
 
     </div>
 
-   @* <div class="form-group row">
+    <div class="form-group row">
         <div class="col-sm-12 d-flex justify-content-between">
             <button type="submit" class="btn btn-primary m-b-0 btn-block">
                 Təsdiq
             </button>
 
         </div>
-    </div>*@
+    </div>
 
 </form>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

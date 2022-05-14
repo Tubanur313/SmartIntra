@@ -11,8 +11,8 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation
     {
         public AppUserProfileValidator()
         {
-            RuleFor(I => I.Name).NotNull().WithMessage("Ad boş ola bilməz");
-            RuleFor(I => I.Surname).NotNull().WithMessage("Soyad boş ola bilməz");
+            RuleFor(I => I.FirstName).NotNull().WithMessage("Ad boş ola bilməz");
+            RuleFor(I => I.LastName).NotNull().WithMessage("Soyad boş ola bilməz");
             RuleFor(I => I.Email).NotNull().WithMessage("Email boş ola bilməz");
             RuleFor(I => I.Email).EmailAddress().WithMessage("Email doğru deyil");
             RuleFor(I => I.PhoneNumber).MinimumLength(10).WithMessage("Telefon nömrəsi 10 simvoldan kiçik olmamalıdır!")

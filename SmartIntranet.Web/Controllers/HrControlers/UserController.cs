@@ -10,6 +10,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Extensions;
+using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
@@ -32,10 +33,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly ICompanyService _companyService;
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
+        private readonly IFileManager _uploadService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
         public UserController(IOptions<GoogleConfigModel> googleConfig,  UserManager<IntranetUser> userManager,
              IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
-            IMapper map, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
+            IMapper map, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService, IFileManager uploadService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
             IPositionService positionService) : base(userManager, httpContextAccessor, signInManager,map)
         {
@@ -44,6 +46,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _passwordHasher = passwordHasher;
             _configuration = configuration;
             _appUserService = appUserService;
+            _uploadService = uploadService;
             _companyService = companyService;
             _departmentService = departmentService;
             _positionService = positionService;
@@ -175,10 +178,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
         [HttpPost]
         [Authorize(Policy = "user.imageUpdate")]
-        public async Task<IActionResult> ImageUpdateAsync(IFormFile profile)
+        public async Task<IActionResult> ImageUpdate(IFormFile profile)
         {
-            var current = GetSignInUserId();
-            var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == current);
+            var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == GetSignInUserId());
 
             if (profile != null && profile.FileName != "default.png")
             {
@@ -186,7 +188,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     return Ok(" Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !");
                 }
-                updateUser.Picture = AddResizedImage("wwwroot/profile/", profile);
+                updateUser.Picture = _uploadService.UploadResizedImg(profile, "wwwroot/profile/");
                 await _userManager.UpdateAsync(updateUser);
                 return Ok(" Uğurla yeniləndi !");
             }
@@ -258,7 +260,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         return RedirectToAction("List");
                     }
 
-                    model.Picture = AddResizedImage("wwwroot/profile/", profile);
+                    model.Picture = _uploadService.UploadResizedImg(profile, "wwwroot/profile/");
                 }
 
                 else if (profile != null)
