@@ -226,5 +226,22 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             delete.IsDeleted = true;
             await _newsService.UpdateAsync(delete);
         }
+        [Authorize(Policy = "news.deleteNewsImage")]
+        public async Task<IActionResult> DeleteNewsImage(int id)
+        {
+            var newsfile = await _newsfileService.FindByIdAsync(id);
+            var oldFileImg = await _newsfileService.FindByIdAsync(id);
+            _upload.Delete(oldFileImg.Name,"wwwroot/news/" );
+            await _newsfileService.RemoveAsync(newsfile);
+            return RedirectToAction("List");
+
+        }
+        [Authorize(Policy = "news.DeleteCategoryFromCategoryNews")]
+        public async Task<IActionResult> DeleteCategoryFromCategoryNews(int newscatId)
+        {
+            var category =await _categoryNewsService.FindByIdAsync(newscatId);
+            await _categoryNewsService.RemoveAsync(category);
+            return RedirectToAction("List");
+        }
     }
 }

@@ -159,7 +159,7 @@ function removeUserTicketCheks(_id, _name, _path, elem) {
 }
 
 function removeNewsImg(_id, _name, _path, elem) {
-
+    console.log(_id)
     swal({
         title: `Diqqət`,
         text: `Əminsiniz ki, '${_name}' siyahıdan silinsin?`,
@@ -195,7 +195,7 @@ function removeNewsImg(_id, _name, _path, elem) {
     });
 }
 
-function removeNewsCategory(_newsId, _catId, _name, _path, elem) {
+function removeNewsCategory(_newscatId, _name, _path, elem) {
 
     var count_elements = $('.select2-selection__rendered li').length;
     if (count_elements <= 2) {
@@ -217,8 +217,7 @@ function removeNewsCategory(_newsId, _catId, _name, _path, elem) {
                     url: _path,
                     datatype: 'json',
                     data: {
-                        newsId: _newsId,
-                        catId: _catId,
+                        newscatId: _newscatId,
                     },
                     success: function (response) {
                         //sorgu ugurla neticelenende

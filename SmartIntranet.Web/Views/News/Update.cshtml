@@ -78,7 +78,7 @@
                                                 {
                                                     <li class="select2-selection__choice">
                                                         @item.Category.Name
-                                                        <span onclick="removeNewsCategory(@item.Id,@item.CategoryId,`@item.Category.Name`,`@Url.Action("DeleteCategoryFromCategoryNews","News")`,this)" class="select2-selection__choice__remove" role="presentation">×</span>
+                                                        <span onclick="removeNewsCategory(@item.Id,`@item.Category.Name`,`@Url.Action("DeleteCategoryFromCategoryNews","News")`,this)" class="select2-selection__choice__remove" role="presentation">×</span>
                                                     </li>
                                                 }
                                             </ul>
@@ -109,6 +109,7 @@
                                             {
                                                 <div class="col-lg-2 col-sm-2">
                                                     <div class="thumbnail">
+                                                        <span class="badge badge-danger" onclick="removeNewsImg(@photo.Id,`@photo.Name`,`@Url.Action("DeleteNewsImage","News").ToString()`,this)"><i class="icofont icofont-ui-delete "></i></span>
                                                         <div class="thumb">
                                                             <a href="~/news/@photo.Name"
                                                            data-lightbox="2" data-title="@photo.Name">
