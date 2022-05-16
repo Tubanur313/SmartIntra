@@ -72,6 +72,9 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        //active tab and links
+        $("#listed-links").find('[href="'+window.location.pathname+'"]').parent().parent().parent().addClass('pcoded-trigger')
+        $("#listed-links").find('[href="'+window.location.pathname+'"]').parent().addClass('active')
         $(function () {
             var a = '@TempData["success"]';
             var b = '@TempData["error"]';

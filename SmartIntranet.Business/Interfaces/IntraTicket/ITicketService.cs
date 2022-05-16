@@ -21,5 +21,6 @@ namespace SmartIntranet.Business.Interfaces.IntraTicket
         Task<Ticket> FindForCheckingsAsync(int id);
         Task<List<Ticket>> GetForAdminAsync();
         Task<List<Ticket>> GetForAdminAsync(int categoryTicketId, StatusType statusType, int companyId);
+        Task<List<Ticket>> GetByDepartmentAllIncAsync(int ıd);
     }
 }

@@ -511,5 +511,16 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             }
 
         }
+        public async Task<List<Ticket>> GetByDepartmentAllIncAsync(int departId)
+        {
+            using var context = new IntranetContext();
+            return await context.Tickets
+                .Where(x => !x.IsDeleted)
+                .Include(x => x.Supporter)
+                .ThenInclude(z => z.Company)
+                .ThenInclude(z => z.Departments)
+                .Where(z => z.Supporter.DepartmentId == departId)
+                .ToListAsync();
+        }
     }
 }

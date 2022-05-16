@@ -16,4 +16,8 @@
     <ProjectReference Include="..\SmartIntranet.Business\SmartIntranet.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Dashboard\" />
+  </ItemGroup>
+
 </Project>

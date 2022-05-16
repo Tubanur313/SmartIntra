@@ -330,11 +330,13 @@ namespace SmartIntranet.Web.Controllers
             {
                 ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _CategoryTicketService.GetAllIncludeAsync());
                 ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+                ViewData["active"] = "active";
                 return View(new List<TicketListDto>());
 
             }
             ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _CategoryTicketService.GetAllIncludeAsync());
             ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewData["active"] = "active";
             return View(model);
         }
         [HttpPost]

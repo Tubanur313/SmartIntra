@@ -1,6 +1,6 @@
 ﻿<nav class="pcoded-navbar">
     <div class="pcoded-inner-navbar main-menu">
-        <ul class="pcoded-item pcoded-left-item">
+        <ul id="listed-links" class="pcoded-item pcoded-left-item">
             @if (User.HasAccess("account.list"))
             {
                 <li class="pcoded-hasmenu">
@@ -69,7 +69,7 @@
             }
             @if (User.HasAccess("ticket.list"))
             {
-                <li class="pcoded-hasmenu pcoded-trigger" @*dropdown-icon="style1" subitem-icon="style1"*@>
+                <li class="pcoded-hasmenu" @*dropdown-icon="style1" subitem-icon="style1"*@>
                     <a href="javascript:void(0)">
                         <span class="pcoded-micon"><i class="feather icon-sidebar"></i></span>
                         <span class="pcoded-mtext">Ticket</span>
@@ -78,7 +78,7 @@
 
                         @if (User.HasAccess("ticket.admin"))
                         {
-                            <li class="">
+                            <li class="@ViewData["admin"]">
                                 <a asp-controller="ticket" asp-action="admin">
                                     <span class="pcoded-mtext">Ticketlər</span>
                                 </a>

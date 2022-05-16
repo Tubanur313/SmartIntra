@@ -33,18 +33,18 @@
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-yellow f-w-600">$30200</h4>
-                                    <h6 class="text-muted m-b-0">All Earnings</h6>
+                                    <h4 class="text-c-yellow f-w-600">@ViewBag.totalCountUsers</h4>
+                                    <h6 class="text-muted m-b-0">Əməkdaş</h6>
                                 </div>
                                 <div class="col-4 text-right">
-                                    <i class="feather icon-bar-chart f-28"></i>
+                                    <i class="feather icon-user f-50 text-c-yellow"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer bg-c-yellow">
                             <div class="row align-items-center">
                                 <div class="col-9">
-                                    <p class="text-white m-b-0">% change</p>
+                                    <p class="text-white m-b-0">Ümumi Əməkdaş Sayı</p>
                                 </div>
                                 <div class="col-3 text-right">
                                     <i class="feather icon-trending-up text-white f-16"></i>
@@ -59,18 +59,18 @@
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-green f-w-600">290+</h4>
-                                    <h6 class="text-muted m-b-0">Page Views</h6>
+                                    <h4 class="text-c-green f-w-600">@ViewBag.totalCountTicket.ToString("0")</h4>
+                                    <h6 class="text-muted m-b-0">Ticket</h6>
                                 </div>
-                                <div class="col-4 text-right">
-                                    <i class="feather icon-file-text f-28"></i>
+                                <div class="col-4 text-right text-green">
+                                    <i class="feather icon-book f-50 text-c-green"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer bg-c-green">
                             <div class="row align-items-center">
                                 <div class="col-9">
-                                    <p class="text-white m-b-0">% change</p>
+                                    <p class="text-white m-b-0">Ümumi Ticket sayı </p>
                                 </div>
                                 <div class="col-3 text-right">
                                     <i class="feather icon-trending-up text-white f-16"></i>
@@ -84,18 +84,18 @@
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-pink f-w-600">145</h4>
-                                    <h6 class="text-muted m-b-0">Task Completed</h6>
+                                    <h4 class="text-c-pink f-w-600">@ViewBag.closeCountTicket.ToString("0")</h4>
+                                    <h6 class="text-muted m-b-0">Bağlı Ticket</h6>
                                 </div>
                                 <div class="col-4 text-right">
-                                    <i class="feather icon-calendar f-28"></i>
+                                    <i class="feather icon-credit-card f-50 text-c-pink"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer bg-c-pink">
                             <div class="row align-items-center">
                                 <div class="col-9">
-                                    <p class="text-white m-b-0">% change</p>
+                                    <p class="text-white m-b-0">Bağlı Ticket sayı</p>
                                 </div>
                                 <div class="col-3 text-right">
                                     <i class="feather icon-trending-up text-white f-16"></i>
@@ -109,18 +109,18 @@
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-blue f-w-600">500</h4>
-                                    <h6 class="text-muted m-b-0">Downloads</h6>
+                                    <h4 class="text-c-blue f-w-600">@ViewBag.totalCountOrders</h4>
+                                    <h6 class="text-muted m-b-0">Sifariş</h6>
                                 </div>
                                 <div class="col-4 text-right">
-                                    <i class="feather icon-download f-28"></i>
+                                    <i class="feather icon-shopping-cart f-50 text-c-blue"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer bg-c-blue">
                             <div class="row align-items-center">
                                 <div class="col-9">
-                                    <p class="text-white m-b-0">% change</p>
+                                    <p class="text-white m-b-0">Ümumi Sifariş sayı</p>
                                 </div>
                                 <div class="col-3 text-right">
                                     <i class="feather icon-trending-up text-white f-16"></i>
@@ -131,48 +131,27 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-4 col-md-12">
+                <div class="col-xl-8 col-md-12">
                     <div class="card">
                         <div class="card-block bg-c-blue">
-                            <div id="proj-earning" style="height: 230px"></div>
+                            <div id="category-tickets" style="height: 266px"></div>
                         </div>
                         <div class="card-footer">
                             <h6 class="text-muted m-b-30 m-t-15">
-                                Total completed project and
-                                earning
+                                Cari günün Ticket məlumatları
                             </h6>
                             <div class="row text-center">
-                                <div class="col-6 b-r-default">
-                                    <h6 class="text-muted m-b-10">Completed Projects</h6>
-                                    <h4 class="m-b-0 f-w-600 ">175</h4>
+                                <div class="col-4 b-r-default">
+                                    <h6 class="text-muted m-b-10">Cari Ticketlər</h6>
+                                    <h4 class="m-b-0 f-w-600 ">@ViewBag.todayTotalCountTicket</h4>
                                 </div>
-                                <div class="col-6">
-                                    <h6 class="text-muted m-b-10">Total Earnings</h6>
-                                    <h4 class="m-b-0 f-w-600 ">76.6M</h4>
+                                <div class="col-4 b-r-default">
+                                    <h6 class="text-muted m-b-10">İcrada olan Ticketlər</h6>
+                                    <h4 class="m-b-0 f-w-600 ">@ViewBag.todayOpenCountTicket</h4>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-6">
-                    <div class="card o-hidden">
-                        <div class="card-block bg-c-pink text-white">
-                            <h6>
-                                Sales Per Day <span class="f-right">
-                                    <i class="feather icon-activity m-r-15"></i>3%
-                                </span>
-                            </h6>
-                            <canvas id="sale-chart1" height="150"></canvas>
-                        </div>
-                        <div class="card-footer text-center">
-                            <div class="row">
-                                <div class="col-6 b-r-default">
-                                    <h4>$4230</h4>
-                                    <p class="text-muted m-b-0">Total Revenue</p>
-                                </div>
-                                <div class="col-6">
-                                    <h4>321</h4>
-                                    <p class="text-muted m-b-0">Today Sales</p>
+                                <div class="col-4">
+                                    <h6 class="text-muted m-b-10">Bağlanmış Ticketlər</h6>
+                                    <h4 class="m-b-0 f-w-600 ">@ViewBag.todayCloseCountTicket</h4>
                                 </div>
                             </div>
                         </div>
@@ -181,24 +160,70 @@
                 <div class="col-xl-4 col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h5>New Users</h5>
+                            <h5>Ticket Statistikası</h5>
                         </div>
                         <div class="card-block">
-                            <canvas id="newuserchart" height="250"></canvas>
+                            <canvas id="ticketsnews" height="250"></canvas>
                         </div>
                         <div class="card-footer ">
                             <div class="row text-center b-t-default">
                                 <div class="col-4 b-r-default m-t-15">
-                                    <h5>85%</h5>
-                                    <p class="text-muted m-b-0">Satisfied</p>
+                                    <h5>@ViewBag.OpenCount.ToString("0.0") %</h5>
+                                    <p class="text-muted m-b-0">Açıq Ticketlər</p>
                                 </div>
                                 <div class="col-4 b-r-default m-t-15">
-                                    <h5>6%</h5>
-                                    <p class="text-muted m-b-0">Unsatisfied</p>
+                                    <h5>@ViewBag.CloseCount.ToString("0.0") %</h5>
+                                    <p class="text-muted m-b-0">Bağlı Ticketlər</p>
                                 </div>
                                 <div class="col-4 m-t-15">
-                                    <h5>9%</h5>
-                                    <p class="text-muted m-b-0">NA</p>
+                                    <h5>@ViewBag.PauseCount.ToString("0.0") %</h5>
+                                    <p class="text-muted m-b-0">Gözləmədə olan Ticketlər</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Şöbələrə görə Ticket Statistikası</h5>
+                        </div>
+                        <div class="card-block">
+                            <canvas id="ticketsDepartment" height="250"></canvas>
+                        </div>
+                        <div class="card-footer ">
+                            <div class="row text-center b-t-default">
+                                <div class="col-12">
+                                    <h5>@ViewBag.NullSupportedCountTicket</h5>
+                                    <p class="text-muted m-b-0">Yönləndirilməyən Ticketlər</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8 col-md-12">
+                    <div class="card">
+                        <div class="card-block bg-c-yellow">
+                            <div id="company-tickets" style="height: 266px"></div>
+                        </div>
+                        <div class="card-footer">
+                            <h6 class="text-muted m-b-30 m-t-15">
+                                Cari günün Ticket məlumatları
+                            </h6>
+                            <div class="row text-center">
+                                <div class="col-4 b-r-default">
+                                    <h6 class="text-muted m-b-10">Cari Ticketlər</h6>
+                                    <h4 class="m-b-0 f-w-600 ">@ViewBag.todayTotalCountTicket</h4>
+                                </div>
+                                <div class="col-4 b-r-default">
+                                    <h6 class="text-muted m-b-10">İcrada olan Ticketlər</h6>
+                                    <h4 class="m-b-0 f-w-600 ">@ViewBag.todayOpenCountTicket</h4>
+                                </div>
+                                <div class="col-4">
+                                    <h6 class="text-muted m-b-10">Bağlanmış Ticketlər</h6>
+                                    <h4 class="m-b-0 f-w-600 ">@ViewBag.todayCloseCountTicket</h4>
                                 </div>
                             </div>
                         </div>
@@ -210,13 +235,190 @@
 </div>
 
 @section CrudJs{
-<script type="text/javascript" src="~/files/assets/pages/dashboard/analytic-dashboard.min.js"></script>
 <!-- Chart js -->
 <script type="text/javascript" src="~/files/bower_components2/chart.js/dist/Chart.js"></script>
+<script type="text/javascript" src="~/files/assets/pages/dashboard/analytic-dashboard.min.js"></script>
 <!-- amchart js -->
 <script src="~/files/assets/pages/widget/amchart/amcharts.js"></script>
 <script src="~/files/assets/pages/widget/amchart/serial.js"></script>
 <script src="~/files/assets/pages/widget/amchart/light.js"></script>
-    @*<script type="text/javascript" src="~/files/assets/js/script.js"></script>*@
-<script src="~/files/assets/js/vartical-layout.min.js"></script>
+@*<script src="~/files/assets/js/vartical-layout.min.js"></script>*@
+<script>
+    $(function(){
+    var myCanvas = document.getElementById('ticketsnews');
+    var ctx = myCanvas.getContext('2d');
+        window.myDoughnut = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [@ViewBag.PauseCount.ToString("0"), @ViewBag.OpenCount.ToString("0"), @ViewBag.CloseCount.ToString("0")],
+                backgroundColor: ["#fe9365", "#01a9ac", "#fe5d70"],
+                label: 'Dataset 1'
+            }],
+            labels: ["Gözləmədə olan Ticketlər", "Açıq Ticketlər", "Bağlı Ticketlər"]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                position: 'bottom',
+            },
+            title: {
+                display: true,
+                text: "",
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    });
+
+    $.ajax({
+      url: `@Url.Action("GetTicketByDepart","Dashboard")`,
+      type: 'get',
+      dataType: "json",
+      success: function (res) {
+              var ctxx = document.getElementById("ticketsDepartment").getContext("2d");
+               window.myDoughnuts = new Chart(ctxx, {
+                   type: 'doughnut',
+                   data: {
+                       datasets: [{
+                           data: res.count,
+                           backgroundColor: res.colors,
+                           label: 'Dataset 1'
+                       }],
+                       labels: res.name
+                   },
+                   options: {
+                       maintainAspectRatio: false,
+                       responsive: true,
+                       legend: {
+                           position: 'bottom',
+                       },
+                       title: {
+                           display: true,
+                           text: "",
+                       },
+                       animation: {
+                           animateScale: true,
+                           animateRotate: true
+                       }
+                   }
+               });
+
+      },
+      error: function (error) {
+
+                },
+    });
+
+
+    $.ajax({
+                url: `@Url.Action("GetCategory","Dashboard")`,
+                type: 'get',
+                dataType: "json",
+                success: function (res) {
+
+     var chart = AmCharts.makeChart("category-tickets", {
+        "type": "serial",
+        "hideCredits": true,
+        "theme": "light",
+        "dataProvider": res,
+        "valueAxes": [{
+            "gridAlpha": 0.3,
+            "gridColor": "#fff",
+            "axisColor": "transparent",
+            "color": '#fff',
+            "dashLength": 0
+        }],
+        "gridAboveGraphs": true,
+        "startDuration": 1,
+        "graphs": [{
+            "balloonText": "Aktiv Ticketlər: <b>[[value]]</b>",
+            "fillAlphas": 1,
+            "lineAlpha": 1,
+            "lineColor": "#fff",
+            "type": "column",
+            "valueField": "visits",
+            "columnWidth": 0.5
+        }],
+        "chartCursor": {
+            "categoryBalloonEnabled": false,
+            "cursorAlpha": 0,
+            "zoomable": false
+        },
+        "categoryField": "type",
+        "categoryAxis": {
+            "gridPosition": "start",
+            "gridAlpha": 0,
+            "axesAlpha": 0,
+            "lineAlpha": 0,
+            "fontSize": 12,
+            "color": '#fff',
+            "tickLength": 0
+        },
+        "export": {
+            "enabled": false
+        }
+
+    });
+    },
+     error: function (error) {
+    },
+    });
+
+    $.ajax({
+                        url: `@Url.Action("GetCompany","Dashboard")`,
+                        type: 'get',
+                        dataType: "json",
+                        success: function (res) {       
+        var chart = AmCharts.makeChart("company-tickets", {
+                "type": "serial",
+                "hideCredits": true,
+                "theme": "light",
+                "dataProvider": res,
+                "valueAxes": [{
+                    "gridAlpha": 0.3,
+                    "gridColor": "#fff",
+                    "axisColor": "transparent",
+                    "color": '#fff',
+                    "dashLength": 0
+                }],
+                "gridAboveGraphs": true,
+                "startDuration": 1,
+                "graphs": [{
+                    "balloonText": "Aktiv Ticketlər: <b>[[value]]</b>",
+                    "fillAlphas": 1,
+                    "lineAlpha": 1,
+                    "lineColor": "#fff",
+                    "type": "column",
+                    "valueField": "visits",
+                    "columnWidth": 0.5
+                }],
+                "chartCursor": {
+                    "categoryBalloonEnabled": false,
+                    "cursorAlpha": 0,
+                    "zoomable": false
+                },
+                "categoryField": "type",
+                "categoryAxis": {
+                    "gridPosition": "start",
+                    "gridAlpha": 0,
+                    "axesAlpha": 0,
+                    "lineAlpha": 0,
+                    "fontSize": 12,
+                    "color": '#fff',
+                    "tickLength": 0
+                },
+                "export": {
+                    "enabled": false
+                }   
+       });
+                   },
+                   error: function (error) {
+                   },
+      });
+    });
+</script>
 }
