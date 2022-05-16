@@ -110,7 +110,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         if (identityResult.Succeeded)
                         {
                             var roller = await _userManager.GetRolesAsync(user);
-                            return RedirectToAction("List", "Ticket");
+                            return RedirectToAction("Menu", "Dashboard");
                         }
                     }
                     ViewBag.error = "Email veya şifre sehvdir";
