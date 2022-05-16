@@ -54,41 +54,57 @@
                                         <td>@Vacancy.Address</td>
                                         @*<td>@Vacancy.Email</td>*@
                                         <td>@Vacancy.EndDate.ToString("dd-MM-yyyy")</td>
-
-                                        <td class="dropdown text-center">
-                                            <button type="button"
+                                        @if (!Vacancy.IsDeleted)
+                                        {
+                                            <td class="dropdown text-center">
+                                                <button type="button"
                                                 class="btn
                                                 btn-outline-info
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="fa fa-list-ul"></i>
-                                            </button>
-                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                @if (User.HasAccess("Vacancy.update"))
-                                                {
-                                                    <li>
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                                <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                    @if (User.HasAccess("Vacancy.update"))
+                                                    {
+                                                        <li>
 
-                                                        <button onclick="showInPopup('@Url.Action("Update","Vacancy",new {id=Vacancy.Id},Context.Request.Scheme)','Yenilə')"
+                                                            <button onclick="showInPopup('@Url.Action("Update","Vacancy",new {id=Vacancy.Id},Context.Request.Scheme)','Yenilə')"
                                                         class="btn  btn-default waves-effect md-trigger text-warning">
-                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                            Yenilə
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (User.HasAccess("Vacancy.delete"))
-                                                {
-                                                    <li>
-                                                        <button onclick="removeItem(@Vacancy.Id,`@Vacancy.Title`,`@Url.Action("Delete","Vacancy").ToString()`)"
+                                                                <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                                Yenilə
+                                                            </button>
+                                                        </li>
+                                                    }
+                                                    @if (User.HasAccess("Vacancy.delete"))
+                                                    {
+                                                        <li>
+                                                            <button onclick="removeItem(@Vacancy.Id,`@Vacancy.Title`,`@Url.Action("Delete","Vacancy").ToString()`)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
-                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                            Sil
-                                                        </button>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </td>
+                                                                <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                                Sil
+                                                            </button>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="dropdown text-center">
+                                                <button disabled type="button"
+                                                class="btn
+                                                btn-outline-danger
+                                                @*dropdown-toggle*@"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                            </td>
+                                        }
                                     </tr>
 
                                 }

@@ -11,5 +11,6 @@ namespace SmartIntranet.Business.Interfaces.Intranet
         Task<Vacancy> FindByIdAllIncludeAsync(int id);
         Vacancy FindByIdIncAsync(int id);
         Task<List<Vacancy>> GetAllWithIncludeAsync();
+        Task<List<Vacancy>> ShowAllWithIncludeAsync();
     }
 }

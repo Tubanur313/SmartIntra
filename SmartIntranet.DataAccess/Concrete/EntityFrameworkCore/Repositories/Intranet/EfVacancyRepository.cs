@@ -34,7 +34,17 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         public async Task<List<Vacancy>> GetAllWithIncludeAsync()
         {
             using var context = new IntranetContext();
-            return await context.Vacancies.OrderBy(x => x.StartDate).Include(x => x.Company).Where(x=>!x.IsDeleted)
+            return await context.Vacancies.OrderBy(x => x.StartDate)
+                .Include(x => x.Company)
+                .OrderByDescending(c => c.CreatedDate).ToListAsync();
+        }
+
+        public async Task<List<Vacancy>> ShowAllWithIncludeAsync()
+        {
+            using var context = new IntranetContext();
+            return await context.Vacancies.OrderBy(x => x.StartDate)
+                .Include(x => x.Company)
+                .Where(x=>!x.IsDeleted)
                 .OrderByDescending(c => c.CreatedDate).ToListAsync();
         }
     }

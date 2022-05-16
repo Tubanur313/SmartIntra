@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Interfaces.Intranet;
-using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Core.Utilities.Messages;
@@ -243,5 +242,6 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             await _categoryNewsService.RemoveAsync(category);
             return RedirectToAction("List");
         }
+        
     }
 }

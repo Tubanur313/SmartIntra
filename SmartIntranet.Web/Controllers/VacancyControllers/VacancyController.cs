@@ -37,16 +37,16 @@ namespace Intranet.Web.Controllers
         [Authorize(Policy = "vacancy.info")]
         public async Task<IActionResult> Info()
         {
-            var vacancies = _map.Map<ICollection<VacancyUpdateDto>>(await _vacancyService.GetAllWithIncludeAsync());
-            foreach (var vc in vacancies)
-            {
-                if (DateTime.Now > vc.EndDate)
-                {
-                    vc.IsDeleted = true;
-                    await _vacancyService.UpdateModifiedAsync(_map.Map<Vacancy>(vc));
-                }
-            }
-            var model = _map.Map<ICollection<VacancyListDto>>(await _vacancyService.GetAllWithIncludeAsync());
+            //var vacancies = _map.Map<ICollection<VacancyUpdateDto>>(await _vacancyService.ShowAllWithIncludeAsync());
+            //foreach (var vc in vacancies)
+            //{
+            //    if (DateTime.Now > vc.EndDate)
+            //    {
+            //        vc.IsDeleted = true;
+            //        await _vacancyService.UpdateModifiedAsync(_map.Map<Vacancy>(vc));
+            //    }
+            //}
+            var model = _map.Map<ICollection<VacancyListDto>>(await _vacancyService.ShowAllWithIncludeAsync());
             if (model.Count > 0)
             {
                 return View(_map.Map<List<VacancyListDto>>(model));
