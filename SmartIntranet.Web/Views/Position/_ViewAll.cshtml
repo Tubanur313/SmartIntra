@@ -20,7 +20,7 @@
                                     <th>Şirkət</th>
                                     <th>Üst Vəzifə</th>
                                     <th>Şöbə</th>
-                                    <th>Status</th>
+                                    @*<th>Status</th>*@
                                     @*<th>Silinmiş</th>*@
                                     @if (User.HasAccess("position.add"))
                                     {
@@ -72,7 +72,7 @@
                                             </td>
 
                                         }
-                                        <td><span class="badge badge-@(position.IsDeleted? "warning" : "success")">@(position.IsDeleted ? "Inactive" : "Active" )</span></td>
+                                        @*<td><span class="badge badge-@(position.IsDeleted? "warning" : "success")">@(position.IsDeleted ? "Inactive" : "Active" )</span></td>*@
                                         @*@if (position.DeleteByUserId == null)
                                             {*@
                                         <td class="dropdown text-center">
@@ -131,7 +131,7 @@
                                     <th>Şirkət</th>
                                     <th>Üst Vəzifə</th>
                                     <th>Şöbə</th>
-                                    <th>Status</th>
+                                    @*<th>Status</th>*@
                                     <th>Action</th>
                                     @*<th>Silinmiş</th>*@
                                 </tr>

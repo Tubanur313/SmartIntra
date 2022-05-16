@@ -129,21 +129,33 @@
                 <div class="tab-pane" id="profile1" role="tabpanel">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                        <div class="file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
                                             Şəkil Yüklə
                                             <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
                                         </div>
                                     </div>
                                     <div class="col-md-6  col-lg-6 col-sm-6">
-                                        <div class="border text-center pt-2">
-                                            <div class="pt-0">
-                                                <label class="floatLabel">Mövcüd Şəkil:</label>
-                                                <img src="~/uploads/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                        @if (Model.Picture != null)
+                                        {
+                                            <div class="border text-center pt-2">
+                                                <div class="pt-0">
+                                                    <label class="floatLabel">Şəkil:</label>
+                                                    <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="@Model.FirstName" />
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="border text-center pt-2">
+                                                <div class="pt-0">
+                                                    <label class="floatLabel">Şəkil:</label>
+                                                    <img src="~/uploads/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
 
                                     <div class="col-md-6 col-lg-6 col-sm-6">
@@ -156,6 +168,29 @@
                                             </div>
                                         </div>
 
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6 col-xl-6">
+                                <div class="file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                    Müqavilə Yüklə
+                                    <input id="file-upload" type="file" name="pdf" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+                                        text/plain, application/pdf" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
+                                </div>
+                                <h4 class="sub-title">Müqavilələr</h4>
+                                <div class="tags_add" style="display: inline-grid;">
+                                    <label id="uploaded" class="badge badge-success"></label>
+                                    <div class="bootstrap-tagsinput">
+                                        @foreach (var pdf in ViewBag.docs)
+                                        {
+                                            <span class="tag label text-light bg-dark">
+                                                <a class="text-warning" href="~/userContractDocs/@pdf.FilePath" download>+</a> @pdf.CreatedDate <a onclick="removeUserDocs(@pdf.Id,`@pdf.CreatedDate`,`@Url.Action("DeleteUserContract","Account").ToString()`,this)" style="cursor: pointer;" class="text-danger"> x </a>
+                                            </span>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -180,9 +215,26 @@
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
 <!-- cust-validation js -->
 <script src="~/files/lib/cust_ajax/cust-validation.js"></script>
-
+<!-- delete_ajax-->
+<script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
 <script>
     $(document).ready(function () {
+            $("#Profile").change(function (e) {
+            $("#lview").show();
+            $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+    });
+        $('#file-upload').change(function() {
+        var file = $('#file-upload')[0].files[0].name;
+        $('#uploaded').removeClass("d-none").text(file);
+    });
+    //phone number masking
+    $.mask.definitions['9'] = '';
+    $.mask.definitions['_'] = '[0-9]';
+    $("#PhoneNumber").on("focus",function(){
+             $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
+    });
+
+
            $(document).on('change','#CompanyId', function(){
             var _id = $(this).val();
           $.ajax({

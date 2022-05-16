@@ -17,7 +17,7 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
+                                    @*<th>Status</th>*@
                                     @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("role.add"))
@@ -39,7 +39,7 @@
                                         </td>
 
                                         <td>@Role.Name</td>
-                                        <td><span class="badge badge-@(Role.IsActive? "success" : "warning")">@(Role.IsActive ? "Active" : "Inactive" )</span></td>
+                                        @*<td><span class="badge badge-@(Role.IsActive? "success" : "warning")">@(Role.IsActive ? "Active" : "Inactive" )</span></td>*@
                                         @*<td><span class="badge badge-@(Role.DeleteByUserId==null ? "success" : "warning")">@(Role.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
                                         @if (Role.DeleteByUserId == null)
                                         {
@@ -114,7 +114,7 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
+                                    @*<th>Status</th>*@
                                     <th>Action</th>
                                 </tr>
                             </tfoot>

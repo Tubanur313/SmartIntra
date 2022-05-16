@@ -21,6 +21,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(x => x.Company)
                 .Include(y => y.Department)
                 .Include(z => z.Position)
+                .Include(z => z.UserContractFiles)
                 .FirstAsync();
 
         }

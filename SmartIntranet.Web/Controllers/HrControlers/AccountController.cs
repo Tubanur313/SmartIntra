@@ -15,6 +15,7 @@ using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
+using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly IFileManager _upload;
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
+        private readonly IUserContractService _userContractService;
         private readonly IntranetContext _db;
         private IPasswordHasher<IntranetUser> _passwordHasher;
         public AccountController(
@@ -46,6 +48,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IntranetUser> signInManager,
             IPasswordHasher<IntranetUser> passwordHasher,
+            IUserContractService userContractService,
             IntranetContext db
             ) : base(userManager, httpContextAccessor, signInManager, map)
         {
@@ -56,6 +59,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _departmentService = departmentService;
             _positionService = positionService;
             _passwordHasher = passwordHasher;
+            _userContractService = userContractService;
             _db = db;
         }
 
@@ -193,24 +197,25 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 && x.DepartmentId == data.DepartmentId));
             ViewBag.grades = _map
                 .Map<List<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.docs = _map.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(Id));
             return View(data);
         }
         [HttpPost]
         [Authorize(Policy = "account.update")]
-        public async Task<IActionResult> Update(AppUserUpdateDto model, IFormFile logo)
+        public async Task<IActionResult> Update(AppUserUpdateDto model, IFormFile profile, IFormFile pdf)
         {
             if (ModelState.IsValid)
             {
                 IntranetUser user = _map.Map<IntranetUser>(model);
                 var update = _userManager.Users.FirstOrDefault(I => I.Id == model.Id);
-                if (!(logo is null) && logo.FileName != "logoDefault.png")
+                if (profile !=null && profile.FileName != "default.png")
                 {
-                    _upload.Delete(update.Picture, "wwwroot/logo/");
-                    user.Picture = _upload.UploadResizedImg(logo, "wwwroot/logo/");
+                    _upload.Delete(update.Picture, "wwwroot/profile/");
+                    user.Picture = _upload.UploadResizedImg(profile, "wwwroot/profile/");
                 }
-                else if (!(logo is null))
+                else if (profile != null)
                 {
-                    user.Picture = "logoDefault.png";
+                    user.Picture = "default.png";
                 }
                 else
                 {
@@ -220,6 +225,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.UpdateDate = DateTime.Now;
                 update.FirstName = user.FirstName;
                 update.LastName = user.LastName;
+                update.Picture = user.Picture;
                 update.Email = user.Email;
                 update.PhoneNumber = user.PhoneNumber;
                 update.Birthday = user.Birthday;
@@ -234,6 +240,39 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     TempData["error"] = " Məlumat yenilənmədi";
                     return View(model);
                 }
+
+                if (pdf != null && MimeTypeCheckExtension.İsDocument(pdf))
+                {
+
+                    UserContractAddDto appContract = new UserContractAddDto
+                    {
+                        FilePath = await _upload.Upload( pdf , "wwwroot/userContractDocs/"),
+                        AppUserId = model.Id,
+                    };
+                    var add = _map.Map<UserContractFile>(appContract);
+                    add.CreatedByUserId = GetSignInUserId();
+                    await _userContractService.AddAsync(add);
+                }
+                else
+                {
+                    if (pdf == null)
+                    {
+                        return RedirectToAction("List");
+                    }
+                    else
+                    {
+                        if (MimeTypeCheckExtension.İsDocument(pdf))
+                        {
+                            TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
+                        }
+                        else
+                        {
+                            TempData["error"] = " Daxil edilən fayl pdf, docx və ya xlsx formatında olmalıdır !";
+                        }
+                        return RedirectToAction("List");
+                    }
+                }
+
                 TempData["success"] = "Yeniləndi";
                 return RedirectToAction("List");
             }
@@ -299,6 +338,17 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 .GetAllAsync(x => x.IsDeleted == false
                 && x.CompanyId == companyId);
             return Ok(department.Select(x => new { x.Id, x.Name }));
+        }
+        [Authorize(Policy = "account.deleteUserContract")]
+        public async Task<IActionResult> DeleteUserContract(int id)
+        {
+            var updateUser = await _userContractService.FindByIdAsync(id);
+            updateUser.IsDeleted = true;
+            updateUser.DeleteByUserId = GetSignInUserId();
+            updateUser.DeleteDate = DateTime.UtcNow.AddHours(4);
+            await _userContractService.UpdateAsync(updateUser);
+            return Ok("Uğurla silindi!");
+
         }
         [Authorize(Policy = "account.setrole")]
         public async Task<IActionResult> SetRole(int userId, int roleId, bool selected)

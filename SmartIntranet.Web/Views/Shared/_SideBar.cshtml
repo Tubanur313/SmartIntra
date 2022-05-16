@@ -1,6 +1,25 @@
 ﻿<nav class="pcoded-navbar">
     <div class="pcoded-inner-navbar main-menu">
         <ul id="listed-links" class="pcoded-item pcoded-left-item">
+                         @if (User.HasAccess("dashboard.menu"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon">
+                            <i class="icofont icofont-home"></i>
+                        </span>
+                        <span class="pcoded-mtext">Dashboard</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="dashboard" asp-action="menu">
+                                <span class="pcoded-mtext">Ticket Dashboard</span>
+                            </a>
+                        </li> 
+                    </ul>
+                </li>
+
+            }
             @if (User.HasAccess("account.list"))
             {
                 <li class="pcoded-hasmenu">
