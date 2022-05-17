@@ -102,7 +102,7 @@ namespace SmartTicket.Web
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Dashboard}/{action=menu}/{id?}");
+                    pattern: "{controller=news}/{action=info}/{id?}");
             });
         }
     }
