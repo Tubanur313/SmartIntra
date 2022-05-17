@@ -70,7 +70,7 @@ namespace SmartTicket.Web
                 //app.UseHsts();
             }
             app.UseHttpsRedirection();
-            //app.SeedTicketSystem();
+            app.SeedTicketSystem();
             //app.UseMiddleware<SecurityHeadersMiddleware>();
             app.UseStaticFiles();
             app.UseRouting();
@@ -102,7 +102,7 @@ namespace SmartTicket.Web
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Ticket}/{action=List}/{id?}");
+                    pattern: "{controller=Dashboard}/{action=menu}/{id?}");
             });
         }
     }

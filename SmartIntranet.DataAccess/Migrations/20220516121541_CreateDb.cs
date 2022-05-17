@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
-    public partial class init : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,9 +16,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 292, DateTimeKind.Local).AddTicks(930)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 645, DateTimeKind.Local).AddTicks(351)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -44,9 +44,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 301, DateTimeKind.Local).AddTicks(9712)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 651, DateTimeKind.Local).AddTicks(9679)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -64,9 +64,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 311, DateTimeKind.Local).AddTicks(4843)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 657, DateTimeKind.Local).AddTicks(4838)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -93,9 +93,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 287, DateTimeKind.Local).AddTicks(5917)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 641, DateTimeKind.Local).AddTicks(5286)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -114,9 +114,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 346, DateTimeKind.Local).AddTicks(3021)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 677, DateTimeKind.Local).AddTicks(1921)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -142,9 +142,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 299, DateTimeKind.Local).AddTicks(7286)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 651, DateTimeKind.Local).AddTicks(1146)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -174,7 +174,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 309, DateTimeKind.Local).AddTicks(6246)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 656, DateTimeKind.Local).AddTicks(4312)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -193,9 +193,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 316, DateTimeKind.Local).AddTicks(197)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 660, DateTimeKind.Local).AddTicks(1309)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -228,9 +228,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 278, DateTimeKind.Local).AddTicks(5232)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 635, DateTimeKind.Local).AddTicks(6381)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -241,7 +241,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     Salary = table.Column<string>(maxLength: 100, nullable: false),
                     Occupations = table.Column<string>(maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(maxLength: 300, nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 276, DateTimeKind.Local).AddTicks(3317)),
+                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 631, DateTimeKind.Local).AddTicks(9257)),
                     EndDate = table.Column<DateTime>(nullable: false),
                     City = table.Column<string>(maxLength: 100, nullable: true),
                     Address = table.Column<string>(maxLength: 200, nullable: true),
@@ -295,9 +295,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 319, DateTimeKind.Local).AddTicks(6299)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 661, DateTimeKind.Local).AddTicks(5718)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -362,12 +362,12 @@ namespace SmartIntranet.DataAccess.Migrations
                     DepartmentId = table.Column<int>(nullable: true),
                     PositionId = table.Column<int>(nullable: true),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 307, DateTimeKind.Local).AddTicks(1872)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 654, DateTimeKind.Local).AddTicks(292)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
                     DeleteDate = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -404,9 +404,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 297, DateTimeKind.Local).AddTicks(7357)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 649, DateTimeKind.Local).AddTicks(8325)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -440,9 +440,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 325, DateTimeKind.Local).AddTicks(9621)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 664, DateTimeKind.Local).AddTicks(2772)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -471,9 +471,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 290, DateTimeKind.Local).AddTicks(6731)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 643, DateTimeKind.Local).AddTicks(9973)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -500,9 +500,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 286, DateTimeKind.Local).AddTicks(394)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 640, DateTimeKind.Local).AddTicks(3996)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -650,16 +650,16 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 339, DateTimeKind.Local).AddTicks(4091)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 672, DateTimeKind.Local).AddTicks(8128)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
                     DeleteDate = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(nullable: false),
                     Description = table.Column<string>(type: "ntext", nullable: true),
-                    OpenDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 332, DateTimeKind.Local).AddTicks(5242)),
+                    OpenDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 667, DateTimeKind.Local).AddTicks(6244)),
                     CloseDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     DeadLineStart = table.Column<DateTime>(type: "Date", nullable: true),
                     DeadLineEnd = table.Column<DateTime>(type: "Date", nullable: true),
@@ -713,7 +713,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 648, DateTimeKind.Local).AddTicks(6410)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -746,7 +746,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 289, DateTimeKind.Local).AddTicks(2261)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 642, DateTimeKind.Local).AddTicks(8181)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -771,9 +771,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 313, DateTimeKind.Local).AddTicks(8759)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 658, DateTimeKind.Local).AddTicks(8768)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -806,9 +806,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 322, DateTimeKind.Local).AddTicks(6296)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 662, DateTimeKind.Local).AddTicks(9396)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -841,9 +841,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 328, DateTimeKind.Local).AddTicks(3361)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 665, DateTimeKind.Local).AddTicks(4124)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -869,9 +869,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 341, DateTimeKind.Local).AddTicks(9582)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 674, DateTimeKind.Local).AddTicks(6678)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -903,9 +903,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 349, DateTimeKind.Local).AddTicks(2488)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 678, DateTimeKind.Local).AddTicks(4984)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
@@ -936,9 +936,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 10, 15, 25, 19, 344, DateTimeKind.Local).AddTicks(2683)),
+                    CreatedDate = table.Column<DateTime>(nullable: true, defaultValue: new DateTime(2022, 5, 16, 16, 15, 41, 676, DateTimeKind.Local).AddTicks(161)),
                     UpdateByUserId = table.Column<int>(nullable: true),
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
