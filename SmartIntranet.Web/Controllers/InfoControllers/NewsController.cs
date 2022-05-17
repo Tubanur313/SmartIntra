@@ -15,6 +15,7 @@ using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers.InfoControllers
@@ -147,7 +148,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 return RedirectToAction("List");
             }
             ViewBag.categories = _map
-                .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted));
+                .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted ));
             return View(data);
         }
         [HttpPost]
@@ -215,7 +216,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             TempData["error"] = Messages.Error.notComplete;
             return RedirectToAction("List");
         }
-        
+
         [Authorize(Policy = "news.delete")]
         public async Task Delete(int id)
         {
@@ -230,7 +231,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         {
             var newsfile = await _newsfileService.FindByIdAsync(id);
             var oldFileImg = await _newsfileService.FindByIdAsync(id);
-            _upload.Delete(oldFileImg.Name,"wwwroot/news/" );
+            _upload.Delete(oldFileImg.Name, "wwwroot/news/");
             await _newsfileService.RemoveAsync(newsfile);
             return RedirectToAction("List");
 
@@ -238,10 +239,27 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         [Authorize(Policy = "news.DeleteCategoryFromCategoryNews")]
         public async Task<IActionResult> DeleteCategoryFromCategoryNews(int newscatId)
         {
-            var category =await _categoryNewsService.FindByIdAsync(newscatId);
+            var category = await _categoryNewsService.FindByIdAsync(newscatId);
             await _categoryNewsService.RemoveAsync(category);
             return RedirectToAction("List");
         }
         
+        [HttpGet]
+        public async Task<JsonResult> GetCategoryList(string searchTerm)
+        {
+            var CategoryList = _map.Map<List<CategoryListDto>>(await _categoryService
+                .GetAllAsync(x => !x.IsDeleted ));
+            if (searchTerm != null)
+            {
+                CategoryList = _map.Map<List<CategoryListDto>>(await _categoryService
+                .GetAllAsync(x => !x.IsDeleted && x.Name.Contains(searchTerm)));               
+            }
+            var categories = CategoryList.Select(x => new {
+            id = x.Id,
+            name = x.Name,
+            });   
+            return Json(categories);
+            
+        }
     }
 }
