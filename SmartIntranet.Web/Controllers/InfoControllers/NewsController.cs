@@ -153,7 +153,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         }
         [HttpPost]
         [Authorize(Policy = "news.update")]
-        public async Task<IActionResult> Update(NewsAddDto model, List<IFormFile> uploads)
+        public async Task<IActionResult> Update(NewsUpdateDto model, List<IFormFile> uploads)
         {
             if (ModelState.IsValid)
             {
@@ -244,7 +244,6 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             return RedirectToAction("List");
         }
         
-        [HttpGet]
         public async Task<JsonResult> GetCategoryList(string searchTerm)
         {
             var CategoryList = _map.Map<List<CategoryListDto>>(await _categoryService
@@ -255,10 +254,10 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 .GetAllAsync(x => !x.IsDeleted && x.Name.Contains(searchTerm)));               
             }
             var categories = CategoryList.Select(x => new {
+            text = x.Name,
             id = x.Id,
-            name = x.Name,
             });   
-            return Json(categories);
+            return Json( new { items = categories });
             
         }
     }
