@@ -170,8 +170,8 @@
     <script type="text/javascript" src="~/files/assets/js/classie.js"></script>
     <!-- Toastr js -->
     <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
-<script  class="removable">
-    $(document).ready(function () {
+<script  >
+    $(document).ready(function ($) {
 
     $("#Profile").change(function (e) {
         $("#lview").show();
@@ -200,7 +200,7 @@
 
                         formdata.append('profile', _image);
                         formdata.append("__RequestVerificationToken",token);
-                        console.log(formdata)
+
                         swal({
                            title: `Diqqət`,
                            text: `Yenilənsin?`,
