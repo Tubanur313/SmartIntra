@@ -170,7 +170,7 @@
     <script type="text/javascript" src="~/files/assets/js/classie.js"></script>
     <!-- Toastr js -->
     <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
-<script>
+<script  class="removable">
     $(document).ready(function () {
 
     $("#Profile").change(function (e) {
@@ -178,11 +178,6 @@
         $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
     });
 
-    });
-
-</script>
-<script>
-    $(document).ready(function($) {
               //phone number masking
               $.mask.definitions['9'] = '';
               $.mask.definitions['_'] = '[0-9]';

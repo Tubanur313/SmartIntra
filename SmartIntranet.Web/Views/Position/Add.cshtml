@@ -89,7 +89,7 @@
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
 
-<script>
+<script class="removable">
     $( document ).ready(function() {
          $(document).on('change','#CompanyId', function(){   
         var _id = $(this).val();

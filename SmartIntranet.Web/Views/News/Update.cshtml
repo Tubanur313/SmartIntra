@@ -42,6 +42,7 @@
             <div class="tab-content tabs card-block">
                 <div class="tab-pane active" id="home1" role="tabpanel">
                     <input hidden class="form-control" asp-for="Id" autocomplete="off">
+                    <input hidden class="form-control" asp-for="AppUserId" autocomplete="off">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -67,26 +68,6 @@
                         </div>
                     </div>
                     <div class="row">
- @*                       <div class="col-sm-12">
-                            <div class="form-group">
-                                <span class="select2 select2-container select2-container--default select2-container--below select2-container--focus" dir="ltr" style="width: 332px;">
-                                    <span class="selection">
-                                        <span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1">
-                                            <ul class="select2-selection__rendered">
-
-                                                @foreach (var item in Model.CategoryNews)
-                                                {
-                                                    <li class="select2-selection__choice">
-                                                        @item.Category.Name
-                                                        <span onclick="removeNewsCategory(@item.Id,`@item.Category.Name`,`@Url.Action("DeleteCategoryFromCategoryNews","News")`,this)" class="select2-selection__choice__remove" role="presentation">×</span>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </span>
-                                    </span>
-                                </span>
-                            </div>
-                        </div>*@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>  Məzmun: </label>
@@ -109,7 +90,7 @@
                                             {
                                                 <div class="col-lg-2 col-sm-2">
                                                     <div class="thumbnail">
-                                                        <span class="badge badge-danger" onclick="removeNewsImg(@photo.Id,`@photo.Name`,`@Url.Action("DeleteNewsImage","News").ToString()`,this)"><i class="icofont icofont-ui-delete "></i></span>
+                                                        <span class="badge badge-danger" onclick="removeNewsImg(@photo.Id,`@photo.Name`,`@Url.Action("DeleteNewsImage","News").ToString()`,this)" style="cursor: pointer;position: absolute;top: -11px;left: 88px;z-index: 1;border-radius: 38%;"><i class="icofont icofont-ui-delete "></i></span>
                                                         <div class="thumb">
                                                             <a href="~/news/@photo.Name"
                                                            data-lightbox="2" data-title="@photo.Name">
@@ -183,7 +164,7 @@
 <!-- ticket img upload js -->
 <script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
 <script type="text/javascript" src="~/files/bower_components2/lightbox2/dist/js/lightbox.min.js"></script>
-<script>
+<script class="removable">
     $(document).ready(function () {
         $.validator.setDefaults({ ignore:''});
         CKEDITOR.replace('Description');
@@ -199,46 +180,61 @@
             'wrapAround': true
         })
 
-    //$("#CategoriesId").select2({
-    //    dropdownCssClass: "custom-dropdown",
-    //    ajax: {
-    //        url: `@Url.Action("GetCategoryList","news")`,
-    //        dataType: 'json',
-    //        delay: 250,
-    //        data: function(params) {
+    $("#CategoriesId").select2({
+        dropdownCssClass: "custom-dropdown",
+        ajax: {
+            url: `@Url.Action("GetCategoryList","news")`,
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
 
-    //            return {
-    //                searchTerm: params.term
-    //            };
-    //        },
-    //        processResults: function(data) {
+                return {
+                    searchTerm: params.term
+                };
+            },
+            processResults: function(data) {
 
-    //            return {
-    //                results: data.items
-    //            };
-    //        },
-    //        cache: true
-    //    },
-    //    templateResult: function formatRepo(repo) {
-    //     return repo.text;
-    //}, 
-    //    templateSelection: function formatRepoSelection(repo) {
-    //    return repo.text;
-    //}
-    //});
+                return {
+                    results: data.items
+                };
+            },
+            cache: true
+        },
+        templateResult: function formatRepo(repo) {
+         return repo.text;
+    }, 
+        templateSelection: function formatRepoSelection(repo) {
+        return repo.text;
+    }
+    });
 
 
-    //$('#CategoriesId').change(function(e) {
-    //    var theID = $(e.target).hasClass('select2-selection__choice');
-    //    console.log(theID)
-    //});
-
-    //$(document).on("select2:unselecting",'#CategoriesId', function(e){
-    //     e.preventDefault();
-    //    var unselected_value = $(this).val();
-    //    var theID = $(e.target).attr('class');
-    //    console.log(theID)
-    //     console.log(unselected_value);
-    //});
+    $(document).on('select2:unselect', '#CategoriesId',function (e) {
+    var _categoryId = e.params.data.id;
+    var _newscatId = @Model.Id;
+    var _name = e.params.data.text;
+    
+       $.ajax({
+           type: 'get',
+           url: `@Url.Action("DeleteCategoryFromCategoryNews","News")`,
+           datatype: 'json',
+           data: {
+               newscatId: _newscatId,
+               categoryId: _categoryId,
+           },
+           success: function () {
+               toastr.success("Silindi", "Uğur!");
+           },
+           error: function () {
+               toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+           }
+       });
+    });
+        $('#CategoriesId').on("select2:unselecting", function (e) {
+      if($(this).val().length === 1) {
+        toastr.error("Sonuncu kategoriya siline bilməz !");
+        e.preventDefault();
+      }
+    })
 });
 </script>   

@@ -237,11 +237,13 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
 
         }
         [Authorize(Policy = "news.DeleteCategoryFromCategoryNews")]
-        public async Task<IActionResult> DeleteCategoryFromCategoryNews(int newscatId)
+        public async void DeleteCategoryFromCategoryNews(int newscatId ,int categoryId)
         {
-            var category = await _categoryNewsService.FindByIdAsync(newscatId);
+            var category =await _categoryNewsService.GetAsync(x=>x.NewsId == newscatId && x.CategoryId== categoryId);
+            if (category!=null)
+            {
             await _categoryNewsService.RemoveAsync(category);
-            return RedirectToAction("List");
+            }
         }
         
         public async Task<JsonResult> GetCategoryList(string searchTerm)
