@@ -170,7 +170,7 @@
     </script>*@
      <script src="https://www.google.com/recaptcha/api.js"></script>
 
-    <script>
+    <script class="removable">
         function onSubmit(token) {
             $("#captcha").val(token);
             document.getElementById("LoginForm").submit();
@@ -194,7 +194,7 @@
             src="~/files/bower_components2/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js"></script>
     <script type="text/javascript" src="~/files/bower_components2/jquery-i18next/jquery-i18next.min.js"></script>
     <script type="text/javascript" src="~/files/assets/js/common-pages.js"></script>
-      <script language="javascript">
+      <script class="removable" language="javascript">
         document.onmousedown = disableclick;
         status = "Right Click Disabled";
         function disableclick(e) {
@@ -204,7 +204,7 @@
             }
         }
     </script>
-    <script>
+    <script class="removable">
 
         $(document).keypress("u", function (e) {
             if (e.ctrlKey) {
@@ -216,7 +216,7 @@
         });
 
     </script>
-    <script>
+    <script class="removable">
         // disable right click
         document.addEventListener('contextmenu', event => event.preventDefault());
 

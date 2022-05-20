@@ -18,9 +18,6 @@ $(document).ready(function () {
         var total_file = document.getElementById("files").files;
         if (!total_file.length) return;
         for (var i = 0; i < total_file.length; i++) {
-            if (total_file[i].size > 1048576) {
-                return false;
-            } else {
                 var fileExt = total_file[i].name.split('.').pop();
                 fileArr.push(total_file[i]);
                 if (
@@ -51,7 +48,6 @@ $(document).ready(function () {
                 }
 
             }
-        }
     });
 
     $('body').on('click', '#action-icon', function (evt) {

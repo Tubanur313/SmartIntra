@@ -134,7 +134,7 @@
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
                 <button id="closeBtn" type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
-                    <strong>x</strong>
+                    <strong id="closeBtnX">x</strong>
                 </button>
             </div>
             <div class="modal-body">
@@ -145,6 +145,40 @@
 @section CrudJs{
 <!-- delete_ajax-->
 <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+<script class="removable">
+$(document).ready(function(){
+   $(window).on('click', function(e){
+                if($(e.target).attr('id') == 'form-lg-modal'
+                || $(e.target).attr('id') =='closeBtn'
+                || $(e.target).attr('id') =='closeBtnX'){
+                    window.location.reload();
+                }
+   });
+   $.ajax({
+      type: 'get',
+      url: '@Url.ActionLink("ConfirmNotify","ticket")',
+      datatype: 'json',
+      success: function (response) {
+          for (let i = 0; i < response.length; i++) 
+          {
+              $("#tickets tr").each(function() {
+              var ticketId = $(this).find("td").attr( 'data-ticketId' );
+              if(response[i].ticketId == ticketId && response[i].confirmTicket == false){
+                  $(this).find("td").parent().css('background','rgb(231 80 97 / 25%)');
+                                    var text = `<span class="blobs-container">
+                                 <span class="blob red">
+                                 </span>
+                             </span>`;
+                    $(this).find("td").first().append(text);
+              }
+              });
+          }
+      },
+      error: function (response) {
 
+      }
+  });
+});
+</script>
 }
 
