@@ -1,5 +1,47 @@
 ﻿@model IEnumerable<TicketListDto>
 
+<style>
+
+    .blobs-container {
+        display: inline-flex;
+    }
+
+    .blob {
+        background: black;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+        margin: 10px;
+        height: 20px;
+        width: 20px;
+        transform: scale(1.3);
+        animation: pulse-black 2s infinite;
+    }
+
+
+        .blob.red {
+            background: rgba(255, 82, 82, 1);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 1);
+            animation: pulse-red 2s infinite;
+        }
+
+    @@keyframes pulse-red {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+        }
+    }
+</style>
+
 <div class="page-body">
     <div class="row">
         <!-- Left column start -->
@@ -20,10 +62,10 @@
                                     <th>Ticket Açan</th>
                                     <th>Yönləndirilib</th>
                                     <th>Status</th>
-                                    <th>Prioritet</th>
+                                    <th>Öncəllik</th>
                                     <th>Kateqoriya</th>
-                                    <th>Tarix</th>
-                                    <th>Deadline</th>
+                                    <th>Açılan Tarix</th>
+                                    <th>Son Tarix</th>
                                     @if (User.HasAccess("ticket.add"))
                                     {
                                         <th class="text-center">
@@ -40,6 +82,7 @@
                                     data-placement="right" title="Ətraflı: @Html.Raw(ticket.Description)">
                                         <td>
                                             #@ticket.Id
+
                                         </td>
                                         <td data-toggle="tooltip"
                                         data-html="true"
@@ -132,7 +175,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.category")&& ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.category") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupSm('@Url.Action("Category","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Kateqoriya')"
@@ -152,7 +195,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.priority")&& ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.priority") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupSm('@Url.Action("Priority","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Priority')"
@@ -162,7 +205,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.redirect")&& ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.redirect") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupMd('@Url.Action("Redirect","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Yönləndirmə')"
@@ -172,7 +215,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.confirm")&& ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.confirm") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupLg('@Url.Action("Confirm","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Təsdiqləmə')"
@@ -182,7 +225,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.watchers")&& ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.watchers") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupLg('@Url.Action("Watchers","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Nəzarətçi')"
@@ -191,8 +234,8 @@
                                                             Nəzarətçi
                                                         </button>
                                                     </li>
-                                                } 
-                                                @if (User.HasAccess("ticket.checklist")&& ticket.StatusType==StatusType.Open)
+                                                }
+                                                @if (User.HasAccess("ticket.checklist") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupLg('@Url.Action("checklist","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Yoxlamalar')"
@@ -202,7 +245,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.orders") && ticket.CategoryTicket.TicketType==TicketType.Purchasing && ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.orders") && ticket.CategoryTicket.TicketType == TicketType.Purchasing && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopup('@Url.Action("orders","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Sifarişlər')"
@@ -212,7 +255,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.delete")&& ticket.StatusType==StatusType.Open)
+                                                @if (User.HasAccess("ticket.delete") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
                                                         <button onclick="removeItem(@ticket.Id,`@ticket.Title`,`@Url.Action("Delete","Ticket").ToString()`)"
@@ -236,8 +279,8 @@
                                     <th>Başlıq</th>
                                     <th>Ticket Açan</th>
                                     <th>Yönləndirilib</th>
-                                    <th>Prioritet</th>
                                     <th>Status</th>
+                                    <th>Öncəllik</th>
                                     <th>Kateqoriya</th>
                                     <th>Açılan Tarix</th>
                                     <th>Son Tarix</th>

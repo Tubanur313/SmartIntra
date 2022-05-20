@@ -35,6 +35,7 @@ using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -479,6 +480,22 @@ namespace SmartIntranet.Web.Controllers
             }
             ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _CategoryTicketService.GetAllIncludeAsync());
             return View(new List<TicketListDto>());
+        }
+        [Authorize(Policy = "ticket.confirmNotify")]
+        public async Task<IActionResult> ConfirmNotify()
+        {
+            List<ConfirmTicketUser> model = _map.Map<List<ConfirmTicketUser>>(await _confirmTicketUserService
+                .MyConfirmNeedTicketsAsync(GetSignInUserId()));
+
+            if (model != null)
+            {
+                return Ok(model.Select(x => new
+                {
+                    ticketId = x.TicketId,
+                    confirmTicket = x.ConfirmTicket
+                }));
+            }
+            return BadRequest();
         }
         [HttpGet]
         [Authorize(Policy = "ticket.confirmed")]
