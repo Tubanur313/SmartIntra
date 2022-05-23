@@ -78,5 +78,15 @@ namespace SmartIntranet.Business.Concrete.IntraTicket
         {
             return await _ticketDal.GetByDepartmentAllIncAsync(departId);
         }
+        public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departmentId)
+        {
+            return await _ticketDal.GetByUserDepartmentAllIncAsync(departmentId);
+
+        }
+
+        public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departmentId, int categoryId, StatusType statusType)
+        {
+            return await _ticketDal.GetByUserDepartmentAllIncAsync(departmentId, categoryId, statusType);
+        }
     }
 }

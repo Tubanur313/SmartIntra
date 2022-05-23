@@ -1,7 +1,7 @@
 ﻿<nav class="pcoded-navbar">
     <div class="pcoded-inner-navbar main-menu">
         <ul id="listed-links" class="pcoded-item pcoded-left-item">
-                         @if (User.HasAccess("dashboard.menu"))
+            @if (User.HasAccess("dashboard.menu"))
             {
                 <li class="pcoded-hasmenu">
                     <a href="javascript:void(0)">
@@ -18,7 +18,6 @@
                         </li> 
                     </ul>
                 </li>
-
             }
             @if (User.HasAccess("account.list"))
             {
@@ -100,6 +99,14 @@
                             <li class="@ViewData["admin"]">
                                 <a asp-controller="ticket" asp-action="admin">
                                     <span class="pcoded-mtext">Ticketlər</span>
+                                </a>
+                            </li>
+                        }                        
+                        @if (User.HasAccess("ticket.DepartmentTickets"))
+                        {
+                            <li class="">
+                                <a asp-controller="ticket" asp-action="DepartmentTickets">
+                                    <span class="pcoded-mtext">Şöbələrin Ticket Siyahısı</span>
                                 </a>
                             </li>
                         }

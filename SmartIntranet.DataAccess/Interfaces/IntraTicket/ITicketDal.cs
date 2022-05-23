@@ -20,5 +20,7 @@ namespace SmartIntranet.DataAccess.Interfaces
         Task<List<Ticket>> GetForAdminAsync();
         Task<List<Ticket>> GetForAdminAsync(int categoryId, StatusType statusType, int companyId);
         Task<List<Ticket>> GetByDepartmentAllIncAsync(int departId);
+        Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departmentId);
+        Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departmentId, int categoryId, StatusType statusType);
     }
 }

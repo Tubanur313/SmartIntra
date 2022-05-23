@@ -1,9 +1,9 @@
 ﻿using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using System.Reflection;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
 {
@@ -12,41 +12,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
-
-
             base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region Mapping
-
-            modelBuilder.ApplyConfiguration(new VacancyMap());
-            modelBuilder.ApplyConfiguration(new UserContractFileMap());
-            modelBuilder.ApplyConfiguration(new GradeMap());
-            modelBuilder.ApplyConfiguration(new NewsFileMap());
-            modelBuilder.ApplyConfiguration(new NewsMap());
-            modelBuilder.ApplyConfiguration(new CategoryMap());
-            modelBuilder.ApplyConfiguration(new CategoryNewsMap());
-            modelBuilder.ApplyConfiguration(new CategoryTicketMap());
-            modelBuilder.ApplyConfiguration(new EmailMap());
-            modelBuilder.ApplyConfiguration(new CheckListMap());
-            modelBuilder.ApplyConfiguration(new IntranetUserMap());
-            modelBuilder.ApplyConfiguration(new IntranetRoleMap());
-            modelBuilder.ApplyConfiguration(new CompanyMap());
-            modelBuilder.ApplyConfiguration(new ConfirmTicketUserMap());
-            modelBuilder.ApplyConfiguration(new DepartmentMap());
-            modelBuilder.ApplyConfiguration(new PositionMap());
-            modelBuilder.ApplyConfiguration(new DiscussionMap());
-            modelBuilder.ApplyConfiguration(new EntranceMap());
-            modelBuilder.ApplyConfiguration(new PhotoMap());
-            modelBuilder.ApplyConfiguration(new TicketMap());
-            modelBuilder.ApplyConfiguration(new TicketCheckListMap());
-            modelBuilder.ApplyConfiguration(new WatcherMap());
-            modelBuilder.ApplyConfiguration(new OrderMap());
-            modelBuilder.ApplyConfiguration(new TicketOrderMap());
-
-            #endregion
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             base.OnModelCreating(modelBuilder);
 

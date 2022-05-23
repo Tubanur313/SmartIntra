@@ -522,5 +522,94 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Where(z => z.Supporter.DepartmentId == departId)
                 .ToListAsync();
         }
+        public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departId)
+        {
+            using var context = new IntranetContext();
+            return await context.Tickets
+                .Where(z => z.Employee.DepartmentId == departId || z.Supporter.DepartmentId == departId)
+                .Include(z => z.Employee)
+                .ThenInclude(z => z.Company)
+                .ThenInclude(z => z.Departments)
+                .ThenInclude(z => z.Positions)
+                .Include(x => x.Supporter)
+                .ThenInclude(z => z.Company)
+                .ThenInclude(z => z.Departments)
+                .ThenInclude(z => z.Positions)
+                .Include(z => z.CategoryTicket)
+                .ToListAsync();
+        }
+        public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departId, int categoryId, StatusType statusType)
+        {
+            using var context = new IntranetContext();
+            if (categoryId > 0 && statusType != 0)
+            {
+                return await context.Tickets
+           .Where(x => x.Supporter.DepartmentId == departId || x.Employee.DepartmentId == departId)
+           .Where(x =>
+             x.CategoryTicketId == categoryId
+             && x.StatusType == statusType
+             && x.IsDeleted == false)
+           .Include(z => z.Employee)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(z => z.Supporter)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(z => z.CategoryTicket)
+           .ToListAsync();
+            }
+            else if (categoryId > 0 && statusType == 0)
+            {
+                return await context.Tickets
+           .Where(x => x.Supporter.DepartmentId == departId || x.Employee.DepartmentId == departId)
+           .Where(x =>
+             x.CategoryTicketId == categoryId && x.IsDeleted == false)
+           .Include(z => z.Employee)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(z => z.Supporter)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(z => z.CategoryTicket)
+           .ToListAsync();
+            }
+            else if (categoryId == 0 && statusType != 0)
+            {
+                return await context.Tickets
+           .Where(x => x.Supporter.DepartmentId == departId || x.Employee.DepartmentId == departId)
+           .Where(x =>
+             x.StatusType == statusType && x.IsDeleted == false)
+           .Include(z => z.Employee)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(z => z.Supporter)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(z => z.CategoryTicket)
+           .ToListAsync();
+            }
+            else
+            {
+                return await context.Tickets
+               .Where(x => x.Supporter.DepartmentId == departId || x.Employee.DepartmentId == departId)
+               .Include(z => z.Employee)
+               .ThenInclude(z => z.Company)
+               .ThenInclude(z => z.Departments)
+               .ThenInclude(z => z.Positions)
+               .Include(z => z.Supporter)
+               .ThenInclude(z => z.Company)
+               .ThenInclude(z => z.Departments)
+               .ThenInclude(z => z.Positions)
+               .Include(z => z.CategoryTicket)
+               .ToListAsync();
+            }
+        }
+
     }
 }
