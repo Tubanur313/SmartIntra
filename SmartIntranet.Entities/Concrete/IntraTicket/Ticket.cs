@@ -17,6 +17,7 @@ namespace SmartIntranet.Entities.Concrete.IntraTicket
         public DateTime? DeadLineStart { get; set; }
         public DateTime? DeadLineEnd { get; set; }
         public bool Confirmed { get; set; }
+
         public int? CategoryTicketId { get; set; }
         public CategoryTicket CategoryTicket { get; set; }
         public PriorityType PriorityType { get; set; }
