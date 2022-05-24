@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.Membership;
 using System.Reflection;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context

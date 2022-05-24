@@ -14,6 +14,7 @@ using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
@@ -45,6 +46,21 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 return View(_map.Map<List<CompanyListDto>>(model));
             }
             return View(new List<CompanyListDto>());
+        }
+        [HttpGet]
+        [Authorize(Policy = "company.ajaxlist")]
+        public async Task<IActionResult> AjaxList()
+        {
+            var model = await _companyService.GetAllAsync(x => x.IsDeleted == false);
+            if (model.Count > 0)
+            {
+                return Ok(_map.Map<List<CompanyListDto>>(model).Select(x => new
+                {
+                    id = x.Id,
+                    name = x.Name
+                }));
+            }
+            return Ok(new List<CompanyListDto>());
         }
         [HttpGet]
         [Authorize(Policy = "company.add")]
@@ -85,6 +101,25 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 TempData["error"] = Messages.Error.notComplete;
                 return RedirectToAction("List");
+            }
+        }
+        [HttpGet]
+        [Authorize(Policy = "company.ajaxadd")]
+        public async Task<IActionResult> AjaxAdd(CompanyAddDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var add = _map.Map<Company>(model);
+                add.CreatedByUserId = GetSignInUserId();
+                if (await _companyService.AddReturnEntityAsync(add) is null)
+                {
+                    return BadRequest(Messages.Add.notAdded);
+                }
+                return Ok(Messages.Add.Added);
+            }
+            else
+            {
+                return BadRequest(Messages.Error.notComplete);
             }
         }
         [HttpGet]

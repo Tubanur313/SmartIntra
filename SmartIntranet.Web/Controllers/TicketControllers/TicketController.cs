@@ -553,6 +553,11 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> DepartmentTickets()
         {
             var user = await _userService.GetAsync(x => x.Id == GetSignInUserId());
+            if (user.DepartmentId is null)
+            {
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                return View(new List<TicketListDto>());
+            }
             List<TicketListDto> model = _map.Map<List<TicketListDto>>(await _ticketService
                .GetByUserDepartmentAllIncAsync((int)user.DepartmentId)
             );
