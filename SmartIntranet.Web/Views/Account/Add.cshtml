@@ -87,19 +87,25 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şöbə: </label>
-                                <select disabled name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.departments)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <label class="floatLabel">  Şöbə: </label>
+                                        <select disabled name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
+                                            <option value="" disabled selected hidden>Seçim edin</option>
+                                            @foreach (var item in ViewBag.departments)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
 
-                                </select>
-                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                        </select>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <a id="openDep"  class="btn text-success" data-toggle="modal" data-target="#departModal"><i class="icofont icofont-plus-circle"></i></a>
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -237,6 +243,66 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="departModal" tabindex="-1" role="dialog" aria-labelledby="exam-m" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content bg-default">
+                <div class="modal-header">
+                    <h5>Şöbə əlavə et</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="dep-form">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="floatLabel">  Ad: </label>
+                                    <input type="text" class="form-control" id="Name" name="Name" autocomplete="off">
+                                    <span class="messages d-none text-danger">Ad boş ola bilməz</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="floatLabel">  Təsvir: </label>
+                                    <input type="text" class="form-control" id="Description" name="Description">
+                                    <span class="messages"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label class="floatLabel">  Şirkət: </label>
+                                <select id="CompanyId" name="CompanyId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.companies)
+                                    {
+                                        <option value="@item.Id">@item.Name </option>
+                                    }
+
+                                </select>
+                                <span class="messages d-none text-danger">Şirkət boş ola bilməz</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="floatLabel">   Üst Şöbə: </label>
+                                <select id="ParentId" name="ParentId" class="form-control">
+                                    <option value="" selected disabled hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.departments)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="closedDepart" type="button" class="btn btn-warning btn-round">Bağla</button>
+                    <button id="addDepart" type="button" class="btn btn-success btn-round">Əlavə et</button>
+                </div>
+            </div>
+        </div>
+</div>
 
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
@@ -246,7 +312,8 @@
 <script class="removable">
         $(document).ready(function () {
             $(document).on("click","#closed",function(){
-                  $('#companyModal').modal('hide')
+                  $('#companyModal').modal('hide');
+                   $("#com-form").trigger("reset");
             })
             $(document).on("click","#addComp",function(){
                    $("#comp-form").find("#Name").on('input',function(){
@@ -293,6 +360,71 @@
                         });
                    }
             });
+                            $(document).on("click","#closedDepart",function(){
+                  $('#departModal').modal('hide');
+                  $("#dep-form").trigger("reset");
+                })
+                $(document).on("click","#addDepart",function(){
+                    $("#dep-form #Name").on('input',function(){
+                     if($("#dep-form #Name").find(".messages").hasClass('d-none')==false){
+                     $("#dep-form #Name").parent().find(".messages").addClass('d-none');
+                    }
+                    });
+                    $("#dep-form #CompanyId").on('change',function(){
+                      if($("#dep-form #CompanyId").find(".messages").hasClass('d-none')==false){
+                      $("#dep-form #CompanyId").parent().find(".messages").addClass('d-none');
+                    
+                     }
+                    });
+                    
+                    if($("#dep-form #Name").val()===""){
+                        if($("#dep-form #Name").parent().find(".messages").hasClass('d-none')){
+                          $("#dep-form #Name").parent().find(".messages").removeClass('d-none');
+                        } 
+                        return;
+                    }
+                    else if($("#dep-form #CompanyId option:selected").val()==="")
+                    {
+                       if($("#dep-form #CompanyId").parent().find(".messages").hasClass('d-none')){
+                            $("#dep-form #CompanyId").parent().find(".messages").removeClass('d-none');
+                       }
+                       return;
+                     }
+                     else
+                     {
+
+                        if($("#dep-form").find(".messages").hasClass('d-none')==false){
+                        $("#dep-form").find(".messages").addClass('d-none');
+                        }
+                        var data = $('#dep-form').serializeArray().reduce(function(obj, item) {
+                            obj[item.name] = item.value;
+                            return obj;
+                        }, {});
+
+                        $.ajax({
+                            type: 'get',
+                            url: '@Url.ActionLink("AjaxAdd","Department")',
+                            datatype: 'json',
+                            traditional: true,
+                            data:data,
+                            success: function (response) {
+                                toastr.success("Məlumat uğurla əlavə edildi", "Uğur!");
+                                $('#departModal').modal('hide');
+                                $("#DepartmentId").empty();
+                                var html = "";
+                                for (var i in response) {
+                                    html += `<option value="${[response[i].id]}">
+                                    ${[response[i].name]}</option>`
+                                }
+                                $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                                $("#dep-form").trigger("reset");
+                            },
+                            error: function (response) {
+                                toastr.error(response, "Xəta!");
+                            }
+                        });
+                    }
+                });
             $("#Profile").change(function (e) {
             if($('.file-name').isImage())
             {
