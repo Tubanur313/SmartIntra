@@ -48,21 +48,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             return View(new List<CompanyListDto>());
         }
         [HttpGet]
-        [Authorize(Policy = "company.ajaxlist")]
-        public async Task<IActionResult> AjaxList()
-        {
-            var model = await _companyService.GetAllAsync(x => x.IsDeleted == false);
-            if (model.Count > 0)
-            {
-                return Ok(_map.Map<List<CompanyListDto>>(model).Select(x => new
-                {
-                    id = x.Id,
-                    name = x.Name
-                }));
-            }
-            return Ok(new List<CompanyListDto>());
-        }
-        [HttpGet]
         [Authorize(Policy = "company.add")]
         public async Task<IActionResult> Add()
         {
@@ -115,7 +100,16 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     return BadRequest(Messages.Add.notAdded);
                 }
-                return Ok(Messages.Add.Added);
+                var list = await _companyService.GetAllAsync(x => x.IsDeleted == false);
+                if (list.Count > 0)
+                {
+                    return Ok(_map.Map<List<CompanyListDto>>(list).Select(x => new
+                    {
+                        id = x.Id,
+                        name = x.Name
+                    }));
+                }
+                return Ok(Messages.Add.notAdded);
             }
             else
             {
