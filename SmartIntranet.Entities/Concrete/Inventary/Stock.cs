@@ -19,7 +19,7 @@ namespace SmartIntranet.Entities.Concrete.Inventary
         public StockCategory StockCategory { get; set; }
         public int CompanyId { get; set; }
         public Company Company { get; set; }
-        public int IntranerUserId { get; set; }
+        public int? IntranerUserId { get; set; }
         public IntranetUser IntranetUser { get; set; }
 
     }
