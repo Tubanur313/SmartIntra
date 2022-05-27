@@ -81,6 +81,34 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             }
         }
         [HttpGet]
+        [Authorize(Policy = "department.ajaxadd")]
+        public async Task<IActionResult> AjaxAdd(DepartmentAddDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var add = _map.Map<Department>(model);
+                add.CreatedByUserId = GetSignInUserId();
+                if (await _departmentService.AddReturnEntityAsync(add) is null)
+                {
+                    return BadRequest(Messages.Add.notAdded);
+                }
+                var list = await _departmentService.GetAllAsync(x => x.IsDeleted == false);
+                if (list.Count > 0)
+                {
+                    return Ok(_map.Map<List<DepartmentListDto>>(list).Select(x => new
+                    {
+                        id = x.Id,
+                        name = x.Name,
+                    }));
+                }
+                return Ok(Messages.Add.notAdded);
+            }
+            else
+            {
+                return BadRequest(Messages.Error.notComplete);
+            }
+        }
+        [HttpGet]
         [Authorize(Policy = "department.update")]
         public async Task<IActionResult> Update(int id)
         {

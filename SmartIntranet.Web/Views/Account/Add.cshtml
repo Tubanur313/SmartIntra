@@ -68,7 +68,7 @@
                         <div class="col-sm-6">
 
                             <div class="row">
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="floatLabel">  Şirkət: </label>
                                         <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
@@ -82,38 +82,51 @@
                                         <span asp-validation-for="CompanyId" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <a id="openComp" class="btn text-success" data-toggle="modal" data-target="#companyModal"><i class="icofont icofont-plus-circle"></i></a>
+                               @* <div class="col-md-2">
+                                    <button id="openComp" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#companyModal"><i class="icofont icofont-plus" style="margin-right: 0;"></i></button>
+                                </div>*@
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="floatLabel">  Şöbə: </label>
+                                        <select disabled name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
+                                            <option value="" disabled selected hidden>Seçim edin</option>
+                                            @foreach (var item in ViewBag.departments)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+                                        </select>
+                                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şöbə: </label>
-                                <select disabled name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.departments)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-
-                                </select>
-                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                         @*       <div class="col-md-2">
+                                    <button id="openDep" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#departModal"><i class="icofont icofont-plus" style="margin-right: 0;"></i></button>
+                                </div>*@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Vəzifə: </label>
-                                <select disabled name="select" asp-for="PositionId" name="PositionId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.position)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="floatLabel">  Vəzifə: </label>
+                                        <select disabled name="select" asp-for="PositionId" name="PositionId" class="form-control">
+                                            <option value="" disabled selected hidden>Seçim edin</option>
+                                            @foreach (var item in ViewBag.position)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
 
-                                </select>
-                                <span asp-validation-for="PositionId" class="text-danger"></span>
+                                        </select>
+                                        <span asp-validation-for="PositionId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                          @*      <div class="col-md-2">
+                                    <button id="openPos" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#positionModal"><i class="icofont icofont-plus" style="margin-right: 0;"></i></button>
+                                </div>*@
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -188,7 +201,7 @@
 
 </div>
 <!-- Modal -->
-<div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="exam-m" aria-hidden="true">
+@*<div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="exam-m" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content bg-default">
             <div class="modal-header">
@@ -231,164 +244,365 @@
 
             </div>
             <div class="modal-footer">
-                <button id="closed" type="button" class="btn btn-warning btn-round">Bağla</button>
-                <button id="addComp" type="button" class="btn btn-success btn-round">Əlavə et</button>
+                <button id="closed" type="button" class="btn btn-outline-warning btn-round">Bağla</button>
+                <button id="addComp" type="button" class="btn btn-outline-success btn-round">Əlavə et</button>
             </div>
         </div>
     </div>
 </div>
+<div class="modal fade" id="departModal" tabindex="-1" role="dialog" aria-labelledby="exam-m" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-default">
+            <div class="modal-header">
+                <h5>Şöbə əlavə et</h5>
+            </div>
+            <div class="modal-body">
+                <form id="dep-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Ad: </label>
+                                <input type="text" class="form-control" id="Name" name="Name" autocomplete="off">
+                                <span class="messages d-none text-danger">Ad boş ola bilməz</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Təsvir: </label>
+                                <input type="text" class="form-control" id="Description" name="Description">
+                                <span class="messages"></span>
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Şirkət: </label>
+                            <select id="CompanyId" name="CompanyId" class="form-control">
+                                <option value="" disabled selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.companies)
+                                {
+                                    <option value="@item.Id">@item.Name </option>
+                                }
+
+                            </select>
+                            <span class="messages d-none text-danger">Şirkət boş ola bilməz</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">   Üst Şöbə: </label>
+                            <select id="ParentId" name="ParentId" class="form-control">
+                                <option value="" selected disabled hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.departments)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="closedDepart" type="button" class="btn btn-outline-warning btn-round">Bağla</button>
+                <button id="addDepart" type="button" class="btn btn-outline-success btn-round">Əlavə et</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="positionModal" tabindex="-1" role="dialog" aria-labelledby="exam-m" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content bg-default">
+            <div class="modal-header">
+                <h5>Vəzifə əlavə et</h5>
+            </div>
+            <div class="modal-body">
+                <form id="pos-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Ad: </label>
+                                <input type="text" class="form-control" id="Name" name="Name" autocomplete="off">
+                                <span class="messages d-none text-danger">Ad boş ola bilməz</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Təsvir: </label>
+                                <input type="text" class="form-control" id="Description" name="Description">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Şirkət: </label>
+                            <select id="CompanyId" name="CompanyId" class="form-control">
+                                <option value="" disabled selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.companies)
+                                {
+                                    <option value="@item.Id">@item.Name </option>
+                                }
+
+                            </select>
+                            <span class="messages d-none text-danger">Şirkət boş ola bilməz</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">
+                                Şöbə:
+                            </label>
+                            <select id="DepartmentId" name="DepartmentId" class="form-control">
+                                <option value="" disabled selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.departments)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                            <span class="messages d-none text-danger">Şöbə boş ola bilməz</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">
+                                Üst Şöbə:
+                            </label>
+                            <select id="ParentId" name="ParentId" class="form-control">
+                                <option value="" selected disabled hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.departments)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="closedPosition" type="button" class="btn btn-outline-warning btn-round">Bağla</button>
+                <button id="addPosition" type="button" class="btn btn-outline-success btn-round">Əlavə et</button>
+            </div>
+        </div>
+    </div>
+</div>*@
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
 <!-- cust-validation js -->
 <script src="~/files/lib/cust_ajax/cust-validation.js"></script>
 
 <script class="removable">
-        $(document).ready(function () {
-            $(document).on("click","#closed",function(){
-                  $('#companyModal').modal('hide')
-            })
-            $(document).on("click","#addComp",function(){
-                   $("#comp-form").find("#Name").on('input',function(){
-                     if($("#comp-form").find(".messages").hasClass('d-none')==false){
-                     $("#comp-form").find(".messages").addClass('d-none');
-                    }
-                   });
-                   if($("#comp-form").find("#Name").val()===""){
-                       if($("#comp-form").find(".messages").hasClass('d-none')){
-                         return $("#comp-form").find(".messages").removeClass('d-none');
-                       }
-                   }
-                   else
-                   {
-                     if($("#comp-form").find(".messages").hasClass('d-none')==false){
-                     $("#comp-form").find(".messages").addClass('d-none');
-                    }
-                        var data = $('#comp-form').serializeArray().reduce(function(obj, item) {
-                            obj[item.name] = item.value;
-                            return obj;
-                        }, {});
+    $(document).ready(function () {
 
+       $("#Profile").change(function (e) {
+                    if($('.file-name').isImage())
+                    {
+                    $("#lview").show();
+                    $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+                    }
+                    else
+                    {
+                        toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
+                    }
+       });
+       $('#file-upload').change(function() {
+       var file = $('#file-upload')[0].files[0].name;
+       $('#uploaded').removeClass("d-none").text(file);
+       });
+       //phone number masking
+       $.mask.definitions['9'] = '';
+       $.mask.definitions['_'] = '[0-9]';
+       $("#PhoneNumber").on("focus",function(){
+            $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
+       });
+       $(document).on('change','#CompanyId', function(){
+                        var _id = $(this).val();
                         $.ajax({
-                            type: 'get',
-                            url: '@Url.ActionLink("AjaxAdd","Company")',
-                            datatype: 'json',
-                            traditional: true,
-                            data:data,
-                            success: function (response) {
-                                toastr.success("Məlumat uğurla əlavə edildi", "Uğur!");
-                                $('#companyModal').modal('hide');
-                                $("#CompanyId").empty();
-                                var html = "";
-                                for (var i in response) {
-                                    html += `<option value="${[response[i].id]}">
-                                    ${[response[i].name]}</option>`
-                                }
-                                $("#CompanyId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                                $("#comp-form").trigger("reset");
-                            },
-                            error: function (response) {
-                                toastr.error(response, "Xəta!");
+                        type: 'Get',
+                        url: '@Url.ActionLink("GetDepartment","Account")',
+                        data: {
+                            companyId: _id,
+                        },
+                        success: function (response) {
+                            if (response.error == true) {
+                                toastr.error(response.message, "Xəta baş verdi!");
+                                return;
                             }
+                            $("#DepartmentId").empty();
+                            var html = "";
+                            for (var i in response) {
+                                html += `<option value="${[response[i].id]}">
+                                ${[response[i].name]}</option>`
+                            }
+                            if(response.length>0)
+                            {
+                                $("#DepartmentId").prop('disabled', false);
+                                $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                            }
+                            else{
+                                 $("#DepartmentId").prop('disabled', false);
+                                $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                                $("#DepartmentId").prop('disabled', false);
+                                $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                            }
+                        },
+                        error: function (response) {
+                            $("#overlay").fadeOut(300);
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
                         });
-                   }
-            });
-            $("#Profile").change(function (e) {
-            if($('.file-name').isImage())
-            {
-                $("#lview").show();
-                $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
-            }
-            else
-            {
-                toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
-            }
-            });
-            $('#file-upload').change(function() {
-            var file = $('#file-upload')[0].files[0].name;
-            $('#uploaded').removeClass("d-none").text(file);
-            });
-            //phone number masking
-            $.mask.definitions['9'] = '';
-            $.mask.definitions['_'] = '[0-9]';
-            $("#PhoneNumber").on("focus",function(){
-                 $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
-            });
-      $(document).on('change','#CompanyId', function(){
-            var _id = $(this).val();
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetDepartment","Account")',
-                data: {
-                    companyId: _id,
-                },
-                success: function (response) {
-                    if (response.error == true) {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#DepartmentId").empty();
-                    var html = "";
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-                    if(response.length>0)
-                    {
-                        $("#DepartmentId").prop('disabled', false);
-                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                         $("#DepartmentId").prop('disabled', false);
-                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                        $("#DepartmentId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-                });
-            });
+       });
        $(document).on('change','#DepartmentId', function(){
-            var _id = $(this).val();
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetPosition","Account")',
-                data: {
-                    departmentId: _id,
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#PositionId").empty();
-                    var html = "";
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-                    if(response.length>0)
-                    {
-                        $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                         $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
+                        var _id = $(this).val();
+                        $.ajax({
+                        type: 'Get',
+                        url: '@Url.ActionLink("GetPosition","Account")',
+                        data: {
+                            departmentId: _id,
+                        },
+                        success: function (response)
+                        {
+                            if (response.error == true)
+                            {
+                                toastr.error(response.message, "Xəta baş verdi!");
+                                return;
+                            }
+                            $("#PositionId").empty();
+                            var html = "";
+                            for (var i in response) {
+                                html += `<option value="${[response[i].id]}">
+                                ${[response[i].name]}</option>`
+                            }
+                            if(response.length>0)
+                            {
+                                $("#PositionId").prop('disabled', false);
+                                $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                            }
+                            else{
+                                 $("#PositionId").prop('disabled', false);
+                                $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                            }
 
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-           });
-        });
+                        },
+                        error: function (response) {
+                            $("#overlay").fadeOut(300);
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                        });
+       });
+
+       //$(document).on("click","#closed",function(){
+       //                $('#companyModal').modal('hide');
+       //                $("#com-form").trigger("reset");
+       //})
+       //$(document).on("click","#addComp",function(){
+       //                $("#comp-form").find("#Name").on('input',function(){
+       //                  if($("#comp-form").find(".messages").hasClass('d-none')==false){
+       //                  $("#comp-form").find(".messages").addClass('d-none');
+       //                 }
+       //                });
+       //                if($("#comp-form").find("#Name").val()===""){
+       //                    if($("#comp-form").find(".messages").hasClass('d-none')){
+       //                      return $("#comp-form").find(".messages").removeClass('d-none');
+       //                    }
+       //                }
+       //                else
+       //                {
+       //                  if($("#comp-form").find(".messages").hasClass('d-none')==false){
+       //                  $("#comp-form").find(".messages").addClass('d-none');
+       //                 }
+       //                     var data = $('#comp-form').serializeArray().reduce(function(obj, item) {
+       //                         obj[item.name] = item.value;
+       //                         return obj;
+       //                     }, {});
+
+       //                     $.ajax({
+       //                         type: 'get',
+       //                         url: '@Url.ActionLink("AjaxAdd","Company")',
+       //                         datatype: 'json',
+       //                         traditional: true,
+       //                         data:data,
+       //                         success: function (response) {
+       //                             toastr.success("Məlumat uğurla əlavə edildi", "Uğur!");
+       //                             $('#companyModal').modal('hide');
+       //                             $("#CompanyId").empty();
+       //                             var html = "";
+       //                             for (var i in response) {
+       //                                 html += `<option value="${[response[i].id]}">
+       //                                 ${[response[i].name]}</option>`
+       //                             }
+       //                             $("#CompanyId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+       //                             $("#comp-form").trigger("reset");
+       //                         },
+       //                         error: function (response) {
+       //                             toastr.error(response, "Xəta!");
+       //                         }
+       //                     });
+       //                }
+       //});
+       //$(document).on("click","#closedDepart",function(){
+       //               $('#departModal').modal('hide');
+       //               $("#dep-form").trigger("reset");
+       //})
+       //$(document).on("click","#addDepart",function(){
+       //                 $("#dep-form #Name").on('input',function(){
+       //                  if($("#dep-form #Name").find(".messages").hasClass('d-none')==false){
+       //                  $("#dep-form #Name").parent().find(".messages").addClass('d-none');
+       //                 }
+       //                 });
+       //                 $("#dep-form #CompanyId").on('change',function(){
+       //                   if($("#dep-form #CompanyId").find(".messages").hasClass('d-none')==false){
+       //                   $("#dep-form #CompanyId").parent().find(".messages").addClass('d-none');
+
+       //                  }
+       //                 });
+
+       //                 if($("#dep-form #Name").val()===""){
+       //                     if($("#dep-form #Name").parent().find(".messages").hasClass('d-none')){
+       //                       $("#dep-form #Name").parent().find(".messages").removeClass('d-none');
+       //                     }
+       //                     return;
+       //                 }
+       //                 else if($("#dep-form #CompanyId option:selected").val()==="")
+       //                 {
+       //                    if($("#dep-form #CompanyId").parent().find(".messages").hasClass('d-none')){
+       //                         $("#dep-form #CompanyId").parent().find(".messages").removeClass('d-none');
+       //                    }
+       //                    return;
+       //                  }
+       //                  else
+       //                  {
+
+       //                     if($("#dep-form").find(".messages").hasClass('d-none')==false){
+       //                     $("#dep-form").find(".messages").addClass('d-none');
+       //                     }
+       //                     var data = $('#dep-form').serializeArray().reduce(function(obj, item) {
+       //                         obj[item.name] = item.value;
+       //                         return obj;
+       //                     }, {});
+
+       //                     $.ajax({
+       //                         type: 'get',
+       //                         url: '@Url.ActionLink("AjaxAdd","Department")',
+       //                         datatype: 'json',
+       //                         traditional: true,
+       //                         data:data,
+       //                         success: function (response) {
+       //                             toastr.success("Məlumat uğurla əlavə edildi", "Uğur!");
+       //                             $('#departModal').modal('hide');
+       //                             $("#DepartmentId").empty();
+       //                             var html = "";
+       //                             for (var i in response) {
+       //                                 html += `<option value="${[response[i].id]}">
+       //                                 ${[response[i].name]}</option>`
+       //                             }
+       //                             $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+       //                             $("#dep-form").trigger("reset");
+       //                         },
+       //                         error: function (response) {
+       //                             toastr.error(response, "Xəta!");
+       //                         }
+       //                     });
+       //                 }
+       //});
     });
 </script>
 @await Html.PartialAsync("_ValidationScriptsPartial")
