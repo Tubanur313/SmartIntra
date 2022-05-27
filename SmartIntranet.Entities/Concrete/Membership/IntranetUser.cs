@@ -2,6 +2,7 @@
 using SmartIntranet.Core.Entities.Abstract;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.Inventary;
 using System;
 using System.Collections.Generic;
 
@@ -42,6 +43,7 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public virtual ICollection<Entrance> Entrances { get; set; }
         public virtual ICollection<CategoryTicket> CategoryTickets { get; set; }
         public virtual ICollection<Discussion> Discussions { get; set; }
+        public virtual ICollection<Stock> Stocks { get; set; }
 
     }
 }
