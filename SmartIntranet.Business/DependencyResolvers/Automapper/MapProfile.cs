@@ -12,6 +12,8 @@ using SmartIntranet.DTO.DTOs.DiscussionDto;
 using SmartIntranet.DTO.DTOs.EmailDto;
 using SmartIntranet.DTO.DTOs.EntranceDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
 using SmartIntranet.DTO.DTOs.NewsDto;
 using SmartIntranet.DTO.DTOs.NewsFileDto;
 using SmartIntranet.DTO.DTOs.OrderDto;
@@ -25,6 +27,7 @@ using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Linq;
@@ -317,6 +320,25 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<NewsFile, NewsFileAddDto>();
             CreateMap<NewsFileListDto, NewsFile>();
             CreateMap<NewsFile, NewsFileListDto>();
+
+            #endregion
+
+            #region  Stock <-> StockDto
+            CreateMap<StockAddDto, Stock>();
+            CreateMap<Stock, StockAddDto>();
+            CreateMap<StockListDto, Stock>();
+            CreateMap<Stock, StockListDto>();
+            CreateMap<StockUpdateDto, Stock>();
+            CreateMap<Stock, StockUpdateDto>();
+
+            #endregion 
+            #region  Stock <-> StockDto
+            CreateMap<StockCategoryAddDto, StockCategory>();
+            CreateMap<StockCategory, StockCategoryAddDto>();
+            CreateMap<StockCategoryListDto, StockCategory>();
+            CreateMap<StockCategory, StockCategoryListDto>();
+            CreateMap<StockCategoryUpdateDto, StockCategory>();
+            CreateMap<StockCategory, StockCategoryUpdateDto>();
 
             #endregion
         }
