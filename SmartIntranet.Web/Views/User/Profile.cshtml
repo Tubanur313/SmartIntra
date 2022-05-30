@@ -1,4 +1,10 @@
-﻿@model AppUserProfileUpdateDto
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;    }
+}
+@model AppUserProfileUpdateDto
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <link rel="stylesheet" href="~/files/lib/file-input-tower/dist/tower-file-input.css" />
 <link rel="stylesheet" href="~/files/lib/toastr.js/toastr.min.css" />
@@ -170,18 +176,23 @@
     <script type="text/javascript" src="~/files/assets/js/classie.js"></script>
     <!-- Toastr js -->
     <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
-<script  >
-    $(document).ready(function ($) {
+<script>
+    $(document).ready(function () {
 
     $("#Profile").change(function (e) {
         $("#lview").show();
         $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
     });
 
+    });
+
+</script>
+<script>
+    $(document).ready(function($) {
               //phone number masking
               $.mask.definitions['9'] = '';
               $.mask.definitions['_'] = '[0-9]';
-              $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
+              $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
 
 
 
@@ -192,16 +203,12 @@
 
               $("#demoInput4").on('change', function (e) {
                   e.preventDefault();
-                  
                         var formdata = new FormData();
                         var _image = $('#demoInput4')[0].files[0];
                         var _id = @Model.AppUserImageDto.Id;
-                        var token = $('input[name="__RequestVerificationToken"]').val();
-
                         formdata.append('profile', _image);
-                        formdata.append("__RequestVerificationToken",token);
 
-                        swal({
+                       swal({
                            title: `Diqqət`,
                            text: `Yenilənsin?`,
                            icon: "warning",

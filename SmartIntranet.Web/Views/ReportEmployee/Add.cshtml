@@ -1,0 +1,77 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model ReportEmployeeDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Şirkət: </label>
+                        <select asp-for="CompanyId" id="CompanyId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.companies)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="floatLabel"> Tarix: </label>
+                    <div class="form-group">
+                        <input asp-for="ReportDate" type="month" class="form-control" id="inputDate">
+                        <span asp-validation-for="ReportDate" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+         
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+    $(document).ready(function () {
+        $('.input-daterange input').each(function () {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            });
+        });
+      
+        //$("#inputDate").datepicker({
+        //    dateFormat: 'MM yy',
+        //    changeMonth: true,
+        //    changeYear: true,
+        //    showButtonPanel: true,
+
+        //    onClose: function (dateText, inst) {
+        //        var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        //        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        //        $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+        //    }
+        //});
+       
+    });
+</script>

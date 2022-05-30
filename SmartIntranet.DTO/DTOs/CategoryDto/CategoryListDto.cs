@@ -12,7 +12,7 @@ namespace SmartIntranet.DTO.DTOs.CategoryDto
         public string Name { get; set; }
 
         public string Description { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public int? CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? UpdateByUserId { get; set; }

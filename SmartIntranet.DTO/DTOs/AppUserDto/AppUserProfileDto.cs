@@ -10,8 +10,8 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
     public class AppUserProfileDto
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
         public string Email { get; set; }
         public DateTime? Birthday { get; set; }
         public string PhoneNumber { get; set; }
@@ -25,6 +25,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public Department Department { get; set; }
         public int? PositionId { get; set; }
         public Position Position { get; set; }
+        public bool IsDeleted { get; set; }
         public List<UserContractFile> UserContractFiles { get; set; }
     }
 }

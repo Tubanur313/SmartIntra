@@ -56,7 +56,7 @@
                                 if (item.IntranetUserId != ViewBag.signInUserId)
                                 {
                                     <li class="d-flex  justify-content-between mb-2">
-                                        <span class="text=danger"> @item.IntranetUser.FirstName+@item.IntranetUser.LastName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
+                                        <span class="text=danger"> @item.IntranetUser.Name+@item.IntranetUser.Surname | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
                                         <div class="d-flex justify-content-between">
                                             <div  class="checkbox mess1">
                                                 <input type="checkbox" class="disable check_switch displayMessage1" data-size="small" @(item.ConfirmTicket==true? "checked":"") >
@@ -76,14 +76,14 @@
 
 
                                     <li class="d-flex justify-content-between mb-2">
-                                        <span> @item.IntranetUser.FirstName+@item.IntranetUser.LastName | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
+                                        <span> @item.IntranetUser.Name+@item.IntranetUser.Surname | @item.IntranetUser.Company?.Name | @item.IntranetUser.Department?.Name | @item.IntranetUser.Position?.Name</span>
                                         <div class="d-flex justify-content-between">
                                             <div class="checkbox">
-                                                <input data-id="@item.Id" data-name="@item.IntranetUser.FirstName+@item.IntranetUser.LastName" type="checkbox" @(item.ConfirmTicket==true? "checked":"") class="js-switch check_switch" data-size="small">
+                                                <input data-id="@item.Id" data-name="@item.IntranetUser.Name+@item.IntranetUser.Surname" type="checkbox" @(item.ConfirmTicket==true? "checked":"") class="js-switch check_switch" data-size="small">
                                             </div>
                                             <div class="checkbox-fade fade-in-danger ml-2">
                                                 <label>
-                                                    <span onclick="removeUserConfirm(@item.Id,`@item.IntranetUser.FirstName+@item.IntranetUser.LastName`,`@Url.Action("Delete","ConfirmTicketUser")`,this)" class="cr">
+                                                    <span onclick="removeUserConfirm(@item.Id,`@item.IntranetUser.Name+@item.IntranetUser.Surname`,`@Url.Action("Delete","ConfirmTicketUser")`,this)" class="cr">
                                                         <i class="cr-icon icofont icofont-ui-close txt-primary"></i>
                                                     </span>
                                                 </label>

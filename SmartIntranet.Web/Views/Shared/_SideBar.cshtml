@@ -77,10 +77,87 @@
                         }
 
                         @*<li class="">
-                            <a asp-controller="account" asp-action="Info">
-                            <span class="pcoded-mtext">Permission</span>
-                            </a>
-                            </li>*@
+        <a asp-controller="account" asp-action="Info">
+        <span class="pcoded-mtext">Permission</span>
+        </a>
+        </li>*@
+
+                        @if (User.HasAccess("nonworkingyear.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="nonWorkingYear" asp-action="list">
+                                    <span class="pcoded-mtext">İstehsalat Təqvimi</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.HasAccess("workgraphic.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="workGraphic" asp-action="list">
+                                    <span class="pcoded-mtext">İş Qrafiki</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("reportEmployee.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="reportEmployee" asp-action="list">
+                                    <span class="pcoded-mtext">Hesabatlıq</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.HasAccess("contract.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="contract" asp-action="list">
+                                    <span class="pcoded-mtext">Müqavilə</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.HasAccess("clause.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="clause" asp-action="list">
+                                    <span class="pcoded-mtext">Şablonlar</span>
+                                </a>
+                            </li>
+                        }
+                        @*<li class="">
+        <a asp-controller="account" asp-action="Info">
+        <span class="pcoded-mtext">Permission</span>
+        </a>
+        </li>*@
+                        @if (User.HasAccess("cause.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="cause" asp-action="list">
+                                    <span class="pcoded-mtext">Ezamiyyət əsası</span>
+                                </a>
+                            </li>
+                        }
+
+
+                        @if (User.HasAccess("place.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="place" asp-action="list">
+                                    <span class="pcoded-mtext">Ezamiyyət yeri</span>
+                                </a>
+                            </li>
+                        }
+
+
+                        @if (User.HasAccess("terminationItem.list"))
+                        {
+                            <li class="">
+                                <a asp-controller="terminationItem" asp-action="list">
+                                    <span class="pcoded-mtext">Maddələr</span>
+                                </a>
+                            </li>
+                        }
+
 
                     </ul>
                 </li>

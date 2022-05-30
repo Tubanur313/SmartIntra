@@ -19,6 +19,545 @@ namespace SmartIntranet.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.BusinessTrip", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CauseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CommandDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommandNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 528, DateTimeKind.Local).AddTicks(2478));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsHotelDemand")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTransportation")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BusinessTrips");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.BusinessTripFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BusinessTripId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessTripId");
+
+                    b.HasIndex("ClauseId");
+
+                    b.ToTable("BusinessTripFiles");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.BusinessTripUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BusinessTripId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessTripId");
+
+                    b.HasIndex("PlaceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BusinessTripUsers");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Cause", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 538, DateTimeKind.Local).AddTicks(4138));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Causes");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Clause", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 540, DateTimeKind.Local).AddTicks(2630));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsBackground")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeletable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clauses");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Contract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("ByTransport")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CommandDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommandNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ContractEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ContractFileType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContractNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ContractStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ContractTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 546, DateTimeKind.Local).AddTicks(3551));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("HasTerm")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAlternate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsMainPlace")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkGraphicId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClauseId");
+
+                    b.HasIndex("ContractTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkGraphicId");
+
+                    b.ToTable("Contracts");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.ContractFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsClause")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClauseId");
+
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("ContractFiles");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.ContractType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContractTypes");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 547, DateTimeKind.Local).AddTicks(6911));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("ntext");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.CategoryTicket", b =>
                 {
                     b.Property<int>("Id")
@@ -36,7 +575,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 649, DateTimeKind.Local).AddTicks(8325));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 537, DateTimeKind.Local).AddTicks(4843));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -102,7 +641,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 651, DateTimeKind.Local).AddTicks(9679));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 539, DateTimeKind.Local).AddTicks(3161));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -158,7 +697,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 658, DateTimeKind.Local).AddTicks(8768));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 544, DateTimeKind.Local).AddTicks(6076));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -219,7 +758,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 662, DateTimeKind.Local).AddTicks(9396));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 549, DateTimeKind.Local).AddTicks(1872));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -279,7 +818,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 664, DateTimeKind.Local).AddTicks(2772));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 553, DateTimeKind.Local).AddTicks(5433));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -344,7 +883,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 677, DateTimeKind.Local).AddTicks(1921));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 565, DateTimeKind.Local).AddTicks(6770));
 
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
@@ -418,7 +957,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 665, DateTimeKind.Local).AddTicks(4124));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 567, DateTimeKind.Local).AddTicks(971));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -481,7 +1020,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 651, DateTimeKind.Local).AddTicks(1146));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 550, DateTimeKind.Local).AddTicks(5741));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -568,7 +1107,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 672, DateTimeKind.Local).AddTicks(8128));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 584, DateTimeKind.Local).AddTicks(3620));
 
                     b.Property<DateTime?>("DeadLineEnd")
                         .ValueGeneratedOnAdd()
@@ -610,7 +1149,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("OpenDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 667, DateTimeKind.Local).AddTicks(6244));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 579, DateTimeKind.Local).AddTicks(5350));
 
                     b.Property<string>("OrderPath")
                         .HasColumnType("nvarchar(max)");
@@ -680,7 +1219,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 674, DateTimeKind.Local).AddTicks(6678));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 576, DateTimeKind.Local).AddTicks(5536));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -734,7 +1273,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 678, DateTimeKind.Local).AddTicks(4984));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 586, DateTimeKind.Local).AddTicks(1142));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -791,7 +1330,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 676, DateTimeKind.Local).AddTicks(161));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 591, DateTimeKind.Local).AddTicks(4310));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -848,7 +1387,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 645, DateTimeKind.Local).AddTicks(351));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 531, DateTimeKind.Local).AddTicks(7013));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -864,7 +1403,9 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("ntext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -903,24 +1444,16 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("CreatedByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 648, DateTimeKind.Local).AddTicks(6410));
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("DeleteByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -929,14 +1462,10 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("UpdateByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -957,6 +1486,24 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankTin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorrespondentAccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CreatedByUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -965,7 +1512,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 657, DateTimeKind.Local).AddTicks(4838));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 541, DateTimeKind.Local).AddTicks(3979));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -981,7 +1528,15 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("ntext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int?>("LeaderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LeaderPosition")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoPath")
                         .ValueGeneratedOnAdd()
@@ -995,6 +1550,12 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SWIFTCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tin")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("UpdateByUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -1006,74 +1567,12 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasDefaultValue(null);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LeaderId");
 
                     b.HasIndex("ParentId");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Department", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 660, DateTimeKind.Local).AddTicks(1309));
-
-                    b.Property<int?>("DeleteByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("ntext");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Grade", b =>
@@ -1093,7 +1592,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 641, DateTimeKind.Local).AddTicks(5286));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 554, DateTimeKind.Local).AddTicks(6223));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1113,7 +1612,9 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("UpdateByUserId")
                         .ValueGeneratedOnAdd()
@@ -1150,7 +1651,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 643, DateTimeKind.Local).AddTicks(9973));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 563, DateTimeKind.Local).AddTicks(4694));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1166,7 +1667,9 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("ntext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1207,7 +1710,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 642, DateTimeKind.Local).AddTicks(8181));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 562, DateTimeKind.Local).AddTicks(877));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1246,75 +1749,6 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.ToTable("NewsFiles");
                 });
 
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Position", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 661, DateTimeKind.Local).AddTicks(5718));
-
-                    b.Property<int?>("DeleteByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("ntext");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Positions");
-                });
-
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Vacancy", b =>
                 {
                     b.Property<int>("Id")
@@ -1347,7 +1781,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 635, DateTimeKind.Local).AddTicks(6381));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 589, DateTimeKind.Local).AddTicks(6094));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1373,7 +1807,9 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasMaxLength(300);
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Occupations")
                         .IsRequired()
@@ -1392,7 +1828,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 631, DateTimeKind.Local).AddTicks(9257));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 589, DateTimeKind.Local).AddTicks(5154));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1416,6 +1852,141 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.ToTable("Vacancies");
                 });
 
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.Stock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 574, DateTimeKind.Local).AddTicks(8074));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("ntext");
+
+                    b.Property<int?>("IntranerUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IntranetUserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MacAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SKU")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("StockCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("IntranetUserId");
+
+                    b.HasIndex("StockCategoryId");
+
+                    b.ToTable("Stocks");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.StockCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 572, DateTimeKind.Local).AddTicks(7074));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StockCategories");
+                });
+
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.IntranetRole", b =>
                 {
                     b.Property<int>("Id")
@@ -1434,10 +2005,10 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(null);
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 656, DateTimeKind.Local).AddTicks(4312));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 555, DateTimeKind.Local).AddTicks(6480));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1448,11 +2019,6 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValue(null);
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1501,29 +2067,8 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeleteByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -1545,10 +2090,17 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("ntext")
+                        .HasDefaultValue(null);
 
                     b.Property<DateTime?>("Birthday")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("Citizenship")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
@@ -1562,10 +2114,10 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(null);
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 654, DateTimeKind.Local).AddTicks(292));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 560, DateTimeKind.Local).AddTicks(8970));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1580,6 +2132,9 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
+                    b.Property<string>("EducationLevel")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -1587,25 +2142,50 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
+                    b.Property<string>("Fathername")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Fullname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GradeId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
+                    b.Property<string>("GraduatedPlace")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("IdCardExpireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("IdCardGiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdCardGivePlace")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdCardNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdCardType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
@@ -1619,7 +2199,9 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue(null);
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -1629,10 +2211,29 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("default.png");
 
+                    b.Property<string>("Pin")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("PositionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Profession")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegisterAdress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
+
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartWorkDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -1652,6 +2253,15 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
+                    b.Property<int>("VacationExtraDay")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VacationMainDay")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WorkGraphicId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -1670,6 +2280,8 @@ namespace SmartIntranet.DataAccess.Migrations
 
                     b.HasIndex("PositionId");
 
+                    b.HasIndex("WorkGraphicId");
+
                     b.ToTable("Users","Membership");
                 });
 
@@ -1685,27 +2297,6 @@ namespace SmartIntranet.DataAccess.Migrations
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeleteByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1725,29 +2316,8 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<string>("ProviderKey")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeleteByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1770,7 +2340,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<int?>("CreatedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DeleteByUserId")
@@ -1806,27 +2376,6 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeleteByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
@@ -1855,7 +2404,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 5, 16, 16, 15, 41, 640, DateTimeKind.Local).AddTicks(3996));
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 587, DateTimeKind.Local).AddTicks(7605));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1872,7 +2421,9 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("UpdateByUserId")
                         .ValueGeneratedOnAdd()
@@ -1889,6 +2440,1068 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("UserContractFiles");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.UserExperience", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExperienceEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExperienceStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Place")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserExperiences");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.NonWorkingDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NonWorkingYearId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NonWorkingYearId");
+
+                    b.ToTable("NonWorkingDays");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.NonWorkingYear", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 564, DateTimeKind.Local).AddTicks(4547));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("Year")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NonWorkingYears");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.PersonalContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CommandDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommandNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainPlace")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMainVacation")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("LastFullVacationDay")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LastMainVacationDay")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LastWorkGraphicId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewFullVacationDay")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NewMainVacationDay")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PositionId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Salary")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VacationDay")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkGraphicId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClauseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PersonalContracts");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.PersonalContractFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("PersonalContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClauseId");
+
+                    b.HasIndex("PersonalContractId");
+
+                    b.ToTable("PersonalContractFiles");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Place", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 569, DateTimeKind.Local).AddTicks(891));
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Places");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Position", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 571, DateTimeKind.Local).AddTicks(5183));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("ntext");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.ReportEmployee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ReportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("ReportEmployees");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.TerminationContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CommandDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommandNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAgree")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReduction")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ReductionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReductionNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RemainVacationCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TerminationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TerminationItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TerminationItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TerminationContracts");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.TerminationContractFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("TerminationContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClauseId");
+
+                    b.HasIndex("TerminationContractId");
+
+                    b.ToTable("TerminationContractFiles");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.TerminationItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TerminationItems");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.UserVacationRemain", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("RemainCount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("UsedCount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("VacationCount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("UserVacationRemains");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContract", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CalendarDay")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CommandDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommandNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FromWorkYearDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("NextWorkDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ToWorkYearDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VacationTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VacationTypeId");
+
+                    b.ToTable("VacationContracts");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContractFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ClauseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("VacationContractId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClauseId");
+
+                    b.HasIndex("VacationContractId");
+
+                    b.ToTable("VacationContractFiles");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VacationTypes");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.WorkCalendar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 592, DateTimeKind.Local).AddTicks(9328));
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Month")
+                        .HasColumnType("ntext");
+
+                    b.Property<int?>("NonWorkingYearId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int?>("WorkGraphicId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NonWorkingYearId");
+
+                    b.HasIndex("WorkGraphicId");
+
+                    b.ToTable("WorkCalendars");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.WorkGraphic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 5, 31, 0, 16, 36, 594, DateTimeKind.Local).AddTicks(4239));
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("ntext");
+
+                    b.Property<int>("Friday")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Monday")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NonWorkingYearId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Saturday")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sunday")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Thursday")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Tuesday")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int>("Wednesday")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("WorkEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("WorkStart")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NonWorkingYearId");
+
+                    b.ToTable("WorkGraphics");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.BusinessTripFile", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.BusinessTrip", "BusinessTrip")
+                        .WithMany()
+                        .HasForeignKey("BusinessTripId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany()
+                        .HasForeignKey("ClauseId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.BusinessTripUser", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.BusinessTrip", "BusinessTrip")
+                        .WithMany("BusinessTripUsers")
+                        .HasForeignKey("BusinessTripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Place", "Place")
+                        .WithMany()
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
+                        .WithMany("BusinessTripUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Contract", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany("Contracts")
+                        .HasForeignKey("ClauseId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.ContractType", null)
+                        .WithMany("Contracts")
+                        .HasForeignKey("ContractTypeId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
+                        .WithMany("Contracts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.WorkGraphic", "WorkGraphic")
+                        .WithMany()
+                        .HasForeignKey("WorkGraphicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.ContractFile", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany()
+                        .HasForeignKey("ClauseId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Contract", "Contract")
+                        .WithMany("ContractFiles")
+                        .HasForeignKey("ContractId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Department", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
+                        .WithMany("Departments")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Department", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.CategoryTicket", b =>
@@ -2025,19 +3638,11 @@ namespace SmartIntranet.DataAccess.Migrations
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Company", b =>
                 {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "Leader")
+                        .WithMany("LeaderCompaines")
+                        .HasForeignKey("LeaderId");
+
                     b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-                });
-
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Department", b =>
-                {
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
-                        .WithMany("Departments")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Department", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
                 });
@@ -2058,28 +3663,30 @@ namespace SmartIntranet.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Position", b =>
-                {
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
-                        .WithMany("Positions")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Department", "Department")
-                        .WithMany("Positions")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Position", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-                });
-
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Intranet.Vacancy", b =>
                 {
                     b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
                         .WithMany("Vacancies")
                         .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.Stock", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "IntranetUser")
+                        .WithMany("Stocks")
+                        .HasForeignKey("IntranetUserId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Inventary.StockCategory", "StockCategory")
+                        .WithMany("Stocks")
+                        .HasForeignKey("StockCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -2100,19 +3707,24 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Department", "Department")
+                    b.HasOne("SmartIntranet.Entities.Concrete.Department", "Department")
                         .WithMany("IntranetUsers")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Grade", "Grade")
                         .WithMany("IntranetUsers")
-                        .HasForeignKey("GradeId");
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Position", "Position")
+                    b.HasOne("SmartIntranet.Entities.Concrete.Position", "Position")
                         .WithMany("IntranetUsers")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.WorkGraphic", "WorkGraphic")
+                        .WithMany()
+                        .HasForeignKey("WorkGraphicId");
                 });
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.IntranetUserClaim", b =>
@@ -2164,6 +3776,153 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.UserExperience", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
+                        .WithMany("UserExperiences")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.NonWorkingDay", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.NonWorkingYear", "NonWorkingYear")
+                        .WithMany("NonWorkingDays")
+                        .HasForeignKey("NonWorkingYearId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.PersonalContract", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany()
+                        .HasForeignKey("ClauseId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.PersonalContractFile", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany()
+                        .HasForeignKey("ClauseId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.PersonalContract", "PersonalContract")
+                        .WithMany("PersonalContractFiles")
+                        .HasForeignKey("PersonalContractId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Position", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
+                        .WithMany("Positions")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Department", "Department")
+                        .WithMany("Positions")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Position", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.ReportEmployee", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.TerminationContract", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.TerminationItem", "TerminationItem")
+                        .WithMany()
+                        .HasForeignKey("TerminationItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.TerminationContractFile", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany()
+                        .HasForeignKey("ClauseId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.TerminationContract", "TerminationContract")
+                        .WithMany("TerminationContractFiles")
+                        .HasForeignKey("TerminationContractId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.UserVacationRemain", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "AppUser")
+                        .WithMany("UserVacationRemains")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContract", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.VacationType", "VacationType")
+                        .WithMany()
+                        .HasForeignKey("VacationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContractFile", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
+                        .WithMany()
+                        .HasForeignKey("ClauseId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.VacationContract", "VacationContract")
+                        .WithMany("VacationContractFiles")
+                        .HasForeignKey("VacationContractId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.WorkCalendar", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.NonWorkingYear", "NonWorkingYear")
+                        .WithMany()
+                        .HasForeignKey("NonWorkingYearId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.WorkGraphic", "WorkGraphic")
+                        .WithMany("WorkCalendars")
+                        .HasForeignKey("WorkGraphicId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.WorkGraphic", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.NonWorkingYear", "NonWorkingYear")
+                        .WithMany("WorkGraphics")
+                        .HasForeignKey("NonWorkingYearId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

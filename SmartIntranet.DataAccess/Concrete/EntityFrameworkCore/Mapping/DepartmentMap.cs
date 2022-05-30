@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using SmartIntranet.Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
@@ -14,7 +14,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Name).IsRequired();
             builder.Property(I => I.Description).HasColumnType("ntext");
 
-            builder.Property(I => I.IsDeleted);
+            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
 
             builder.HasOne(s => s.Company)
                    .WithMany(s => s.Departments)

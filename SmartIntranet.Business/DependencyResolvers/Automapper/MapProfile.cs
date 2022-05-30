@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
+using SmartIntranet.DTO.DTOs.BusinessTripDto;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
 using SmartIntranet.DTO.DTOs.CategoryTicketDto;
+using SmartIntranet.DTO.DTOs.CauseDto;
 using SmartIntranet.DTO.DTOs.CheckListDto;
+using SmartIntranet.DTO.DTOs.ClauseDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.ConfirmTicketUserDto;
+using SmartIntranet.DTO.DTOs.ContractDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.DiscussionDto;
 using SmartIntranet.DTO.DTOs.EmailDto;
@@ -17,14 +21,21 @@ using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
 using SmartIntranet.DTO.DTOs.NewsDto;
 using SmartIntranet.DTO.DTOs.NewsFileDto;
 using SmartIntranet.DTO.DTOs.OrderDto;
+using SmartIntranet.DTO.DTOs.PersonalContractDto;
 using SmartIntranet.DTO.DTOs.PhotoDto;
+using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
+using SmartIntranet.DTO.DTOs.ReportEmployeeDto;
+using SmartIntranet.DTO.DTOs.TerminationContractDto;
+using SmartIntranet.DTO.DTOs.TerminationItemDto;
 using SmartIntranet.DTO.DTOs.TicketCheckListDto;
 using SmartIntranet.DTO.DTOs.TicketDto;
 using SmartIntranet.DTO.DTOs.TicketOrderDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
+using SmartIntranet.DTO.DTOs.WorkGraphicDto;
+using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Inventary;
@@ -42,7 +53,7 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<IntranetUser, AppUserClaimsDto>();
             CreateMap<IntranetRole, AppRoleClaimsDto>();
             CreateMap<IntranetUser, AppUserDetailsDto>()
-              .ForMember(u => u.FullName, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
+              .ForMember(u => u.FullName, opt => opt.MapFrom(src => src.Name + " " + src.Surname))
               .ForMember(d => d.Company, opt => opt.MapFrom(src => src.Company.Name))
               .ForMember(d => d.Department, opt => opt.MapFrom(src => src.Department.Name))
               .ForMember(d => d.Position, opt => opt.MapFrom(src => src.Position.Name));
@@ -340,6 +351,97 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<StockCategoryUpdateDto, StockCategory>();
             CreateMap<StockCategory, StockCategoryUpdateDto>();
 
+            #endregion
+
+            #region NonWorkingYear-NonWorkingYearDto
+            CreateMap<NonWorkingYearAddDto, NonWorkingYear>().ReverseMap();
+            CreateMap<NonWorkingYearListDto, NonWorkingYear>().ReverseMap();
+            CreateMap<NonWorkingYearUpdateDto, NonWorkingYear>().ReverseMap();
+            #endregion
+            #region NonWorkingDay-NonWorkingDayDto
+            CreateMap<NonWorkingDayAddDto, NonWorkingDay>().ReverseMap();
+            CreateMap<NonWorkingDayListDto, NonWorkingDay>().ReverseMap();
+            CreateMap<NonWorkingDayUpdateDto, NonWorkingDay>().ReverseMap();
+            #endregion
+
+            #region WorkGraphic-WorkGraphicDto
+            CreateMap<WorkGraphicAddDto, WorkGraphic>().ReverseMap();
+            CreateMap<WorkGraphicListDto, WorkGraphic>().ReverseMap();
+            CreateMap<WorkGraphicUpdateDto, WorkGraphic>().ReverseMap();
+            #endregion
+            #region WorkCalendar-WorkCalendarDto
+            CreateMap<WorkCalendarAddDto, WorkCalendar>().ReverseMap();
+            CreateMap<WorkCalendarListDto, WorkCalendar>().ReverseMap();
+            CreateMap<WorkCalendarUpdateDto, WorkCalendar>().ReverseMap();
+            #endregion
+
+            #region Contract-ContractDto
+            CreateMap<ContractAddDto, Contract>().ReverseMap();
+            CreateMap<ContractListDto, Contract>().ReverseMap();
+            CreateMap<ContractUpdateDto, Contract>().ReverseMap();
+            #endregion
+
+            #region Clause-ClauseDto
+            CreateMap<ClauseAddDto, Clause>().ReverseMap();
+            CreateMap<ClauseListDto, Clause>().ReverseMap();
+            CreateMap<ClauseUpdateDto, Clause>().ReverseMap();
+            #endregion
+
+            #region Cause-CauseDto
+            CreateMap<CauseAddDto, Cause>().ReverseMap();
+            CreateMap<CauseListDto, Cause>().ReverseMap();
+            CreateMap<CauseUpdateDto, Cause>().ReverseMap();
+            #endregion
+
+            #region Place-PlaceDto
+            CreateMap<PlaceAddDto, Place>().ReverseMap();
+            CreateMap<PlaceListDto, Place>().ReverseMap();
+            CreateMap<PlaceUpdateDto, Place>().ReverseMap();
+            #endregion
+
+            #region PersonalContract-PersonalContractDto
+            CreateMap<PersonalContractAddDto, PersonalContract>().ReverseMap();
+            CreateMap<PersonalContractListDto, PersonalContract>().ReverseMap();
+            CreateMap<PersonalContractUpdateDto, PersonalContract>().ReverseMap();
+            CreateMap<ContractListDto, PersonalContract>().ReverseMap();
+            CreateMap<ContractListDto, TerminationContract>().ReverseMap();
+            #endregion
+
+            #region UserVacationRemain-UserVacationRemainDto
+            CreateMap<UserVacationRemainAddDto, UserVacationRemain>().ReverseMap();
+            CreateMap<UserVacationRemainListDto, UserVacationRemain>().ReverseMap();
+            CreateMap<UserVacationRemainUpdateDto, UserVacationRemain>().ReverseMap();
+            #endregion
+
+            #region VacationContract-VacationContractDto
+            CreateMap<VacationContract, VacationContractAddDto>().ReverseMap();
+            CreateMap<VacationContract, VacationContractUpdateDto>().ReverseMap();
+            CreateMap<VacationContract, VacationContractListDto>().ReverseMap();
+            CreateMap<ContractListDto, VacationContract>().ReverseMap();
+            #endregion
+
+            #region BusinessTrip-BusinessTripDto
+            CreateMap<BusinessTripAddDto, BusinessTrip>().ReverseMap();
+            CreateMap<BusinessTripListDto, BusinessTrip>().ReverseMap();
+            CreateMap<BusinessTripUpdateDto, BusinessTrip>().ReverseMap();
+            CreateMap<ContractListDto, BusinessTrip>().ReverseMap();
+            #endregion
+
+            #region TerminationItem-TerminationItemDto
+            CreateMap<TerminationItemAddDto, TerminationItem>().ReverseMap();
+            CreateMap<TerminationItemListDto, TerminationItem>().ReverseMap();
+            CreateMap<TerminationItemUpdateDto, TerminationItem>().ReverseMap();
+            #endregion
+
+            #region TerminationContract-TerminationContractDto
+            CreateMap<TerminationContractAddDto, TerminationContract>().ReverseMap();
+            CreateMap<TerminationContractListDto, TerminationContract>().ReverseMap();
+            CreateMap<TerminationContractUpdateDto, TerminationContract>().ReverseMap();
+            #endregion
+
+            #region ReportEmployee-ReportEmployeeDto
+            CreateMap<ReportEmployeeDto, ReportEmployee>().ReverseMap();
+            CreateMap<ReportEmployeeListDto, ReportEmployee>().ReverseMap();
             #endregion
         }
     }

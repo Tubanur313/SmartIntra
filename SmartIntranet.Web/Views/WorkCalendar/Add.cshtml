@@ -1,0 +1,50 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model WorkCalendarAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form">
+            <input type="hidden" asp-for="Month" />
+            <input type="hidden" asp-for="Day" />
+            <input type="hidden" asp-for="WorkGraphicId" />
+            <input type="hidden" asp-for="NonWorkingYearId" />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Dəyər: </label>
+                        <input type="text" class="form-control" asp-for="Number" min="1" max="24" autocomplete="off">
+                        <span asp-validation-for="Number" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+

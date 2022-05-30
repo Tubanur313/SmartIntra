@@ -1,4 +1,11 @@
-﻿@model CompanyUpdateDto
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model CompanyUpdateDto
 
 @{
     Layout = null;
@@ -8,19 +15,16 @@
 
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs  md-tabs" role="tablist">
+        <ul class="nav nav-tabs  tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
-                   href="#home1" role="tab">
-                   <i class="icofont icofont-clip"></i> &nbsp; Məlumatlar</a>
-                      <div class="slide"></div>
+                   href="#home1" role="tab">Məlumatlar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab"
-                   href="#profile1" role="tab">
-                   <i class="icofont icofont-files"></i>&nbsp; Fayllar</a>
-                      <div class="slide"></div>
+                   href="#profile1" role="tab">Fayllar</a>
             </li>
+
         </ul>
         <!-- Tab panes -->
         <form asp-action="Update" enctype="multipart/form-data" class="main-signin-form">
@@ -44,47 +48,154 @@
                                 @*<span asp-validation-for="Surname" class="text-danger"></span>*@
                                 <span class="messages"></span>
                             </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">   Üst Şirkət: </label>
+                                <select name="select" asp-for="ParentId" name="ParentId" class="form-control">
+                                    <option value="" selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.companies)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">   Rəhbər: </label>
+                                <select asp-for="LeaderId" class="form-control">
+                                    <option value="" selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.Leader)
+                                    {
+                                        <option value="@item.Id">@item.Name @item.Surname @item.Fathername</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="LeaderId" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6 form-group ">
-                            <label class="floatLabel">   Üst Şirkət: </label>
-                            <select name="select" asp-for="ParentId" name="ParentId" class="form-control">
-                                <option value="" selected hidden>Seçim edin</option>
-                                @foreach (var item in ViewBag.companies)
-                                {
-                                    <option value="@item.Id">@item.Name</option>
-                                }
-                            </select>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkətin rəhbərinin vəzifəsi: </label>
+                                <input type="text" class="form-control" asp-for="LeaderPosition" autocomplete="off">
+                                <span asp-validation-for="LeaderPosition" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
                         </div>
-                       @* <div class="col-sm-6">
-                            <div class="form-radio form-group">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkətin VÖEN-i: </label>
+                                <input type="text" class="form-control" asp-for="Tin" autocomplete="off">
+                                <span asp-validation-for="Tin" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkətin hüquqi ünvanı: </label>
+                                <input type="text" class="form-control" asp-for="Address">
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkətin bank hesabının nömrəsi: </label>
+                                <input type="text" class="form-control" asp-for="BankAccountNumber" autocomplete="off">
+                                <span asp-validation-for="BankAccountNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Bankın adı: </label>
+                                <input type="text" class="form-control" asp-for="BankName">
+                                <span asp-validation-for="BankName" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Bankın VÖEN-i: </label>
+                                <input type="text" class="form-control" asp-for="BankTin" autocomplete="off">
+                                <span asp-validation-for="BankTin" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Bankın kodu: </label>
+                                <input type="text" class="form-control" asp-for="BankCode">
+                                <span asp-validation-for="BankCode" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Bankın SWIFT kodu: </label>
+                                <input type="text" class="form-control" asp-for="SWIFTCode" autocomplete="off">
+                                <span asp-validation-for="SWIFTCode" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Müxbir hesabının nömrəsi: </label>
+                                <input type="text" class="form-control" asp-for="CorrespondentAccountNumber">
+                                <span asp-validation-for="CorrespondentAccountNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-radio">
+
                                 <div class="radio radio-inline">
                                     <label for="True">
-                                        <input type="radio" id="True" value="True" asp-for="IsDeleted"
+                                        <input type="radio" id="True" value="False" asp-for="IsDeleted"
                                                checked="checked">
-                                        <i class="helper"></i> Deactive
+                                        <i class="helper"></i>Active
                                     </label>
                                 </div>
                                 <div class="radio radio-inline">
                                     <label for="False">
-                                        <input type="radio" id="False" value="False" asp-for="IsDeleted">
-                                        <i class="helper"></i> Active 
+                                        <input type="radio" id="False" value="True" asp-for="IsDeleted">
+                                        <i class="helper"></i>InActive
                                     </label>
                                 </div>
+
                             </div>
-                        </div>*@
+                        </div>
                     </div>
 
                 </div>
                 <div class="tab-pane" id="profile1" role="tabpanel">
                     <div class="row">
-                        <div class="file-name col-sm-12 form-group ">
-                            <label for="Logo" class="btn btn-mat btn-primary"><i class="icofont icofont-cloud-upload"></i> Logo Yüklə</label>
-                            <input type="file" style="visibility:hidden;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
+                        <div class="col-sm-12 form-group ">
+                            <label class="floatLabel"> Logo Seç:</label>
+                            <input type="file" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
                         </div>
                         <div class="col-md-6  col-lg-6 col-sm-6 form-group">
-                            @if (Model.LogoPath!=null && Model.LogoPath.Length>0 && Model.LogoPath !="logoDefault.png" )
+                            @if (@Model.LogoPath != null)
                             {
                                 <div class="border text-center pt-2">
                                     <div class="pt-0">
@@ -98,7 +209,7 @@
                                 <div class="border text-center pt-2">
                                     <div class="pt-0">
                                         <label class="floatLabel">Mövcud Logo:</label>
-                                        <img src="~/uploads/logoDefault.png" class="pb-2 " style="width: 150px; height: 150px;" alt="Default Logo" />
+                                        <img src="~/logo/logoDefault.png" class="pb-2 " style="width: 150px; height: 150px;" alt="Default Logo" />
                                     </div>
                                 </div>
                             }
@@ -131,22 +242,12 @@
     </div>
 
 </div>
-<!-- cust-validation js -->
-<script src="~/files/lib/cust_ajax/cust-validation.js"></script>
-
 @await Html.PartialAsync("_ValidationScriptsPartial")
-<script class="removable" type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         $("#Logo").change(function (e) {
-        if($('.file-name').isImage())
-        {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
-        }
-        else
-        {
-            toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
-        }
         });
     });
 </script>

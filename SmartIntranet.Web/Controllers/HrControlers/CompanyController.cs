@@ -1,178 +1,143 @@
 ﻿using AutoMapper;
+using SmartIntranet.Business.Interfaces;
+using SmartIntranet.DTO.DTOs.AppUserDto;
+using SmartIntranet.DTO.DTOs.CompanyDto;
+using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SmartIntranet.Business.Interfaces;
-using SmartIntranet.Business.Interfaces.Intranet;
-using SmartIntranet.Core.Extensions;
-using SmartIntranet.Core.Utilities.FileUploader;
-using SmartIntranet.Core.Utilities.Messages;
-using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Intranet;
-using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.Web.Controllers.HrControlers
+namespace SmartIntranet.Web.Controllers
 {
     public class CompanyController : BaseIdentityController
     {
+        private readonly IMapper _mapper;
         private readonly ICompanyService _companyService;
-        private readonly IFileManager _upload;
-        public CompanyController
-            (
-            IMapper map,
-            ICompanyService companyService,
-            IFileManager upload,
-            UserManager<IntranetUser> userManager,
-            IHttpContextAccessor httpContextAccessor,
-            SignInManager<IntranetUser> signInManager
-            ) : base(userManager, httpContextAccessor, signInManager, map)
+        private readonly IAppUserService _appUserService;
+        public CompanyController(UserManager<IntranetUser> userManager, IAppUserService appUserService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
+
+            _mapper = mapper;
             _companyService = companyService;
-            _upload = upload;
+            _appUserService = appUserService;
         }
-        [HttpGet]
+
         [Authorize(Policy = "company.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _companyService.GetAllAsync(x => !x.IsDeleted);
-            if (model.Count > 0)
-            {
-                return View(_map.Map<List<CompanyListDto>>(model));
-            }
-            return View(new List<CompanyListDto>());
+            return View(_mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.DeleteByUserId == null)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
+
         [HttpGet]
         [Authorize(Policy = "company.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             return View();
         }
+
         [HttpPost]
         [Authorize(Policy = "company.add")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CompanyAddDto model, IFormFile logo)
         {
+
             if (ModelState.IsValid)
             {
-                if (!(logo is null) && logo.FileName != "logoDefault.png")
+                if (logo != null && logo.FileName != "logoDefault.png")
                 {
-                    if (!MimeTypeCheckExtension.İsImage(logo))
-                    {
-                        TempData["error"] = Messages.Error.wrongFormat;
-                    }
-                    else
-                    {
-                        model.LogoPath = _upload.UploadResizedImg(logo, "wwwroot/logo/");
-                    }
+                  //  model.LogoPath = AddResizedImage("wwwroot/logo/", logo);
                 }
-                var add = _map.Map<Company>(model);
-                add.CreatedByUserId = GetSignInUserId();
-                if (await _companyService.AddReturnEntityAsync(add) is null)
-                {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
-                }
-                TempData["success"] = Messages.Add.Added;
+                model.CreatedByUserId = GetSignInUserId();
+                await _companyService.AddAsync(_mapper.Map<Company>(model));
+
                 return RedirectToAction("List");
+
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
+
+                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
         }
         [HttpGet]
-        [Authorize(Policy = "company.ajaxadd")]
-        public async Task<IActionResult> AjaxAdd(CompanyAddDto model)
+        [Authorize(Policy = "company.update")]
+        public async Task<IActionResult> Update(int id)
         {
-            if (ModelState.IsValid)
+            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.Leader = _mapper.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.IsDeleted  == false && x.CompanyId == id));
+            var listModel = _mapper.Map<CompanyUpdateDto>(await _companyService.FindByIdAsync(id));
+            if (listModel == null)
             {
-                var add = _map.Map<Company>(model);
-                add.CreatedByUserId = GetSignInUserId();
-                if (await _companyService.AddReturnEntityAsync(add) is null)
-                {
-                    return BadRequest(Messages.Add.notAdded);
-                }
-                var list = await _companyService.GetAllAsync(x => x.IsDeleted == false);
-                if (list.Count > 0)
-                {
-                    return Ok(_map.Map<List<CompanyListDto>>(list).Select(x => new
-                    {
-                        id = x.Id,
-                        name = x.Name
-                    }));
-                }
-                return Ok(Messages.Add.notAdded);
+                return NotFound();
             }
-            else
-            {
-                return BadRequest(Messages.Error.notComplete);
-            }
+
+            return View(listModel);
         }
-        [HttpGet]
-        [Authorize(Policy = "company.Update")]
-        public async Task<IActionResult> Update(int Id)
-        {
-            var data = _map.Map<CompanyUpdateDto>(await _companyService.FindByIdAsync(Id));
-            if (data is null)
-            {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
-            }
-            ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted == false));
-            return View(data);
-        }
+
         [HttpPost]
-        [Authorize(Policy = "company.Update")]
+        [Authorize(Policy = "company.update")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(CompanyUpdateDto model, IFormFile logo)
         {
             if (ModelState.IsValid)
             {
-                var data = await _companyService.FindByIdAsync(model.Id);
-                if (!(logo is null) && logo.FileName != "logoDefault.png")
+
+                if (logo != null && logo.FileName != "logoDefault.png")
                 {
-                    _upload.Delete(data.LogoPath, "wwwroot/logo/");
-                    model.LogoPath = _upload.UploadResizedImg(logo, "wwwroot/logo/");
+                   // model.LogoPath = AddResizedImage("wwwroot/logo/", logo);
                 }
-                else if (!(logo is null))
+                else if (logo != null)
                 {
                     model.LogoPath = "logoDefault.png";
                 }
                 else
                 {
-                    model.LogoPath = data.LogoPath;
-                }
-                var update = _map.Map<Company>(model);
-                update.UpdateByUserId = GetSignInUserId();
-                update.CreatedByUserId = data.CreatedByUserId;
-                update.DeleteByUserId = data.DeleteByUserId;
-                update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
-                update.DeleteDate = data.DeleteDate;
+                    var company = await _companyService.FindByIdAsync(model.Id);
+                    model.LogoPath = company.LogoPath;
 
-                await _companyService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                }
+                var current = GetSignInUserId();
+                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateByUserId = current;
+                var oldFileImg = await _companyService.FindByIdAsync(model.Id);
+                var result = await _companyService.UpdateReturnEntityAsync(_mapper.Map<Company>(model));
+                if (result!=null && oldFileImg.LogoPath != "logoDefault.png")
+                {
+                    TempData["msg"] = DeleteFile("wwwroot/logo/", oldFileImg.LogoPath);
+                }
+
+                //return Json(new { isValid = true, html = RazorHelper.RenderRazorViewToString(this, "_ViewAll", _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync())) });
                 return RedirectToAction("List");
+
             }
-            TempData["error"] = Messages.Error.notComplete;
+            TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
             return RedirectToAction("List");
+
 
         }
         [Authorize(Policy = "company.delete")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var delete = await _companyService.FindByIdAsync(id);
-            delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
-            delete.IsDeleted = true;
-            await _companyService.UpdateAsync(delete);
+            //var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result.Id;
+            var current = GetSignInUserId();
+
+            var transactionModel = _mapper.Map<CompanyListDto>(await _companyService.FindByIdAsync(id));
+            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteByUserId = current;
+            transactionModel.IsDeleted = true;
+            await _companyService.UpdateAsync(_mapper.Map<Company>(transactionModel));
+            return Ok();
         }
+
     }
 }

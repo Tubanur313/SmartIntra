@@ -1,5 +1,12 @@
 ﻿@model IEnumerable<AppUserListDto>
 
+<!-- Data Table Css -->
+<link rel="stylesheet" type="text/css" href="~/files/bower_components2/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="~/files/assets/pages/data-table/css/buttons.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="~/files/bower_components2/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css">
+
+
+
 <div class="page-body">
     <div class="row">
         <!-- Left column start -->
@@ -12,15 +19,20 @@
                                class="table table-striped table-bordered nowrap">
                             <thead>
                                 <tr>
-                                    <th>Ad Soyad</th>
+                                    <th>Ad</th>
+                                    <th>Soyad</th>
+                                    @*<th>Şirkət</th>
+                                        <th>Şöbə</th>*@
                                     <th>Vəzifə</th>
                                     <th>Dərəcə</th>
-                                    @if (User.HasAccess("account.add"))
-                                    {
-                                        <th class="text-center">
+                                    <th>Status</th>
+                                    @*<th>Silinmiş</th>*@
+                                    <th class="text-center">
+                                        @if (User.HasAccess("account.add"))
+                                        {
                                             <button onclick="showInPopup('@Url.Action("Add","Account",null,Context.Request.Scheme)','Əməkdaş əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
-                                        </th>
-                                    }
+                                        }
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,83 +42,102 @@
                                     <tr>
 
                                         <td>
-                                            @account.FirstName @account.LastName
+                                            @account.Name
                                         </td>
+                                        <td>@account.Surname</td>
                                         @if (account.Position != null)
                                         {
                                             <td> @(account.Position.Company.Name!=null?account.Position.Company.Name:"Təyin edilməyib")/ @(account.Position.Department.Name!=null?account.Position.Department.Name:"Təyin edilməyib")/ @(account.Position.Name!=null?account.Position.Name:"Təyin edilməyib")</td>
-
+                                            
                                         }
                                         else
                                         {
                                             <td>Təyin edilməyib</td>
                                         }
                                         <td>@(account.GradeId!=null?account.Grade.GradeName:"Təyin edilməyib")</td>
-                                        <td class="dropdown text-center">
-                                            <button type="button"
+                                        <td><span class="badge badge-@(!account.IsDeleted? "success" : "warning")">@(!account.IsDeleted ? "Active" : "Inactive" )</span></td>
+                                        @*<td><span class="badge badge-@(account.DeleteByUserId==null ? "success" : "warning")">@(account.DeleteByUserId == null ? "Xeyr" : "Bəli" )</span></td>*@
+
+                                        @if (account.DeleteByUserId == null)
+                                        {
+                                            <td class="dropdown text-center">
+                                                <button type="button"
                                                 class="btn
                                                 btn-outline-info
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="fa fa-list-ul"></i>
-                                            </button>
-                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                @if (User.HasAccess("account.update"))
-                                                {
-                                                    <li>
-                                                        <button onclick="showInPopup('@Url.Action("Update","Account",new {id=account.Id},Context.Request.Scheme)','Yenilə')"
-                                                        class="btn  btn-default waves-effect md-trigger text-warning">
-                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                            Yenilə
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (User.HasAccess("account.newpassword"))
-                                                {
-                                                    <li>
-                                                        <button onclick="showInPopup('@Url.Action("NewPassword","Account",new {id=account.Id},Context.Request.Scheme)','Şifrə Yenilə')"
-                                                        class="btn  btn-default waves-effect md-trigger text-secondary">
-                                                            <i class="fas fa-fingerprint text-secondary p-r-15"></i>
-                                                            Şifrə Yenilə
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (User.HasAccess("account.permission"))
-                                                {
-                                                    <li>
-                                                        <button onclick="showInPopup('@Url.Action("Permission","Account",new {id=account.Id},Context.Request.Scheme)','İcazə')"
-                                                        class="btn  btn-default waves-effect md-trigger text-primary">
-                                                            <i class="icofont icofont-key text-primary p-r-15 "></i>
-                                                            İcazə
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (User.HasAccess("account.delete"))
-                                                {
-                                                    <li>
-                                                        <button onclick="removeItem(@account.Id,`@account.FullName`,`@Url.Action("Delete","Account").ToString()`)"
-                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                            Sil
-                                                        </button>
-                                                    </li>
-                                                }
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                                <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                    @if (User.HasAccess("account.update"))
+                                                    {
+                                                        <li>
 
-                                            </ul>
-                                        </td>
+                                                            <button onclick="showInPopup('@Url.Action("Update","Account",new {id=account.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                                <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                                Yenilə
+                                                            </button>
+                                                        </li>
+                                                    }
+                                                    @if (User.HasAccess("account.permission"))
+                                                    {
+                                                        <li>
+                                                            <button onclick="showInPopup('@Url.Action("Permission","Account",new {id=account.Id},Context.Request.Scheme)','İcazə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-primary">
+                                                                <i class="icofont icofont-key text-primary p-r-15 "></i>
+                                                                İcazə
+                                                            </button>
+                                                        </li>
+                                                    }
+                                                    @if (User.HasAccess("account.newPassword"))
+                                                    {
+                                                        <li>
+                                                            <button onclick="showInPopup('@Url.Action("NewPassword","Account",new {id=account.Id},Context.Request.Scheme)','Şifrə Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-secondary">
+                                                                <i class="fas fa-fingerprint text-secondary p-r-15"></i>
+                                                                Şifrə Yenilə
+                                                            </button>
+                                                        </li>
+                                                    }
+                                                    @if (User.HasAccess("account.delete"))
+                                                    {
+                                                        <li>
+                                                            <button onclick="removeItem(@account.Id,`@account.Name`,`@Url.Action("Delete","Account").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                                <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                                Sil
+                                                            </button>
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="dropdown text-center">
+                                                <button disabled type="button"
+                                                class="btn
+                                                btn-outline-danger
+                                                @*dropdown-toggle*@"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                            </td>
+                                        }
+
+
                                     </tr>
+
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Ad Soyad</th>
-                                    <th>Vəzifə</th>
-                                    <th>Dərəcə</th>
-                                    <th class="text-center">-----</th>
-                                </tr>
-                            </tfoot>
+
+
                         </table>
                     </div>
                 </div>
@@ -115,3 +146,4 @@
     </div>
 
 </div>
+

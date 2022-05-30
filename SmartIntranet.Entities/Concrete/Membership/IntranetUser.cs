@@ -1,22 +1,41 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SmartIntranet.Core.Entities.Abstract;
+﻿using SmartIntranet.Core.Entities.Concrete;
+using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Inventary;
-using System;
-using System.Collections.Generic;
 
 namespace SmartIntranet.Entities.Concrete.Membership
 {
-    public class IntranetUser : IdentityUser<int>, IStatus, ICreatedByUser, IUpdateByUserId, IDeleteByUser
+    public class IntranetUser : IdentityUser<int>
     {
-        //public string FullName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Picture { get; set; } 
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Fathername { get; set; }
+        public string Gender { get; set; }
+        public string Fullname { get; set; }
+        public DateTime StartWorkDate { get; set; }
+        public string Pin { get; set; }
+        public double Salary { get; set; }
+        public int VacationMainDay { get; set; }
+        public int VacationExtraDay { get; set; }
+        public string EducationLevel { get; set; }
+        public string Citizenship { get; set; }
+        public string IdCardType { get; set; }
+        public string GraduatedPlace { get; set; }
+        public string Profession { get; set; }
+        public int? WorkGraphicId { get; set; }
+        public WorkGraphic WorkGraphic { get; set; }
+        public string IdCardNumber { get; set; } // serial + number
+        public DateTime IdCardGiveDate { get; set; }
+        public string IdCardGivePlace { get; set; } // veren qurum
+        public DateTime IdCardExpireDate { get; set; }
+        public string RegisterAdress { get; set; }
+        public string Picture { get; set; } = "default.png";
         public DateTime? Birthday { get; set; }
         public string Address { get; set; }
-
         public int? GradeId { get; set; }
         public Grade Grade { get; set; }
         public int? CompanyId { get; set; }
@@ -25,16 +44,20 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public Department Department { get; set; }
         public int? PositionId { get; set; }
         public Position Position { get; set; }
-
         public int? CreatedByUserId { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public int? UpdateByUserId { get; set; }
         public DateTime? UpdateDate { get; set; }
         public int? DeleteByUserId { get; set; }
         public DateTime? DeleteDate { get; set; }
         public bool IsDeleted { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
+        public virtual ICollection<UserExperience> UserExperiences { get; set; }
+        public virtual ICollection<UserVacationRemain> UserVacationRemains { get; set; }
         public virtual ICollection<News> News { get; set; }
+        public virtual ICollection<Contract> Contracts { get; set; }
+        public virtual ICollection<Company> LeaderCompaines { get; set; }
+        public virtual ICollection<BusinessTripUser> BusinessTripUsers { get; set; }
         public virtual ICollection<Watcher> Watchers { get; set; }
         public virtual ICollection<ConfirmTicketUser> ConfirmTicketUsers { get; set; }
         public virtual ICollection<Ticket> TicketEmployees { get; set; }
@@ -44,6 +67,5 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public virtual ICollection<CategoryTicket> CategoryTickets { get; set; }
         public virtual ICollection<Discussion> Discussions { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
-
     }
 }

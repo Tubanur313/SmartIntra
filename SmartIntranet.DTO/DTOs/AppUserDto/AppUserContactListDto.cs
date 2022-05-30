@@ -22,6 +22,6 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public Department Department { get; set; }
         public int? PositionId { get; set; }
         public Position Position { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

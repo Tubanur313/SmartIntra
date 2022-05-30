@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
@@ -11,12 +13,21 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
         {
             builder.HasKey(I => I.Id);
             builder.Property(I => I.Id).UseIdentityColumn();
-            //builder.Property(I => I.FullName).IsRequired();
-            builder.Property(I => I.FirstName).IsRequired();
-            builder.Property(I => I.LastName).IsRequired();
+            builder.Property(I => I.Name).IsRequired();
+            builder.Property(I => I.Surname).IsRequired();
             builder.Property(I => I.Picture).HasDefaultValue("default.png");
-            builder.Property(I => I.IsDeleted);
-
+            builder.Property(I => I.IsDeleted).HasDefaultValue(false);
+            builder.Property(I => I.Birthday).HasDefaultValue(null);
+            builder.Property(I => I.Address).HasColumnType("ntext").HasDefaultValue(null);
+            builder.Property(I => I.PhoneNumber).HasDefaultValue(null);
+            //builder.Property(I => I.Gender).IsRequired();
+            //builder.Property(I => I.VacationDay).IsRequired();
+            //builder.Property(I => I.EducationLevel).IsRequired();
+            //builder.Property(I => I.IsMainPlace).IsRequired();
+            //builder.Property(I => I.IdCardNumber).IsRequired();
+            //builder.Property(I => I.IdCardGiveDate).IsRequired();
+            //builder.Property(I => I.IdCardGivePlace).IsRequired();
+            //builder.Property(I => I.RegisterAdress).IsRequired();
 
 
             builder.HasOne(s => s.Department)
@@ -31,6 +42,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
                    .WithMany(s => s.IntranetUsers)
                    .HasForeignKey(s => s.PositionId).OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(s => s.Grade)
+                   .WithMany(s => s.IntranetUsers)
+                   .HasForeignKey(s => s.GradeId).OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);

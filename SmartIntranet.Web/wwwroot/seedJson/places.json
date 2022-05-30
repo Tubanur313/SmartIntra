@@ -1,0 +1,652 @@
+[
+ {
+  "name": "Bakı",
+  "amount": 90,
+  "currency": "AZN"
+ },
+ {
+  "name": "Gəncə, Sumqayıt və Naxçıvan",
+  "amount": 70,
+  "currency": "AZN"
+ },
+ {
+  "name": "Digər şəhərlər",
+  "amount": 65,
+  "currency": "AZN"
+ },
+ {
+  "name": "ABŞ",
+  "amount": 330,
+  "currency": "USD"
+ },
+ {
+  "name": "ABŞ - Nyu-York şəhəri",
+  "amount": 350,
+  "currency": "USD"
+ },
+ {
+  "name": "Afrika qitəsi üzrə digər ölkələr",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Albaniya",
+  "amount": 160,
+  "currency": "EUR"
+ },
+ {
+  "name": "Almaniya",
+  "amount": 225,
+  "currency": "EUR"
+ },
+ {
+  "name": "Amerika qitəsi üzrə digər ölkələr",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Andorra",
+  "amount": 200,
+  "currency": "EUR"
+ },
+ {
+  "name": "Argentina",
+  "amount": 195,
+  "currency": "USD"
+ },
+ {
+  "name": "Avstraliya və Okeaniya",
+  "amount": 195,
+  "currency": "USD"
+ },
+ {
+  "name": "Avstriya",
+  "amount": 185,
+  "currency": "EUR"
+ },
+ {
+  "name": "Banqladeş",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Bəhreyn",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Belarus",
+  "amount": 140,
+  "currency": "USD"
+ },
+ {
+  "name": "Belarus - Minsk şəhəri",
+  "amount": 180,
+  "currency": "USD"
+ },
+ {
+  "name": "Belçika",
+  "amount": 215,
+  "currency": "EUR"
+ },
+ {
+  "name": "Birləşmiş Ərəb Əmirlikləri",
+  "amount": 235,
+  "currency": "USD"
+ },
+ {
+  "name": "Bolqarıstan",
+  "amount": 135,
+  "currency": "EUR"
+ },
+ {
+  "name": "Bosniya və Herseqovina",
+  "amount": 160,
+  "currency": "EUR"
+ },
+ {
+  "name": "Böyük Britaniya",
+  "amount": 170,
+  "currency": "GBP"
+ },
+ {
+  "name": "Böyük Britaniya - London şəhəri",
+  "amount": 190,
+  "currency": "GBP"
+ },
+ {
+  "name": "Braziliya",
+  "amount": 225,
+  "currency": "USD"
+ },
+ {
+  "name": "Bruney",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Butan",
+  "amount": 145,
+  "currency": "USD"
+ },
+ {
+  "name": "Çad",
+  "amount": 225,
+  "currency": "USD"
+ },
+ {
+  "name": "Cənubi Afrika Respublikası",
+  "amount": 240,
+  "currency": "USD"
+ },
+ {
+  "name": "Çexiya",
+  "amount": 190,
+  "currency": "EUR"
+ },
+ {
+  "name": "Cibuti",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Çin Xalq Respublikası",
+  "amount": 185,
+  "currency": "USD"
+ },
+ {
+  "name": "Danimarka",
+  "amount": 180,
+  "currency": "EUR"
+ },
+ {
+  "name": "Əfqanıstan",
+  "amount": 175,
+  "currency": "USD"
+ },
+ {
+  "name": "Əlcəzair",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Estoniya",
+  "amount": 95,
+  "currency": "EUR"
+ },
+ {
+  "name": "Estoniya - Tallin şəhəri",
+  "amount": 140,
+  "currency": "EUR"
+ },
+ {
+  "name": "Fələstin",
+  "amount": 170,
+  "currency": "USD"
+ },
+ {
+  "name": "Filippin",
+  "amount": 210,
+  "currency": "USD"
+ },
+ {
+  "name": "Finlandiya",
+  "amount": 210,
+  "currency": "EUR"
+ },
+ {
+  "name": "Fransa",
+  "amount": 205,
+  "currency": "EUR"
+ },
+ {
+  "name": "Fransa - Paris şəhəri",
+  "amount": 250,
+  "currency": "EUR"
+ },
+ {
+  "name": "Gürcüstan",
+  "amount": 140,
+  "currency": "USD"
+ },
+ {
+  "name": "Gürcüstan - Tbilisi şəhəri",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Hibraltar",
+  "amount": 150,
+  "currency": "EUR"
+ },
+ {
+  "name": "Hindistan",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "İndoneziya",
+  "amount": 205,
+  "currency": "USD"
+ },
+ {
+  "name": "İordaniya",
+  "amount": 140,
+  "currency": "USD"
+ },
+ {
+  "name": "İran",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "İraq",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "İrlandiya",
+  "amount": 215,
+  "currency": "EUR"
+ },
+ {
+  "name": "İslandiya",
+  "amount": 190,
+  "currency": "EUR"
+ },
+ {
+  "name": "İspaniya",
+  "amount": 200,
+  "currency": "EUR"
+ },
+ {
+  "name": "İsrail",
+  "amount": 170,
+  "currency": "USD"
+ },
+ {
+  "name": "İsveç",
+  "amount": 225,
+  "currency": "EUR"
+ },
+ {
+  "name": "İsveçrə",
+  "amount": 210,
+  "currency": "EUR"
+ },
+ {
+  "name": "İtaliya",
+  "amount": 185,
+  "currency": "EUR"
+ },
+ {
+  "name": "Kamboca",
+  "amount": 175,
+  "currency": "USD"
+ },
+ {
+  "name": "Kanada",
+  "amount": 190,
+  "currency": "USD"
+ },
+ {
+  "name": "Kipr",
+  "amount": 160,
+  "currency": "EUR"
+ },
+ {
+  "name": "Koreya Respublikası",
+  "amount": 245,
+  "currency": "USD"
+ },
+ {
+  "name": "Koreya Xalq Demokratik Respublikası",
+  "amount": 225,
+  "currency": "USD"
+ },
+ {
+  "name": "Küveyt",
+  "amount": 180,
+  "currency": "USD"
+ },
+ {
+  "name": "Laos",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Latviya",
+  "amount": 105,
+  "currency": "EUR"
+ },
+ {
+  "name": "Latviya - Riqa şəhəri",
+  "amount": 140,
+  "currency": "EUR"
+ },
+ {
+  "name": "Litva",
+  "amount": 120,
+  "currency": "EUR"
+ },
+ {
+  "name": "Litva - Vilnüs şəhəri",
+  "amount": 145,
+  "currency": "EUR"
+ },
+ {
+  "name": "Livan",
+  "amount": 170,
+  "currency": "USD"
+ },
+ {
+  "name": "Liviya",
+  "amount": 170,
+  "currency": "USD"
+ },
+ {
+  "name": "Lixtenşteyn",
+  "amount": 200,
+  "currency": "EUR"
+ },
+ {
+  "name": "Lüksemburq",
+  "amount": 190,
+  "currency": "EUR"
+ },
+ {
+  "name": "Macarıstan",
+  "amount": 160,
+  "currency": "EUR"
+ },
+ {
+  "name": "Makedoniya",
+  "amount": 190,
+  "currency": "EUR"
+ },
+ {
+  "name": "Malayziya",
+  "amount": 205,
+  "currency": "USD"
+ },
+ {
+  "name": "Maldiv adaları",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Mali",
+  "amount": 195,
+  "currency": "USD"
+ },
+ {
+  "name": "Malta",
+  "amount": 160,
+  "currency": "EUR"
+ },
+ {
+  "name": "Mavritaniya",
+  "amount": 175,
+  "currency": "USD"
+ },
+ {
+  "name": "Meksika",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Mərakeş",
+  "amount": 180,
+  "currency": "USD"
+ },
+ {
+  "name": "Misir",
+  "amount": 180,
+  "currency": "USD"
+ },
+ {
+  "name": "Moldova",
+  "amount": 110,
+  "currency": "USD"
+ },
+ {
+  "name": "Moldova - Kişineu şəhəri",
+  "amount": 150,
+  "currency": "USD"
+ },
+ {
+  "name": "Monako",
+  "amount": 195,
+  "currency": "EUR"
+ },
+ {
+  "name": "Monqolustan",
+  "amount": 145,
+  "currency": "USD"
+ },
+ {
+  "name": "Monteneqro",
+  "amount": 155,
+  "currency": "EUR"
+ },
+ {
+  "name": "Myanma",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Nepal",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Niderland",
+  "amount": 225,
+  "currency": "EUR"
+ },
+ {
+  "name": "Norveç",
+  "amount": 225,
+  "currency": "EUR"
+ },
+ {
+  "name": "Oman",
+  "amount": 170,
+  "currency": "USD"
+ },
+ {
+  "name": "Özbəkistan",
+  "amount": 100,
+  "currency": "USD"
+ },
+ {
+  "name": "Özbəkistan - Daşkənd şəhəri",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "Pakistan",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Polşa",
+  "amount": 175,
+  "currency": "EUR"
+ },
+ {
+  "name": "Portuqaliya",
+  "amount": 170,
+  "currency": "EUR"
+ },
+ {
+  "name": "Qazaxıstan",
+  "amount": 130,
+  "currency": "USD"
+ },
+ {
+  "name": "Qazaxıstan - Almatı və Astana şəhərləri",
+  "amount": 200,
+  "currency": "USD"
+ },
+ {
+  "name": "Qətər",
+  "amount": 180,
+  "currency": "USD"
+ },
+ {
+  "name": "Qırğızıstan",
+  "amount": 130,
+  "currency": "USD"
+ },
+ {
+  "name": "Qırğızıstan - Bişkek şəhəri",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "Rumıniya",
+  "amount": 175,
+  "currency": "EUR"
+ },
+ {
+  "name": "Rusiya ",
+  "amount": 150,
+  "currency": "USD"
+ },
+ {
+  "name": "Rusiya - Moskva və Sankt-Peterburq şəhərləri",
+  "amount": 240,
+  "currency": "USD"
+ },
+ {
+  "name": "San-Marino",
+  "amount": 215,
+  "currency": "EUR"
+ },
+ {
+  "name": "Seneqal",
+  "amount": 185,
+  "currency": "USD"
+ },
+ {
+  "name": "Serbiya",
+  "amount": 155,
+  "currency": "EUR"
+ },
+ {
+  "name": "Səudiyyə Ərəbistanı",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Sinqapur",
+  "amount": 235,
+  "currency": "USD"
+ },
+ {
+  "name": "Slovakiya",
+  "amount": 160,
+  "currency": "EUR"
+ },
+ {
+  "name": "Sloveniya",
+  "amount": 145,
+  "currency": "EUR"
+ },
+ {
+  "name": "Şri-Lanka",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Sudan",
+  "amount": 165,
+  "currency": "USD"
+ },
+ {
+  "name": "Suriya",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "Tacikistan",
+  "amount": 140,
+  "currency": "USD"
+ },
+ {
+  "name": "Tacikistan - Düşənbə şəhəri",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "Tailand",
+  "amount": 205,
+  "currency": "USD"
+ },
+ {
+  "name": "Tunis",
+  "amount": 180,
+  "currency": "USD"
+ },
+ {
+  "name": "Türkiyə",
+  "amount": 150,
+  "currency": "EUR"
+ },
+ {
+  "name": "Türkiyə - Ankara və İstanbul şəhərləri",
+  "amount": 165,
+  "currency": "EUR"
+ },
+ {
+  "name": "Türkmənistan",
+  "amount": 95,
+  "currency": "USD"
+ },
+ {
+  "name": "Türkmənistan - Aşqabad şəhəri",
+  "amount": 130,
+  "currency": "USD"
+ },
+ {
+  "name": "Ukrayna",
+  "amount": 160,
+  "currency": "USD"
+ },
+ {
+  "name": "Ukrayna - Kiyev şəhəri",
+  "amount": 210,
+  "currency": "USD"
+ },
+ {
+  "name": "Vyetnam",
+  "amount": 155,
+  "currency": "USD"
+ },
+ {
+  "name": "Xorvatiya",
+  "amount": 185,
+  "currency": "EUR"
+ },
+ {
+  "name": "Yaponiya",
+  "amount": 34720,
+  "currency": "JPY"
+ },
+ {
+  "name": "Yəmən",
+  "amount": 185,
+  "currency": "USD"
+ },
+ {
+  "name": "Yeni Zelandiya",
+  "amount": 195,
+  "currency": "USD"
+ },
+ {
+  "name": "Yunanıstan",
+  "amount": 180,
+  "currency": "EUR"
+ }
+]

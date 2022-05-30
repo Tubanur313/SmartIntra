@@ -9,11 +9,12 @@ using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.Entities.Concrete.Membership;
-using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {

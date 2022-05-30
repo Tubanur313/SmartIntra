@@ -1,0 +1,406 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model VacationContractUpdateDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs  tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab"
+                   href="#home1" role="tab">Müqavilə məlumatları</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#file1" role="tab">Fayllar</a>
+            </li>
+        </ul>
+        <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
+            <div class="tab-content tabs card-block">
+                <div class="tab-pane active" id="home1"
+                     role="tabpanel">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkət: </label>
+                                <select name="select" disabled id="CompanyId" class="form-control">
+                                    <option>@ViewBag.company.Name</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Əməkdaşlar: </label>
+                                <select name="select" asp-for="UserId" name="UserId" readonly class="form-control disabled_custom">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.users)
+                                    {
+                                        <option value="@item.Id">
+                                            @(item.Name) @(item.Surname) / @(item.Position.Company.Name!=null? item.Position.Company.Name:"Təyin edilməyib")/ @(item.Position.Department.Name!=null? item.Position.Department.Name:"Təyin edilməyib")/ @(item.Position.Name!=null? item.Position.Name:"Təyin edilməyib")
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="UserId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6" id="graphic_div">
+                            <label class="floatLabel"> Məzuniyyət növü: </label>
+                            <select  asp-for="VacationTypeId" readonly class="form-control disabled_custom">
+                                <option value="" disabled selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.vacationTypes)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="VacationTypeId" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Sənəd nömrəsi: </label>
+                                <input type="text" class="form-control" asp-for="CommandNumber" autocomplete="off">
+                                <span asp-validation-for="CommandNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="floatLabel"> Sənəd tarixi: </label>
+                            <div class="form-group">
+                                <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                                <span asp-validation-for="CommandDate" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Əmrin əsası: </label>
+                                <input class="form-control" asp-for="Description" autocomplete="off">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məz. başlama tarixi: </label>
+                                <div class="form-group">
+                                    <input  asp-for="FromDate" type="date" readonly class="form-control disabled_custom" id="FromDate">
+                                    <span asp-validation-for="FromDate" class="text-danger"></span>
+                                    <span class="messages"></span>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="floatLabel">  Məz. bitmə tarixi: </label>
+                                    <div class="form-group">
+                                        <input asp-for="ToDate" type="date" readonly class="form-control disabled_custom" id="ToDate">
+                                        <span asp-validation-for="ToDate" class="text-danger"></span>
+                                        <span class="messages"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="floatLabel"> Təqvim günü: </label>
+                            <div class="form-group">
+                               <input asp-for="CalendarDay" type="number" readonly class="form-control disabled_custom" >
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="labor_vacation" class="form-group">
+                                <label class="floatLabel">  Qalıq başlama tarixi: </label>
+                                <div class="form-group">
+                                   <input  asp-for="FromWorkYearDate" type="date" readonly class="form-control disabled_custom">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div id="labor_vacation_2" class="form-group">
+                                <label class="floatLabel">  Qalıq bitmə tarixi: </label>
+                                <div class="form-group">
+
+                                    <input asp-for="ToWorkYearDate" type="date" readonly class="form-control disabled_custom">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <div class="form-radio">
+                                <div class="radio radio-inline">
+                                    <label for="True">
+                                        <input type="radio" id="True" value="False" asp-for="IsDeleted"
+                                               checked="checked">
+                                        <i class="helper"></i>Active
+                                    </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label for="False">
+                                        <input type="radio" id="False" value="True" asp-for="IsDeleted">
+                                        <i class="helper"></i>InActive
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="file1" role="tabpanel">
+                    @foreach (var el in ViewBag.contractFiles)
+                    {
+                        <a class="pl-4" target="_blank" href="~/contractDocs/@el.FilePath">
+                            <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
+                            @el.Clause.Name
+                        </a> <br /> <br />
+                    }
+                </div>
+
+                <div class="form-group row mt-3">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button type="submit" id="sub-btn" class="btn btn-primary m-b-0  btn-block">
+                            Təsdiqlə
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+      $(document).ready(function () {
+          var vac_id = $("#VacationTypeId").val();
+          getVacationTypeDisplay(vac_id, false);
+        $("#labor_vacation").css('display', "none");
+        $("#labor_vacation_2").css('display', "none");
+
+        $('.input-daterange input').each(function () {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            });
+        });
+
+        $("form").submit( function(e) {
+
+        });
+
+        $('#FromDate').change(function () {
+            var date = $(this).val();
+            $("#CalendarDay").val("0");
+            var to_date = $("#ToDate").val();
+            if (date != null && date != "" && to_date != null && to_date != "") {
+                var diff = new Date(Date.parse(to_date) - Date.parse(date));
+                var days = diff / 1000 / 60 / 60 / 24;
+                days += 1;
+
+                getRemainDates(Date.parse(date), Date.parse(to_date))
+                $("#CalendarDay").val(days.toString());
+            }
+        });
+
+        $('#ToDate').change(function () {
+            var to_date = $(this).val();
+            $("#CalendarDay").val("0");
+            var date = $("#FromDate").val();
+            if (date != null && date != "" && to_date != null && to_date != "") {
+                var diff = new Date(Date.parse(to_date) - Date.parse(date));
+                var days = diff / 1000 / 60 / 60 / 24;
+                days += 1;
+                getRemainDates(Date.parse(date), Date.parse(to_date))
+                $("#CalendarDay").val(days.toString());
+
+            }
+        });
+    });
+
+
+
+    $(document).on('change', '#VacationTypeId', function () {
+            var _id = $(this).val();
+        getVacationTypeDisplay(_id, true);
+
+    });
+
+    function getVacationTypeDisplay(vac_id, remain_check) {
+          $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetUserVacationType", "VacationContract")',
+                data: {
+                    id: vac_id,
+                },
+                success: function (response)
+                {
+                    if (response.error == true)
+                    {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+
+                    if (response == "labor") {
+                        $("#labor_vacation").css('display', "block");
+                        $("#labor_vacation_2").css('display', "block");
+
+                        if (remain_check) {
+                            var date = $("#FromDate").val();
+                            var to_date = $("#ToDate").val();
+                            if (date != null && date != "" && to_date != null && to_date != "") {
+                                var diff = new Date(Date.parse(to_date) - Date.parse(date));
+                                var days = diff / 1000 / 60 / 60 / 24;
+                                days += 1;
+                                $("#CalendarDay").val(days.toString());
+                                getRemainDates(Date.parse(date), Date.parse(to_date))
+                            }
+                        }
+                      
+                    } else {
+                        $("#labor_vacation").css('display', "none");
+                        $("#labor_vacation_2").css('display', "none");
+                    }
+
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+    }
+
+
+    function getRemainDates(fromDate, toDate) {
+        var usr_id = $("#UserId").val()
+        if (usr_id==null) {
+            toastr.error("Əməkdaş boş ola bilməz", "Xəta!");
+            return;
+        }
+          $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetUserVacationRemainDates", "VacationContract")',
+                data: {
+                    user_id: parseInt(usr_id),
+                    fromDate: fromDate / 1000,
+                    toDate: toDate / 1000
+                },
+                success: function (response)
+                {
+                    if (response.message!= null)
+                    {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        $("#CalendarDay").val("0");
+                        return;
+                    }
+                    $("#FromWorkYearDate").val(response.fromDate.toString().split('T')[0]);
+                    $("#ToWorkYearDate").val(response.toDate.toString().split('T')[0]);
+
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+           });
+    }
+
+    function getPos(_id) {
+          $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetPositionWithUser", "Account")',
+                data: {
+                    userId: _id,
+                },
+                success: function (response)
+                {
+                    if (response.error == true)
+                    {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#PositionId").empty();
+                    var html = "";
+
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                        ${[response[i].name]}</option>`
+                    }
+
+                    if(response.length>0)
+                    {
+                        $("#PositionId").prop('disabled', false);
+                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    }
+                    else{
+                         $("#PositionId").prop('disabled', false);
+                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+           });
+    }
+
+    $(document).on('change','#CompanyId', function(){
+        var _id = $(this).val();
+
+        $.ajax({
+            type: 'Get',
+            url: '@Url.ActionLink("GetCompanyUsers", "Account")',
+            data: {
+                companyId: _id,
+            },
+            success: function (response)
+            {
+                if (response.error == true)
+                {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
+                }
+                $("#UserId").empty();
+                var html = "";
+
+                for (var i in response) {
+                    html += `<option value="${[response[i].id]}">
+                    ${[response[i].name]}</option>`
+                }
+
+                if(response.length>0)
+                {
+                    $("#UserId").prop('disabled', false);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                }
+                else{
+                    $("#UserId").prop('disabled', false);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                }
+
+            },
+            error: function (response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+       });
+    });
+</script>

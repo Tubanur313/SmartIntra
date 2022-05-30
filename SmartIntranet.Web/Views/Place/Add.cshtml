@@ -1,0 +1,68 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model PlaceAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Ad: </label>
+                        <input type="text" class="form-control" asp-for="Name" autocomplete="off">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Xərc: </label>
+                        <input class="form-control" asp-for="Amount" autocomplete="off">
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+             <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Valyuta: </label>
+                        <select asp-for="Currency" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.Currencies)
+                            {
+                                <option value="@item.Key">@item.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Currency" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+     $(document).ready(function () {
+        
+    });
+</script>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Entities.Concrete;
 
 namespace SmartIntranet.Business.Concrete.Intranet
 {

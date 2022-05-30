@@ -1,0 +1,256 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model TerminationContractAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Şirkət: </label>
+                        <select id="CompanyId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.companies)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Əməkdaşlar: </label>
+                        <select disabled asp-for="UserId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Sənəd nömrəsi: </label>
+                        <input type="text" class="form-control" asp-for="CommandNumber" autocomplete="off">
+                        <span asp-validation-for="CommandNumber" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="floatLabel"> Sənəd tarixi: </label>
+                    <div class="form-group">
+                        <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                        <span asp-validation-for="CommandDate" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Əmrin əsası: </label>
+                        <input class="form-control" asp-for="Description" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="floatLabel"> Xitam tarixi: </label>
+                    <div class="form-group">
+                        <input asp-for="TerminationDate" type="date" class="form-control" id="terminationDate">
+                        <span asp-validation-for="TerminationDate" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Maddələr: </label>
+                        <select id="TerminationItemId" asp-for="TerminationItemId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.terminationItems)
+                            {
+                                <option  value="@item.Id">@item.Name </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <div class="checkbox-zoom zoom-primary">
+                            <label>
+                                <input type="checkbox" asp-for="IsReduction">
+                                <span class="cr">
+                                    <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                </span>
+                                <span>İxtisar</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            <div class="row" >
+                <div class="col-sm-6" id="reduction_number">
+                    <div class="form-group">
+                        <label class="floatLabel">  İxtisar sən. nömrəsi: </label>
+                        <input type="text" class="form-control" asp-for="ReductionNumber" autocomplete="off">
+                        <span asp-validation-for="ReductionNumber" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" id="reduction_date">
+                    <label class="floatLabel"> İxtisar sən. tarixi: </label>
+                    <div class="form-group">
+                        <input asp-for="ReductionDate" type="date" class="form-control" id="reductionDate">
+                     
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6" id="agree_id">
+                    <div class="form-group">
+                        <div class="checkbox-zoom zoom-primary">
+                            <label>
+                                <input type="checkbox" asp-for="IsAgree">
+                                <span class="cr">
+                                    <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                </span>
+                                <span>Müştəri razılığı</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6"  id="content_id">
+                    <div class="form-group">
+                        <label class="floatLabel">  Əmrin məzunu: </label>
+                        <input class="form-control" asp-for="Content" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row mt-3">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" id="sub-btn" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#reduction_number").css('display', "none");
+        $("#reduction_date").css('display', "none");
+        $("#content_id").css('display', "none");
+        $("#agree_id").css('display', "none");
+
+        $('.input-daterange input').each(function () {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            });
+        });
+
+        $("form").submit( function(e) {
+
+        });
+
+       
+    });
+
+
+
+    $(document).on('change', '#IsReduction', function () {
+        var check_val = $(this).is(':checked');
+        console.log(check_val)
+        if (check_val) {
+            $("#content_id").css('display', "block");
+            $("#agree_id").css('display', "block");
+            $("#reduction_number").css('display', "block");
+            $("#reduction_date").css('display', "block");
+        } else {
+            $("#content_id").css('display', "none");
+            $("#agree_id").css('display', "none");
+            $("#reduction_number").css('display', "none");
+            $("#reduction_date").css('display', "none");
+        }
+
+        
+    });
+
+
+  
+    $(document).on('change','#CompanyId', function(){
+        var _id = $(this).val();
+
+        $.ajax({
+            type: 'Get',
+            url: '@Url.ActionLink("GetCompanyUsers", "Account")',
+            data: {
+                companyId: _id,
+            },
+            success: function (response)
+            {
+                if (response.error == true)
+                {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
+                }
+                $("#UserId").empty();
+                var html = "";
+
+                for (var i in response) {
+                    html += `<option value="${[response[i].id]}">
+                    ${[response[i].name]}</option>`
+                }
+
+                if(response.length>0)
+                {
+                    $("#UserId").prop('disabled', false);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                }
+                else{
+                    $("#UserId").prop('disabled', false);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                }
+
+            },
+            error: function (response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+       });
+    });
+
+</script>

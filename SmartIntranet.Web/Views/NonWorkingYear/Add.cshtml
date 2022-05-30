@@ -1,0 +1,59 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model NonWorkingYearAddDto
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  İl: </label>
+                        <input type="text" class="form-control" asp-for="Year" autocomplete="off" id="inputDate">
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" class="years" value="@ViewBag.Years" />
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+    $(document).ready(function () {
+
+        $('#inputDate').datepicker({
+            format: "yyyy",
+            viewMode: "years",
+            minViewMode: "years"
+        });
+
+        $("form").submit( function(e) {
+            let years = JSON.parse($(".years").val());
+            let year = $("#inputDate").val();
+            if(years.some(x => x == year))
+            {
+                toastr.error(" Bu il artıq mövcuddur !", "Xəta!");
+                e.preventDefault();
+            }
+        });
+    });
+</script>

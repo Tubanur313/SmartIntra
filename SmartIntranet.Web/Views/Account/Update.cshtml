@@ -1,9 +1,16 @@
-﻿@model AppUserUpdateDto
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model AppUserUpdateDto
 
 @{
     Layout = null;
 }
-<link href="~/files/assets/pages/advance-elements/css/bootstrap-datetimepicker.css" />
+
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
@@ -17,53 +24,188 @@
                    href="#profile1" role="tab">Fayllar</a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#vacationRemain" role="tab">Məzuniyyət qalıqları</a>
+            </li>
+
         </ul>
         <!-- Tab panes -->
         <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
             <div class="tab-content tabs card-block">
-                <div class="tab-pane active" id="home1" role="tabpanel">
-
-                    @*            <input type="hidden" asp-for="Id" />*@
+                <div class="tab-pane active" id="home1"
+                     role="tabpanel">
+                    <input type="hidden" asp-for="Id" />
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Ad: </label>
-                                <input type="text" class="form-control" asp-for="FirstName" autocomplete="off">
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                <input type="text" class="form-control" asp-for="Name" autocomplete="off">
+                                <span asp-validation-for="Name" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Soyad: </label>
-                                <input type="text" class="form-control" asp-for="LastName" autocomplete="off">
-                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                <input type="text" class="form-control" asp-for="Surname" autocomplete="off">
+                                <span asp-validation-for="Surname" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
 
-                        </div>                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Ata adı: </label>
+                                <input type="text" class="form-control" asp-for="Fathername" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Əmək Haqqı: </label>
+                                <input type="hidden" asp-for="Salary" />
+                                <input type="number" class="form-control disabled_custom" readonly asp-for="Salary" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Vəsiqənin Seriyası və Nömrəsi: </label>
+                                <input type="text" class="form-control" asp-for="IdCardNumber" autocomplete="off">
+                                <span asp-validation-for="IdCardNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Vəsiqənin Verilmə Tarixi: </label>
+                                <input type="date" class="form-control" asp-for="IdCardGiveDate" autocomplete="off">
+                                <span asp-validation-for="IdCardGiveDate" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Sənəd növü: </label>
+                                <select name="select" asp-for="IdCardType" name="IdCardType" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.idCardTypes)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="IdCardType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Vətəndaşlıq: </label>
+                                <input type="text" class="form-control" asp-for="Citizenship" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Vəsiqənin Qüvvədə Olma Tarixi: </label>
+                                <input type="date" class="form-control" asp-for="IdCardExpireDate" autocomplete="off">
+                                <span asp-validation-for="IdCardExpireDate" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Vəsiqəni Verən Orqanın Adı: </label>
+                                <input type="text" class="form-control" asp-for="IdCardGivePlace" autocomplete="off">
+                                <span asp-validation-for="IdCardGivePlace" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Fin kod: </label>
+                                <input type="text" class="form-control" asp-for="Pin" autocomplete="off">
+                                <span asp-validation-for="Pin" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  İşə Başlama Tarixi: </label>
+                            <div class="form-group">
+                                <input readonly asp-for="StartWorkDate" type="date" class="form-control disabled_custom" id="inputDate">
+                                <span asp-validation-for="StartWorkDate" class="text-danger"></span>
+                                @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Email: </label>
                                 <input type="email" class="form-control" asp-for="Email" autocomplete="off">
                                 <span asp-validation-for="Email" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
-                        </div>
 
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="floatLabel">  Tel: </label>
-                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PhoneNumber" autocomplete="off">
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <label class="floatLabel">  Doğum Tarixi: </label>
+                                <input asp-for="Birthday" type="date" class="form-control">
+                                @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Yaşadığı Ünvan: </label>
+                                <input type="text" class="form-control" asp-for="Address" autocomplete="off">
                                 <span class="messages"></span>
                             </div>
 
                         </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Qeydiyyat Ünvanı: </label>
+                                <input type="text" class="form-control" asp-for="RegisterAdress" autocomplete="off">
+                                <span asp-validation-for="RegisterAdress" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Şirkət: </label>
                                 <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    <option value="" selected hidden>Seçim edin</option>
                                     @foreach (var item in ViewBag.companies)
                                     {
                                         <option value="@item.Id">@item.Name</option>
@@ -72,12 +214,13 @@
                                 </select>
                                 <span asp-validation-for="CompanyId" class="text-danger"></span>
                             </div>
+
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Şöbə: </label>
                                 <select name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    <option value="" selected hidden>Seçim edin</option>
                                     @foreach (var item in ViewBag.departments)
                                     {
                                         <option value="@item.Id">@item.Name</option>
@@ -87,25 +230,27 @@
                                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Vəzifə: </label>
-                                <select name="select" asp-for="PositionId" name="PositionId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.position)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
+                    </div>
 
-                                </select>
-                                <span asp-validation-for="PositionId" class="text-danger"></span>
-                            </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Vəzifə: </label>
+                            <input type="hidden" asp-for="PositionId" />
+                            <select name="select" asp-for="PositionId" name="PositionId" readonly class="form-control disabled_custom">
+                                <option value="" selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.position)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                            <span asp-validation-for="PositionId" class="text-danger"></span>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Dərəcə: </label>
                                 <select name="select" asp-for="GradeId" name="GradeId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    <option value="" selected hidden>Seçim edin</option>
                                     @foreach (var item in ViewBag.grades)
                                     {
                                         <option value="@item.Id">@item.GradeName</option>
@@ -115,16 +260,178 @@
                                 <span asp-validation-for="GradeId" class="text-danger"></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">  Doğum Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="Birthday" type="date" class="form-control">
+                                <label>  Cinsi: </label>
+                                <div class="form-radio">
+
+
+                                    <div class="radio radio-inline">
+                                        <label for="FEMALE">
+                                            <input type="radio" id="FEMALE" value="FEMALE" asp-for="Gender"
+                                                   checked="checked">
+                                            <i class="helper"></i>Qadın
+                                        </label>
+                                    </div>
+                                    <div class="radio radio-inline">
+                                        <label for="MALE">
+                                            <input type="radio" id="MALE" value="MALE" asp-for="Gender">
+                                            <i class="helper"></i>Kişi
+                                        </label>
+                                    </div>
+                                </div>
+
+
                             </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Bitirdiyi İxtisasın adı: </label>
+                                <input type="text" class="form-control" asp-for="Profession" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Təhsilin növü: </label>
+                                <select name="select" asp-for="EducationLevel" name="EducationLevel" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.educationLevels)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+
+                                </select>
+                                <span asp-validation-for="EducationLevel" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Bitirdiyi Təhsil Müəssisəsinin adı: </label>
+                                <input type="text" class="form-control" asp-for="GraduatedPlace" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
+                                <input type="number" readonly class="form-control disabled_custom" asp-for="VacationMainDay" autocomplete="off">
+                                <span asp-validation-for="VacationMainDay" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əlavə Gün Sayı: </label>
+                                <input type="number" readonly class="form-control disabled_custom" asp-for="VacationExtraDay" autocomplete="off">
+                                <span asp-validation-for="VacationExtraDay" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Tel: </label>
+                                <input type="text" class="form-control" asp-for="PhoneNumber" autocomplete="off">
+                                <span asp-validation-for="PhoneNumber" placeholder="+994 __-___-__-__" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <input type="hidden" asp-for="WorkGraphicId" />
+                            <label class="floatLabel">  İstehsalat təqvimi: </label>
+                            <select readonly asp-for="WorkGraphicId" class="form-control disabled_custom">
+                                <option value="" disabled selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.workGraphics)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="WorkGraphicId" class="text-danger"></span>
+                        </div>
+
+
+                    </div>
+
+                    <div id="row-box">
+                        <input id="rowCount" type="hidden" value="@Model.UserExperiences.Count" />
+                        @for (var i = 0; i < Model.UserExperiences.Count; i++)
+                        {
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel"> Yer: </label>
+                                        <input type="text" class="form-control" asp-for="UserExperiences[i].Place" autocomplete="off">
+                                        <span class="messages"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel"> Tarix: </label>
+                                        <div class="input-group input-daterange mb-0">
+                                            <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control experience-history" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control experience-history" autocomplete="off">
+                                        </div>
+                                        <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span>
+                                        <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span>
+                                        <span class="messages"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            İş stajı: <button type="button" id="addRow" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
                         </div>
                     </div>
 
 
 
+                    <div class="row form-group">
+                        <div class="col-sm-12">
+                            <div class="form-radio">
+
+                                <div class="radio radio-inline">
+                                    <label for="True">
+                                        <input type="radio" id="True" value="False" asp-for="IsDeleted"
+                                               checked="checked">
+                                        <i class="helper"></i>Active
+                                    </label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <label for="False">
+                                        <input type="radio" id="False" value="True" asp-for="IsDeleted">
+                                        <i class="helper"></i>InActive
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane" id="profile1" role="tabpanel">
                     <div class="form-group">
@@ -138,12 +445,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6  col-lg-6 col-sm-6">
-                                        @if (Model.Picture != null)
+                                        @if (@Model.Picture != null)
                                         {
                                             <div class="border text-center pt-2">
                                                 <div class="pt-0">
                                                     <label class="floatLabel">Şəkil:</label>
-                                                    <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="@Model.FirstName" />
+                                                    <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="@Model.Name" />
                                                 </div>
                                             </div>
                                         }
@@ -152,7 +459,7 @@
                                             <div class="border text-center pt-2">
                                                 <div class="pt-0">
                                                     <label class="floatLabel">Şəkil:</label>
-                                                    <img src="~/uploads/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                                    <img src="~/profile/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
                                                 </div>
                                             </div>
                                         }
@@ -197,9 +504,84 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane" id="vacationRemain" role="tabpanel">
+                    <div class="form-group">
+
+                        <div id="vac-box">
+                            <input id="vacCount" type="hidden" value="@Model.UserVacationRemains.Count" />
+                            @for (var i = 0; i < Model.UserVacationRemains.Count; i++)
+                            {
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel"> Tarix: </label>
+                                            <input type="hidden" asp-for="UserVacationRemains[i].IsEditable" />
+                                            <input type="hidden" asp-for="UserVacationRemains[i].IsDeleted" />
+
+                                            <div class="input-group input-daterange mb-0">
+                                                <input type="text" asp-for="UserVacationRemains[i].FromDate" value="@Model.UserVacationRemains[i].FromDate.ToString("dd.MM.yyyy")" class="form-control vacation-remain start old" autocomplete="off">
+                                                <div class="input-group-addon">to</div>
+                                                <input type="text" asp-for="UserVacationRemains[i].ToDate" value="@Model.UserVacationRemains[i].ToDate.ToString("dd.MM.yyyy")" class="form-control vacation-remain end old" autocomplete="off">
+                                            </div>
+
+                                            <span asp-validation-for="UserVacationRemains[i].ToDate" class="text-danger"></span>
+                                            <span asp-validation-for="UserVacationRemains[i].FromDate" class="text-danger"></span>
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">  Qalıq gün: </label>
+                                            <input type="text" class="form-control" asp-for="UserVacationRemains[i].RemainCount" autocomplete="off">
+
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-right">
+                                Əlavə et: <button type="button" id="addVacDay" class="btn btn-outline-success rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-plus m-0"></i></button>
+                            </div>
+                        </div>
+                      
+                            @foreach (var item in ViewBag.userVacationDisable)
+                            {
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel"> Tarix: </label>
+                                            <div class="input-group input-daterange mb-0">
+                                                <input type="text" value="@item.FromDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
+                                                <div class="input-group-addon">to</div>
+                                                <input type="text" value="@item.ToDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
+                                            </div>
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">  Qalıq gün: </label>
+                                            <input type="text" class="form-control disabled_custom" readonly value="@item.RemainCount" autocomplete="off">
+
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                      
+                    </div>
+                </div>
+
                 <div class="form-group row mt-3">
                     <div class="col-sm-12 d-flex justify-content-between">
-                        <button type="submit" id="sub-btn" class="btn btn-primary m-b-0  btn-block">
+                        <button type="submit" class="btn btn-primary m-b-0  btn-block">
                             Təsdiqlə
                         </button>
 
@@ -211,33 +593,199 @@
 
 </div>
 
+
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-<!-- cust-validation js -->
-<script src="~/files/lib/cust_ajax/cust-validation.js"></script>
+
 <!-- delete_ajax-->
 <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
-<script class="removable">
+<script type="text/javascript">
     $(document).ready(function () {
-            $("#Profile").change(function (e) {
-            $("#lview").show();
-            $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
-    });
-        $('#file-upload').change(function() {
-        var file = $('#file-upload')[0].files[0].name;
-        $('#uploaded').removeClass("d-none").text(file);
-    });
-    //phone number masking
-    $.mask.definitions['9'] = '';
-    $.mask.definitions['_'] = '[0-9]';
-    $("#PhoneNumber").on("focus",function(){
-             $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
-    });
+
+        let dateArray = [];
+
+         $("form").submit( function(e) {
+                let isEmpty = false;
+                $(".experience-history").each(function(i, el){
+                     let val = $(el).val();
+                     if(!val)
+                     {
+                         isEmpty = true;
+                     }
+                });
+                if(isEmpty)
+                {
+                    toastr.error(" Staj tarixi boş ola bilməz !", "Xəta!");
+                    e.preventDefault();
+                }
+                if(!checkDate())
+                {
+                    e.preventDefault();
+                    return;
+                }
+                checkRemainCount(e);
+         });
+
+         function setDisableAndOld() {
+            dateArray = [];
+            setDate('disable');
+            setDate('old');
+         }
+
+         function checkRemainCount(e)
+         {
+            let isEmpty = false;
+            $(".remain-count").each(function(i, el){
+                    let val = $(el).val();
+                    if(!val)
+                    {
+                        isEmpty = true;
+                    }
+            });
+            if(isEmpty)
+            {
+                toastr.error(" Qalıq gün boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+                return isEmpty;
+            }
+         }
+
+         function setDate(type) {
+            $(`.vacation-remain.${type}`).each(function (i, el) {
+                let val = $(el).val();
+                val = new Date(val);
+                val.setHours(0, 0, 0, 0);
+                let startMonth = val.getMonth() + 1;
+                let startDay = val.getDate();
+                let year = val.getFullYear();
+                if(type == 'disable')
+                {
+                    val = new Date(year, startDay - 1, startMonth);
+                }
+                startMonth = val.getMonth() + 1;
+                startDay = val.getDate();
+                if(i % 2 == 0)
+                {
+                    dateArray.push(val);
+                }
+            })
+         }
+
+         function checkDate() {
+            setDisableAndOld();
+            let startYear;
+            let valid = true;
+            $(".vacation-remain").each(function (i, el) {
+                let startWorkDate = $('#inputDate').val();
+                startWorkDate = new Date(startWorkDate);
+                startWorkDate.setHours(0, 0, 0, 0);
+                let startWorkMonth = startWorkDate.getMonth() + 1;
+                let startWorkDay = startWorkDate.getDate();
+                let val = $(el).val();
+                val = new Date(val);
+                val.setHours(0, 0, 0, 0);
+                let startMonth = val.getMonth() + 1;
+                let startDay = val.getDate();
+                let year = val.getFullYear();
+                if (el.classList.contains('disable')) {
+                    val = new Date(year, startDay - 1, startMonth);
+                    startMonth = val.getMonth() + 1;
+                    startDay = val.getDate();
+                }
+                else if(el.classList.contains('new')) {
+                    if (el.classList.contains('start') && startWorkDate > val) {
+                     toastr.error(" Məzuniyyət qalığının başlama tarixi işə başlama tarixindən kiçik ola bilməz !", "Xəta!");
+                      valid = false;
+                      return valid;
+                    }
+                    if (i % 2 == 1) {
+                        if (year - startYear != 1) {
+                             toastr.error(" Aralıq 1 il olmalıdır !", "Xəta!");
+                              valid = false;
+                              return valid;
+                        }
+                    }
+                    else {
+                        startYear = year;
+                    }
+                    if (startMonth != startWorkMonth || startDay != startWorkDay) {
+                        toastr.error(" Ay və gün işə başlama tarixindəki ilə eyni olmalıdı !", "Xəta!");
+                         valid = false;
+                         return valid;
+                    }
+                    if (valid && val && i % 2 == 0) {
+                        if (dateArray.some(x => new Date(x).getTime() == new Date(val).getTime())) {
+                             toastr.error(" Tarix artıq mövcuddur !", "Xəta!");
+                              valid = false;
+                              return valid;
+                        }
+                        else {
+                            dateArray.push(val)
+                        }
+                    }
+                }
+            });
+             return valid;
+         }
+
+          $('.input-daterange input').each(function () {
+                $(this).datepicker({
+                    //format: "dd.mm.yyyy"
+                });
+          });
+          $("#addRow").click(function () {
+                let rowCount = parseInt($("#rowCount").val());
+                rowCount++;
+                $("#rowCount").val(rowCount);
+                let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
+                $('#row-box').append(html);
+
+                $('.input-daterange input').each(function () {
+                    $(this).datepicker({
+                        //format: "dd.mm.yyyy"
+                    });
+                });
+          });
+
+        $("#addVacDay").click(function (e) {
+            if(!checkDate() || checkRemainCount(e))
+            {
+                return;
+            }
+            let rowCount = parseInt($("#vacCount").val());
+            rowCount++;
+            $("#vacCount").val(rowCount);
+            let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
+            $('#vac-box').append(html);
+
+            $('.input-daterange input').each(function () {
+                $(this).datepicker({
+                    //format: "dd.mm.yyyy"
+                });
+            });
+        });
 
 
-           $(document).on('change','#CompanyId', function(){
+
+        $("#Profile").change(function (e) {
+                $("#lview").show();
+                $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+        });
+            $('#file-upload').change(function() {
+            var file = $('#file-upload')[0].files[0].name;
+            $('#uploaded').removeClass("d-none").text(file);
+        });
+        //phone number masking
+        $.mask.definitions['9'] = '';
+        $.mask.definitions['_'] = '[0-9]';
+        $("#PhoneNumber").on("focus",function(){
+                 $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
+        });
+
+          $(document).on('change','#CompanyId', function(){
             var _id = $(this).val();
-          $.ajax({
+
+            $.ajax({
                 type: 'Get',
                 url: '@Url.ActionLink("GetDepartment","Account")',
                 data: {
@@ -250,6 +798,7 @@
                     }
                     $("#DepartmentId").empty();
                     var html = "";
+
                     for (var i in response) {
                         html += `<option value="${[response[i].id]}">
                         ${[response[i].name]}</option>`
@@ -264,30 +813,35 @@
                         $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
                         $("#PositionId").removeClass('disable');
                         $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-
                     }
                 },
                 error: function (response) {
                     $("#overlay").fadeOut(300);
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
+                });
             });
-       });
+
+
        $(document).on('change','#DepartmentId', function(){
             var _id = $(this).val();
-          $.ajax({
+
+            $.ajax({
                 type: 'Get',
                 url: '@Url.ActionLink("GetPosition","Account")',
                 data: {
                     departmentId: _id,
                 },
-                success: function (response) {
-                    if (response.error == true) {
+                success: function (response)
+                {
+                    if (response.error == true)
+                    {
                         toastr.error(response.message, "Xəta baş verdi!");
                         return;
                     }
-                    $("#ParentId").empty();
+                    $("#PositionId").empty();
                     var html = "";
+
                     for (var i in response) {
                         html += `<option value="${[response[i].id]}">
                         ${[response[i].name]}</option>`
@@ -299,14 +853,15 @@
                     }
                     else{
                         $("#PositionId").removeClass('disable');
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`+ html);
+                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
                     }
                 },
                 error: function (response) {
+                    $("#overlay").fadeOut(300);
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
-            });
-       });
+           });
+        });
     });
 </script>
 @await Html.PartialAsync("_ValidationScriptsPartial")

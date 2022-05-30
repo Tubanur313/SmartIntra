@@ -1,0 +1,181 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model WorkGraphicAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form">
+            <input type="hidden" class="names" value="@ViewBag.Names" />
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Ad: </label>
+                        <input type="text" class="form-control" asp-for="Name" autocomplete="off">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Təsvir: </label>
+                        <input type="text" class="form-control" asp-for="Description">
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  İş Qrafiki ili: </label>
+                        <select name="select" asp-for="NonWorkingYearId" name="NonWorkingYearId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.years)
+                            {
+                                <option value="@item.Id">@item.Year</option>
+                            }
+
+                        </select>
+                        <span asp-validation-for="NonWorkingYearId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  İş saatı aralığı: </label>
+                        <div class="input-group input-daterange mb-0">
+                            <input type="time" asp-for="WorkStart" class="form-control" autocomplete="off">
+                            <div class="input-group-addon">to</div>
+                            <input type="time" asp-for="WorkEnd" class="form-control" autocomplete="off">
+                        </div>
+                        <span asp-validation-for="WorkStart" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Bazar artəsi iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Monday" autocomplete="off">
+                        <span asp-validation-for="Monday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Çərşənbə axşamı iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Tuesday">
+                        <span asp-validation-for="Tuesday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Çərşənbə iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Wednesday" autocomplete="off">
+                        <span asp-validation-for="Wednesday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Cümə axşamı iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Thursday">
+                        <span asp-validation-for="Thursday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Cümə iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Friday" autocomplete="off">
+                        <span asp-validation-for="Friday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Şənbə iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Saturday">
+                        <span asp-validation-for="Saturday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Bazar iş saatı: </label>
+                        <input type="number" class="form-control" asp-for="Sunday" autocomplete="off">
+                        <span asp-validation-for="Sunday" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+    $(document).ready(function () {
+
+       //$('.input-daterange input').each(function () {
+       //     $(this).datetimepicker({
+       //         format: "HH:mm"
+       //     });
+       // });
+
+        $("form").submit( function(e) {
+            let names = JSON.parse($(".names").val());
+            let name = $("#Name").val();
+            if(names.some(x => x == name))
+            {
+                toastr.error(" Bu ad artıq mövcuddur !", "Xəta!");
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+

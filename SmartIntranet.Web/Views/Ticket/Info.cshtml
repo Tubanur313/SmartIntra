@@ -169,7 +169,7 @@
                                         <i class=""></i>
                                         <i class="fa-solid fa-user-gear mr-2 text-primary p-absolute text-center d-block f-30"></i>
                                         <p>
-                                            @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.FirstName+Model.Supporter.LastName} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}" )
+                                            @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.Name+Model.Supporter.Surname} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}" )
                                         </p>
                                     </div>
                                 </div>
@@ -180,7 +180,7 @@
                                     <div class="d-flex">
                                         <i class="fa-solid fa-user-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
                                         <p>
-                                            @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.FirstName+Model.Employee.LastName} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}" )
+                                            @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.Name+Model.Employee.Surname} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}" )
                                         </p>
                                     </div>
                                 </div>

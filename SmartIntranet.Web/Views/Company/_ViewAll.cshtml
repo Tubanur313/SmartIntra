@@ -1,8 +1,10 @@
-﻿@model IList<CompanyListDto>
+﻿@model IEnumerable<CompanyListDto>
 
 <div class="page-body">
     <div class="row">
+        <!-- Left column start -->
         <div class="col-lg-12 col-xl-12">
+            <!-- Job description card start -->
             <div class="card">
                 <div class="card-block contact-details">
                     <div class="data_table_main table-responsive dt-responsive">
@@ -14,26 +16,28 @@
                             <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Şirkət</th>
                                     <th>Üst Şirkət</th>
+                                    <th>Ad</th>
+                                    <th>Status</th>
                                     @*<th>Silinmiş</th>*@
-                                    @if (User.HasAccess("company.add"))
-                                    {
-                                        <th class="text-center">
+                                    <th class="text-center">
+                                        @if (User.HasAccess("company.add"))
+                                        {
                                             <button onclick="showInPopup('@Url.Action("Add","Company",null,Context.Request.Scheme)','Şirkət əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
-                                        </th>
-                                    }
+                                        }
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var company in Model)
                                 {
+
                                     <tr>
                                         <td>
                                             @company.Id
                                         </td>
-                                        <td>@company.Name</td>
-                                        @if (!(company.Parent is null))
+
+                                        @if (company.Parent != null)
                                         {
                                             <td> @company.Parent.Name</td>
                                         }
@@ -42,55 +46,86 @@
                                             <td>
                                                 Təyin edilməyib
                                             </td>
+
                                         }
-                                        <td class="dropdown text-center">
-                                            <button type="button"
+
+
+                                        <td>@company.Name</td>
+                                        <td><span class="badge badge-@(!company.IsDeleted? "success" : "warning")">@(!company.IsDeleted ? "Active" : "Inactive" )</span></td>
+
+                                        @*<td><span class="badge badge-@(company.DeleteByUserId==null ? "success" : "warning")">@(company.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
+                                        @if (company.DeleteByUserId == null)
+                                        {
+                                            <td class="dropdown text-center">
+                                                   <button type="button"
                                                 class="btn
                                                 btn-outline-info
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="fa fa-list-ul"></i>
-                                            </button>
-                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                @if (User.HasAccess("company.update"))
-                                                {
-                                                    <li>
-                                                        <button onclick="showInPopup('@Url.Action("Update","Company",new {id=company.Id},Context.Request.Scheme)','Yenilə')"
-                                                        class="btn  btn-default waves-effect md-trigger text-warning">
-                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                            Yenilə
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (User.HasAccess("company.delete"))
-                                                {
-                                                    <li>
-                                                        <button onclick="removeItem(@company.Id,`@company.Name`,`@Url.Action("Delete","Company").ToString()`)"
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                                <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                    @if (User.HasAccess("company.update"))
+                                                    {
+                                                        <li>
+                                                            <button onclick="showInPopup('@Url.Action("Update","Company",new {id=company.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                                <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                                Yenilə
+                                                            </button>
+                                                        </li>
+                                                    }
+                                                    @if (User.HasAccess("category.delete"))
+                                                    {
+                                                        <li>
+                                                            <button onclick="removeItem(@company.Id,`@company.Name`,`@Url.Action("Delete","Company").ToString()`)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
-                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                            Sil
-                                                        </button>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </td>
+                                                                <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                                Sil
+                                                            </button>
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                           <td class="dropdown text-center">
+                                                   <button disabled type="button"
+                                                class="btn
+                                                btn-outline-danger
+                                                @*dropdown-toggle*@"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                                    <i class="fa fa-list-ul"></i>
+                                                </button>
+                                            </td>
+                                        }
+
                                     </tr>
+
                                 }
                             </tbody>
+
+
                             <tfoot>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Şirkət</th>
                                     <th>Üst Şirkət</th>
-                                    <th class="text-center">-----</th>
+                                    <th>Ad</th>
+                                    <th>Status</th>
+                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-            </div>
+            </div>        <!-- Job description card end -->
         </div>
     </div>
+
 </div>

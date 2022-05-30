@@ -111,7 +111,7 @@
 
 
     <script type="text/javascript" src="~/files/assets/js/script.js"></script>
-    <script class="removable">
+    <script>
     $(document).ready(function () {
         $('#order-table1').DataTable({
             "paging": true,
@@ -144,7 +144,7 @@
                     if (willDelete) {
                         $.ajax({
                             url: '@Url.Action("SetRole")',
-                            type: 'get',
+                            type: 'POST',
                             data: {roleId,userId,selected},
                             contentType: 'application/x-www-form-urlencoded',
                             dataType:'json',
@@ -191,7 +191,7 @@
                         $.ajaxSettings.autoReload=false;
                         $.ajax({
                             url: '@Url.Action("SetClaim")',
-                            type: 'get',
+                            type: 'POST',
                             data: {claimName,userId,selected},
                             contentType: 'application/x-www-form-urlencoded',
                             dataType:'json',

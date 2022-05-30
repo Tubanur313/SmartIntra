@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using SmartIntranet.Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
@@ -18,8 +21,6 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
                    .HasOne(n => n.News)
                    .WithMany(nc => nc.NewsFiles)
                    .HasForeignKey(c => c.NewsId).OnDelete(DeleteBehavior.Restrict);
-
-            builder.Property(I => I.IsDeleted);
 
             builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);

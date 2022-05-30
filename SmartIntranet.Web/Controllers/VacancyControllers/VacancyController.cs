@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.CategoryDto;
@@ -15,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Intranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers
 {
     public class VacancyController : BaseIdentityController
     {

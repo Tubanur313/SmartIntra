@@ -8,7 +8,7 @@ namespace SmartIntranet.DTO.DTOs.AppRoleDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
         public int? CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? UpdateByUserId { get; set; }

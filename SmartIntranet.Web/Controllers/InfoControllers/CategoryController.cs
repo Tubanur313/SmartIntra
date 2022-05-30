@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Intranet.Web.Controllers.InfoControllers
+namespace SmartIntranet.Web.Controllers.InfoControllers
 {
     public class CategoryController : BaseIdentityController
     {

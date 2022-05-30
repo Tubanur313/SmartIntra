@@ -1,93 +1,94 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SmartIntranet.Business.Interfaces.Intranet;
-using SmartIntranet.Business.Interfaces.Membership;
-using SmartIntranet.Business.Provider;
-using SmartIntranet.Core.Extensions;
-using SmartIntranet.Core.Utilities.FileUploader;
+using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
+using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
+using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Core.Extensions;
+using SmartIntranet.Business.Provider;
 
-namespace SmartIntranet.Web.Controllers.HrControlers
+namespace SmartIntranet.Web.Controllers
 {
-    [Authorize]
     public class AccountController : BaseIdentityController
     {
-        private readonly IAppUserService _userService;
+        private readonly IConfiguration _configuration;
+        private readonly IntranetContext _db;
+        private readonly IMapper _mapper;
+        private readonly IAppUserService _appUserService;
+        private readonly IWorkGraphicService _workGraphicService;
+        private readonly IAppRoleService _appRoleService;
+        private readonly IUserVacationRemainService _userVacationRemains;
+        private readonly Business.Interfaces.Membership.IUserContractService _userContractService;
         private readonly ICompanyService _companyService;
         private readonly IGradeService _gradeService;
-        private readonly IFileManager _upload;
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
-        private readonly IUserContractService _userContractService;
-        private readonly IntranetContext _db;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public AccountController(
-            IMapper map,
-            IAppUserService userService,
-            ICompanyService companyService,
-            IGradeService gradeService,
-            IFileManager upload,
-            IDepartmentService departmentService,
-            IPositionService positionService,
-            UserManager<IntranetUser> userManager,
-            IHttpContextAccessor httpContextAccessor,
-            SignInManager<IntranetUser> signInManager,
-            IPasswordHasher<IntranetUser> passwordHasher,
-            IUserContractService userContractService,
-            IntranetContext db
-            ) : base(userManager, httpContextAccessor, signInManager, map)
+        public AccountController(IntranetContext db, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
+            IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
+            IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
+            IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
+            IPositionService positionService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _userService = userService;
-            _companyService = companyService;
+            _appRoleService = appRoleService;
+            _workGraphicService = workGraphicService;
+            _mapper = mapper;
+            _userVacationRemains = userVacationRemains;
+            _db = db;
+            _passwordHasher = passwordHasher;
+            _configuration = configuration;
+            _appUserService = appUserService;
+            _userContractService = userContractService;
             _gradeService = gradeService;
-            _upload = upload;
+            _companyService = companyService;
             _departmentService = departmentService;
             _positionService = positionService;
-            _passwordHasher = passwordHasher;
-            _userContractService = userContractService;
-            _db = db;
         }
 
         [HttpGet]
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _userService.GetAllIncludeAsync();
-            if (model.Count > 0)
-            {
-                return View(_map.Map<List<AppUserListDto>>(model));
-            }
-            return View(new List<AppUserListDto>());
+            return View(_mapper.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com")).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
+
         [HttpGet]
         [Authorize(Policy = "account.permission")]
         public async Task<IActionResult> Permission(int id)
         {
-            var user = await _userService.FindByIdAsync(id);
+            var user = await _appUserService.FindByIdAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
+
             var vm = new AppUserClaimsDto
             {
                 User = user
             };
+
+
+
             vm.Roles = await (from r in _db.Roles
                               join ur in _db.UserRoles.Where(_ => _.UserId == user.Id) on r.Id equals ur.RoleId into ljUr
                               from jUr in ljUr.DefaultIfEmpty()
@@ -98,17 +99,21 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                          from jUc in ljUc.DefaultIfEmpty()
                          select Tuple.Create(p, jUc != null)).ToList();
 
+
             return View(vm);
         }
+
         [Authorize(Policy = "account.role")]
         public async Task<IActionResult> Role(int id)
         {
-            var user = await _userService.FindByIdAsync(id);
+
+            var user = await _appUserService.FindByIdAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
+
             var vm = new AppUserClaimsDto
             {
                 User = user
@@ -118,183 +123,34 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         join ur in _db.UserRoles.Where(_ => _.UserId == user.Id) on r.Id equals ur.RoleId into ljUr
                         from jUr in ljUr.DefaultIfEmpty()
                         select Tuple.Create(r, jUr != null)).ToList();
+
+
+
+
+
+
             return View(vm);
         }
-        [HttpGet]
-        [Authorize(Policy = "account.add")]
-        public async Task<IActionResult> Add()
-        {
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.grades = _map
-                .Map<List<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.position = _map
-                .Map<List<PositionListDto>>(await _positionService.GetAllAsync(x => !x.IsDeleted));
 
-            return View();
-        }
-        [HttpPost]
-        [Authorize(Policy = "account.add")]
-        public async Task<IActionResult> Add(AppUserAddDto model, IFormFile profile)
-        {
-            if (ModelState.IsValid)
-            {
-                if (!(profile is null) && profile.FileName != "default.png")
-                {
-                    if (!MimeTypeCheckExtension.İsImage(profile))
-                    {
-                        TempData["error"] = " Daxil edilən fayllar image, jpeg, png və ya gif formatında olmalıdır !";
-                    }
-                    else
-                    {
-                        model.Picture = _upload.UploadResizedImg(profile, "wwwroot/profile/");
-                    }
-                }
 
-                IntranetUser appUser = _map.Map<IntranetUser>(model);
-                appUser.UserName = CreateUsername.FixUsername(model.FirstName + "." + model.LastName);
-                appUser.CreatedByUserId=GetSignInUserId();
-                var result = await _userManager.CreateAsync(appUser, model.Password);
-                if (result.Succeeded)
-                {
-                    TempData["success"] = "Əlavə olundu";
-                    return RedirectToAction("List");
-                }
-                TempData["error"] = " Məlumat əlavə olunmadı";
-                return RedirectToAction("List");
-            }
-            else
-            {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil";
-                return RedirectToAction("List");
-            }
-        }
-        [HttpGet]
-        [Authorize(Policy = "account.update")]
-        public async Task<IActionResult> Update(int Id)
-        {
-            var data = _map.Map<AppUserUpdateDto>(await _userService.FindByUserAllInc(Id));
-            if (data is null)
-            {
-                TempData["error"] = " Məlumat tapılmadı";
-                return RedirectToAction("List");
-            }
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => !x.IsDeleted));
-
-            ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => !x.IsDeleted
-                && x.CompanyId == data.CompanyId));
-
-            ViewBag.position = _map
-                .Map<List<PositionListDto>>(await _positionService
-                .GetAllAsync(x => !x.IsDeleted
-                && x.CompanyId == data.CompanyId
-                && x.DepartmentId == data.DepartmentId));
-            ViewBag.grades = _map
-                .Map<List<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.docs = _map.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(Id));
-            return View(data);
-        }
-        [HttpPost]
-        [Authorize(Policy = "account.update")]
-        public async Task<IActionResult> Update(AppUserUpdateDto model, IFormFile profile, IFormFile pdf)
-        {
-            if (ModelState.IsValid)
-            {
-                IntranetUser user = _map.Map<IntranetUser>(model);
-                var update = _userManager.Users.FirstOrDefault(I => I.Id == model.Id);
-                if (profile !=null && profile.FileName != "default.png")
-                {
-                    _upload.Delete(update.Picture, "wwwroot/profile/");
-                    user.Picture = _upload.UploadResizedImg(profile, "wwwroot/profile/");
-                }
-                else if (profile != null)
-                {
-                    user.Picture = "default.png";
-                }
-                else
-                {
-                    user.Picture = update.Picture;
-                }
-                update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
-                update.FirstName = user.FirstName;
-                update.LastName = user.LastName;
-                update.Picture = user.Picture;
-                update.Email = user.Email;
-                update.PhoneNumber = user.PhoneNumber;
-                update.Birthday = user.Birthday;
-                update.GradeId = user.GradeId;
-                update.CompanyId = user.CompanyId;
-                update.DepartmentId = user.DepartmentId;
-                update.PositionId = user.PositionId;
-                update.IsDeleted = user.IsDeleted;
-
-                if (await _userManager.UpdateAsync(update) is null)
-                {
-                    TempData["error"] = " Məlumat yenilənmədi";
-                    return View(model);
-                }
-
-                if (pdf != null && MimeTypeCheckExtension.İsDocument(pdf))
-                {
-
-                    UserContractAddDto appContract = new UserContractAddDto
-                    {
-                        FilePath = await _upload.Upload( pdf , "wwwroot/userContractDocs/"),
-                        AppUserId = model.Id,
-                    };
-                    var add = _map.Map<UserContractFile>(appContract);
-                    add.CreatedByUserId = GetSignInUserId();
-                    await _userContractService.AddAsync(add);
-                }
-                else
-                {
-                    if (pdf == null)
-                    {
-                        return RedirectToAction("List");
-                    }
-                    else
-                    {
-                        if (MimeTypeCheckExtension.İsDocument(pdf))
-                        {
-                            TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                        }
-                        else
-                        {
-                            TempData["error"] = " Daxil edilən fayl pdf, docx və ya xlsx formatında olmalıdır !";
-                        }
-                        return RedirectToAction("List");
-                    }
-                }
-
-                TempData["success"] = "Yeniləndi";
-                return RedirectToAction("List");
-            }
-            TempData["error"] = " Daxil edilən məlumatlar tam deyil";
-            return RedirectToAction("List");
-
-        }
         [HttpGet]
         [Authorize(Policy = "account.newPassword")]
         public async Task<IActionResult> NewPassword(int id)
         {
-            var data = _map.Map<AppUserPassDto>(await _userService.FindByIdAsync(id));
-            if (data == null)
+
+            var listModel = _mapper.Map<AppUserPassDto>(await _appUserService.FindByIdAsync(id));
+            if (listModel == null)
             {
-                TempData["error"] = " Məlumat tapılmadı";
-                return RedirectToAction("List");
+                return NotFound();
             }
 
-            return View(data);
+            return View(listModel);
         }
+
+
         [HttpPost]
         [Authorize(Policy = "account.newPassword")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> NewPassword(AppUserPassDto appUserPass)
         {
             if (ModelState.IsValid)
@@ -310,35 +166,461 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             }
             else
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil";
+                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
+
         }
-        [Authorize(Policy = "account.delete")]
-        public async Task Delete(int id)
-        {
-            var delete = await _userService.FindByIdAsync(id);
-            //delete.DeleteByUserId = 1;
-            delete.DeleteDate = DateTime.Now;
-            delete.IsDeleted = true;
-            await _userService.UpdateAsync(delete);
-        }
+
         [HttpGet]
-        public async Task<IActionResult> GetPosition(int departmentId)
+        [Authorize(Policy = "account.add")]
+        public async Task<IActionResult> Add()
         {
-            var position = await _positionService
-                .GetAllAsync(x => x.IsDeleted == false
-                && x.DepartmentId == departmentId);
-            return Ok(position.Select(x => new { x.Id, x.Name }));
+            var levels = new List<LevelType>();
+            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.MASTER, Name = "Magistratura" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.VOCATIONAL, Name = "Orta ixtisas" });
+
+            ViewBag.educationLevels = levels;
+
+            var idCardTypes = new List<LevelType>();
+            idCardTypes.Add(new LevelType() { Id = IdCardTypeConstant.NATIVE, Name = "Şəxsiyyət vəsiqəsi" });
+            idCardTypes.Add(new LevelType() { Id = IdCardTypeConstant.DYI, Name = "Daimi yaşayış icazəsi vəsiqəsi" });
+            idCardTypes.Add(new LevelType() { Id = IdCardTypeConstant.MYI, Name = "Müvəqqəti yaşayış icazəsi vəsiqəsi" });
+
+            ViewBag.idCardTypes = idCardTypes;
+
+            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.grades = _mapper.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.departments = _mapper.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.position = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false));
+
+            ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
+
+            return View();
         }
+
+        [HttpPost]
+        [Authorize(Policy = "account.add")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(AppUserAddDto user, IFormFile profile)
+        {
+            if (profile != null)
+            {
+
+                if (!MimeTypeCheckExtension.İsImage(profile))
+                {
+                    TempData["msg"] = " Daxil edilən fayllar image, png və ya gif formatında olmalıdır !";
+                    return RedirectToAction("List");
+                }
+            }
+
+
+            if (ModelState.IsValid)
+            {
+                var sendUserEmailExist = await _appUserService.IsExistEmail(user.Email);
+
+                if (sendUserEmailExist)
+                {
+                    TempData["msg"] = " Daxil edilən email istifadə olunur !";
+                    return RedirectToAction("List");
+                }
+
+                if (profile != null && profile.FileName != "default.png")
+                {
+                   // user.Picture = AddResizedImage("wwwroot/profile/", profile);
+                }
+                var current = GetSignInUserId();
+                List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
+                if (user.UserVacationRemains!=null && user.UserVacationRemains.Count() > 0)
+                {
+                   foreach (var el in user.UserVacationRemains)
+                    {
+                        el.IsDeleted = true;
+                        el.IsEditable = true;
+                        el.CreatedByUserId = current;
+                        el.CreatedDate = DateTime.Now;
+                        el.VacationCount = el.RemainCount;
+                        UserVacationRemainsNew.Add(el);
+                    }
+
+                }
+
+
+                var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
+                IntranetUser appUser = new IntranetUser
+                {
+                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname),
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Fathername = user.Fathername,
+                    Gender = user.Gender,
+                    Fullname = user.Name + " " + user.Surname + " " + user.Fathername + " " + gender,
+                    EducationLevel = user.EducationLevel,
+                    GraduatedPlace = user.GraduatedPlace,
+                    IdCardExpireDate = user.IdCardExpireDate,
+                    IdCardGiveDate = user.IdCardGiveDate,
+                    IdCardGivePlace = user.IdCardGivePlace,
+                    IdCardNumber = user.IdCardNumber,
+                    Profession = user.Profession,
+                    IdCardType = user.IdCardType,
+                    Citizenship = user.Citizenship,
+                    RegisterAdress = user.RegisterAdress,
+                    Salary = user.Salary,
+                    VacationMainDay = user.VacationMainDay,
+                    VacationExtraDay = user.VacationExtraDay,
+                    CompanyId = user.CompanyId,
+                    DepartmentId = user.DepartmentId,
+                    WorkGraphicId = user.WorkGraphicId,
+                    PositionId = user.PositionId,
+                    GradeId = user.GradeId,
+                    Email = user.Email,
+                    Pin = user.Pin,
+                    StartWorkDate = user.StartWorkDate,
+                    Birthday = user.Birthday,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    Picture = user.Picture,
+                    CreatedByUserId = current,
+                    UserExperiences = user.UserExperiences,
+                    UserVacationRemains = UserVacationRemainsNew
+                };
+
+                var result = await _userManager.CreateAsync(appUser, user.Password);
+                return RedirectToAction("List");
+            }
+            else
+            {
+                ViewBag.grades = _mapper.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.departments = _mapper.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.position = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false));
+
+                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+
+                return RedirectToAction("List", user);
+            }
+        }
+
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetDepartment(int companyId)
         {
-            var department = await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false
-                && x.CompanyId == companyId);
-            return Ok(department.Select(x => new { x.Id, x.Name }));
+            var department = _mapper.Map<ICollection<DepartmentListDto>>(
+                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
+                .Select(x => new { x.Id, x.Name });
+            return Ok(department);
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCompanyUsers(int companyId)
+        {
+            var usrs = _mapper.Map<ICollection<AppUserListDto>>(
+                await _appUserService.GetAllIncludeAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
+                .Select(x => new { x.Id, Name = x.Name + " " + x.Surname + "/" + x.Company.Name + "/" + x.Department.Name + "/" + x.Position.Name });
+            return Ok(usrs);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserVacationDay(int userId)
+        {
+            var usr = await _appUserService.FindByUserAllInc(userId);
+            double experienceYears = (usr.UserExperiences.Sum(x => (x.ExperienceEnd - x.ExperienceStart).TotalDays) + (DateTime.Now - usr.StartWorkDate).TotalDays) / 365;
+            int vacationDay = 0;
+            if (experienceYears >= 5 && experienceYears <= 10)
+                vacationDay = 2;
+            else if (experienceYears > 10 && experienceYears <= 15)
+                vacationDay = 4;
+            else if (experienceYears > 15)
+                vacationDay = 6;
+            return Ok(vacationDay);
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetPosition(int departmentId)
+        {
+            var position = _mapper.Map<ICollection<PositionListDto>>(
+                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == departmentId))
+                 .Select(x => new { x.Id, x.Name });
+
+            return Ok(position);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetPositionWithUser(int userId)
+        {
+            var usr = await _userManager.FindByIdAsync(userId.ToString());
+            var position = _mapper.Map<ICollection<PositionListDto>>(
+                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId))
+                 .Select(x => new { x.Id, x.Name });
+
+            return Ok(position);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "account.update")]
+        public async Task<IActionResult> Update(int id)
+        {
+            var model = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            var listModel = _mapper.Map<AppUserUpdateDto>(await _appUserService.FindByUserAllInc(id));
+            if (listModel == null)
+            {
+                return NotFound();
+            }
+
+            DateTime work_start_date = listModel.StartWorkDate;
+          
+            if (work_start_date != null)
+            {
+                DateTime start_interval;
+                DateTime end_interval;
+                if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                {
+                    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                }
+                else
+                {
+                    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                }
+
+                var remains =  _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval);
+
+                if (!remains)
+                {
+                    UserVacationRemain ur = new UserVacationRemain();
+                    ur.FromDate = start_interval;
+                    ur.ToDate = end_interval;
+                    ur.IsDeleted = true;
+                    ur.CreatedDate = DateTime.Now;
+                    ur.AppUserId = id;
+                    ur.UsedCount = 0;
+                    ur.VacationCount = listModel.VacationMainDay + listModel.VacationExtraDay;
+                    ur.RemainCount = ur.VacationCount;
+
+                    await _userVacationRemains.AddAsync(ur);
+                }
+
+            }
+
+                var levels = new List<LevelType>();
+            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.MASTER, Name = "Magistratura" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.VOCATIONAL, Name = "Orta ixtisas" });
+
+            ViewBag.educationLevels = levels;
+
+            var idCardTypes = new List<LevelType>();
+            idCardTypes.Add(new LevelType() { Id = IdCardTypeConstant.NATIVE, Name = "Şəxsiyyət vəsiqəsi" });
+            idCardTypes.Add(new LevelType() { Id = IdCardTypeConstant.DYI, Name = "Daimi yaşayış icazəsi vəsiqəsi" });
+            idCardTypes.Add(new LevelType() { Id = IdCardTypeConstant.MYI, Name = "Müvəqqəti yaşayış icazəsi vəsiqəsi" });
+
+            ViewBag.idCardTypes = idCardTypes;
+
+            ViewBag.grades = _mapper.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.departments = _mapper.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId==listModel.CompanyId));
+            ViewBag.position = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId==listModel.DepartmentId));
+            ViewBag.docs = _mapper.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(id));
+
+            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && x.IsEditable).ToListAsync();
+            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsEditable).ToListAsync();
+
+            ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
+            return View(listModel);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "account.update")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(AppUserUpdateDto model, IFormFile profile, IFormFile pdf)
+        {
+            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsEditable).ToListAsync();
+            if (ModelState.IsValid)
+            {
+                if (profile != null && profile.FileName != "default.png")
+                {
+                    if (!MimeTypeCheckExtension.İsImage(profile))
+                    {
+                        TempData["msg"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
+                        return RedirectToAction("List");
+                    }
+
+                   // model.Picture = AddResizedImage("wwwroot/profile/", profile);
+                }
+
+                else if (profile != null)
+                {
+                    if (MimeTypeCheckExtension.İsImage(profile))
+                    {
+                        model.Picture = "logoDefault.png";
+
+                    }
+                    else
+                    {
+                        TempData["msg"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
+                        return RedirectToAction("List");
+                    }
+                }
+                else
+                {
+                    var user = await _appUserService.FindByIdAsync(model.Id);
+                    model.Picture = user.Picture;
+
+                }
+
+                var current = GetSignInUserId();
+                var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == model.Id);
+                var oldFileImage = updateUser.Picture;
+
+                if (updateUser != null)
+                {
+
+                    if (!string.IsNullOrEmpty(model.Email))
+                        updateUser.Email = model.Email;
+                    else
+                        ModelState.AddModelError("", "Email boş ola bilməz !");
+
+
+
+                    if (!string.IsNullOrEmpty(model.Email))
+                    {
+                        var gender = model.Gender == "MALE" ? " oğlu" : "qızı";
+                        List<UserExperience> userExperiences = await _db.UserExperiences.Where(x => x.UserId == model.Id).ToListAsync();
+                        _db.UserExperiences.RemoveRange(userExperiences);
+
+                        List<UserVacationRemain> userVacRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && x.IsEditable).ToListAsync();
+                        _db.UserVacationRemains.RemoveRange(userVacRemains);
+
+                        List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsEditable).ToListAsync();
+
+                        List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
+                        if (model.UserVacationRemains != null && model.UserVacationRemains.Count() > 0)
+                        {
+                            foreach (var el in model.UserVacationRemains)
+                            {
+                                el.IsEditable = true;
+                                el.IsDeleted = false;
+                                el.CreatedByUserId = current;
+                                el.CreatedDate = DateTime.Now;
+                                el.UpdateByUserId = current;
+                                el.UpdateDate = DateTime.Now;
+                                el.VacationCount = el.RemainCount;
+                                UserVacationRemainsNew.Add(el);
+                            }
+                        }
+                        if (userVacRemainsDisable != null && userVacRemainsDisable.Count() > 0)
+                        {
+                            foreach (var el in userVacRemainsDisable)
+                            {
+                                UserVacationRemainsNew.Add(el);
+                            }
+                        }
+
+                        updateUser.IsDeleted = model.IsDeleted;
+                        updateUser.UserName = CreateUsername.FixUsername(model.Name + "." + model.Surname);
+                        updateUser.Fathername = model.Fathername;
+                        updateUser.Gender = model.Gender;
+                        updateUser.Fullname = model.Name + " " + model.Surname + " " + model.Fathername + " " + gender;
+                        updateUser.EducationLevel = model.EducationLevel;
+                        updateUser.GraduatedPlace = model.GraduatedPlace;
+                        updateUser.IdCardExpireDate = model.IdCardExpireDate;
+                        updateUser.IdCardGiveDate = model.IdCardGiveDate;
+                        updateUser.IdCardGivePlace = model.IdCardGivePlace;
+                        updateUser.IdCardNumber = model.IdCardNumber;
+                        updateUser.Profession = model.Profession;
+                        updateUser.RegisterAdress = model.RegisterAdress;
+                        updateUser.VacationMainDay = model.VacationMainDay;
+                        updateUser.VacationExtraDay = model.VacationExtraDay;
+                        updateUser.IdCardType = model.IdCardType;
+                        updateUser.Citizenship = model.Citizenship;
+                        updateUser.CompanyId = model.CompanyId;
+                        updateUser.DepartmentId = model.DepartmentId;
+                        updateUser.GradeId = model.GradeId;
+                        updateUser.Name = model.Name;
+                        updateUser.Surname = model.Surname;
+                        updateUser.Pin = model.Pin;
+                        updateUser.StartWorkDate = model.StartWorkDate;
+                        updateUser.IsDeleted = model.IsDeleted;
+                        updateUser.Birthday = model.Birthday;
+                        updateUser.PhoneNumber = model.PhoneNumber;
+                        updateUser.Address = model.Address;
+                        updateUser.Picture = model.Picture;
+                        updateUser.UpdateDate = DateTime.UtcNow.AddHours(4);
+                        updateUser.UpdateByUserId = current;
+                        updateUser.UserExperiences = model.UserExperiences;
+                        updateUser.UserVacationRemains = UserVacationRemainsNew;
+
+                        IdentityResult result = await _userManager.UpdateAsync(updateUser);
+                        if (result.Succeeded && oldFileImage != "default.png")
+                        {
+                            TempData["msg"] = DeleteFile("wwwroot/profile/", oldFileImage);
+                        }
+
+                        if (pdf != null && MimeTypeCheckExtension.İsDocument(pdf))
+                        {
+
+                            UserContractAddDto appContract = new UserContractAddDto
+                            {
+                                FilePath = await AddFile("wwwroot/userContractDocs/", pdf),
+                                AppUserId = model.Id,
+                                CreatedByUserId = current,
+                                CreatedDate = DateTime.UtcNow.AddHours(4)
+                            };
+                            await _userContractService.AddAsync(_mapper.Map<UserContractFile>(appContract));
+                        }
+                        else
+                        {
+                            if (pdf == null)
+                            {
+                                return RedirectToAction("List");
+                            }
+                            else
+                            {
+                                if (MimeTypeCheckExtension.İsDocument(pdf))
+                                {
+                                    TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                                }
+                                else
+                                {
+                                    TempData["msg"] = " Daxil edilən fayl pdf, docx və ya xlsx formatında olmalıdır !";
+                                }
+                                return RedirectToAction("List");
+                            }
+                        }
+                    }
+                }
+                else
+                    TempData["msg"] = " İstifadəçi tapılmadı !";
+                return RedirectToAction("List");
+
+            }
+
+            TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+            return RedirectToAction("List");
+        }
+
+        [Authorize(Policy = "account.delete")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var current = GetSignInUserId();
+            var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == id);
+            updateUser.IsDeleted = true;
+            updateUser.DeleteByUserId = current;
+            updateUser.DeleteDate = DateTime.UtcNow.AddHours(4);
+            await _userManager.UpdateAsync(updateUser);
+            return Ok();
+
+        }
+
         [Authorize(Policy = "account.deleteUserContract")]
         public async Task<IActionResult> DeleteUserContract(int id)
         {
@@ -350,6 +632,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             return Ok("Uğurla silindi!");
 
         }
+
         [Authorize(Policy = "account.setrole")]
         public async Task<IActionResult> SetRole(int userId, int roleId, bool selected)
         {
@@ -405,6 +688,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 });
             }
 
+
             if (selected)
             {
                 _db.UserRoles.Add(new IntranetUserRole
@@ -439,6 +723,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 });
             }
         }
+
         [Authorize(Policy = "account.setclaim")]
         public async Task<IActionResult> SetClaim(int userId, string claimName, bool selected)
         {
