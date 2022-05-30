@@ -50,11 +50,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             ViewBag.companies = _map
                 .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => x.IsDeleted == false));
+                .GetAllAsync(x => !x.IsDeleted));
 
             ViewBag.departments = _map
                 .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false));
+                .GetAllAsync(x => !x.IsDeleted));
 
             return View();
         }

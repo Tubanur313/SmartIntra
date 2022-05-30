@@ -27,7 +27,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
         {
             _stockCategoryService = stockCategoryService;
         }
-        [Authorize(Policy = "StockCategory.list")]
+        [Authorize(Policy = "stockcategory.list")]
         public async Task<IActionResult> List()
         {
             var model = await _stockCategoryService.GetAllAsync(x => !x.IsDeleted);
@@ -39,7 +39,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
 
         }
         [HttpGet]
-        [Authorize(Policy = "StockCategory.add")]
+        [Authorize(Policy = "stockcategory.add")]
         public async Task<IActionResult> Add()
         {
             ViewBag.StockCategory = _map
@@ -47,7 +47,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             return View();
         }
         [HttpPost]
-        [Authorize(Policy = "StockCategory.add")]
+        [Authorize(Policy = "stockcategory.add")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(StockCategoryAddDto model)
         {
@@ -70,7 +70,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             }
         }
         [HttpGet]
-        [Authorize(Policy = "StockCategory.update")]
+        [Authorize(Policy = "stockcategory.update")]
         public async Task<IActionResult> Update(int id)
         {
             var data = _map.Map<StockCategoryUpdateDto>(await _stockCategoryService.FindByIdAsync(id));
@@ -84,7 +84,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             return View(data);
         }
         [HttpPost]
-        [Authorize(Policy = "StockCategory.update")]
+        [Authorize(Policy = "stockcategory.update")]
         public async Task<IActionResult> Update(StockCategoryUpdateDto model)
         {
             if (ModelState.IsValid)
@@ -106,7 +106,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             return RedirectToAction("List");
         }
 
-        [Authorize(Policy = "StockCategory.delete")]
+        [Authorize(Policy = "stockcategory.delete")]
         public async Task Delete(int id)
         {
             var delete = await _stockCategoryService.FindByIdAsync(id);

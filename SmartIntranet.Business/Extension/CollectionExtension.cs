@@ -22,6 +22,9 @@ using SmartIntranet.DTO.DTOs.CategoryNewsDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.CategoryTicketDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
+using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 
 namespace SmartIntranet.Business.Extension
 {
@@ -128,6 +131,12 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<GradeAddDto>, GradeAddValidator>();
             services.AddTransient<IValidator<GradeUpdateDto>, GradeUpdateValidator>();
+            
+            services.AddTransient<IValidator<StockAddDto>, StockAddValidator>();
+            services.AddTransient<IValidator<StockUpdateDto>, StockUpdateValidator>();
+            
+            services.AddTransient<IValidator<StockCategoryAddDto>, StockCategoryAddValidator>();
+            services.AddTransient<IValidator<StockCategoryUpdateDto>, StockCategoryUpdateValidator>();
         }
 
 

@@ -26,6 +26,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.HasOne(d => d.StockCategory)
                     .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.StockCategoryId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(d => d.IntranetUser)
+                    .WithMany(p => p.Stocks)
+                    .HasForeignKey(d => d.IntranerUserId).OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(I => I.IsDeleted);
 
