@@ -74,6 +74,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 var add = _map.Map<Company>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _companyService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _companyService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] = Messages.Add.notAdded;
@@ -156,9 +163,15 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-
+                if (await _companyService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 await _companyService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;

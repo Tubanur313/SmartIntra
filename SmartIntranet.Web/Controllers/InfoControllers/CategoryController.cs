@@ -56,6 +56,13 @@ namespace Intranet.Web.Controllers.InfoControllers
             {
                 var add = _map.Map<Category>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _categoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _categoryService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] = Messages.Add.notAdded;
@@ -92,6 +99,13 @@ namespace Intranet.Web.Controllers.InfoControllers
             {
                 var data = await _categoryService.FindByIdAsync(model.Id);
                 var update = _map.Map<Category>(model);
+                if (await _categoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 update.UpdateByUserId = GetSignInUserId();
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
@@ -100,7 +114,7 @@ namespace Intranet.Web.Controllers.InfoControllers
                 update.DeleteDate = data.DeleteDate;
 
                 await _categoryService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;
