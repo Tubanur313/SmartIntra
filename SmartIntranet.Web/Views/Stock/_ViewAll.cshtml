@@ -36,7 +36,9 @@
                             <tbody>
                                 @foreach (var stock in Model)
                                 {
-                                    <tr>
+                                    <tr data-toggle="tooltip"
+                                    data-html="true"
+                                    data-placement="right" title= "Ətraflı: @Html.Raw(stock.Description)">
                                         <td>
                                             @stock.Id
                                         </td>

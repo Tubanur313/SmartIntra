@@ -56,24 +56,17 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="floatLabel">Ətraflı: </label>
-                        <input type="text" class="form-control" asp-for="Description" autocomplete="off">
-                        <span class="messages"></span>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
                         <label class="floatLabel">MacAddress: </label>
                         <input type="text" class="form-control" asp-for="MacAddress" autocomplete="off">
                         <span class="messages"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="floatLabel">Dəyər: </label>
-                        <input type="text" class="form-control" asp-for="Price" autocomplete="off">
-                        <span class="messages"></span>
-                    </div>
+                     <div class="form-group">
+                    <label class="floatLabel">Dəyər: </label>
+                    @*@Html.EditorFor(model => model.Price)*@
+                    <input type="text" asp-for="Price" class="form-control autonumber">
+                </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -90,6 +83,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>  Ətraflı: </label>
+                        <textarea type="text" class="form-control" asp-for="Description"></textarea>
+                        <span class="messages"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-12 d-flex justify-content-between">
@@ -101,12 +101,19 @@
         </form>
     </div>
 </div>
-<!-- Mask js -->
-<script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-<!-- cust-validation js -->
-<script src="~/files/lib/cust_ajax/cust-validation.js"></script>
+<!-- Masking js -->
+    <script src="~/files/assets/pages/form-masking/inputmask.js"></script>
+    <script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
+    <script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
+    <script src="~/files/assets/pages/form-masking/form-mask.js"></script>
+<!-- ckeditor js -->
+<script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
-<script>
-    //$('#Price').mask("999,999,999,99", {reverse: true});
+<script class="removable">
+        $( document ).ready(function() {
+    //$('#MacAddress').inputmask({mask:""});
+                               // ckeditor
+                        CKEDITOR.replace('Description');
+        });
 </script>
