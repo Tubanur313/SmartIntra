@@ -4,6 +4,10 @@
     Layout = null;
 }
 
+
+
+
+
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
@@ -62,11 +66,11 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                     <div class="form-group">
-                    <label class="floatLabel">Dəyər: </label>
-                    @*@Html.EditorFor(model => model.Price)*@
-                    <input type="text" asp-for="Price" class="form-control autonumber">
-                </div>
+                    <div class="form-group">
+                        <label class="floatLabel">Dəyər: </label>
+                        @*@Html.EditorFor(model => model.Price)*@
+                        <input type="text" asp-for="Price" class="form-control autonumber">
+                    </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -83,11 +87,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label>  Ətraflı: </label>
                         <textarea type="text" class="form-control" asp-for="Description"></textarea>
                         <span class="messages"></span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <div class="page-body">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="panel panel-primary">
+
+                                        <div class="panel-heading">
+                                            <h3 class="">Fayl Yüklə</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                                                        <input hidden="hidden" type="file" name="uploads" id="files" accept="image/*" multiple class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <div id="image_preview" class="row" @*style="width:100%;"*@>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,12 +138,14 @@
     </div>
 </div>
 <!-- Masking js -->
-    <script src="~/files/assets/pages/form-masking/inputmask.js"></script>
-    <script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
-    <script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
-    <script src="~/files/assets/pages/form-masking/form-mask.js"></script>
+<script src="~/files/assets/pages/form-masking/inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
+<script src="~/files/assets/pages/form-masking/form-mask.js"></script>
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
+<!-- ticket img upload js -->
+<script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
 <script class="removable">

@@ -698,7 +698,6 @@ namespace SmartIntranet.Web.Controllers
                 {
                     if (!(upload is null))
                     {
-                        _ = upload.ContentType;
                         if (MimeTypeCheckExtension.İsImage(upload))
                         {
                             string folder = "/ticketPhoto/";

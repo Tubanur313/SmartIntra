@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Inventary;
 using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.Core.Extensions;
+using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockImageDto;
 using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
@@ -24,8 +27,10 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
 
         private readonly IStockService _stockService;
         private readonly IStockCategoryService _stockCategoryService;
+        private readonly IStockImageService _stockImageService;
         private readonly IAppUserService _userService;
         private readonly ICompanyService _companyService;
+        private readonly IFileManager _upload;
         public StockController(IMapper map,
             IStockService StockService,
             IStockCategoryService stockCategoryService,
@@ -33,6 +38,8 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             IAppUserService userService,
             ICompanyService companyService,
             IHttpContextAccessor httpContextAccessor,
+            IStockImageService stockImageService,
+            IFileManager upload,
             SignInManager<IntranetUser> signInManager)
             : base(userManager, httpContextAccessor, signInManager, map)
         {
@@ -40,6 +47,8 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             _stockCategoryService = stockCategoryService;
             _userService = userService;
             _companyService = companyService;
+            _stockImageService = stockImageService;
+            _upload = upload;
         }
         [Authorize(Policy = "stock.list")]
         public async Task<IActionResult> List()
@@ -65,7 +74,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
         [HttpPost]
         [Authorize(Policy = "stock.add")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(StockAddDto model)
+        public async Task<IActionResult> Add(StockAddDto model, List<IFormFile> uploads)
         {
             if (ModelState.IsValid)
             {
@@ -75,6 +84,29 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 {
                     TempData["error"] = Messages.Add.notAdded;
                     return RedirectToAction("List");
+                }
+                foreach (var upload in uploads)
+                {
+                    if (MimeTypeCheckExtension.İsImage(upload))
+                    {
+                        string folder = "/stock/";
+                        string name = _upload.UploadResizedImg(upload, "wwwroot" + folder);
+                        StockImageAddDto dto = new StockImageAddDto
+                        {
+                            Name = name,
+                            Path = HttpContext.Request.Host.Value + folder + name,
+                            StockId = add.Id
+                        };
+                        var photo = _map.Map<StockImage>(dto);
+                        photo.CreatedByUserId = GetSignInUserId();
+                        await _stockImageService.AddAsync(photo);
+                    }
+                    else
+                    {
+                        TempData["success"] = Messages.Add.Added;
+                        TempData["error"] = $"{upload.ContentType.GetType()} formatı uyğun format deyil";
+                        return RedirectToAction("List");
+                    }
                 }
                 TempData["success"] = Messages.Add.Added;
                 return RedirectToAction("List");
