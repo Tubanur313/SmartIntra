@@ -13,7 +13,9 @@ using SmartIntranet.DTO.DTOs.EmailDto;
 using SmartIntranet.DTO.DTOs.EntranceDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockDiscussDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockImageDto;
 using SmartIntranet.DTO.DTOs.NewsDto;
 using SmartIntranet.DTO.DTOs.NewsFileDto;
 using SmartIntranet.DTO.DTOs.OrderDto;
@@ -182,12 +184,19 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #region Discussion <-> DiscussionDto
             CreateMap<DiscussionAddDto, Discussion>();
             CreateMap<Discussion, DiscussionAddDto>();
-            CreateMap<DiscussionUpdateDto, Discussion>();
-            CreateMap<Discussion, DiscussionUpdateDto>();
             CreateMap<DiscussionListDto, Discussion>();
             CreateMap<Discussion, DiscussionListDto>();
             CreateMap<DiscussionListSecondDto, Discussion>();
             CreateMap<Discussion, DiscussionListSecondDto>();
+            #endregion 
+
+            #region StockDiscuss <-> StockDiscussDto
+            CreateMap<StockDiscussAddDto, StockDiscuss>();
+            CreateMap<StockDiscuss, StockDiscussAddDto>();
+            CreateMap<StockDiscussListDto, StockDiscuss>();
+            CreateMap<StockDiscuss, StockDiscussListDto>();
+            CreateMap<StockDiscussListSecondDto, StockDiscuss>();
+            CreateMap<StockDiscuss, StockDiscussListSecondDto>();
             #endregion
 
             #region Entrance <-> EntranceDto
@@ -341,6 +350,22 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<StockCategory, StockCategoryUpdateDto>();
 
             #endregion
+
+            #region Stock Images <-> Stock ImagesDto
+            CreateMap<StockImageAddDto, StockImage>();
+            CreateMap<StockImage, StockImageAddDto>();
+            CreateMap<StockImageListDto, StockImage>();
+            CreateMap<StockImage, StockImageListDto>();
+            #endregion
+
+            #region StockDiscuss <-> StockDiscussDto
+            CreateMap<StockDiscussAddDto, Discussion>();
+            CreateMap<StockDiscuss, StockDiscussAddDto>();
+            CreateMap<StockDiscussListDto, StockDiscuss>();
+            CreateMap<StockDiscuss, StockDiscussListDto>();
+            CreateMap<StockDiscussListSecondDto, StockDiscuss>();
+            CreateMap<StockDiscuss, StockDiscussListSecondDto>();
+            #endregion 
         }
     }
 

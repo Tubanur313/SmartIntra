@@ -80,6 +80,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<StockCategory> StockCategories { get; set; }
+        public DbSet<StockImage> StockImages { get; set; }
+        public DbSet<StockDiscuss> StockDiscusses { get; set; }
         #endregion
 
 

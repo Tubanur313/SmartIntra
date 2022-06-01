@@ -100,12 +100,20 @@ namespace SmartIntranet.Business.Containers.MicrosoftIoC
             
             services.AddScoped<ITicketOrderService, TicketOrderManager>();
             services.AddScoped<ITicketOrderDal, EfTicketOrderRepository>();
+
+            //inventary
             
             services.AddScoped<IStockService, StockManager>();
             services.AddScoped<IStockDal, EfStockRepository>();
 
             services.AddScoped<IStockCategoryService, StockCategoryManager>();
             services.AddScoped<IStockCategoryDal, EfStockCategoryRepository>();
+
+            services.AddScoped<IStockDiscussService, StockDiscussManager>();
+            services.AddScoped<IStockDiscussDal, EfStockDiscussRepository>(); 
+
+            services.AddScoped<IStockImageService, StockImageManager>();
+            services.AddScoped<IStockImageDal, EfStockImageRepository>();
         }
     }
 }

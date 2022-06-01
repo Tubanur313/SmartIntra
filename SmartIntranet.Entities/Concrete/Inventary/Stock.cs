@@ -21,6 +21,7 @@ namespace SmartIntranet.Entities.Concrete.Inventary
         public Company Company { get; set; }
         public int? IntranerUserId { get; set; }
         public IntranetUser IntranetUser { get; set; }
-
+        public virtual ICollection<StockImage> StockImages { get; set; }
+        public virtual ICollection<StockDiscuss> StockDiscusses { get; set; }
     }
 }
