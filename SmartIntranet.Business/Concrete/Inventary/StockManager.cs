@@ -18,6 +18,11 @@ namespace SmartIntranet.Business.Concrete.Inventary
             _genericDal = genericDal;
         }
 
+        public Task<Stock> FindByIdIncludeAsync(int id)
+        {
+            return _stockDal.FindByIdIncludeAsync(id);
+        }
+
         public Task<List<Stock>> GetStockAllIncludeAsync()
         {
             return _stockDal.GetStockAllIncludeAsync();

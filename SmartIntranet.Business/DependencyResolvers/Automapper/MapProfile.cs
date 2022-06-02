@@ -356,6 +356,7 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<StockImage, StockImageAddDto>();
             CreateMap<StockImageListDto, StockImage>();
             CreateMap<StockImage, StockImageListDto>();
+            CreateMap<Stock, StockInfoDto>();
             #endregion
 
             #region StockDiscuss <-> StockDiscussDto

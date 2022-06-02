@@ -68,7 +68,6 @@
                     <div class="form-group">
                         <label class="floatLabel">Dəyər: </label>
                         <input type="text" asp-for="Price" class="form-control autonumber">
-                        @*@Html.EditorFor(model => model.Price)*@
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -84,13 +83,6 @@
                         <div class="checkbox mt-3">
                             <input asp-for="Status" type="checkbox" class="check_switch" data-size="small">
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>  Ətraflı: </label>
-                        <textarea type="text" class="form-control" asp-for="Description"></textarea>
-                        <span class="messages"></span>
                     </div>
                 </div>
             </div>

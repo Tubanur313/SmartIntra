@@ -1127,7 +1127,7 @@ namespace SmartIntranet.Web.Controllers
             return View(new List<TicketListDto>());
         }
 
-        [Authorize(Policy = "ticket.delete")]
+        [Authorize(Policy = "ticket.discuss")]
         public async Task<IActionResult> Discuss(DiscussionAddDto model)
         {
             var add = _map.Map<Discussion>(model);

@@ -12,6 +12,7 @@ using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockDiscussDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockImageDto;
 using SmartIntranet.Entities.Concrete.Inventary;
@@ -26,6 +27,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
     {
 
         private readonly IStockService _stockService;
+        private readonly IStockDiscussService _stockDiscussService;
         private readonly IStockCategoryService _stockCategoryService;
         private readonly IStockImageService _stockImageService;
         private readonly IAppUserService _userService;
@@ -37,6 +39,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             UserManager<IntranetUser> userManager,
             IAppUserService userService,
             ICompanyService companyService,
+            IStockDiscussService stockDiscussService,
             IHttpContextAccessor httpContextAccessor,
             IStockImageService stockImageService,
             IFileManager upload,
@@ -44,6 +47,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             : base(userManager, httpContextAccessor, signInManager, map)
         {
             _stockService = StockService;
+            _stockDiscussService = stockDiscussService;
             _stockCategoryService = stockCategoryService;
             _userService = userService;
             _companyService = companyService;
@@ -71,6 +75,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             .GetAllAsync(x => !x.IsDeleted));
             return View();
         }
+        
         [HttpPost]
         [Authorize(Policy = "stock.add")]
         [ValidateAntiForgeryToken]
@@ -156,6 +161,43 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             return RedirectToAction("List");
         }
 
+        [HttpGet]
+        [Authorize(Policy = "stock.detail")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var data = _map.Map<StockInfoDto>(await _stockService.FindByIdIncludeAsync(id));
+            if (data is null)
+            {
+                TempData["error"] = Messages.Error.notFound;
+                return RedirectToAction("List");
+            }
+            return View(data);
+        }
+        [Authorize(Policy = "stock.discuss")]
+        public async Task<IActionResult> Discuss(StockDiscussAddDto model)
+        {
+            var add = _map.Map<StockDiscuss>(model);
+            add.CreatedByUserId = GetSignInUserId();
+            add.IntranetUserId = GetSignInUserId();
+            var result = await _stockDiscussService.AddReturnEntityAsync(add);
+            var count = await _stockDiscussService.GetAllAsync(x => x.StockId == result.StockId);
+
+            var discuss = _map.Map<StockDiscussListDto>(await _stockDiscussService.GetAllIncludeAsync(result.Id));
+            return Ok(new
+            {
+                fulname = _map.Map<AppUserDetailsDto>(discuss.IntranetUser).ToString(),
+                comment = discuss.Content,
+                date = discuss.CreatedDate.Value.ToString("dd.MM.yyyy HH:mm:ss"),
+                count = count.Count
+            });
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetDiscuss(int stockId)
+        {
+            var discuss = _map
+                .Map<List<StockDiscussListSecondDto>>(await _stockDiscussService.GetAllByTicketAsync(stockId));
+            return PartialView("_stockDiscuss", discuss);
+        }
         [Authorize(Policy = "stock.delete")]
         public async Task Delete(int id)
         {

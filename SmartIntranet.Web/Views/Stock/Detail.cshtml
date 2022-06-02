@@ -1,0 +1,458 @@
+﻿@model StockInfoDto
+@{
+    Layout = null;
+}
+
+<head>
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" type="text/css" href="~/files/assets/css/uploadPrevView.css" />
+    <!-- img-upload -->
+    <link rel="stylesheet" type="text/css" href="~/files/lib/ticket-img-uploader/ticket-img-uploader.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <!-- Slick Slider -->
+    <link rel="stylesheet" type="text/css" href="~/files/lib/slick-carousel/slick.min.css" />
+    <!-- list css -->
+    <link rel="stylesheet" type="text/css" href="~/files/assets/pages/list-scroll/list.css">
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components2/stroll/css/stroll.css">
+</head>
+<style>
+    .pt-3-half {
+        padding-top: 1.4rem;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs  md-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab"
+                   href="#home1" role="tab">
+                    <i class="icofont icofont-home"></i> &nbsp; Məlumatlar
+                </a>
+                <div class="slide"></div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link get-count-discuss" data-toggle="tab" href="#discuss" role="tab">
+                    <i class="icofont icofont-pen-alt-4"></i>&nbsp; Müzakirə
+                </a>
+                <div class="slide"></div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link get-count-discuss" data-toggle="tab" href="#photos" role="tab">
+                    <i class="icofont icofont-file-image-4"></i> &nbsp; Şəkillər
+                </a>
+                <div class="slide"></div>
+            </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content tabs card-block">
+            <div class="tab-pane active" id="home1" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Ad:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.Name
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Mac Address:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.MacAddress
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Kateqoriya</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.StockCategory.Name
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Kateqoriya</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.Company.Name
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-5">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Dəstək:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @(Model.IntranerUserId == 0 ? "Təyin edilməyib" : $"{Model.IntranetUser.FirstName+Model.IntranetUser.LastName} / {Model.IntranetUser.Company?.Name}/ {Model.IntranetUser.Department?.Name}/ {Model.IntranetUser.Position?.Name}" )
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Son dəyişiklik Tarixi:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @(Model.UpdateDate == null ? "Yenilənməyib":Model.UpdateDate.Value.ToString("dd.MM.yyyy hh:mm"))
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">İnventar etiket kodu:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.SKU
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="discuss" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="bg-white p-relative card card-block">
+                            <div class="p-b-20">
+                                <a id="countId" class="f-14 text-primary label label-info " style="cursor: pointer;">(0)</a>
+                            </div>
+                            <div id="discussing" class="scroll-list overflow-auto" style="display: none;">
+                                <div class="loader animation-start">
+                                    <span class="circle delay-1 size-2"></span>
+                                    <span class="circle delay-2 size-4"></span>
+                                    <span class="circle delay-3 size-6"></span>
+                                    <span class="circle delay-4 size-7"></span>
+                                    <span class="circle delay-5 size-7"></span>
+                                    <span class="circle delay-6 size-6"></span>
+                                    <span class="circle delay-7 size-4"></span>
+                                    <span class="circle delay-8 size-2"></span>
+                                </div>
+                            </div>
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <div id="data-input">
+                                        <div class="">
+                                            <textarea class="f-13 post-input msg-send" data-id="@Model.Id" id="comments" name="comments" rows="3" cols="10" required="" placeholder="Şərh bildirin....."></textarea>
+                                            <div class="text-right m-t-20">
+                                                <a href="#" id="send" class="btn btn-primary waves-effect waves-light">Göndər</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="photos" role="tabpanel">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-group row mt-3">
+                            <div class="panel-heading">
+                                <h3 class="">Fayllar</h3>
+                            </div>
+                            <div class="col-sm-12 d-flex justify-content-between">
+                                <a id="fayl-photos" class="btn btn-primary m-b-0 btn-block text-white">
+                                    Göstər
+                                </a>
+                            </div>
+                        </div>
+                        <div id="photo" class="row" style="display: none;">
+                            <div class="col-md-12">
+                                <div class="cell preloader5 loader-block">
+                                    <div class="circle-5 l"></div>
+                                    <div class="circle-5 m"></div>
+                                    <div class="circle-5 r"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="upload-files" class="panel-heading">
+                            <h3 class="">Fayl Yüklə</h3>
+                        </div>
+                        <div id="formData" method="POST" class="form-group" enctype="multipart/form-data">
+
+                            <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                            <input hidden="hidden" type="file" name="files" id="files" multiple class="form-control">
+                            <input type="hidden" asp-for="Id" />
+
+                            <div class="form-group row mt-3">
+                                <div class="col-sm-12 d-flex justify-content-between">
+                                    <button type="button" id="sub-btn" class="btn btn-primary m-b-0 disable btn-block">
+                                        Yüklə
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="row">
+                                <div id="loadspin" class="d-none col-xl-12 col-md-4 col-sm-6 " style="position: absolute;z-index: 1;background: #ffffffb5;width: 100%;height: 50%;">
+                                    <div class="loader-block" style="position: absolute;left: 45%;top: 40%;">
+                                        <svg id="loader2" viewBox="0 0 100 100">
+                                            <circle id="circle-loader2" cx="50" cy="50" r="45"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="col-sm-2">
+                                    </div>
+                                    <div class="col-sm-10">
+
+                                        <div class="form-group">
+                                            <div id="image_preview" class="row" @*style="width:100%;"*@>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- slick js -->
+<script type="text/javascript" src="~/files/lib/slick-carousel/slick.min.js"></script>
+<!-- jquery slimscroll js -->
+<script type="text/javascript" src="~/files/bower_components2/jquery-slimscroll/jquery.slimscroll.js"></script>
+<!-- list-scroll js -->
+<script type="text/javascript" src="~/files/bower_components2/stroll/js/stroll.js"></script>
+<script type="text/javascript" src="~/files/assets/pages/list-scroll/list-custom.js"></script>
+<!-- ticket img upload js -->
+<script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
+<script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+<!-- ckeditor js -->
+<script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
+<script class="removable">
+    $(document).ready(function(){
+        $(".get-count-discuss").click(function(){
+            $("#countId").html(`Müzakirələr (@(ViewBag.DiscCount>0 ? ViewBag.DiscCount:0))`);
+        });
+        $("#countId").click(function() {
+            $("#discussing").toggle(function(){
+               if ($(this).css('display') != 'none')
+                    {
+                        $.ajax({
+                            url : `@Url.Action("GetDiscuss","Stock")`,
+                            type: "get",
+                            dataType:"html",
+                            data : ({
+                                stockId:@Model.Id
+                            }),
+                            success: function(response) {
+                                $("#discussing").html(response)
+                            },
+                            error: function (response) {
+                                }
+                            });
+                     }
+                else{
+                    $("#discussing").html(`
+                                <div class="loader animation-start">
+                                    <span class="circle delay-1 size-2"></span>
+                                    <span class="circle delay-2 size-4"></span>
+                                    <span class="circle delay-3 size-6"></span>
+                                    <span class="circle delay-4 size-7"></span>
+                                    <span class="circle delay-5 size-7"></span>
+                                    <span class="circle delay-6 size-6"></span>
+                                    <span class="circle delay-7 size-4"></span>
+                                    <span class="circle delay-8 size-2"></span>
+                                </div>`)
+                }
+            });
+        });
+        $("#fayl-photos").click(function() {
+                $(this).text("Bağla");
+                    $("#photo").toggle(function(){
+                        if ($(this).css('display') != 'none')
+                        {
+                            $.ajax({
+                                url : `@Url.Action("GetPhoto","Photo")`,
+                                type: "get",
+                                dataType:"html",
+                                data : ({
+                                    ticketId:@Model.Id
+                                }),
+                                success: function(response) {
+                                    $("#photo").html(response)
+                                },
+                                error: function (response) {
+                                    }
+                                });
+                         }
+                         else{
+                             $("#fayl-photos").text("Göstər");
+                             $("#photo").html(`
+                                             <div class="col-md-12" >
+                                                 <div class="cell preloader5 loader-block" >
+                                                     <div class="circle-5 l"></div>
+                                                     <div class="circle-5 m"></div>
+                                                     <div class="circle-5 r"></div>
+                                                 </div>
+                                             </div>`)
+                         }
+                });
+        });
+        CKEDITOR.replace('comments');
+        $('.ticket-slide').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 2000,
+            dots: false,
+            prevArrow: false,
+            nextArrow: false
+        });
+        $('#send').on("click",function(){
+
+            let comment = CKEDITOR.instances['comments'].getData();
+            let id = $("#comments").data("id");
+            var lenght = CKEDITOR.instances['comments'].getData().replace(/<[^>]*>/gi, '').length;
+            if(lenght == 0){
+                toastr.error("Şərh boş ola bilməz", "Xəta!");
+                return;
+            }
+
+            var formData = $('#data-input').getFormData({
+            Content: comment,
+            StockId: id
+            });
+            $.ajax({
+            url : `@Url.Action("Discuss","Stock")`,
+            type: "get",
+            data : formData,
+            async : false,
+            success: function(response) {
+                                console.log(response);
+                var html = ` <div class="media">
+                            <div class="media-body b-b-theme social-client-description">
+                            <div class="chat-header text-success">
+                             ${[response.fulname]}
+                                      <span class="text-muted">
+                                         ${[response.date]}
+                                      </span>
+                                  </div>
+                                  <p class="text-muted">
+                                    ${[response.comment]}
+                                  </p>
+                              </div>
+                          </div>`
+                $("#discussing").prepend(html);
+                $("#countId").text(`Müzakirələr (${[response.count]})`);
+                CKEDITOR.instances['comments'].setData('');
+
+            },
+            error: function (response) {
+            }
+            });
+        });
+        $(document).on("click","#custom-button",function ()
+        {
+            $("#sub-btn").removeClass("disable");
+            $("#photo").hide("slow");
+            $("#fayl-photos").text("Göstər");
+            $("#photo").html(`
+                              <div class="col-md-12" >
+                                  <div class="cell preloader5 loader-block">
+                                      <div class="circle-5 l"></div>
+                                      <div class="circle-5 m"></div>
+                                      <div class="circle-5 r"></div>
+                                  </div>
+                              </div>
+                              `)
+        });
+        $(document).on("click","#sub-btn",function ()
+        {
+            let id = $("#Id").val();
+            let file = $("input[name='files']")[0];
+            let data = new FormData();
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            for(var i = 0 ;i < file.files.length;i++){
+                data.append("files",file.files[i])
+            }
+            data.append("__RequestVerificationToken",token);
+            data.append("Id",id);
+            console.log(data);
+            $.ajax({
+                url: `@Url.Action("load","ticket")`,
+                type: 'post',
+                dataType: "json",
+                data:data,
+                cache:false,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $("#loadspin").removeClass("d-none");
+                },
+                success: function (res) {
+                    $("#sub-btn").addClass("disable");
+                    setTimeout(function(){ $("#loadspin").addClass("d-none"); }, 9000);
+                    $("#image_preview").html("");
+                },
+                error: function (error) {
+                    $("#loadspin").addClass("d-none");
+                },
+                complete: function () {
+                    $("#sub-btn").addClass("disable");
+                    $("#image_preview").html("");
+                    swal("UĞUR!", "Fayllar uğurla yükləndi !", "success");
+                }
+            });
+        });
+        $(window).on('click', function(e){
+         if($(e.target).attr('id') == 'form-modal-info'
+         || $(e.target).attr('id') =='closeBtn'
+         || $(e.target).attr('id') =='closeBtnX'){
+             window.location.reload();
+         }
+        });
+    });
+</script>
+
+
+
+
+
+
+

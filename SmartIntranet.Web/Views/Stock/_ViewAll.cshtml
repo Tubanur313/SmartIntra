@@ -18,12 +18,9 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Kateqoriya</th>
-                                    <th>Şirkət</th>
                                     <th>İstifadəçi</th>
                                     <th>MacAddress</th>
                                     <th>İnventar etiket kodu</th>
-                                    <th>Dəyər</th>
                                     <th>Status</th>
                                     @if (User.HasAccess("stock.add"))
                                     {
@@ -36,37 +33,14 @@
                             <tbody>
                                 @foreach (var stock in Model)
                                 {
-                                    <tr data-toggle="tooltip"
-                                    data-html="true"
-                                    data-placement="right" title= "Ətraflı: @Html.Raw(stock.Description)">
+                                    <tr>
                                         <td>
                                             @stock.Id
                                         </td>
                                         <td>
                                             @stock.Name
                                         </td>
-                                        @if (!(stock.StockCategory is null))
-                                        {
-                                            <td> @stock.StockCategory.Name</td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                Təyin edilməyib
-                                            </td>
 
-                                        }
-                                        @if (!(stock.Company is null))
-                                        {
-                                            <td> @stock.Company.Name</td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                Təyin edilməyib
-                                            </td>
-
-                                        }
                                         @if (stock.IntranetUser is null)
                                         {
                                             <td>
@@ -85,17 +59,14 @@
                                             </td>
                                         }
                                         <td>
-                                            @stock.MacAddress
+                                            @stock.MacAddress                                          
                                         </td>
                                         <td>
                                             @stock.SKU
                                         </td>
-                                        <td>
-                                            @stock.Price
-                                        </td>  
                                         <td class="text-center">
                                             <span class="badge badge-@(stock.Status==true?"success":"warning")">
-                                               @(stock.Status==true?"Istifadə olunur":"Rezerv")
+                                               @(stock.Status==true? Html.Raw("<i class='icofont icofont-plus'></i>"):Html.Raw("<i class='icofont icofont-minus'></i>"))
                                             </span>
                                         </td>
                                         <td class="dropdown text-center">
@@ -118,11 +89,21 @@
                                                             Yenilə
                                                         </button>
                                                     </li>
+                                                } 
+                                                @if (User.HasAccess("stock.detail"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopup('@Url.Action("Detail","Stock",new {id=stock.Id},Context.Request.Scheme)','Ətraflı')"
+                                                        class="btn  btn-default waves-effect md-trigger text-info">
+                                                            <i class="icofont icofont-info-circle text-info  p-r-15"></i>
+                                                            Ətraflı
+                                                        </button>
+                                                    </li>
                                                 }
                                                 @if (User.HasAccess("stock.delete"))
                                                 {
                                                     <li>
-                                                        <button onclick="removeItem(@stock.Id,`@stock.Name`,`@Url.Action("Delete","stock").ToString()`)"
+                                                        <button onclick="removeItem(@stock.Id,`@stock.Name`,`@Url.Action("Delete","Stock").ToString()`)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
                                                             <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
                                                             Sil
@@ -138,12 +119,9 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Kateqoriya</th>
-                                    <th>Şirkət</th>
                                     <th>İstifadəçi</th>
                                     <th>MacAddress</th>
                                     <th>İnventar etiket kodu</th>
-                                    <th>Dəyər</th>
                                     <th>Status</th>
                                     <th class="text-center">-----</th>
                                 </tr>
