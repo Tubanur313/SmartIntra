@@ -18,8 +18,6 @@
                                     <th>Id</th>
                                     <th>Üst Şirkət</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("company.add"))
                                         {
@@ -51,9 +49,7 @@
 
 
                                         <td>@company.Name</td>
-                                        <td><span class="badge badge-@(!company.IsDeleted? "success" : "warning")">@(!company.IsDeleted ? "Active" : "Inactive" )</span></td>
 
-                                        @*<td><span class="badge badge-@(company.DeleteByUserId==null ? "success" : "warning")">@(company.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
                                         @if (company.DeleteByUserId == null)
                                         {
                                             <td class="dropdown text-center">
@@ -117,7 +113,6 @@
                                     <th>Id</th>
                                     <th>Üst Şirkət</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
                                     <th>Silinmiş</th>
                                 </tr>
                             </tfoot>

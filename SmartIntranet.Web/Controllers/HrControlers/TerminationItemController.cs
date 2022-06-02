@@ -36,7 +36,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "terminationItem.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<TerminationItemListDto> data = _mapper.Map<ICollection<TerminationItemListDto>>(await _terminationService.GetAllIncCompAsync(x => x.DeleteByUserId == null));
+            IEnumerable<TerminationItemListDto> data = _mapper.Map<ICollection<TerminationItemListDto>>(await _terminationService.GetAllIncCompAsync(x => !x.IsDeleted));
             return View(data);
         }
 

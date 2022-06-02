@@ -52,7 +52,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "reportEmployee.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<ReportEmployeeListDto> data = _mapper.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => x.DeleteByUserId == null));
+            IEnumerable<ReportEmployeeListDto> data = _mapper.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
             return View(data);
         }
 

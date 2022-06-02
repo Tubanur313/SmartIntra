@@ -36,7 +36,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "place.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<PlaceListDto> data = _mapper.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => x.DeleteByUserId == null)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList().Select(x =>
+            IEnumerable<PlaceListDto> data = _mapper.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList().Select(x =>
             new PlaceListDto()
             {
                 Id = x.Id,

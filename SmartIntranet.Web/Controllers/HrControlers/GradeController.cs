@@ -10,6 +10,7 @@ using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
@@ -28,7 +29,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "grade.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _gradeService.GetAllAsync();
+            var model = (await _gradeService.GetAllAsync()).Where(x => !x.IsDeleted).ToList();
             if (model.Count > 0)
             {
                 return View(_map.Map<List<GradeListDto>>(model));

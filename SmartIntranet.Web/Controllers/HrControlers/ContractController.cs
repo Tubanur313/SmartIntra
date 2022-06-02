@@ -65,7 +65,7 @@ namespace SmartIntranet.Web.Controllers
         {
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
-            var contracts = _mapper.Map<List<ContractListDto>>(await _contractService.GetAllIncCompAsync(x => x.DeleteByUserId == null));
+            var contracts = _mapper.Map<List<ContractListDto>>(await _contractService.GetAllIncCompAsync(x => !x.IsDeleted));
 
             var work_accept = "WORK_ACCEPT";
             var el_work_accept = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == work_accept).Result[0].Name;
@@ -76,7 +76,7 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var personal_contracts = _mapper.Map<List<ContractListDto>>(await _personalContractService.GetAllIncCompAsync(x => x.DeleteByUserId == null));
+            var personal_contracts = _mapper.Map<List<ContractListDto>>(await _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted));
             var personal_chg = "PERSONAL_CHG";
             var el_personal_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == personal_chg).Result[0].Name;
                 foreach (var el in personal_contracts)
@@ -87,7 +87,7 @@ namespace SmartIntranet.Web.Controllers
             }
 
 
-            var vacation_contracts = _mapper.Map<List<ContractListDto>>(await _vacationContractService.GetAllIncCompAsync(x => x.DeleteByUserId == null));
+            var vacation_contracts = _mapper.Map<List<ContractListDto>>(await _vacationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
             var vacation_chg = "VACATION";
             var el_vacation_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == vacation_chg).Result[0].Name;
             foreach (var el in vacation_contracts)
@@ -97,7 +97,7 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => x.DeleteByUserId == null);
+            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
             var business_trips = _mapper.Map<List<ContractListDto>>(business_trips_org);
             var business_trip = "BUSINESS_TRIP";
             var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
@@ -111,7 +111,7 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var termination_contracts = _mapper.Map<List<ContractListDto>>(await _terminationContractService.GetAllIncCompAsync(x => x.DeleteByUserId == null));
+            var termination_contracts = _mapper.Map<List<ContractListDto>>(await _terminationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
             var termination_chg = "TERMINATION";
             var el_termination_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == termination_chg).Result[0].Name;
             foreach (var el in termination_contracts)

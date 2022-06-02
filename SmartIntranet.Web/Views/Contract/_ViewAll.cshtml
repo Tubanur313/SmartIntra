@@ -20,12 +20,9 @@
                                     <th>Müqavilə növü</th>
                                     <th>Sənəd nömrəsi</th>
                                     <th>Sənəd tarixi</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
-                                    <th class="text-center">
+                                    <th class="text-center position-relative">
                                         @if (User.HasAccess("contract.add"))
                                         {
-
                                             <button type="button"
                                                 class="btn btn-outline-success rounded-circle
                                                 @*dropdown-toggle*@"
@@ -133,10 +130,6 @@
                                                 <span>@contract.CommandDate.Value.ToString("dd.MM.yyyy")</span>
                                             }
                                         </td>
-
-
-                                        <td><span class="badge badge-@(!contract.IsDeleted? "success" : "warning")">@(!contract.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                        @*<td><span class="badge badge-@(contract.DeleteByUserId==null ? "success" : "warning")">@(contract.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                         @if (contract.DeleteByUserId == null)
                                         {
@@ -292,8 +285,6 @@
                                     <th>Müqavilə növü</th>
                                     <th>Sənəd nömrəsi</th>
                                     <th>Sənəd tarixi</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>

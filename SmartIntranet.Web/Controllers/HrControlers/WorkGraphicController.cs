@@ -39,7 +39,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> List()
         {
 
-            return View(_mapper.Map<ICollection<WorkGraphicListDto>>(await _workGraphicService.GetAllIncCompAsync(x => x.DeleteByUserId == null)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            return View(_mapper.Map<ICollection<WorkGraphicListDto>>(await _workGraphicService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
 
         [HttpGet]

@@ -38,7 +38,7 @@ namespace SmartIntranet.Web.Controllers
         {
             if (id == 0 || (await _nonWorkingYearService.FindByIdAsync(id) == null)) return RedirectToAction("List", "NonWorkingYear");
             _nonWorkingYearId = id;
-            IEnumerable<NonWorkingDayListDto> data = _mapper.Map<ICollection<NonWorkingDayListDto>>(await _nonWorkingDayService.GetAllIncCompAsync(x => x.DeleteByUserId == null && x.NonWorkingYearId == id)).Select(x =>
+            IEnumerable<NonWorkingDayListDto> data = _mapper.Map<ICollection<NonWorkingDayListDto>>(await _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted && x.NonWorkingYearId == id)).Select(x =>
                 new NonWorkingDayListDto()
                 {
                     Name = x.Name,

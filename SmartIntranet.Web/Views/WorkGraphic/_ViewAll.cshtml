@@ -19,8 +19,6 @@
                                     <th>Ad</th>
                                     <th>Təsvir</th>
                                     <th>İş Qrafiki ili</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("workgraphic.add"))
                                         {
@@ -63,9 +61,6 @@
 
                                     }
 
-                                    <td><span class="badge badge-@(!workgraphic.IsDeleted? "success" : "warning")">@(!workgraphic.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                    @*<td><span class="badge badge-@(workgraphic.DeleteByUserId==null ? "success" : "warning")">@(workgraphic.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
-
                                     @if (workgraphic.DeleteByUserId == null)
                                     {
                                         <td class="dropdown text-center">
@@ -92,16 +87,9 @@
                                                 @if (User.HasAccess("workcalendar.list"))
                                                 {
                                             <li>
-                                                @*<button onclick="showInPopup('@Url.Action("List","WorkCalendar",new {id=workgraphic.Id},Context.Request.Scheme)','Detala keçid')"
-                                                        class="btn  btn-default waves-effect md-trigger text-primary">
-                                                    <i class="icofont icofont-list text-primary p-r-15 "></i>
-                                                    Detala keçid
-                                                </button>*@
-
                                                 <a asp-controller="WorkCalendar" asp-action="list" asp-route-id="@workgraphic.Id" asp-route-year_id="@workgraphic.NonWorkingYearId" class="btn  btn-default waves-effect md-trigger text-primary not-focus not-hover">
                                                     <i class="icofont icofont-list text-primary p-r-15 "></i>  Detala keçid
                                                 </a>
-
                                             </li>
                                                 }
                                                 @if (User.HasAccess("workgraphic.delete") && workgraphic.Key!= "five_day" && workgraphic.Key != "six_day")
@@ -146,8 +134,6 @@
                                     <th>Ad</th>
                                     <th>Təsvir</th>
                                     <th>İş Qrafiki ili</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>

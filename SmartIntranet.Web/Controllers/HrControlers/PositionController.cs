@@ -40,7 +40,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "position.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _positionService.GetAllIncludeAsync();
+            var model = (await _positionService.GetAllIncludeAsync()).Where(x => !x.IsDeleted).ToList();
             if (model.Count > 0)
             {
                 return View(_map.Map<List<PositionListDto>>(model));

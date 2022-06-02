@@ -36,7 +36,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<ClauseListDto> data = _mapper.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => x.DeleteByUserId == null)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            IEnumerable<ClauseListDto> data = _mapper.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(data);
         }
 

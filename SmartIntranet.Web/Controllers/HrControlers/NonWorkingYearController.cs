@@ -33,7 +33,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "nonworkingyear.list")]
         public async Task<IActionResult> List()
         {
-            return View(_mapper.Map<ICollection<NonWorkingYearListDto>>(await _nonWorkingYearService.GetAllIncCompAsync(x => x.DeleteByUserId == null)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            return View(_mapper.Map<ICollection<NonWorkingYearListDto>>(await _nonWorkingYearService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
 
         [HttpGet]

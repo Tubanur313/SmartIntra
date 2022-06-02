@@ -68,7 +68,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            return View(_mapper.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com")).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            return View(_mapper.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
 
         [HttpGet]

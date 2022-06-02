@@ -19,7 +19,6 @@
                                     <th>Ad</th>
                                     <th>Tarix</th>
                                     <th>Növ</th>
-                                    <th>Status</th>
                                     <th class="text-center">
                                         @if (User.HasAccess("nonworkingday.add"))
                                         {
@@ -50,9 +49,7 @@
                                         }
                                     </td>
                                     <td>@day.Type</td>
-                                    <td><span class="badge badge-@(!day.IsDeleted? "success" : "warning")">@(!day.IsDeleted ? "Active" : "Inactive" )</span></td>
 
-                                    @*<td><span class="badge badge-@(year.DeleteByUserId==null ? "success" : "warning")">@(year.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                     @if (day.DeleteByUserId == null)
                                     {
@@ -118,8 +115,6 @@
                                     <th>Ad</th>
                                     <th>Tarix</th>
                                     <th>Növ</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>

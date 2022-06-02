@@ -34,7 +34,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "cause.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<CauseListDto> data = _mapper.Map<ICollection<CauseListDto>>(await _causeService.GetAllIncAsync(x => x.DeleteByUserId == null)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            IEnumerable<CauseListDto> data = _mapper.Map<ICollection<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(data);
         }
 

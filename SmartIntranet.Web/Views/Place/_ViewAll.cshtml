@@ -19,8 +19,6 @@
                                     <th>Ad</th>
                                     <th>Xərc</th>
                                     <th>Valyuta</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("place.add"))
                                         {
@@ -42,8 +40,6 @@
                                         <td>@place.Name</td>
                                         <td>@place.Amount</td>
                                         <td>@place.Currency</td>
-                                        <td><span class="badge badge-@(!place.IsDeleted? "success" : "warning")">@(!place.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                        @*<td><span class="badge badge-@(year.DeleteByUserId==null ? "success" : "warning")">@(year.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                         @if (place.DeleteByUserId == null)
                                         {
@@ -102,8 +98,6 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>

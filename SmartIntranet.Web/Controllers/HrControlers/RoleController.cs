@@ -39,7 +39,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "role.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _roleService.GetAllAsync();
+            var model = (await _roleService.GetAllAsync()).Where(x => !x.IsDeleted).ToList();
             if (model.Count > 0)
             {
                 return View(_map.Map<List<AppRoleListDto>>(model));

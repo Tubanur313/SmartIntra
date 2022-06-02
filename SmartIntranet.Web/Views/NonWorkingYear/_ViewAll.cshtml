@@ -16,8 +16,6 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>İl</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("nonworkingyear.add"))
                                         {
@@ -34,8 +32,6 @@
                                             @year.Id
                                         </td>
                                         <td>@year.Year</td>
-                                        <td><span class="badge badge-@(!year.IsDeleted? "success" : "warning")">@(!year.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                        @*<td><span class="badge badge-@(year.DeleteByUserId==null ? "success" : "warning")">@(year.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                         @if (year.DeleteByUserId == null)
                                         {
@@ -102,8 +98,6 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>İl</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>

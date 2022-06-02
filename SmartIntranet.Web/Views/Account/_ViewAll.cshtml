@@ -25,7 +25,6 @@
                                         <th>Şöbə</th>*@
                                     <th>Vəzifə</th>
                                     <th>Dərəcə</th>
-                                    <th>Status</th>
                                     @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("account.add"))
@@ -55,8 +54,6 @@
                                             <td>Təyin edilməyib</td>
                                         }
                                         <td>@(account.GradeId!=null?account.Grade.GradeName:"Təyin edilməyib")</td>
-                                        <td><span class="badge badge-@(!account.IsDeleted? "success" : "warning")">@(!account.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                        @*<td><span class="badge badge-@(account.DeleteByUserId==null ? "success" : "warning")">@(account.DeleteByUserId == null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                         @if (account.DeleteByUserId == null)
                                         {

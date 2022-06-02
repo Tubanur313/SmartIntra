@@ -37,7 +37,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "department.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _departmentService.GetAllIncludeAsync();
+            var model = (await _departmentService.GetAllIncludeAsync()).Where(x => !x.IsDeleted).ToList();
             if (model.Count > 0)
             {
                 return View(_map.Map<List<DepartmentListDto>>(model));

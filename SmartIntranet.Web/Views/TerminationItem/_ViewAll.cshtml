@@ -17,8 +17,6 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("terminationItem.add"))
                                         {
@@ -38,8 +36,6 @@
                                         </td>
 
                                         <td>@terminationItem.Name</td>
-                                        <td><span class="badge badge-@(!terminationItem.IsDeleted? "success" : "warning")">@(!terminationItem.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                        @*<td><span class="badge badge-@(year.DeleteByUserId==null ? "success" : "warning")">@(year.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                         @if (terminationItem.DeleteByUserId == null)
                                         {
@@ -98,8 +94,6 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Ad</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>

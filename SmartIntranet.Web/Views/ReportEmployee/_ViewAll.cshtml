@@ -20,8 +20,6 @@
                                     <th>Tarix</th>
                                     <th>Hesabatlıq tarixi</th>
                                     <th>Yükləmə</th>
-                                    <th>Status</th>
-                                    @*<th>Silinmiş</th>*@
                                     <th class="text-center">
                                         @if (User.HasAccess("reportEmployee.add"))
                                         {
@@ -48,8 +46,6 @@
                                             <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
                                         </a> 
                                     </td>
-                                    <td><span class="badge badge-@(!reportEmployee.IsDeleted? "success" : "warning")">@(!reportEmployee.IsDeleted ? "Active" : "Inactive" )</span></td>
-                                    @*<td><span class="badge badge-@(year.DeleteByUserId==null ? "success" : "warning")">@(year.DeleteByUserId==null ? "Xeyr" : "Bəli" )</span></td>*@
 
                                     @if (reportEmployee.DeleteByUserId == null)
                                     {
@@ -111,8 +107,6 @@
                                     <th>Tarix</th>
                                     <th>Hesabatlıq tarixi</th>
                                     <th>Yükləmə</th>
-                                    <th>Status</th>
-                                    <th>Silinmiş</th>
                                 </tr>
                             </tfoot>
                         </table>
