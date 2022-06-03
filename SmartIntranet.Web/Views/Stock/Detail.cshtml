@@ -42,7 +42,7 @@
                 <div class="slide"></div>
             </li>
             <li class="nav-item">
-                <a class="nav-link get-count-discuss" data-toggle="tab" href="#photos" role="tab">
+                <a class="nav-link" data-toggle="tab" href="#photos" role="tab">
                     <i class="icofont icofont-file-image-4"></i> &nbsp; Şəkillər
                 </a>
                 <div class="slide"></div>
@@ -209,7 +209,7 @@
                             <h3 class="">Fayl Yüklə</h3>
                         </div>
                         <div id="formData" method="POST" class="form-group" enctype="multipart/form-data">
-
+                           
                             <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
                             <input hidden="hidden" type="file" name="files" id="files" multiple class="form-control">
                             <input type="hidden" asp-for="Id" />
@@ -267,7 +267,7 @@
 <script class="removable">
     $(document).ready(function(){
         $(".get-count-discuss").click(function(){
-            $("#countId").html(`Müzakirələr (@(ViewBag.DiscCount>0 ? ViewBag.DiscCount:0))`);
+            $("#countId").html(`Müzakirələr (@(ViewBag.stockDiscCount>0 ? ViewBag.stockDiscCount:0))`);
         });
         $("#countId").click(function() {
             $("#discussing").toggle(function(){
@@ -308,11 +308,11 @@
                         if ($(this).css('display') != 'none')
                         {
                             $.ajax({
-                                url : `@Url.Action("GetPhoto","Photo")`,
+                                url : `@Url.Action("GetPhoto","Stock")`,
                                 type: "get",
                                 dataType:"html",
                                 data : ({
-                                    ticketId:@Model.Id
+                                    stockId:@Model.Id
                                 }),
                                 success: function(response) {
                                     $("#photo").html(response)
@@ -364,7 +364,6 @@
             data : formData,
             async : false,
             success: function(response) {
-                                console.log(response);
                 var html = ` <div class="media">
                             <div class="media-body b-b-theme social-client-description">
                             <div class="chat-header text-success">
@@ -413,9 +412,9 @@
             }
             data.append("__RequestVerificationToken",token);
             data.append("Id",id);
-            console.log(data);
+            console.log($('[name=__RequestVerificationToken]').val());
             $.ajax({
-                url: `@Url.Action("load","ticket")`,
+                url: `@Url.ActionLink("load","Stock")`,
                 type: 'post',
                 dataType: "json",
                 data:data,
@@ -441,7 +440,7 @@
             });
         });
         $(window).on('click', function(e){
-         if($(e.target).attr('id') == 'form-modal-info'
+         if($(e.target).attr('id') == 'form-modal'
          || $(e.target).attr('id') =='closeBtn'
          || $(e.target).attr('id') =='closeBtnX'){
              window.location.reload();

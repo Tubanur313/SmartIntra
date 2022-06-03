@@ -1,0 +1,97 @@
+﻿@model List<StockImageListDto>
+@foreach (var photo in Model)
+{
+    var mimeT = photo.Name.Split(".")[photo.Name.Split(".").Length - 1].ToString();
+
+    if (mimeT == "pdf" || mimeT == "docx" || mimeT == "doc" || mimeT == "xls" || mimeT == "xlsx" || mimeT == "zip" || mimeT == "pptx" || mimeT == "ppt")
+    {
+
+        if (mimeT == "pdf")
+        {
+            <div class="col-md-3 col-sm-2">
+                <div class="thumbnail">
+                    <div class="thumb">
+                        <a href="~/ticketFile/@photo.Name" download>
+                            @*@(photo.Name!=null?photo.Name:"Pdf file")*@
+                            <img src="~/uploads/pdf.png" alt="thumb" title="@(photo.Name)"
+                     data-toggle="tooltip" data-html="true" data-placement="top" class="img-fluid width-100 m-b-20">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (mimeT == "doc" || mimeT == "docx")
+        {
+            <div class="col-md-3 col-sm-2">
+                <div class="thumbnail">
+                    <div class="thumb">
+                        <a href="~/ticketFile/@photo.Name" download>
+                            @*@(photo.Name!=null?photo.Name:"Word file")*@
+                            <img src="~/uploads/doc.png" alt="thumb" title="@(photo.Name)"
+                     data-toggle="tooltip" data-html="true" data-placement="top" class="img-fluid width-100 m-b-20">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (mimeT == "xls" || mimeT == "xlsx")
+        {
+            <div class="col-md-3 col-sm-2">
+                <div class="thumbnail">
+                    <div class="thumb">
+                        <a href="~/ticketFile/@photo.Name" download>
+                            @*  @(photo.Name!=null?photo.Name:"Excel file")*@
+                            <img src="~/uploads/xls.png" alt="thumb" title="@(photo.Name)"
+                     data-toggle="tooltip" data-html="true" data-placement="top" class="img-fluid width-100 m-b-20">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (mimeT == "zip")
+        {
+            <div class="col-md-3 col-sm-2">
+                <div class="thumbnail">
+                    <div class="thumb">
+                        <a href="~/ticketFile/@photo.Name" download>
+                            @*@(photo.Name!=null?photo.Name:"Zip file")*@
+                            <img src="~/uploads/zipfile.jpg" alt="thumb" title="@(photo.Name)"
+                     class="img-fluid width-100 m-b-20" data-toggle="tooltip" data-html="true" data-placement="top">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (mimeT == "ppt" || mimeT == "pptx")
+        {
+            <div class="col-md-3 col-sm-2">
+                <div class="thumbnail">
+                    <div class="thumb">
+                        <a href="~/ticketFile/@photo.Name" download>
+                            @*@(photo.Name!=null?photo.Name:"Power Point file")*@
+                            <img src="~/uploads/ppt.png" alt="thumb" title="@(photo.Name)"
+                     class="img-fluid width-100 m-b-20" data-toggle="tooltip" data-html="true" data-placement="top">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+        <div class="col-md-3 col-sm-2">
+            <div class="thumbnail">
+                <div class="thumb">
+                    <a href="~/ticketPhoto/@photo.Name" download>
+                        <img src="~/@(photo!=null? "stock/"+photo.Name:"uploads/default.png")"
+                     class="img-fluid width-100 m-b-20" data-toggle="tooltip" data-html="true" data-placement="top"
+                     title="@(photo!=null?photo.Name:"default.png")">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    }
+
+}

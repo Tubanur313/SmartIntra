@@ -2,6 +2,8 @@
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.DataAccess.Interfaces.Inventary;
 using SmartIntranet.Entities.Concrete.Inventary;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete.Inventary
 {
@@ -15,6 +17,11 @@ namespace SmartIntranet.Business.Concrete.Inventary
         {
             _genericDal = genericDal;
             _stockImageDal = stockImageDal;
+        }
+
+        public Task<List<StockImage>> GetAllByStockAsync(int stockId)
+        {
+            return _stockImageDal.GetAllByStockAsync(stockId);
         }
     }
 }

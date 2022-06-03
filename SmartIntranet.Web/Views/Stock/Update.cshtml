@@ -96,19 +96,15 @@
         </form>
     </div>
 </div>
-<!-- Masking js -->
+
+@section Crudjs{
+    <!-- Masking js -->
 <script src="~/files/assets/pages/form-masking/inputmask.js"></script>
 <script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
 <script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
 <script src="~/files/assets/pages/form-masking/form-mask.js"></script>
+}
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
-<script class="removable">
-        $( document ).ready(function() {
-    //$('#MacAddress').inputmask({mask:""});
-                               // ckeditor
-                        CKEDITOR.replace('Description');
-        });
-</script>

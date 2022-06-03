@@ -15,7 +15,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             using var context = new IntranetContext();
             return await context.Photos
                 .Where(x => x.TicketId == ticketId
-                && x.IsDeleted == false)
+                && !x.IsDeleted)
                 .ToListAsync();
         }
     }

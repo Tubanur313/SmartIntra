@@ -171,6 +171,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 TempData["error"] = Messages.Error.notFound;
                 return RedirectToAction("List");
             }
+            ViewBag.stockDiscCount = _stockDiscussService.GetAllAsync(x => x.StockId == id).Result.Count;
             return View(data);
         }
         [Authorize(Policy = "stock.discuss")]
@@ -197,6 +198,41 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var discuss = _map
                 .Map<List<StockDiscussListSecondDto>>(await _stockDiscussService.GetAllByTicketAsync(stockId));
             return PartialView("_stockDiscuss", discuss);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "stock.GetPhoto")]
+        public async Task<IActionResult> GetPhoto(int stockId)
+        {
+            var photo = _map.Map<List<StockImageListDto>>(await _stockImageService.GetAllByStockAsync(stockId));
+            return PartialView("_stockPhoto", photo);
+        }
+        [HttpPost]
+        [Authorize(Policy = "stock.load")]
+        public async Task<IActionResult> Load(int Id, IFormFile[] files)
+        {
+            foreach (var upload in files)
+            {
+                if (MimeTypeCheckExtension.İsImage(upload))
+                {
+                    string folder = "/stock/";
+                    string name =_upload.UploadResizedImg(upload, "wwwroot" + folder);
+                    StockImageAddDto dto = new StockImageAddDto
+                    {
+                        Name = name,
+                        Path = HttpContext.Request.Host.Value + folder + name,
+                        StockId = Id
+                    };
+                    var photo = _map.Map<StockImage>(dto);
+                    photo.CreatedByUserId = GetSignInUserId();
+                    await _stockImageService.AddAsync(photo);
+                }
+                else
+                {
+                    return Ok($"{upload.ContentType.GetType()} formatı uyğun format deyil");
+                }
+            }
+                return Ok();
         }
         [Authorize(Policy = "stock.delete")]
         public async Task Delete(int id)
