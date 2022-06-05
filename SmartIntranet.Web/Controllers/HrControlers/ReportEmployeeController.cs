@@ -140,7 +140,7 @@ namespace SmartIntranet.Web.Controllers
 
         private void ExcellGenerate(ReportEmployeeDto model)
         {
-            var users = _appUserService.GetAllIncludeAsync(x => x.CompanyId == model.CompanyId).Result;
+            var users = _appUserService.GetAllIncludeAsync(x => x.CompanyId == model.CompanyId && !x.IsDeleted).Result;
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/reportDocs/" + model.FilePath);
             FileInfo file = new FileInfo(path);
             var memory = new MemoryStream();
