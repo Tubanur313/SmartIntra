@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Membership;
@@ -141,6 +139,7 @@ namespace SmartIntranet.Web.Controllers
                     var body = doc.MainDocumentPart.Document.Body;
                     var paras = body.Elements<Paragraph>();
                     bool flag = false;
+                    var aa = doc.MainDocumentPart.Document.Body.Descendants<Text>();
                     foreach (var text in doc.MainDocumentPart.Document.Body.Descendants<Text>()) // <<< Here
                     {
 
