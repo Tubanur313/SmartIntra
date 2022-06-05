@@ -318,7 +318,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetCompanyUsers(int companyId)
         {
             var usrs = _mapper.Map<ICollection<AppUserListDto>>(
-                await _appUserService.GetAllIncludeAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
+                await _appUserService.GetAllIncludeAsync(x => !x.IsDeleted && x.CompanyId == companyId))
                 .Select(x => new { x.Id, Name = x.Name + " " + x.Surname + "/" + x.Company.Name + "/" + x.Department.Name + "/" + x.Position.Name });
             return Ok(usrs);
         }

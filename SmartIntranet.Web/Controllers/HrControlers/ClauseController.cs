@@ -47,7 +47,7 @@ namespace SmartIntranet.Web.Controllers
             return View();
         }
 
-      
+
 
         [HttpPost]
         [Authorize(Policy = "clause.add")]
@@ -106,7 +106,7 @@ namespace SmartIntranet.Web.Controllers
                     await AddFile("wwwroot/clauseDocs/", readyDoc, model.FilePath);
                 }
                 var current = GetSignInUserId();
-                
+
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
 
@@ -123,6 +123,7 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
+            DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);
             await _clauseService.UpdateAsync(_mapper.Map<Clause>(transactionModel));
             return Ok();
         }

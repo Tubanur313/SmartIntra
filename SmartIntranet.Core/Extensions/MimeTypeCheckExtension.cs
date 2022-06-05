@@ -115,6 +115,7 @@ namespace SmartIntranet.Core.Extensions
             doc.ContentType != "application/vnd.openxmlformats-officedocument.presentationml.presentation" &&
             doc.ContentType != "text/plain" &&
             doc.ContentType != "application/pdf"&&
+            doc.ContentType != "application/octet-stream" &&
             doc.ContentType != "application/x-zip-compressed"
             )
             {

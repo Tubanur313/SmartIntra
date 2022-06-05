@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
 using SmartIntranet.DTO.DTOs.PositionDto;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {

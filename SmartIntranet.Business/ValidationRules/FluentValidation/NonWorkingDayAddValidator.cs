@@ -6,12 +6,13 @@ using System.Text;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {
-    public class DepartmentAddValidator : AbstractValidator<DepartmentAddDto>
+    public class NonWorkingDayAddValidator : AbstractValidator<NonWorkingDayAddDto>
     {
-        public DepartmentAddValidator()
+        public NonWorkingDayAddValidator()
         {
             RuleFor(I => I.Name).NotNull().WithMessage("Ad boş ola bilməz");
-            RuleFor(I => I.CompanyId).NotNull().WithMessage("Şirkət boş ola bilməz");
+            RuleFor(I => I.StartDate).NotNull().WithMessage("Tarix boş ola bilməz");
+            RuleFor(I => I.Type).NotNull().WithMessage("Növ boş ola bilməz");
         }
     }
 }
