@@ -174,18 +174,18 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
 
                 //    db.SaveChangesAsync().GetAwaiter().GetResult();
                 //};
-                var user2 = new IntranetUser()
-                {
-                    UserName = "MahirTahiroghlu",
-                    Email = "mahir.tahiroghlu@srgroupco.com",
-                    Name = "Mahir",
-                    Surname = "Tahiroglu",
-                    Picture = "Default.png",
-                    //CompanyId = 1,
-                    //DepartmentId = 1,
-                    //PositionId = 1,
-                    EmailConfirmed = true
-                };
+                //var user2 = new IntranetUser()
+                //{
+                //    UserName = "MahirTahiroghlu",
+                //    Email = "mahir.tahiroghlu@srgroupco.com",
+                //    Name = "Mahir",
+                //    Surname = "Tahiroglu",
+                //    Picture = "Default.png",
+                //    //CompanyId = 1,
+                //    //DepartmentId = 1,
+                //    //PositionId = 1,
+                //    EmailConfirmed = true
+                //};
 
                 var user = new IntranetUser()
                 {
@@ -199,21 +199,21 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                     //PositionId = 1,
                     EmailConfirmed = true
                 };
-                var foundUser2 = userManager.FindByEmailAsync(user2.Email).Result;
+                //var foundUser2 = userManager.FindByEmailAsync(user2.Email).Result;
 
-                if (foundUser2 != null && !userManager.IsInRoleAsync(foundUser2, role.Name).Result)
-                {
-                    userManager.AddToRoleAsync(foundUser2, role.Name).Wait();
-                }
-                else if (foundUser2 == null)
-                {
-                    string password = "123";
-                    var iUserResult = userManager.CreateAsync(user2, password).Result;
-                    if (iUserResult.Succeeded)
-                    {
-                        userManager.AddToRoleAsync(user2, userRole.Name).Wait();
-                    }
-                }
+                //if (foundUser2 != null && !userManager.IsInRoleAsync(foundUser2, role.Name).Result)
+                //{
+                //    userManager.AddToRoleAsync(foundUser2, role.Name).Wait();
+                //}
+                //else if (foundUser2 == null)
+                //{
+                //    string password = "123";
+                //    var iUserResult = userManager.CreateAsync(user2, password).Result;
+                //    if (iUserResult.Succeeded)
+                //    {
+                //        userManager.AddToRoleAsync(user2, userRole.Name).Wait();
+                //    }
+                //}
 
                 var foundUser = userManager.FindByEmailAsync(user.Email).Result;
 
