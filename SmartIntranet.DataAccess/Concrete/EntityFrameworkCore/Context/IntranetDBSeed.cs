@@ -487,6 +487,19 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         IsBackground = true
                     };
 
+                    // Mqavile uzadilmasi
+
+                    var long_contract = new Clause()
+                    {
+                        Name = "Müqavilə uzadılması",
+                        Key = "long_contract",
+                        FilePath = "long_contract.docx",
+                        IsDeleted = false,
+                        CreatedDate = DateTime.Now,
+                        IsDeletable = false,
+                        IsBackground = true
+                    };
+
 
                     // Ise qebul
                     db.Clauses.Add(recruitment_labor_contract);
@@ -519,6 +532,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                     db.Clauses.Add(termination_base);
                     db.Clauses.Add(termination_reduction_agree);
                     db.Clauses.Add(termination_reduction_not_agree);
+
+                    // Muqavile uzadilmasi
+                    db.Clauses.Add(long_contract);
 
                     db.SaveChanges();
                 }
@@ -576,11 +592,20 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         CreatedDate = DateTime.Now
                     };
 
+                    var longContract = new ContractType()
+                    {
+                        Name = "Müqavilə uzadılması",
+                        Key = "LONG_CONTRACT",
+                        IsDeleted = false,
+                        CreatedDate = DateTime.Now
+                    };
+
                     db.ContractTypes.Add(work_accept);
                     db.ContractTypes.Add(personal_chg);
                     db.ContractTypes.Add(vacation);
                     db.ContractTypes.Add(business_trip);
                     db.ContractTypes.Add(termination);
+                    db.ContractTypes.Add(longContract);
 
                     db.SaveChanges();
                 }

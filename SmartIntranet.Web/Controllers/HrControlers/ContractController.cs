@@ -41,8 +41,9 @@ namespace SmartIntranet.Web.Controllers
         private readonly ICompanyService _companyService;
         private readonly IAppUserService _appUserService;
         private readonly IBusinessTripService _businessTripService;
+        private readonly ILongContractService _longContractService;
 
-        public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, ITerminationContractService terminationContractService, IMapper mapper, IContractService contractService, IPersonalContractService personalContractService, IContractFileService contractFileService, IClauseService clauseService,  IContractTypeService contractTypeService, IVacationContractService vacationContractService, IAppUserService userService, IWorkGraphicService workGraphicService, ICompanyService companyService,  IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, ITerminationContractService terminationContractService, IMapper mapper, IContractService contractService, IPersonalContractService personalContractService, IContractFileService contractFileService, IClauseService clauseService,  IContractTypeService contractTypeService, IVacationContractService vacationContractService, IAppUserService userService, IWorkGraphicService workGraphicService, ICompanyService companyService, ILongContractService longContractService, IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _mapper = mapper;
             _contractService = contractService;
@@ -51,6 +52,7 @@ namespace SmartIntranet.Web.Controllers
             _vacationContractService = vacationContractService;
             _contractTypeService = contractTypeService;
             _contractFileService = contractFileService;
+            _longContractService = longContractService;
             _userService = userService;
             _clauseService = clauseService;
             _workGraphicService = workGraphicService;
@@ -120,7 +122,17 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-             result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            var long_contracts = _mapper.Map<List<ContractListDto>>(await _longContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var long_chg = "LONG_CONTRACT";
+            var el_long_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == long_chg).Result[0].Name;
+            foreach (var el in long_contracts)
+            {
+                el.ContractKey = long_chg;
+                el.ContractName = el_long_chg;
+                result_list.Add(el);
+            }
+
+            result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(result_list);
         }
 

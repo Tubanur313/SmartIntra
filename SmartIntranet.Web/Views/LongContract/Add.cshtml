@@ -1,0 +1,140 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+@model LongContractAddDto
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Şirkət: </label>
+                        <select id="CompanyId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                            @foreach (var item in ViewBag.companies)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Əməkdaşlar: </label>
+                        <select disabled asp-for="UserId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                        </select>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+         <div class="row">
+                <div class="col-sm-6">
+                    <label class="floatLabel"> Başlama tarixi: </label>
+                    <div class="form-group">
+                        <input asp-for="FromDate" type="date" class="form-control" id="FromDate">
+                        <span asp-validation-for="FromDate" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Bitmə tarixi: </label>
+                        <div class="form-group">
+                            <input asp-for="ToDate" type="date" class="form-control" id="ToDate">
+                            <span asp-validation-for="ToDate" class="text-danger"></span>
+                            <span class="messages"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group row mt-3">
+                <div class="col-sm-12 d-flex justify-content-between">
+                    <button type="submit" id="sub-btn" class="btn btn-primary m-b-0  btn-block">
+                        Təsdiqlə
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial")
+
+<script>
+
+    $(document).ready(function () {
+
+        $('.input-daterange input').each(function () {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            });
+        });
+
+        $("form").submit( function(e) {
+
+        });
+
+       
+    });
+
+
+
+  
+    $(document).on('change','#CompanyId', function(){
+        var _id = $(this).val();
+
+        $.ajax({
+            type: 'Get',
+            url: '@Url.ActionLink("GetCompanyUsers", "Account")',
+            data: {
+                companyId: _id,
+            },
+            success: function (response)
+            {
+                if (response.error == true)
+                {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
+                }
+                $("#UserId").empty();
+                var html = "";
+
+                for (var i in response) {
+                    html += `<option value="${[response[i].id]}">
+                    ${[response[i].name]}</option>`
+                }
+
+                if(response.length>0)
+                {
+                    $("#UserId").prop('disabled', false);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                }
+                else{
+                    $("#UserId").prop('disabled', false);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                }
+
+            },
+            error: function (response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+       });
+    });
+
+</script>
