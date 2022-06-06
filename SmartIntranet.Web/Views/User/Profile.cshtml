@@ -1,8 +1,9 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions{
+@functions {
     public string GetAntiXsrfRequestToken()
     {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;    }
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
 }
 @model AppUserProfileUpdateDto
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
@@ -171,11 +172,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
 <script type="text/javascript" src="~/files/lib/file-input-tower/dist/tower-file-input.js"></script>
-    <!-- sweet alert js -->
-  <script type="text/javascript" src="~/files/lib/sweetalert/sweetalert.min.js"></script>
-    <script type="text/javascript" src="~/files/assets/js/classie.js"></script>
-    <!-- Toastr js -->
-    <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
+<!-- sweet alert js -->
+<script type="text/javascript" src="~/files/lib/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript" src="~/files/assets/js/classie.js"></script>
+<!-- Toastr js -->
+<script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
 <script>
     $(document).ready(function () {
 
@@ -188,72 +189,74 @@
 
 </script>
 <script>
-    $(document).ready(function($) {
-              //phone number masking
-              $.mask.definitions['9'] = '';
-              $.mask.definitions['_'] = '[0-9]';
-              $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
+     $(document).ready(function($) {
+               //phone number masking
+               $.mask.definitions['9'] = '';
+               $.mask.definitions['_'] = '[0-9]';
+               $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
 
 
 
-              $('#demoInput4').fileInput({
-                 iconClass: 'mdi mdi-fw mdi-upload'
-              });
+               $('#demoInput4').fileInput({
+                  iconClass: 'mdi mdi-fw mdi-upload'
+               });
 
 
-              $("#demoInput4").on('change', function (e) {
-                  e.preventDefault();
-                        var formdata = new FormData();
-                        var _image = $('#demoInput4')[0].files[0];
-                        var _id = @Model.AppUserImageDto.Id;
-                        formdata.append('profile', _image);
+               $("#demoInput4").on('change', function (e) {
+                   e.preventDefault();
+                         var formdata = new FormData();
+                         var _image = $('#demoInput4')[0].files[0];
+                         var _id = @Model.AppUserImageDto.Id;
+                         var token = $('input[name="__RequestVerificationToken"]').val();
+                         formdata.append("__RequestVerificationToken",token);
+                         formdata.append('profile', _image);
 
-                       swal({
-                           title: `Diqqət`,
-                           text: `Yenilənsin?`,
-                           icon: "warning",
-                           buttons: ["Xeyr", "Bəli"],
-                           dangerMode: true,
-                       }).then((willDelete) => {
-                           if (willDelete) {
-                               $.ajax({
-                                   type: 'post',
-                                   url: '@Url.ActionLink("ImageUpdate","User")',
-                                   data: formdata,
-                                   async: false,
-                                   cache: false,
-                                   contentType: false,
-                                   processData: false,
-                                   success: function (response) {
-                                       //sorgu ugurla neticelenende
-                                       if (response.error == true) {
+                        swal({
+                            title: `Diqqət`,
+                            text: `Yenilənsin?`,
+                            icon: "warning",
+                            buttons: ["Xeyr", "Bəli"],
+                            dangerMode: true,
+                        }).then((willDelete) => {
+                            if (willDelete) {
+                                $.ajax({
+                                    type: 'post',
+                                    url: '@Url.ActionLink("ImageUpdate","User")',
+                                    data: formdata,
+                                    async: false,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (response) {
+                                        //sorgu ugurla neticelenende
+                                        if (response.error == true) {
 
-                                           toastr.error(response, "Xəta baş verdi!");
-                                           return;
-                                       }
-                                    
-                                       toastr.success(response,"Uğur!");
-                                        setTimeout(function () {
-                                         window.location.reload();
-                                     }, 1000)
-                                   },
-                                   error: function (response) {
-                                       //sorgu ugursuz neticelenende
+                                            toastr.error(response, "Xəta baş verdi!");
+                                            return;
+                                        }
 
-                                       toastr.error(response, "Xəta!");
-                                   }
-                               });
-                           }else{
-                                     toastr.success('Əməliyat datandırıldı');
-                                        setTimeout(function () {
-                                         window.location.reload();
-                                     }, 1000)
-                           }
-                       });
+                                        toastr.success(response,"Uğur!");
+                                         setTimeout(function () {
+                                          window.location.reload();
+                                      }, 1000)
+                                    },
+                                    error: function (response) {
+                                        //sorgu ugursuz neticelenende
 
-              })
+                                        toastr.error(response, "Xəta!");
+                                    }
+                                });
+                            }else{
+                                      toastr.success('Əməliyat datandırıldı');
+                                         setTimeout(function () {
+                                          window.location.reload();
+                                      }, 1000)
+                            }
+                        });
 
-   });
+               })
+
+    });
 
 
 

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using SmartIntranet.Business.Containers.MicrosoftIoC;
 using SmartIntranet.Business.DependencyResolvers.Automapper;
 using SmartIntranet.Business.Extension;
+using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.Web.GoogleRecaptcha;
 using System;
@@ -43,7 +44,7 @@ namespace SmartTicket.Web
             services.AddAutoMapper(typeof(MapProfile));
             services.AddSession(option =>
             {
-                option.IdleTimeout = TimeSpan.FromDays(20);
+                option.IdleTimeout = TimeSpan.FromHours(5);
                 option.Cookie.HttpOnly = true;
                 option.Cookie.IsEssential = true;
                 option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
@@ -70,14 +71,14 @@ namespace SmartTicket.Web
                 //app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.SeedTicketSystem();
+            //app.SeedTicketSystem();
             IntranetDBSeed.SeedClause(app);
             IntranetDBSeed.SeedVacationType(app);
             IntranetDBSeed.SeedNonWorkingGraphics(app);
             IntranetDBSeed.SeedPlace(app);
             IntranetDBSeed.SeedTerminationItem(app);
             IntranetDBSeed.SeedContractType(app);
-            //app.UseMiddleware<SecurityHeadersMiddleware>();
+            app.UseMiddleware<SecurityHeadersMiddleware>();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
