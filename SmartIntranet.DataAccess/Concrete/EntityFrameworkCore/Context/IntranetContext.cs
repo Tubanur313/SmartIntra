@@ -14,9 +14,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //Xadica's local connection string
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranet2;Trusted_Connection=False;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=SmartIntranet3;Trusted_Connection=False;MultipleActiveResultSets=true");
 
-            //optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet2;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
             base.OnConfiguring(optionsBuilder);
         }
 
