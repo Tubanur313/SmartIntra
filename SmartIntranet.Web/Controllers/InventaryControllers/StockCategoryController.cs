@@ -27,7 +27,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
         {
             _stockCategoryService = stockCategoryService;
         }
-        [Authorize(Policy = "StockCategory.list")]
+        [Authorize(Policy = "stockcategory.list")]
         public async Task<IActionResult> List()
         {
             var model = await _stockCategoryService.GetAllAsync(x => !x.IsDeleted);
@@ -39,7 +39,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
 
         }
         [HttpGet]
-        [Authorize(Policy = "StockCategory.add")]
+        [Authorize(Policy = "stockcategory.add")]
         public async Task<IActionResult> Add()
         {
             ViewBag.StockCategory = _map
@@ -47,7 +47,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             return View();
         }
         [HttpPost]
-        [Authorize(Policy = "StockCategory.add")]
+        [Authorize(Policy = "stockcategory.add")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(StockCategoryAddDto model)
         {
@@ -55,6 +55,13 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             {
                 var add = _map.Map<StockCategory>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _stockCategoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _stockCategoryService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] = Messages.Add.notAdded;
@@ -70,7 +77,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             }
         }
         [HttpGet]
-        [Authorize(Policy = "StockCategory.update")]
+        [Authorize(Policy = "stockcategory.update")]
         public async Task<IActionResult> Update(int id)
         {
             var data = _map.Map<StockCategoryUpdateDto>(await _stockCategoryService.FindByIdAsync(id));
@@ -84,7 +91,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             return View(data);
         }
         [HttpPost]
-        [Authorize(Policy = "StockCategory.update")]
+        [Authorize(Policy = "stockcategory.update")]
         public async Task<IActionResult> Update(StockCategoryUpdateDto model)
         {
             if (ModelState.IsValid)
@@ -97,16 +104,22 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-
+                if (await _stockCategoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 await _stockCategoryService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;
             return RedirectToAction("List");
         }
 
-        [Authorize(Policy = "StockCategory.delete")]
+        [Authorize(Policy = "stockcategory.delete")]
         public async Task Delete(int id)
         {
             var delete = await _stockCategoryService.FindByIdAsync(id);

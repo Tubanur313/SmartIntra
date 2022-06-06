@@ -135,7 +135,7 @@ namespace SmartIntranet.Web.Controllers
                 update.DeleteDate = data.DeleteDate;
 
                 await _vacancyService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;

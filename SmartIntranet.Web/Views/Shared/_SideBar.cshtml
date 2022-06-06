@@ -15,7 +15,7 @@
                             <a asp-controller="dashboard" asp-action="menu">
                                 <span class="pcoded-mtext">Ticket Dashboard</span>
                             </a>
-                        </li> 
+                        </li>
                     </ul>
                 </li>
             }
@@ -178,7 +178,7 @@
                                     <span class="pcoded-mtext">Ticketlər</span>
                                 </a>
                             </li>
-                        }                        
+                        }
                         @if (User.HasAccess("ticket.DepartmentTickets"))
                         {
                             <li class="">
@@ -258,7 +258,7 @@
                             <a asp-controller="News" asp-action="List">
                                 <span class="pcoded-mtext">Xəbər Siyahısı</span>
                             </a>
-                        </li>  
+                        </li>
                         <li class="">
                             <a asp-controller="News" asp-action="Info">
                                 <span class="pcoded-mtext">Xəbərlər</span>
@@ -273,7 +273,7 @@
                 </li>
 
             }
-             @if (User.HasAccess("vacancy.list"))
+            @if (User.HasAccess("vacancy.list"))
             {
                 <li class="pcoded-hasmenu">
                     <a href="javascript:void(0)">
@@ -287,12 +287,36 @@
                             <a asp-controller="vacancy" asp-action="List">
                                 <span class="pcoded-mtext">Vakansiya Siyahısı</span>
                             </a>
-                        </li> 
+                        </li>
                         <li class="">
                             <a asp-controller="vacancy" asp-action="info">
                                 <span class="pcoded-mtext">Vakansiyalar</span>
                             </a>
-                        </li>  
+                        </li>
+                    </ul>
+                </li>
+
+            }
+            @if (User.HasAccess("Stock.list"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon">
+                            <i class="icofont icofont-job-search"></i>
+                        </span>
+                        <span class="pcoded-mtext">İnventar</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="Stock" asp-action="List">
+                                <span class="pcoded-mtext">İnventar</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a asp-controller="StockCategory" asp-action="List">
+                                <span class="pcoded-mtext">İnventar Kateqoriya</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

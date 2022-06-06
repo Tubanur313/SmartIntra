@@ -47,6 +47,18 @@ p {
     }
 }
 
+#image_preview .img-div #action-icon {
+    position: relative;
+    width: 0px !important;
+    height: 0px !important;
+}
+
+    #image_preview .img-div #action-icon i:before {
+        position: absolute;
+        bottom: 0px;
+        left: 5px;
+    }
+
 .media-left {
     padding-right: 20px
 }
@@ -1286,6 +1298,7 @@ a.mytooltip {
             padding-left: 5px;
             padding-right: 5px
         }
+
     .select-option .form-control {
         margin-bottom: 12px;
     }
@@ -1659,9 +1672,11 @@ a.bg-danger:focus, a.bg-danger:hover {
 .table-borderless tbody tr td, .table-borderless tbody tr th {
     border: 0
 }
+
 .table-borderless-and-padding tbody tr td, .table-borderless-and-padding tbody tr th {
-    padding-left:42px;
+    padding-left: 42px;
 }
+
 .table-bordered > thead > tr.border-solid > td, .table-bordered > thead > tr.border-solid > th {
     border-bottom-width: 2px
 }
@@ -3806,7 +3821,7 @@ a[data-lightbox="example-set"] .img-fluid, a[data-lightbox="roadtrip"] .img-flui
 }
 
 @media (min-width: 576px) {
-  
+
     .col-sm {
         -ms-flex-preferred-size: 0;
         flex-basis: 0;
@@ -4892,6 +4907,7 @@ a[data-lightbox="example-set"] .img-fluid, a[data-lightbox="roadtrip"] .img-flui
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     .sticky-card {
         margin-bottom: 250px
     }
@@ -5027,9 +5043,11 @@ a[data-lightbox="example-set"] .img-fluid, a[data-lightbox="roadtrip"] .img-flui
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     #main-chat .page-body, .full-calender .page-body {
         display: none
     }
@@ -5039,6 +5057,7 @@ a[data-lightbox="example-set"] .img-fluid, a[data-lightbox="roadtrip"] .img-flui
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     .card .card-header .card-header-right.job-compney-btn {
         position: relative;
         float: left;
@@ -7481,6 +7500,7 @@ table thead .border-bottom-info th, table tbody .border-bottom-info th, table tb
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     .header-navbar .navbar-wrapper .navbar-logo {
         -webkit-box-pack: center;
         -ms-flex-pack: center;
@@ -10703,6 +10723,7 @@ table thead .border-bottom-info th, table tbody .border-bottom-info th, table tb
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     .pcoded #styleSelector {
         display: none
     }
@@ -22204,6 +22225,7 @@ span.value {
     .select-option .form-control {
         margin-bottom: 12px;
     }
+
     .pagination {
         float: inherit;
         text-align: center;
@@ -22784,13 +22806,13 @@ span.value {
         margin-top: 10px
     }
 
-   /* .similar-job .media {
+    /* .similar-job .media {
         display: inline-block
     }*/
 
-        .similar-job .media .media-body {
-            margin-top: 20px
-        }
+    .similar-job .media .media-body {
+        margin-top: 20px
+    }
 
     .cal-event .inverse-card p:after {
         width: 100%
@@ -23986,17 +24008,20 @@ span.value {
 .input-group-text {
     background-color: #01a9ac;
 }
+
 .card-with-shadow {
     padding: 1.5rem 1.5rem;
     box-shadow: 0 4px 11px 0 rgb(34 41 47 / 10%);
     margin-bottom: 0.75rem;
 }
+
 .apply {
     transition: all 0.3s;
 }
-.apply:hover {
-    color: cornflowerblue;
-}
+
+    .apply:hover {
+        color: cornflowerblue;
+    }
 
 input[type="checkbox"].check_switch {
     -webkit-appearance: none;

@@ -52,7 +52,7 @@ namespace SmartIntranet.Web.Controllers
                 update.DeleteDate = data.DeleteDate;
 
                 await _emailService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return View();
             }
             TempData["error"] = Messages.Error.notComplete;

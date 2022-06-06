@@ -52,11 +52,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> Add()
         {
             ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<DepartmentListDto>>(await _departmentService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.positions = _map
-                .Map<List<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted == false));
+                .Map<List<PositionListDto>>(await _positionService.GetAllAsync(x => !x.IsDeleted));
 
             return View();
         }
@@ -68,6 +68,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Position>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _positionService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] = Messages.Add.notAdded;
@@ -124,7 +131,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-
+                if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 await _positionService.UpdateAsync(update);
                 TempData["success"] = "Yeniləndi";
                 return RedirectToAction("List");

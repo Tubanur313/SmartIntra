@@ -10,6 +10,10 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Business.Concrete.Membership;
 using SmartIntranet.Business.Interfaces.IntraTicket;
+using SmartIntranet.Business.Concrete.Inventary;
+using SmartIntranet.Business.Interfaces.Inventary;
+using SmartIntranet.DataAccess.Interfaces.Inventary;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Inventary;
 
 namespace SmartIntranet.Business.Containers.MicrosoftIoC
 {
@@ -167,6 +171,19 @@ namespace SmartIntranet.Business.Containers.MicrosoftIoC
 
             services.AddScoped<IBusinessTripFileService, BusinessTripFileManager>();
             services.AddScoped<IBusinessTripFileDal, EfBusinessTripFileRepository>();
+            //inventary
+            
+            services.AddScoped<IStockService, StockManager>();
+            services.AddScoped<IStockDal, EfStockRepository>();
+
+            services.AddScoped<IStockCategoryService, StockCategoryManager>();
+            services.AddScoped<IStockCategoryDal, EfStockCategoryRepository>();
+
+            services.AddScoped<IStockDiscussService, StockDiscussManager>();
+            services.AddScoped<IStockDiscussDal, EfStockDiscussRepository>(); 
+
+            services.AddScoped<IStockImageService, StockImageManager>();
+            services.AddScoped<IStockImageDal, EfStockImageRepository>();
         }
     }
 }

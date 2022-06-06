@@ -98,7 +98,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.DeleteDate = data.DeleteDate;
 
                 await _gradeService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;

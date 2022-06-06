@@ -3691,6 +3691,52 @@ namespace SmartIntranet.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.Stock", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Intranet.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "IntranetUser")
+                        .WithMany("Stocks")
+                        .HasForeignKey("IntranerUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Inventary.StockCategory", "StockCategory")
+                        .WithMany("Stocks")
+                        .HasForeignKey("StockCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.StockCategory", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Inventary.StockCategory", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.StockDiscuss", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "IntranetUser")
+                        .WithMany("StockDiscusses")
+                        .HasForeignKey("IntranetUserId");
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Inventary.Stock", "Stock")
+                        .WithMany("StockDiscusses")
+                        .HasForeignKey("StockId");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.Inventary.StockImage", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Inventary.Stock", "Stock")
+                        .WithMany("StockImages")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.IntranetRoleClaim", b =>
                 {
                     b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetRole", null)

@@ -210,7 +210,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                         }
                     }
                 }
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;

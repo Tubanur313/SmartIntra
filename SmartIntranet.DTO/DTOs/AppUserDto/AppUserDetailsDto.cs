@@ -17,7 +17,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
 
         public override string ToString()
         {
-            return FirstName+LastName + " / " + Company + " / " + Department + " / "+ Position;
+            return FirstName +" "+ LastName + " / " + Company + " / " + Department + " / "+ Position;
         }
     }
 }

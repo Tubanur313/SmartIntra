@@ -50,11 +50,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             ViewBag.companies = _map
                 .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => x.IsDeleted == false));
+                .GetAllAsync(x => !x.IsDeleted));
 
             ViewBag.departments = _map
                 .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false));
+                .GetAllAsync(x => !x.IsDeleted));
 
             return View();
         }
@@ -66,6 +66,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Department>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _departmentService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] = Messages.Add.notAdded;
@@ -144,7 +151,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-
+                if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 await _departmentService.UpdateAsync(update);
                 TempData["success"] = "Yeniləndi";
                 return RedirectToAction("List");

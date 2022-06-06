@@ -7,7 +7,7 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValid
     {
         public StockCategoryAddValidator()
         {
-
+            RuleFor(I => I.Name).NotNull().WithMessage("Ad boş ola bilməz");
         }
     }
 }

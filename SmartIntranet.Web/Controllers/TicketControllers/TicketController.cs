@@ -698,7 +698,6 @@ namespace SmartIntranet.Web.Controllers
                 {
                     if (!(upload is null))
                     {
-                        _ = upload.ContentType;
                         if (MimeTypeCheckExtension.İsImage(upload))
                         {
                             string folder = "/ticketPhoto/";
@@ -1128,7 +1127,7 @@ namespace SmartIntranet.Web.Controllers
             return View(new List<TicketListDto>());
         }
 
-        [Authorize(Policy = "ticket.delete")]
+        [Authorize(Policy = "ticket.discuss")]
         public async Task<IActionResult> Discuss(DiscussionAddDto model)
         {
             var add = _map.Map<Discussion>(model);

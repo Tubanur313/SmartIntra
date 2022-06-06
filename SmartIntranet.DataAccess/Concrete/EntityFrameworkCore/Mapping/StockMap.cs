@@ -14,7 +14,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Id).UseIdentityColumn();
             builder.Property(I => I.Name).IsRequired();
             builder.Property(I => I.StockCategoryId).IsRequired();
-            builder.Property(I => I.Description).HasColumnType("ntext");
+            //builder.Property(I => I.Description).HasColumnType("ntext");
             builder.Property(I => I.Price);
             builder.Property(I => I.MacAddress);
             builder.Property(I => I.Status);
@@ -26,6 +26,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.HasOne(d => d.StockCategory)
                     .WithMany(p => p.Stocks)
                     .HasForeignKey(d => d.StockCategoryId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(d => d.IntranetUser)
+                    .WithMany(p => p.Stocks)
+                    .HasForeignKey(d => d.IntranerUserId).OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(I => I.IsDeleted);
 

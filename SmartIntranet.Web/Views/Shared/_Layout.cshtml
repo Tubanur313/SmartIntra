@@ -20,6 +20,7 @@
                             <!-- Main-body start -->
                             <div class="main-body">
                                 <div class="page-wrapper">
+                                     @Html.AntiForgeryToken()
                                     @RenderBody()
                                 </div>
                             </div>

@@ -61,6 +61,13 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<CategoryTicket>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _CategoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _CategoryTicketService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] =Messages.Add.notAdded;
@@ -103,9 +110,15 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-
+                if (await _CategoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 await _CategoryTicketService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.Updated;
+                TempData["success"] = Messages.Update.updated;
                 return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;
