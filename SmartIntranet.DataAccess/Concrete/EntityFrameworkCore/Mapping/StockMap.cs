@@ -17,7 +17,6 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             //builder.Property(I => I.Description).HasColumnType("ntext");
             builder.Property(I => I.Price);
             builder.Property(I => I.MacAddress);
-            builder.Property(I => I.Status);
             builder.Property(I => I.SKU);
             builder.Property(I => I.CompanyId).IsRequired();
             builder.Property(I => I.IntranerUserId);

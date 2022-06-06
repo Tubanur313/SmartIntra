@@ -13,7 +13,6 @@ namespace SmartIntranet.DTO.DTOs.InventaryDtos.StockDto
         public string Name { get; set; }
         public string Price { get; set; }
         public string MacAddress { get; set; }
-        public bool Status { get; set; }
         public string SKU { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdateDate { get; set; }
