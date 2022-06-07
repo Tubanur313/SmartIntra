@@ -184,6 +184,12 @@ namespace SmartIntranet.Business.Containers.MicrosoftIoC
 
             services.AddScoped<IStockImageService, StockImageManager>();
             services.AddScoped<IStockImageDal, EfStockImageRepository>();
+
+            services.AddScoped<ILongContractService, LongContractManager>();
+            services.AddScoped<ILongContractDal, EfLongContractRepository>();
+
+            services.AddScoped<ILongContractFileService, LongContractFileManager>();
+            services.AddScoped<ILongContractFileDal, EfLongContractFileRepository>();
         }
     }
 }

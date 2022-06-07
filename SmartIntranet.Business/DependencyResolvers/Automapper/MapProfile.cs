@@ -467,7 +467,14 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<StockDiscuss, StockDiscussListDto>();
             CreateMap<StockDiscussListSecondDto, StockDiscuss>();
             CreateMap<StockDiscuss, StockDiscussListSecondDto>();
-            #endregion 
+            #endregion
+
+            #region LongContract-LongContractDto
+            CreateMap<LongContractAddDto, LongContract>().ReverseMap();
+            CreateMap<LongContractListDto, LongContract>().ReverseMap();
+            CreateMap<LongContractUpdateDto, LongContract>().ReverseMap();
+            CreateMap<ContractListDto, LongContract>().ReverseMap();
+            #endregion
         }
     }
 
