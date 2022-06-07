@@ -55,7 +55,7 @@ namespace SmartIntranet.Business.Extension
                 opt.Cookie.Name = "SmartIntranetCookie";
                 //opt.Cookie.SameSite = SameSiteMode.Strict;
                 opt.Cookie.HttpOnly = true;
-                opt.ExpireTimeSpan = TimeSpan.FromHours(5);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
                 opt.SlidingExpiration = true;
                 //opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 opt.LoginPath = "/signin.html";

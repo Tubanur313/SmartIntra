@@ -44,7 +44,7 @@ namespace SmartTicket.Web
             services.AddAutoMapper(typeof(MapProfile));
             services.AddSession(option =>
             {
-                option.IdleTimeout = TimeSpan.FromHours(5);
+                option.IdleTimeout = TimeSpan.FromMinutes(300);
                 option.Cookie.HttpOnly = true;
                 option.Cookie.IsEssential = true;
                 option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
@@ -70,7 +70,7 @@ namespace SmartTicket.Web
                 app.UseExceptionHandler("/Home/Error");
                 //app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             //app.SeedTicketSystem();
             IntranetDBSeed.SeedClause(app);
             IntranetDBSeed.SeedVacationType(app);
