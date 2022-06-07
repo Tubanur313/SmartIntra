@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    partial class IntranetContextModelSnapshot : ModelSnapshot
+    [Migration("20220606074820_deleteStockStatusProperty")]
+    partial class deleteStockStatusProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2088,96 +2090,6 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.ToTable("StockImages");
                 });
 
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.LongContract", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeleteByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LongContracts");
-                });
-
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.LongContractFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ClauseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeleteByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("LongContractId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UpdateByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClauseId");
-
-                    b.HasIndex("LongContractId");
-
-                    b.ToTable("LongContractFiles");
-                });
-
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.IntranetRole", b =>
                 {
                     b.Property<int>("Id")
@@ -3907,26 +3819,6 @@ namespace SmartIntranet.DataAccess.Migrations
                         .WithMany("StockImages")
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.LongContract", b =>
-                {
-                    b.HasOne("SmartIntranet.Entities.Concrete.Membership.IntranetUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SmartIntranet.Entities.Concrete.LongContractFile", b =>
-                {
-                    b.HasOne("SmartIntranet.Entities.Concrete.Clause", "Clause")
-                        .WithMany()
-                        .HasForeignKey("ClauseId");
-
-                    b.HasOne("SmartIntranet.Entities.Concrete.LongContract", "LongContract")
-                        .WithMany("LongContractFiles")
-                        .HasForeignKey("LongContractId");
                 });
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.Membership.IntranetRoleClaim", b =>

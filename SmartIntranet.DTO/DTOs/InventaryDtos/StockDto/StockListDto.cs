@@ -11,7 +11,6 @@ namespace SmartIntranet.DTO.DTOs.InventaryDtos.StockDto
         public string Description { get; set; }
         public string Price { get; set; }
         public string MacAddress { get; set; }
-        public bool Status { get; set; }
         public string SKU { get; set; }
         public int StockCategoryId { get; set; }
         public StockCategory StockCategory { get; set; }

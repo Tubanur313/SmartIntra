@@ -10,8 +10,8 @@ using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    [Migration("20220606070155_whole-chg")]
-    partial class wholechg
+    [Migration("20220606065910_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,7 +50,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 54, 998, DateTimeKind.Local).AddTicks(8716));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 670, DateTimeKind.Local).AddTicks(5808));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -205,7 +205,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 12, DateTimeKind.Local).AddTicks(9236));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 679, DateTimeKind.Local).AddTicks(2997));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -258,7 +258,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 16, DateTimeKind.Local).AddTicks(810));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 680, DateTimeKind.Local).AddTicks(8394));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -351,7 +351,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 25, DateTimeKind.Local).AddTicks(6445));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 686, DateTimeKind.Local).AddTicks(1237));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -514,7 +514,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 27, DateTimeKind.Local).AddTicks(3126));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 687, DateTimeKind.Local).AddTicks(2033));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -577,7 +577,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 11, DateTimeKind.Local).AddTicks(3677));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 678, DateTimeKind.Local).AddTicks(5160));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -643,7 +643,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 14, DateTimeKind.Local).AddTicks(4554));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 680, DateTimeKind.Local).AddTicks(340));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -699,7 +699,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 23, DateTimeKind.Local).AddTicks(909));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 684, DateTimeKind.Local).AddTicks(6424));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -760,7 +760,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 29, DateTimeKind.Local).AddTicks(3669));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 688, DateTimeKind.Local).AddTicks(4354));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -820,7 +820,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 32, DateTimeKind.Local).AddTicks(9022));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 690, DateTimeKind.Local).AddTicks(6777));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -885,7 +885,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 48, DateTimeKind.Local).AddTicks(1684));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 700, DateTimeKind.Local).AddTicks(8719));
 
                     b.Property<string>("Currency")
                         .HasColumnType("nvarchar(max)");
@@ -959,7 +959,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 49, DateTimeKind.Local).AddTicks(7072));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 701, DateTimeKind.Local).AddTicks(8346));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1022,7 +1022,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 31, DateTimeKind.Local).AddTicks(612));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 689, DateTimeKind.Local).AddTicks(4873));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1109,7 +1109,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 69, DateTimeKind.Local).AddTicks(8312));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 714, DateTimeKind.Local).AddTicks(5434));
 
                     b.Property<DateTime?>("DeadLineEnd")
                         .ValueGeneratedOnAdd()
@@ -1151,7 +1151,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("OpenDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 64, DateTimeKind.Local).AddTicks(4635));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 710, DateTimeKind.Local).AddTicks(8058));
 
                     b.Property<string>("OrderPath")
                         .HasColumnType("nvarchar(max)");
@@ -1221,7 +1221,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 61, DateTimeKind.Local).AddTicks(5503));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 708, DateTimeKind.Local).AddTicks(8901));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1275,7 +1275,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 71, DateTimeKind.Local).AddTicks(8649));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 715, DateTimeKind.Local).AddTicks(7809));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1332,7 +1332,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 77, DateTimeKind.Local).AddTicks(6188));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 719, DateTimeKind.Local).AddTicks(6592));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1389,7 +1389,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 2, DateTimeKind.Local).AddTicks(7941));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 673, DateTimeKind.Local).AddTicks(3893));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1514,7 +1514,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 17, DateTimeKind.Local).AddTicks(9939));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 681, DateTimeKind.Local).AddTicks(7996));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1594,7 +1594,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 34, DateTimeKind.Local).AddTicks(1699));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 691, DateTimeKind.Local).AddTicks(4682));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1653,7 +1653,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 45, DateTimeKind.Local).AddTicks(2993));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 699, DateTimeKind.Local).AddTicks(862));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1712,7 +1712,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 43, DateTimeKind.Local).AddTicks(6184));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 697, DateTimeKind.Local).AddTicks(9221));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1783,7 +1783,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 75, DateTimeKind.Local).AddTicks(5651));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 718, DateTimeKind.Local).AddTicks(1610));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1830,7 +1830,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 75, DateTimeKind.Local).AddTicks(4625));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 718, DateTimeKind.Local).AddTicks(836));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1874,7 +1874,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 59, DateTimeKind.Local).AddTicks(7533));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 707, DateTimeKind.Local).AddTicks(7223));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -1949,7 +1949,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 54, DateTimeKind.Local).AddTicks(9690));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 704, DateTimeKind.Local).AddTicks(9737));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -2051,7 +2051,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 57, DateTimeKind.Local).AddTicks(256));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 706, DateTimeKind.Local).AddTicks(247));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -2114,7 +2114,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 35, DateTimeKind.Local).AddTicks(3940));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 692, DateTimeKind.Local).AddTicks(2747));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -2223,7 +2223,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 42, DateTimeKind.Local).AddTicks(1206));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 696, DateTimeKind.Local).AddTicks(9020));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -2510,7 +2510,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 73, DateTimeKind.Local).AddTicks(5659));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 716, DateTimeKind.Local).AddTicks(8809));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -2662,7 +2662,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 46, DateTimeKind.Local).AddTicks(6031));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 699, DateTimeKind.Local).AddTicks(8798));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -2849,7 +2849,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 51, DateTimeKind.Local).AddTicks(3948));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 702, DateTimeKind.Local).AddTicks(9401));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -2909,7 +2909,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 53, DateTimeKind.Local).AddTicks(4878));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 704, DateTimeKind.Local).AddTicks(2143));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()
@@ -3390,7 +3390,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 79, DateTimeKind.Local).AddTicks(2622));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 720, DateTimeKind.Local).AddTicks(7349));
 
                     b.Property<int>("Day")
                         .HasColumnType("int");
@@ -3458,7 +3458,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 6, 11, 1, 55, 81, DateTimeKind.Local).AddTicks(195));
+                        .HasDefaultValue(new DateTime(2022, 6, 6, 10, 59, 10, 721, DateTimeKind.Local).AddTicks(7909));
 
                     b.Property<int?>("DeleteByUserId")
                         .ValueGeneratedOnAdd()

@@ -65,8 +65,8 @@
                                             @stock.SKU
                                         </td>
                                         <td class="text-center">
-                                            <span class="badge badge-@(stock.Status==true?"success":"warning")">
-                                               @(stock.Status==true? Html.Raw("<i class='icofont icofont-plus'></i>"):Html.Raw("<i class='icofont icofont-minus'></i>"))
+                                            <span class="badge badge-@(stock.IntranerUserId!=null?"success":"warning")">
+                                               @(stock.IntranerUserId!=null? Html.Raw("<i class='icofont icofont-plus'></i>"):Html.Raw("<i class='icofont icofont-minus'></i>"))
                                             </span>
                                         </td>
                                         <td class="dropdown text-center">

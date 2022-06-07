@@ -49,12 +49,14 @@ namespace SmartIntranet.Business.Extension
             })
              .AddEntityFrameworkStores<IntranetContext>();
 
-            services.ConfigureApplicationCookie(opt =>
+
+            services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
             {
                 opt.Cookie.Name = "SmartIntranetCookie";
                 //opt.Cookie.SameSite = SameSiteMode.Strict;
                 opt.Cookie.HttpOnly = true;
-                opt.ExpireTimeSpan = TimeSpan.FromDays(20);
+                opt.ExpireTimeSpan = TimeSpan.FromHours(5);
+                opt.SlidingExpiration = true;
                 //opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 opt.LoginPath = "/signin.html";
                 opt.AccessDeniedPath = "/accessdenied.html";
