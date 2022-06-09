@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Business.Extension;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -83,7 +84,12 @@ namespace SmartIntranet.Web.Controllers
 
             return View(listModel);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetCompanyTree()
+        {
+            var treecompnay = DropDownTreeExtensions.BuildTreesCompany(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(treecompnay);
+        }
         [HttpPost]
         [Authorize(Policy = "company.update")]
         [ValidateAntiForgeryToken]
