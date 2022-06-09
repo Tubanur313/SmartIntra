@@ -36,11 +36,13 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpGet]
         [Authorize(Policy = "CategoryTicket.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _CategoryTicketService.GetAllIncludeAsync();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<CategoryTicketListDto>>(model));
             }
             return View(new List<CategoryTicketListDto>());
@@ -70,16 +72,22 @@ namespace SmartIntranet.Web.Controllers
                 }
                 if (await _CategoryTicketService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] =Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -89,8 +97,10 @@ namespace SmartIntranet.Web.Controllers
             var data = _map.Map<CategoryTicketUpdateDto>(await _CategoryTicketService.FindByIdAsync(Id));
             if (data == null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _CategoryTicketService.GetAllIncludeAsync());
             ViewBag.supporters = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
@@ -118,11 +128,15 @@ namespace SmartIntranet.Web.Controllers
                     });
                 }
                 await _CategoryTicketService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
         }
         [Authorize(Policy = "CategoryTicket.delete")]
         public async Task Delete(int id)
