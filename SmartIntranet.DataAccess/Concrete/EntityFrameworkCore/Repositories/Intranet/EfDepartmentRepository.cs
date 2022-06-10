@@ -14,7 +14,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.Departments
-                .Where(z => z.IsDeleted == false)
+                .Where(z => !z.IsDeleted)
                 .Include(z => z.Company)
                 .ToListAsync();
         }

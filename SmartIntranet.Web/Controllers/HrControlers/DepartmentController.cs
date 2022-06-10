@@ -35,11 +35,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
         [HttpGet]
         [Authorize(Policy = "department.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            var model = (await _departmentService.GetAllIncludeAsync()).Where(x => !x.IsDeleted).ToList();
+            var model = await _departmentService.GetAllIncludeAsync();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<DepartmentListDto>>(model));
             }
             return View(new List<DepartmentListDto>());
@@ -75,16 +77,22 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 if (await _departmentService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error =  Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -122,16 +130,18 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             var data = _map.Map<DepartmentUpdateDto>(await _departmentService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.companies = _map
                 .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => x.IsDeleted == false));
+                .GetAllAsync(x => !x.IsDeleted));
 
             ViewBag.departments = _map
                 .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false
+                .GetAllAsync(x => !x.IsDeleted
                 && x.CompanyId == data.CompanyId));
 
             return View(data);
@@ -158,12 +168,25 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         error = Messages.Error.sameName
                     });
                 }
-                await _departmentService.UpdateAsync(update);
-                TempData["success"] = "Yeniləndi";
-                return RedirectToAction("List");
+                if (await _departmentService.UpdateReturnEntityAsync(update) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
         [Authorize(Policy = "department.delete")]
         public async Task Delete(int id)
