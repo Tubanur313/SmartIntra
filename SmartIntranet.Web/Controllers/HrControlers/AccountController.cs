@@ -32,7 +32,6 @@ namespace SmartIntranet.Web.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IntranetContext _db;
-        private readonly IMapper _mapper;
         private readonly IAppUserService _appUserService;
         private readonly IWorkGraphicService _workGraphicService;
         private readonly IAppRoleService _appRoleService;
@@ -51,7 +50,6 @@ namespace SmartIntranet.Web.Controllers
         {
             _appRoleService = appRoleService;
             _workGraphicService = workGraphicService;
-            _mapper = mapper;
             _userVacationRemains = userVacationRemains;
             _db = db;
             _passwordHasher = passwordHasher;
@@ -68,7 +66,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            return View(_mapper.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            return View(_map.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
 
         [HttpGet]
@@ -138,7 +136,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> NewPassword(int id)
         {
 
-            var listModel = _mapper.Map<AppUserPassDto>(await _appUserService.FindByIdAsync(id));
+            var listModel = _map.Map<AppUserPassDto>(await _appUserService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -191,10 +189,10 @@ namespace SmartIntranet.Web.Controllers
 
             ViewBag.idCardTypes = idCardTypes;
 
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.grades = _mapper.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.departments = _mapper.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.position = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false));
 
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
 
@@ -292,10 +290,10 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-                ViewBag.grades = _mapper.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
-                ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-                ViewBag.departments = _mapper.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false));
-                ViewBag.position = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false));
 
                 TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
 
@@ -307,7 +305,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize]
         public async Task<IActionResult> GetDepartment(int companyId)
         {
-            var department = _mapper.Map<ICollection<DepartmentListDto>>(
+            var department = _map.Map<ICollection<DepartmentListDto>>(
                 await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
                 .Select(x => new { x.Id, x.Name });
             return Ok(department);
@@ -317,7 +315,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize]
         public async Task<IActionResult> GetCompanyUsers(int companyId)
         {
-            var usrs = _mapper.Map<ICollection<AppUserListDto>>(
+            var usrs = _map.Map<ICollection<AppUserListDto>>(
                 await _appUserService.GetAllIncludeAsync(x => !x.IsDeleted && x.CompanyId == companyId))
                 .Select(x => new { x.Id, Name = x.Name + " " + x.Surname + "/" + x.Company.Name + "/" + x.Department.Name + "/" + x.Position.Name });
             return Ok(usrs);
@@ -344,7 +342,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize]
         public async Task<IActionResult> GetPosition(int departmentId)
         {
-            var position = _mapper.Map<ICollection<PositionListDto>>(
+            var position = _map.Map<ICollection<PositionListDto>>(
                 await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == departmentId))
                  .Select(x => new { x.Id, x.Name });
 
@@ -356,7 +354,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetPositionWithUser(int userId)
         {
             var usr = await _userManager.FindByIdAsync(userId.ToString());
-            var position = _mapper.Map<ICollection<PositionListDto>>(
+            var position = _map.Map<ICollection<PositionListDto>>(
                 await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId))
                  .Select(x => new { x.Id, x.Name });
 
@@ -367,8 +365,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var model = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            var listModel = _mapper.Map<AppUserUpdateDto>(await _appUserService.FindByUserAllInc(id));
+            var model = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            var listModel = _map.Map<AppUserUpdateDto>(await _appUserService.FindByUserAllInc(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -425,11 +423,11 @@ namespace SmartIntranet.Web.Controllers
 
             ViewBag.idCardTypes = idCardTypes;
 
-            ViewBag.grades = _mapper.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.departments = _mapper.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId==listModel.CompanyId));
-            ViewBag.position = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId==listModel.DepartmentId));
-            ViewBag.docs = _mapper.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(id));
+            ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId==listModel.CompanyId));
+            ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId==listModel.DepartmentId));
+            ViewBag.docs = _map.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(id));
 
             listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && x.IsEditable).ToListAsync();
             ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsEditable).ToListAsync();
@@ -575,7 +573,7 @@ namespace SmartIntranet.Web.Controllers
                                 CreatedByUserId = current,
                                 CreatedDate = DateTime.UtcNow.AddHours(4)
                             };
-                            await _userContractService.AddAsync(_mapper.Map<UserContractFile>(appContract));
+                            await _userContractService.AddAsync(_map.Map<UserContractFile>(appContract));
                         }
                         else
                         {

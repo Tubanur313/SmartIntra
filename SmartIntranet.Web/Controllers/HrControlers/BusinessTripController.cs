@@ -28,7 +28,6 @@ namespace SmartIntranet.Web.Controllers
 {
     public class BusinessTripController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly IBusinessTripService _businessTripService;
         private readonly ICompanyService _companyService;
         private readonly ICauseService _causeService;
@@ -40,7 +39,6 @@ namespace SmartIntranet.Web.Controllers
         private readonly IAppUserService _appUserService;
         public BusinessTripController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IBusinessTripService businessTripService, ICompanyService companyService, ICauseService causeService, IAppUserService userService, IClauseService clauseService, IBusinessTripFileService businessTripFileService, IPlaceService placeService, IntranetContext db, IAppUserService appUserService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _businessTripService = businessTripService;
             _companyService = companyService;
             _causeService = causeService;
@@ -56,8 +54,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "businessTrip.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.causes = _mapper.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.causes = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => x.IsDeleted  == false));
             return View();
         }
 
@@ -77,7 +75,7 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedDate = DateTime.UtcNow.AddHours(4);
                 model.IsDeleted = false;
 
-                var result_model = _mapper.Map<BusinessTrip>(model);
+                var result_model = _map.Map<BusinessTrip>(model);
                 foreach (var item in result_model.BusinessTripUsers)
                 {
                     item.IsDeleted = false;
@@ -126,15 +124,15 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "businessTrip.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<BusinessTripUpdateDto>(await _businessTripService.FindByIdAsync(id));
+            var listModel = _map.Map<BusinessTripUpdateDto>(await _businessTripService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
             }
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.causes = _mapper.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.users = _mapper.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => !x.IsDeleted && x.Email != "tahiroglumahir@gmail.com"));
-            ViewBag.places =_mapper.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.causes = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.users = _map.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => !x.IsDeleted && x.Email != "tahiroglumahir@gmail.com"));
+            ViewBag.places =_map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
             ViewBag.contractFiles = await _businessTripFileService.GetAllIncAsync(x => x.BusinessTripId == id && !x.IsDeleted);
             listModel.BusinessTripUsers = await _db.BusinessTripUsers.Where(x => x.BusinessTripId == listModel.Id).ToListAsync();
             return View(listModel);
@@ -161,7 +159,7 @@ namespace SmartIntranet.Web.Controllers
                 _db.BusinessTripUsers.RemoveRange(businessTripUsersDb);
                 _db.SaveChanges();
 
-                await _businessTripService.UpdateAsync(_mapper.Map<BusinessTrip>(model));
+                await _businessTripService.UpdateAsync(_map.Map<BusinessTrip>(model));
 
                 List<BusinessTripUser> businessTripUsers = model.BusinessTripUsers.ToList();
                 List<IntranetUser> users = new List<IntranetUser>();
@@ -206,12 +204,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "businessTrip.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<BusinessTripListDto>(await _businessTripService.FindByIdAsync(id));
+            var transactionModel = _map.Map<BusinessTripListDto>(await _businessTripService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _businessTripService.UpdateAsync(_mapper.Map<BusinessTrip>(transactionModel));
+            await _businessTripService.UpdateAsync(_map.Map<BusinessTrip>(transactionModel));
             return Ok();
         }
     }

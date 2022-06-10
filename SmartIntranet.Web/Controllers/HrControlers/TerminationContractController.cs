@@ -32,7 +32,6 @@ namespace SmartIntranet.Web.Controllers
 {
     public class TerminationContractController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly ITerminationContractService _contractService;
         private readonly ITerminationContractFileService _contractFileService;
         private readonly ITerminationItemService _terminationItemService;
@@ -50,7 +49,6 @@ namespace SmartIntranet.Web.Controllers
 
         public TerminationContractController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ITerminationContractService contractService, ITerminationContractFileService contractFileService, ITerminationItemService terminationItemService, INonWOrkingYearService nonWorkingYearService, INonWorkingDayService nonWorkingDayService, IPersonalContractService personalContractService, IClauseService clauseService, IContractTypeService contractTypeService, IUserVacationRemainService userVacationRemainService, IAppUserService userService, IVacationTypeService vacationTypeService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _contractService = contractService;
             _contractTypeService = contractTypeService;
             _terminationItemService = terminationItemService;
@@ -72,8 +70,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "terminationContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.users = _mapper.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.terminationItems = await _terminationItemService.GetAllAsync(x => !x.IsDeleted);
             return View();
         }
@@ -92,7 +90,7 @@ namespace SmartIntranet.Web.Controllers
                 model.IsDeleted = false;
                 model.CreatedDate = DateTime.Now;
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_mapper.Map<TerminationContract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(_map.Map<TerminationContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
                 var usr2 = await _userManager.FindByIdAsync(result_model.UserId.ToString());
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -168,16 +166,16 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "terminationContract.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<TerminationContractUpdateDto>(await _contractService.FindByIdAsync(id));
+            var listModel = _map.Map<TerminationContractUpdateDto>(await _contractService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
             }
             var usr = await _userManager.FindByIdAsync(listModel.UserId.ToString());
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             ViewBag.company = await _companyService.FindByIdAsync((int)usr.CompanyId);
-            ViewBag.positions = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId));
-            ViewBag.users = _mapper.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.positions = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.TerminationContractId == id && !x.IsDeleted);
             ViewBag.terminationItems = await _terminationItemService.GetAllAsync(x => !x.IsDeleted);
             return View(listModel);
@@ -208,7 +206,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
-                await _contractService.UpdateAsync(_mapper.Map<TerminationContract>(model));
+                await _contractService.UpdateAsync(_map.Map<TerminationContract>(model));
 
                 var usr = await _userService.FindByUserAllInc(model.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -285,11 +283,11 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var current = GetSignInUserId();
-            var transactionModel = _mapper.Map<TerminationContractListDto>(await _contractService.FindByIdAsync(id));
+            var transactionModel = _map.Map<TerminationContractListDto>(await _contractService.FindByIdAsync(id));
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _contractService.UpdateAsync(_mapper.Map<TerminationContract>(transactionModel));
+            await _contractService.UpdateAsync(_map.Map<TerminationContract>(transactionModel));
           
             return RedirectToAction("List", "Contract");
 

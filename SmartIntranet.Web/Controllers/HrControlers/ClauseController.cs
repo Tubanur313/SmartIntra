@@ -26,17 +26,15 @@ namespace SmartIntranet.Web.Controllers
 {
     public class ClauseController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly IClauseService _clauseService;
         public ClauseController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IClauseService clauseService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _clauseService = clauseService;
         }
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<ClauseListDto> data = _mapper.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            IEnumerable<ClauseListDto> data = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(data);
         }
 
@@ -70,7 +68,7 @@ namespace SmartIntranet.Web.Controllers
                 {
                     model.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
                 }
-                await _clauseService.AddAsync(_mapper.Map<Clause>(model));
+                await _clauseService.AddAsync(_map.Map<Clause>(model));
                 return RedirectToAction("List");
             }
         }
@@ -79,7 +77,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "clause.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<ClauseUpdateDto>(await _clauseService.FindByIdAsync(id));
+            var listModel = _map.Map<ClauseUpdateDto>(await _clauseService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -110,7 +108,7 @@ namespace SmartIntranet.Web.Controllers
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
 
-                await _clauseService.UpdateAsync(_mapper.Map<Clause>(model));
+                await _clauseService.UpdateAsync(_map.Map<Clause>(model));
                 return RedirectToAction("List");
             }
         }
@@ -118,13 +116,13 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "clause.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<ClauseListDto>(await _clauseService.FindByIdAsync(id));
+            var transactionModel = _map.Map<ClauseListDto>(await _clauseService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);
-            await _clauseService.UpdateAsync(_mapper.Map<Clause>(transactionModel));
+            await _clauseService.UpdateAsync(_map.Map<Clause>(transactionModel));
             return Ok();
         }
     }

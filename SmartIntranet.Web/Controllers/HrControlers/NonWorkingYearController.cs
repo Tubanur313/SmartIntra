@@ -22,18 +22,16 @@ namespace SmartIntranet.Web.Controllers
 {
     public class NonWorkingYearController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly INonWOrkingYearService _nonWorkingYearService;
         public NonWorkingYearController(UserManager<IntranetUser> userManager, INonWOrkingYearService nonWorkingYearService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, INonWorkingDayService nonWorkingDayService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _nonWorkingYearService = nonWorkingYearService;
         }
 
         [Authorize(Policy = "nonworkingyear.list")]
         public async Task<IActionResult> List()
         {
-            return View(_mapper.Map<ICollection<NonWorkingYearListDto>>(await _nonWorkingYearService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            return View(_map.Map<ICollection<NonWorkingYearListDto>>(await _nonWorkingYearService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
         }
 
         [HttpGet]
@@ -64,7 +62,7 @@ namespace SmartIntranet.Web.Controllers
                     ModelState.AddModelError("Year", "Bu il artıq mövcuddur");
                     return RedirectToAction("Add");
                 }
-                await _nonWorkingYearService.AddAsync(_mapper.Map<NonWorkingYear>(model));
+                await _nonWorkingYearService.AddAsync(_map.Map<NonWorkingYear>(model));
                 return RedirectToAction("List");
             }
         }
@@ -73,7 +71,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize]
         public async Task<IActionResult> GetNonWorkingYear(int nonWorkingYearId)
         {
-            var nonWorkingYear = _mapper.Map<ICollection<NonWorkingYearListDto>>(
+            var nonWorkingYear = _map.Map<ICollection<NonWorkingYearListDto>>(
                 await _nonWorkingYearService.GetAllAsync(x => x.IsDeleted  == false && x.Id == nonWorkingYearId))
                  .Select(x => new { x.Id, x.Year });
 
@@ -85,7 +83,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "nonworkingyear.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<NonWorkingYearUpdateDto>(await _nonWorkingYearService.FindByIdAsync(id));
+            var listModel = _map.Map<NonWorkingYearUpdateDto>(await _nonWorkingYearService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -109,7 +107,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
-                await _nonWorkingYearService.UpdateAsync(_mapper.Map<NonWorkingYear>(model));
+                await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(model));
                 return RedirectToAction("List");
             }
         }
@@ -117,12 +115,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "nonworkingyear.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<NonWorkingYearListDto>(await _nonWorkingYearService.FindByIdAsync(id));
+            var transactionModel = _map.Map<NonWorkingYearListDto>(await _nonWorkingYearService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _nonWorkingYearService.UpdateAsync(_mapper.Map<NonWorkingYear>(transactionModel));
+            await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(transactionModel));
             return Ok();
         }
     }

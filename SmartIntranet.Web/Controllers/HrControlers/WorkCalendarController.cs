@@ -23,7 +23,6 @@ namespace SmartIntranet.Web.Controllers
 {
     public class WorkCalendarController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly IWorkCalendarService _workCalendarService;
         private readonly INonWOrkingYearService _nonWOrkingYearService;
         private readonly INonWorkingDayService _nonWorkingDayService;
@@ -31,7 +30,6 @@ namespace SmartIntranet.Web.Controllers
         public WorkCalendarController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IWorkCalendarService workCalendarService, INonWOrkingYearService nonWOrkingYearService,
           INonWorkingDayService nonWorkingDayService, IWorkGraphicService workGraphicService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _workCalendarService = workCalendarService;
             _nonWOrkingYearService = nonWOrkingYearService;
             _nonWorkingDayService = nonWorkingDayService;
@@ -48,7 +46,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.year =_nonWOrkingYearService.FindByIdAsync(year_id).Result.Year;
 
             var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id).Result;
-            var list = _mapper.Map<ICollection<WorkCalendarListDto>>(await _workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, id));
+            var list = _map.Map<ICollection<WorkCalendarListDto>>(await _workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, id));
             for (int m = 0; m < CalendarConstant.Month.Length; m++)
             {
                 var nonWorkDaysToMonth = nonWorkDays.Where(x => x.StartDate.Month <= m + 1 || x.EndDate.Month >= m + 1);
@@ -138,7 +136,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
                 model.IsDeleted = false;
-                await _workCalendarService.AddAsync(_mapper.Map<WorkCalendar>(model));
+                await _workCalendarService.AddAsync(_map.Map<WorkCalendar>(model));
                 return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
 
             }
@@ -148,7 +146,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "workcalendar.update")]
         public async Task<IActionResult> Update(int id, int number, int day, string month, int workGraphicId, int nonWorkingYearId)
         {
-            var listModel = _mapper.Map<WorkCalendarUpdateDto>(await _workCalendarService.FindByIdAsync(id));
+            var listModel = _map.Map<WorkCalendarUpdateDto>(await _workCalendarService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -175,7 +173,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
-                await _workCalendarService.UpdateAsync(_mapper.Map<WorkCalendar>(model));
+                await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(model));
                 return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
             }
         }
@@ -183,12 +181,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "workcalendar.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<WorkCalendarListDto>(await _workCalendarService.FindByIdAsync(id));
+            var transactionModel = _map.Map<WorkCalendarListDto>(await _workCalendarService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _workCalendarService.UpdateAsync(_mapper.Map<WorkCalendar>(transactionModel));
+            await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(transactionModel));
             return Ok();
 
         }

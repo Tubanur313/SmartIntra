@@ -23,7 +23,6 @@ namespace SmartIntranet.Web.Controllers
     public class ReportEmployeeController : BaseIdentityController
     {
         private readonly IAppUserService _appUserService;
-        private readonly IMapper _mapper;
         private readonly IReportEmployeeService _reportService;
         private readonly IWorkGraphicService _workGraphicService;
         private readonly IWorkCalendarService _workCalendarService;
@@ -36,7 +35,6 @@ namespace SmartIntranet.Web.Controllers
         private readonly INonWOrkingYearService _nonWorkingYearService;
         public ReportEmployeeController(UserManager<IntranetUser> userManager, ITerminationContractService terminationContractService, IWorkGraphicService workGraphicService, IWorkCalendarService workCalendarService, ICompanyService companyService, IPersonalContractService personContractService, IVacationContractService vacationContractService, IHttpContextAccessor httpContextAccessor, IAppUserService appUserService, SignInManager<IntranetUser> signInManager, IBusinessTripService businessTripService, INonWorkingDayService nonWorkingDayService, IMapper mapper, INonWOrkingYearService nonWorkingYearService, IReportEmployeeService reportService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _reportService = reportService;
             _workGraphicService = workGraphicService;
             _workCalendarService = workCalendarService;
@@ -52,7 +50,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "reportEmployee.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<ReportEmployeeListDto> data = _mapper.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
+            IEnumerable<ReportEmployeeListDto> data = _map.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
             return View(data);
         }
 
@@ -60,7 +58,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "reportEmployee.add")]
         public IActionResult Add()
         {
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>( _companyService.GetAllAsync(x => x.IsDeleted  == false).Result);
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>( _companyService.GetAllAsync(x => x.IsDeleted  == false).Result);
             return View();
         }
 
@@ -85,7 +83,7 @@ namespace SmartIntranet.Web.Controllers
                 model.FilePath = Guid.NewGuid() +".xlsx";
                 ExcellGenerate(model);
               
-                await _reportService.AddAsync(_mapper.Map<ReportEmployee>(model));
+                await _reportService.AddAsync(_map.Map<ReportEmployee>(model));
                 return RedirectToAction("List");
             }
         }
@@ -94,12 +92,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "reportEmployee.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<ReportEmployeeDto>(await _reportService.FindByIdAsync(id));
+            var listModel = _map.Map<ReportEmployeeDto>(await _reportService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
             }
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(_companyService.GetAllAsync(x => x.IsDeleted  == false).Result);
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_companyService.GetAllAsync(x => x.IsDeleted  == false).Result);
             return View(listModel);
         }
 
@@ -121,7 +119,7 @@ namespace SmartIntranet.Web.Controllers
                 model.UpdateByUserId = current;
                 DeleteFile("wwwroot/reportDocs/", model.FilePath);
                 ExcellGenerate(model);
-                await _reportService.UpdateAsync(_mapper.Map<ReportEmployee>(model));
+                await _reportService.UpdateAsync(_map.Map<ReportEmployee>(model));
                 return RedirectToAction("List");
             }
         }
@@ -129,12 +127,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "reportEmployee.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<ReportEmployeeListDto>(await _reportService.FindByIdAsync(id));
+            var transactionModel = _map.Map<ReportEmployeeListDto>(await _reportService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _reportService.UpdateAsync(_mapper.Map<ReportEmployee>(transactionModel));
+            await _reportService.UpdateAsync(_map.Map<ReportEmployee>(transactionModel));
             return RedirectToAction("List");
         }
 
@@ -332,7 +330,7 @@ namespace SmartIntranet.Web.Controllers
 
                     }
                     var graph = _workGraphicService.FindByIdAsync(graph_id).Result;
-                    var calendar_list = _mapper.Map<ICollection<WorkCalendarListDto>>( _workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
+                    var calendar_list = _map.Map<ICollection<WorkCalendarListDto>>( _workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
 
                     for (int i = 1; i <= 31; i++)
                     {
@@ -354,13 +352,13 @@ namespace SmartIntranet.Web.Controllers
                                     if (mn.CommandDate > day)
                                     {
                                         graph = _workGraphicService.FindByIdAsync(mn.LastWorkGraphicId).Result;
-                                        calendar_list = _mapper.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
+                                        calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
                                         break;
                                     }
                                     else
                                     {
                                         graph = _workGraphicService.FindByIdAsync(mn.WorkGraphicId).Result;
-                                        calendar_list = _mapper.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
+                                        calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
                                     }
                                 }
                             }
