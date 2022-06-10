@@ -57,7 +57,13 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             {
                 var add = _map.Map<StockCategory>(model);
                 add.CreatedByUserId = GetSignInUserId();
-
+                if (await _stockCategoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _stockCategoryService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -108,7 +114,13 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-
+                if (await _stockCategoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _stockCategoryService.UpdateReturnEntityAsync(update) is null)
                 {
                     return RedirectToAction("List", new
