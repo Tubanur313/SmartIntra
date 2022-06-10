@@ -59,11 +59,13 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         }
         [HttpGet]
         [Authorize(Policy = "news.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _newsService.GetAllWithIncludeAsync();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<NewsListDto>>(model));
             }
             return View(new List<NewsListDto>());
@@ -74,7 +76,6 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         {
             ViewBag.categories = _map
                 .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted));
-
             return View();
         }
         [HttpPost]
@@ -123,17 +124,26 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                         };
                         var map = _map.Map<CategoryNews>(confirm);
                         map.CreatedByUserId = GetSignInUserId();
-                        var confirmers = await _categoryNewsService
-                        .AddReturnEntityAsync(map);
+                        if (await _categoryNewsService.AddReturnEntityAsync(map) is null)
+                        {
+                            return RedirectToAction("List", new
+                            {
+                                error = Messages.Add.notAdded
+                            });
+                        }
                     }
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
 
@@ -144,11 +154,13 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             var data = _map.Map<NewsUpdateDto>(await _newsService.FindByIdIncludeAllAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.categories = _map
-                .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted ));
+                .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted));
             return View(data);
         }
         [HttpPost]
@@ -169,8 +181,10 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 var result = await _newsService.UpdateReturnEntityAsync(update);
                 if (result.Id == 0)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
                 }
                 if (uploads.Count > 0)
                 {
@@ -210,11 +224,18 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                         }
                     }
                 }
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
 
         [Authorize(Policy = "news.delete")]
@@ -237,30 +258,31 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
 
         }
         [Authorize(Policy = "news.DeleteCategoryFromCategoryNews")]
-        public async void DeleteCategoryFromCategoryNews(int newscatId ,int categoryId)
+        public async void DeleteCategoryFromCategoryNews(int newscatId, int categoryId)
         {
-            var category =await _categoryNewsService.GetAsync(x=>x.NewsId == newscatId && x.CategoryId== categoryId);
-            if (category!=null)
+            var category = await _categoryNewsService.GetAsync(x => x.NewsId == newscatId && x.CategoryId == categoryId);
+            if (category != null)
             {
-            await _categoryNewsService.RemoveAsync(category);
+                await _categoryNewsService.RemoveAsync(category);
             }
         }
-        
+
         public async Task<JsonResult> GetCategoryList(string searchTerm)
         {
             var CategoryList = _map.Map<List<CategoryListDto>>(await _categoryService
-                .GetAllAsync(x => !x.IsDeleted ));
+                .GetAllAsync(x => !x.IsDeleted));
             if (searchTerm != null)
             {
                 CategoryList = _map.Map<List<CategoryListDto>>(await _categoryService
-                .GetAllAsync(x => !x.IsDeleted && x.Name.Contains(searchTerm)));               
+                .GetAllAsync(x => !x.IsDeleted && x.Name.Contains(searchTerm)));
             }
-            var categories = CategoryList.Select(x => new {
-            text = x.Name,
-            id = x.Id,
-            });   
-            return Json( new { items = categories });
-            
+            var categories = CategoryList.Select(x => new
+            {
+                text = x.Name,
+                id = x.Id,
+            });
+            return Json(new { items = categories });
+
         }
     }
 }

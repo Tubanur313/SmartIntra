@@ -92,8 +92,10 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             var data = _map.Map<CategoryUpdateDto>(await _categoryService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.category = _map
                     .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted));
