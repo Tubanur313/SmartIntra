@@ -10,7 +10,7 @@
 @{
     Layout = null;
 }
-
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <div class="row">
 
     <div class="col-lg-12 col-xl-12">
@@ -28,7 +28,7 @@
         </ul>
         <!-- Tab panes -->
         <form asp-action="Update" enctype="multipart/form-data" class="main-signin-form">
-            <div class="tab-content tabs card-block">
+            <div class="tab-content card-block">
                 <div class="tab-pane active" id="home1"
                      role="tabpanel">
                     <input type="hidden" asp-for="Id" />
@@ -50,20 +50,11 @@
                             </div>
 
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">   Üst Şirkət: </label>
-                                <select name="select" asp-for="ParentId" name="ParentId" class="form-control">
-                                    <option value="" selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.companies)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-                                </select>
-                            </div>
+                            <label class="floatLabel">   Üst Şirkət: </label>
+                                <div class="selectedId" style="margin-bottom:20px">
+                                    <input type="text" class="form-control" asp-for="ParentId" name="ParentId" style="width:100%">
+                                </div>
                         </div>
 
                         <div class="col-sm-6">
@@ -221,11 +212,46 @@
 
 </div>
 @await Html.PartialAsync("_ValidationScriptsPartial")
-<script type="text/javascript">
-    $(document).ready(function () {
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+<script class="removable" type="text/javascript">
+    $(document).ready(function ($) {
         $("#Logo").change(function (e) {
+        if($('.file-name').isImage())
+        {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+        }
+        else
+        {
+            toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
+        }
+        });
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Company")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                $('#ParentId').combotree({
+                    data:data,
+                    prompt:'Seçim edin'
+                });
+                if($('[name="ParentId"]').val()===""){
+                 $('#ParentId')
+                     .combotree('setValue', {
+	                  id: 0,
+	                  text: 'Yoxdur'
+                     });
+                }
+            },
+            error: function (data) {
+            }
+        });
+        $("form").submit(function (e){
+            var val = $('#ParentId')
+               .combotree('getValue');
+            $('#ParentId').val($('[name="ParentId"]').val());
         });
     });
 </script>

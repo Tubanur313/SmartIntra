@@ -53,8 +53,8 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label class="floatLabel">   Üst Şirkət: </label>
-                                <div class="selectedId" style="margin-bottom:20px">
-                                    <input type="text" asp-for="ParentId" name="ParentId" style="width:100%" placeholder="Seçim edin">
+                                <div style="margin-bottom:20px">
+                                     <input type="text" class="form-control"  asp-for="ParentId" name="ParentId" style="width:100%" >
                                 </div>
                         </div>
                         <div class="col-sm-6">
@@ -209,6 +209,7 @@
             success: function (data) {
                 $('#ParentId').combotree({
                     data:data,
+                    prompt:'Seçim edin'
                 });
             },
             error: function (data) {
@@ -218,7 +219,6 @@
             var val = $('#ParentId')
                .combotree('getValue');
             $('#ParentId').val($('[name="ParentId"]').val());
-            console.log($('#ParentId').val());
         });
     });
 </script>
