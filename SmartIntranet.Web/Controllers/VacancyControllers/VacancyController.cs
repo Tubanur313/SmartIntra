@@ -62,11 +62,13 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpGet]
         [Authorize(Policy = "category.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _vacancyService.GetAllWithIncludeAsync();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<VacancyListDto>>(model));
             }
             return View(new List<VacancyListDto>());
@@ -93,16 +95,22 @@ namespace SmartIntranet.Web.Controllers
                 add.CreatedByUserId = GetSignInUserId();
                 if (await _vacancyService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -112,8 +120,10 @@ namespace SmartIntranet.Web.Controllers
             var data = _map.Map<VacancyUpdateDto>(await _vacancyService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.companies = _map
                 .Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
@@ -134,12 +144,25 @@ namespace SmartIntranet.Web.Controllers
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
 
-                await _vacancyService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                if (await _vacancyService.UpdateReturnEntityAsync(update) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
         [Authorize(Policy = "vacancy.delete")]
         public async Task Delete(int id)
