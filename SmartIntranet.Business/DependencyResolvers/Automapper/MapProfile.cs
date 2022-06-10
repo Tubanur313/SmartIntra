@@ -120,6 +120,11 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #region Company <-> CompanyDto
             CreateMap<CompanyAddDto, Company>();
             CreateMap<Company, CompanyAddDto>();
+            CreateMap<AjaxCompanyAddDto, Company>()
+                .ForMember(p => p.Name, opt => opt.MapFrom(src => src.Company_Name))
+                .ForMember(p => p.Description, opt => opt.MapFrom(src => src.Company_Description))
+                .ForMember(p => p.Parent, opt => opt.MapFrom(src => src.Company_Parent))
+                .ForMember(p => p.ParentId, opt => opt.MapFrom(src => src.Company_ParentId));
             CreateMap<CompanyListDto, Company>();
             CreateMap<Company, CompanyListDto>();
             CreateMap<CompanyUpdateDto, Company>();

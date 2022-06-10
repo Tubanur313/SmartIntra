@@ -1667,7 +1667,7 @@
     opacity: 0.3;
     filter: alpha(opacity=30);
 }
-
+/*
 .tabs {
     list-style-type: none;
     height: 26px;
@@ -1733,7 +1733,7 @@
             right: 5px;
             opacity: 0.6;
             filter: alpha(opacity=60);
-        }
+        }*/
 
 .tabs-p-tool {
     right: 16px;
