@@ -54,8 +54,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "businessTrip.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.causes = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.causes = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => !x.IsDeleted));
             return View();
         }
 
