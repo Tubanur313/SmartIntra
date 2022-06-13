@@ -10,11 +10,11 @@
 @{
     Layout = null;
 }
-
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs  tabs" role="tablist">
+        <ul class="nav tabs nav-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
                    href="#home1" role="tab">Məlumatlar</a>
@@ -53,14 +53,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label class="floatLabel">   Üst Şirkət: </label>
-                            <select name="select" asp-for="ParentId" name="ParentId" class="form-control">
-                                <option value="" selected disabled hidden>Seçim edin</option>
-                                @foreach (var item in ViewBag.companies)
-                                {
-                                    <option value="@item.Id">@item.Name</option>
-                                }
-
-                            </select>
+                                <div style="margin-bottom:20px">
+                                     <input type="text" class="form-control"  asp-for="ParentId" name="ParentId" style="width:100%" >
+                                </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -146,15 +141,15 @@
                 </div>
                 <div class="tab-pane" id="profile1" role="tabpanel">
                     <div class="row form-group">
-                        <div class="col-md-12">
-                            <label class="floatLabel"> Logo Seç:</label>
-                            <input type="file" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
+                        <div class="file-name col-md-12">
+                            <label for="Logo" class="btn btn-mat btn-primary"><i class="icofont icofont-cloud-upload"></i> Logo Yüklə</label>
+                            <input type="file" style="visibility:hidden;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
                         </div>
                         <div class="col-md-6  col-lg-6 col-sm-6">
                             <div class="border text-center pt-2">
                                 <div class="pt-0">
                                     <label class="floatLabel">Mövcud Logo:</label>
-                                    <img src="~/logo/logoDefault.png" class="pb-2 " style="width: 150px; height: 150px;" alt="Default Logo" />
+                                    <img src="~/uploads/logoDefault.png" class="pb-2 " style="width: 150px; height: 150px;" alt="Default Logo" />
                                 </div>
                             </div>
                         </div>
@@ -185,14 +180,45 @@
     </div>
 
 </div>
+<!-- cust-validation js -->
+<script src="~/files/lib/cust_ajax/cust-validation.js"></script>
 @await Html.PartialAsync("_ValidationScriptsPartial")
-<script type="text/javascript">
-    $(document).ready(function () {
+@*<script src="~/files/lib/comboTree/comboTreePlugin.js"></script>*@
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+
+<script class="removable" type="text/javascript">
+    $(document).ready(function ($) {
         $("#Logo").change(function (e) {
-
-
+        if($('.file-name').isImage())
+        {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+        }
+        else
+        {
+            toastr.error("Diqqət","Daxil edilən fayllar "+
+            " image, png və ya gif formatında olmalıdır !");
+        }
+        });
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Company")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                $('#ParentId').combotree({
+                    data:data,
+                    prompt:'Seçim edin'
+                });
+            },
+            error: function (data) {
+            }
+        });
+        $("form").submit(function (e){
+            var val = $('#ParentId')
+               .combotree('getValue');
+            $('#ParentId').val($('[name="ParentId"]').val());
         });
     });
 </script>

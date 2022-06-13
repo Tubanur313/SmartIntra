@@ -24,17 +24,15 @@ namespace SmartIntranet.Web.Controllers
 {
     public class CauseController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly ICauseService _causeService;
         public CauseController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ICauseService causeService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _causeService = causeService;
         }
         [Authorize(Policy = "cause.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<CauseListDto> data = _mapper.Map<ICollection<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            IEnumerable<CauseListDto> data = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(data);
         }
 
@@ -62,7 +60,7 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedByUserId = current;
                 model.CreatedDate = DateTime.UtcNow.AddHours(4);
                 model.IsDeleted = false;
-                await _causeService.AddAsync(_mapper.Map<Cause>(model));
+                await _causeService.AddAsync(_map.Map<Cause>(model));
                 return RedirectToAction("List");
             }
         }
@@ -71,7 +69,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "cause.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<CauseUpdateDto>(await _causeService.FindByIdAsync(id));
+            var listModel = _map.Map<CauseUpdateDto>(await _causeService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -97,7 +95,7 @@ namespace SmartIntranet.Web.Controllers
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
 
-                await _causeService.UpdateAsync(_mapper.Map<Cause>(model));
+                await _causeService.UpdateAsync(_map.Map<Cause>(model));
                 return RedirectToAction("List");
             }
         }
@@ -105,12 +103,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "cause.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<CauseListDto>(await _causeService.FindByIdAsync(id));
+            var transactionModel = _map.Map<CauseListDto>(await _causeService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _causeService.UpdateAsync(_mapper.Map<Cause>(transactionModel));
+            await _causeService.UpdateAsync(_map.Map<Cause>(transactionModel));
             return Ok();
         }
     }

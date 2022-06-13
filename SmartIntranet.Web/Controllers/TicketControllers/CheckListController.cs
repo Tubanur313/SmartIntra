@@ -31,11 +31,13 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpGet]
         [Authorize(Policy = "checkList.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _checkListService.GetAllAsync(x => !x.IsDeleted);
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<CheckListListDto>>(model));
             }
             return View(new List<CheckListListDto>());
@@ -62,17 +64,19 @@ namespace SmartIntranet.Web.Controllers
                     });
                 }
                 if (await _checkListService.AddReturnEntityAsync(add) is null)
+                {return RedirectToAction("List", new
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    error = Messages.Add.notAdded
+                });
                 }
                 TempData["success"] = Messages.Add.Added;
                 return RedirectToAction("List");
             }
             else
+            {return RedirectToAction("List", new
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                error = Messages.Error.notComplete
+            });
             }
         }
         [HttpGet]
@@ -81,9 +85,10 @@ namespace SmartIntranet.Web.Controllers
         {
             var data = _map.Map<CheckListUpdateDto>(await _checkListService.FindByIdAsync(Id));
             if (data is null)
+            {return RedirectToAction("List", new
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                error = Messages.Error.notFound
+            });
             }
             return View(data);
         }
@@ -109,11 +114,15 @@ namespace SmartIntranet.Web.Controllers
                     });
                 }
                 await _checkListService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
 
         }
         [Authorize(Policy = "checkList.delete")]

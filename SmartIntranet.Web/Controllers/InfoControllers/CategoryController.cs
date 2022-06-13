@@ -29,11 +29,13 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             _categoryService = categoryService;
         }
         [Authorize(Policy = "category.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _categoryService.GetAllAsync(x=>!x.IsDeleted);
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<CategoryListDto>>(model));
             }
             return View(new List<CategoryListDto>());
@@ -65,16 +67,22 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 }
                 if (await _categoryService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -84,8 +92,10 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             var data = _map.Map<CategoryUpdateDto>(await _categoryService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.category = _map
                     .Map<ICollection<CategoryListDto>>(await _categoryService.GetAllAsync(x => !x.IsDeleted));
@@ -113,12 +123,25 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
 
-                await _categoryService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                if (await _categoryService.UpdateReturnEntityAsync(update) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
 
         [Authorize(Policy = "category.delete")]

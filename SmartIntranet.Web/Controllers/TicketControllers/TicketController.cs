@@ -365,7 +365,7 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpGet]
         [Authorize(Policy = "ticket.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = _map.Map<List<TicketListDto>>(await _ticketService
              .GetListedBySignInUserIdAsync(GetSignInUserId()));
@@ -377,6 +377,8 @@ namespace SmartIntranet.Web.Controllers
                 return View(new List<TicketListDto>());
 
             }
+            TempData["success"] = success;
+            TempData["error"] = error;
             ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
             return View(model);
         }
@@ -620,8 +622,10 @@ namespace SmartIntranet.Web.Controllers
 
                 if (result is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
                 var ticketResult = await _ticketService.FindAllIncludeForInfoAsync(result.Id);
                 if (model.AppUserWatcherId != null)
@@ -734,8 +738,10 @@ namespace SmartIntranet.Web.Controllers
                             {
                                 SendEmailAsync(" Nomreli Task Yaradildi", result.Id);
                             }
-                            TempData["error"] = Messages.Add.Added + $"{upload.ContentType.GetType()} formatı uyğun format deyil";
-                            return RedirectToAction("List");
+                            return RedirectToAction("List", new
+                            {
+                                success = Messages.Add.Added + $"{upload.ContentType.GetType()} formatı uyğun format deyil"
+                            });
                         }
                     }
                 }
@@ -748,14 +754,17 @@ namespace SmartIntranet.Web.Controllers
                 {
                     SendEmailAsync(message, result.Id);
                 }
-                TempData["success"] = "Tiket Əlavə olundu";
-                return RedirectToAction("List");
-
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -858,12 +867,16 @@ namespace SmartIntranet.Web.Controllers
                 data.CategoryTicketId = model.CategoryTicketId;
                 await _ticketService.UpdateModifiedAsync(data);
 
-                TempData["success"] = "Kateqoriya siyahısı yeniləndi";
                 SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                success = Messages.Error.notComplete
+            });
         }
 
         [HttpGet]
@@ -905,12 +918,16 @@ namespace SmartIntranet.Web.Controllers
                         }
                     }
                 }
-                TempData["success"] = "Checklistler siyahısı yeniləndi";
                 SendEmailAsync(" Nomreli Task Checklistler Yeniləndi", model.Id);
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = "Daxil edilən məlumatlar tam deyil !";
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
         }
         [HttpGet]
         [Authorize(Policy = "ticket.confirm")]
@@ -938,8 +955,10 @@ namespace SmartIntranet.Web.Controllers
                     ticket.Confirmed = model.Confirmed;
                     await _ticketService.UpdateModifiedAsync(ticket);
                     //SendEmailAsync(" Nomreli Taska Tesdiq Sorgusu Elave olundu", model.Id);
-                    TempData["success"] = "Təsdiqləyənlər siyahısı yeniləndi";
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        success = Messages.Update.confirmed
+                    });
                 }
                 if (model.ConfirmTicketUserId != null)
                 {
@@ -1071,11 +1090,15 @@ namespace SmartIntranet.Web.Controllers
 
                 await _ticketService.UpdateAsync(update);
                 SendEmailAsync(" Nomreli Taskın Statusu Dəyişdirildi", model.Id);
-                TempData["success"] = "Status dəyişdirildi";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
         }
         [HttpGet]
         [Authorize(Policy = "ticket.priority")]
@@ -1101,11 +1124,15 @@ namespace SmartIntranet.Web.Controllers
 
                 await _ticketService.UpdateAsync(update);
                 //SendEmailAsync(" Nomreli Taskın Prioriteti Dəyişdirildi", model.Id);
-                TempData["success"] = "Prioritet dəyişdirildi";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
         }
         #endregion
         #region Tickets Other Actions

@@ -26,17 +26,15 @@ namespace SmartIntranet.Web.Controllers
 {
     public class PlaceController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly IPlaceService _placeService;
         public PlaceController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IPlaceService placeService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _placeService = placeService;
         }
         [Authorize(Policy = "place.list")]
         public async Task<IActionResult> List()
         {
-            IEnumerable<PlaceListDto> data = _mapper.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList().Select(x =>
+            IEnumerable<PlaceListDto> data = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList().Select(x =>
             new PlaceListDto()
             {
                 Id = x.Id,
@@ -74,7 +72,7 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedByUserId = current;
                 model.CreatedDate = DateTime.UtcNow.AddHours(4);
                 model.IsDeleted = false;
-                await _placeService.AddAsync(_mapper.Map<Place>(model));
+                await _placeService.AddAsync(_map.Map<Place>(model));
                 return RedirectToAction("List");
             }
         }
@@ -83,7 +81,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "place.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<PlaceUpdateDto>(await _placeService.FindByIdAsync(id));
+            var listModel = _map.Map<PlaceUpdateDto>(await _placeService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -109,7 +107,7 @@ namespace SmartIntranet.Web.Controllers
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
 
-                await _placeService.UpdateAsync(_mapper.Map<Place>(model));
+                await _placeService.UpdateAsync(_map.Map<Place>(model));
                 return RedirectToAction("List");
             }
         }
@@ -117,12 +115,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "place.delete")]
         public async Task<IActionResult> Delete(int id)
         {
-            var transactionModel = _mapper.Map<PlaceListDto>(await _placeService.FindByIdAsync(id));
+            var transactionModel = _map.Map<PlaceListDto>(await _placeService.FindByIdAsync(id));
             var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _placeService.UpdateAsync(_mapper.Map<Place>(transactionModel));
+            await _placeService.UpdateAsync(_map.Map<Place>(transactionModel));
             return Ok();
         }
 
@@ -146,7 +144,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize]
         public async Task<IActionResult> GetPlaces()
         {
-            IEnumerable<PlaceListDto> data = _mapper.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => x.DeleteByUserId == null)).Select(x =>
+            IEnumerable<PlaceListDto> data = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => x.DeleteByUserId == null)).Select(x =>
              new PlaceListDto()
              {
                  Id = x.Id,

@@ -13,16 +13,16 @@ namespace SmartIntranet.Web.ViewComponents
     public class ContactInfoViewComponent : ViewComponent
     {
         private readonly IAppUserService _appUserService;
-        private readonly IMapper _mapper;
+        private readonly IMapper _map;
         public ContactInfoViewComponent(IAppUserService appUserService, IMapper mapper)
         {
             _appUserService = appUserService;
-            _mapper = mapper;
+            _map = mapper;
         }
 
         public IViewComponentResult Invoke()
         {
-            return View(_mapper.Map<ICollection<AppUserContactListDto>>( _appUserService.GetAllIncludeAsync().Result
+            return View(_map.Map<ICollection<AppUserContactListDto>>( _appUserService.GetAllIncludeAsync().Result
                 .OrderBy(x => new Random().Next()).ToList()));
         }
     }

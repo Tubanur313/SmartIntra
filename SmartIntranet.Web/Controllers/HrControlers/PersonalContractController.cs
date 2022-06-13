@@ -30,7 +30,6 @@ namespace SmartIntranet.Web.Controllers
 {
     public class PersonalContractController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly IntranetContext _db;
         private readonly IPersonalContractService _contractService;
         private readonly IVacationContractService _vacationContractService;
@@ -45,7 +44,6 @@ namespace SmartIntranet.Web.Controllers
 
         public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _db = db;
             _contractService = contractService;
             _vacationContractService = vacationContractService;
@@ -64,8 +62,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "personalContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.users = _mapper.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
             return View();
@@ -108,7 +106,7 @@ namespace SmartIntranet.Web.Controllers
 
                 // Emek muqavile senedi
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_mapper.Map<PersonalContract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(_map.Map<PersonalContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
 
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -353,16 +351,16 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "personalContract.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<PersonalContractUpdateDto>(await _contractService.FindByIdAsync(id));
+            var listModel = _map.Map<PersonalContractUpdateDto>(await _contractService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
             }
             var usr = await _userManager.FindByIdAsync(listModel.UserId.ToString());
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             ViewBag.company = await _companyService.FindByIdAsync((int)usr.CompanyId);
-            ViewBag.positions = _mapper.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId));
-            ViewBag.users = _mapper.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.positions = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == id && !x.IsDeleted);
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
@@ -405,7 +403,7 @@ namespace SmartIntranet.Web.Controllers
                 }
 
 
-                await _contractService.UpdateAsync(_mapper.Map<PersonalContract>(model));
+                await _contractService.UpdateAsync(_map.Map<PersonalContract>(model));
 
                 var usr = await _userService.FindByUserAllInc(model.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -523,7 +521,7 @@ namespace SmartIntranet.Web.Controllers
                             el_del.DeleteDate = DateTime.UtcNow.AddHours(4);
                             el_del.DeleteByUserId = current;
                             el_del.IsDeleted = true;
-                            await _contractService.UpdateAsync(_mapper.Map<PersonalContract>(el_del));
+                            await _contractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
                         }
 
                         var del_list = _vacationContractService.GetAllIncCompAsync(x => x.FromDate >= start_interval).Result;
@@ -537,7 +535,7 @@ namespace SmartIntranet.Web.Controllers
                             el.DeleteDate = DateTime.UtcNow.AddHours(4);
                             el.DeleteByUserId = current;
                             el.IsDeleted = true;
-                            await _vacationContractService.UpdateAsync(_mapper.Map<VacationContract>(el));
+                            await _vacationContractService.UpdateAsync(_map.Map<VacationContract>(el));
                         }
 
                         var remain_list = _userVacationRemains.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
@@ -585,7 +583,7 @@ namespace SmartIntranet.Web.Controllers
                 transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
                 transactionModel.DeleteByUserId = current;
                 transactionModel.IsDeleted = true;
-                await _contractService.UpdateAsync(_mapper.Map<PersonalContract>(transactionModel));
+                await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
             }
             return Ok();
         }

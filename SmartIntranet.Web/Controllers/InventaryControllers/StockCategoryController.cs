@@ -28,11 +28,13 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             _stockCategoryService = stockCategoryService;
         }
         [Authorize(Policy = "stockcategory.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _stockCategoryService.GetAllAsync(x => !x.IsDeleted);
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<StockCategoryListDto>>(model));
             }
             return View(new List<StockCategoryListDto>());
@@ -64,16 +66,22 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 }
                 if (await _stockCategoryService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -83,8 +91,10 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var data = _map.Map<StockCategoryUpdateDto>(await _stockCategoryService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.StockCategory = _map
                     .Map<ICollection<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
@@ -111,12 +121,25 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                         error = Messages.Error.sameName
                     });
                 }
-                await _stockCategoryService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                if (await _stockCategoryService.UpdateReturnEntityAsync(update) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
 
         [Authorize(Policy = "stockcategory.delete")]

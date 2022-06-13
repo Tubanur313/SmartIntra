@@ -27,11 +27,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
 
         [Authorize(Policy = "grade.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = (await _gradeService.GetAllAsync()).Where(x => !x.IsDeleted).ToList();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<GradeListDto>>(model));
             }
             return View(new List<GradeListDto>());
@@ -53,18 +55,31 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Grade>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
                 if (await _gradeService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
 
@@ -74,13 +89,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var data = _map.Map<GradeUpdateDto>(await _gradeService.FindByIdAsync(id));
             if (data is null)
-            {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
-            }
+                return RedirectToAction("List", new { error = Messages.Error.notFound });
             return View(data);
         }
-
         [HttpPost]
         [Authorize(Policy = "grade.update")]
         [ValidateAntiForgeryToken]
@@ -98,11 +109,32 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.DeleteDate = data.DeleteDate;
 
                 await _gradeService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameName
+                    });
+                }
+                if (await _gradeService.UpdateReturnEntityAsync(update) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
 
         [Authorize(Policy = "grade.delete")]

@@ -56,11 +56,13 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             _upload = upload;
         }
         [Authorize(Policy = "stock.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = await _stockService.GetStockAllIncludeAsync();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<StockListDto>>(model));
             }
             return View(new List<StockListDto>());
@@ -88,8 +90,10 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 add.CreatedByUserId = GetSignInUserId();
                 if (await _stockService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
                 foreach (var upload in uploads)
                 {
@@ -109,18 +113,24 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                     }
                     else
                     {
-                        TempData["success"] = Messages.Add.Added;
-                        TempData["error"] = $"{upload.ContentType.GetType()} formatı uyğun format deyil";
-                        return RedirectToAction("List");
+                        return RedirectToAction("List", new
+                        {
+                            success = Messages.Add.Added,
+                            error = $"{upload.ContentType.GetType()} formatı uyğun format deyil"
+                        });
                     }
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -130,8 +140,10 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var data = _map.Map<StockUpdateDto>(await _stockService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             ViewBag.StockCategories = _map.Map<List<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
@@ -154,12 +166,25 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
 
-                await _stockService.UpdateAsync(update);
-                TempData["success"] = Messages.Update.updated;
-                return RedirectToAction("List");
+                if (await _stockService.UpdateReturnEntityAsync(update) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Update.notUpdated
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
+            }
         }
 
         [HttpGet]

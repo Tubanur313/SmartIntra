@@ -20,7 +20,6 @@ namespace SmartIntranet.Web.Controllers
 {
     public class LongContractController : BaseIdentityController
     {
-        private readonly IMapper _mapper;
         private readonly ILongContractService _contractService;
         private readonly ILongContractFileService _contractFileService;
         private readonly IAppUserService _userService;
@@ -29,7 +28,6 @@ namespace SmartIntranet.Web.Controllers
 
         public LongContractController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ILongContractService contractService, ILongContractFileService contractFileService, IClauseService clauseService,IAppUserService userService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
-            _mapper = mapper;
             _contractService = contractService;
             _contractFileService = contractFileService;
             _userService = userService;
@@ -42,8 +40,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "longContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.users = _mapper.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             return View();
         }
 
@@ -61,7 +59,7 @@ namespace SmartIntranet.Web.Controllers
                 model.IsDeleted = false;
                 model.CreatedDate = DateTime.Now;
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_mapper.Map<LongContract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(_map.Map<LongContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
                 var usr2 = await _userManager.FindByIdAsync(result_model.UserId.ToString());
                 var company = await _companyService.FindByIdAsync((int)usr2.CompanyId);
@@ -93,16 +91,16 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "longContract.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _mapper.Map<LongContractUpdateDto>(await _contractService.FindByIdAsync(id));
+            var listModel = _map.Map<LongContractUpdateDto>(await _contractService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
             }
             var usr = await _userManager.FindByIdAsync(listModel.UserId.ToString());
-            ViewBag.companies = _mapper.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             ViewBag.company = await _companyService.FindByIdAsync((int)usr.CompanyId);
           
-            ViewBag.users = _mapper.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.LongContractId == id && !x.IsDeleted);
 
             return View(listModel);
@@ -125,7 +123,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
-                await _contractService.UpdateAsync(_mapper.Map<LongContract>(model));
+                await _contractService.UpdateAsync(_map.Map<LongContract>(model));
 
                 var usr = await _userService.FindByUserAllInc(model.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -157,11 +155,11 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var current = GetSignInUserId();
-            var transactionModel = _mapper.Map<LongContractListDto>(await _contractService.FindByIdAsync(id));
+            var transactionModel = _map.Map<LongContractListDto>(await _contractService.FindByIdAsync(id));
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            await _contractService.UpdateAsync(_mapper.Map<LongContract>(transactionModel));
+            await _contractService.UpdateAsync(_map.Map<LongContract>(transactionModel));
             return Ok();
 
         }
