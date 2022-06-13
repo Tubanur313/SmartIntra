@@ -235,7 +235,7 @@ namespace SmartIntranet.Web.Controllers
                 {
                    foreach (var el in user.UserVacationRemains)
                     {
-                        el.IsDeleted = true;
+                        el.IsDeleted = false;
                         el.IsEditable = true;
                         el.CreatedByUserId = current;
                         el.CreatedDate = DateTime.Now;
@@ -396,7 +396,7 @@ namespace SmartIntranet.Web.Controllers
                     UserVacationRemain ur = new UserVacationRemain();
                     ur.FromDate = start_interval;
                     ur.ToDate = end_interval;
-                    ur.IsDeleted = true;
+                    ur.IsDeleted = false;
                     ur.CreatedDate = DateTime.Now;
                     ur.AppUserId = id;
                     ur.UsedCount = 0;
