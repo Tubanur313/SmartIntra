@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -60,8 +61,10 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "contract.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
+            TempData["success"] = success;
+            TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var contracts = _map.Map<List<ContractListDto>>(await _contractService.GetAllIncCompAsync(x => !x.IsDeleted));
@@ -251,7 +254,10 @@ namespace SmartIntranet.Web.Controllers
                 financialResponsibilityFile.FilePath = await AddContractFile(financial_clause.FilePath, PdfFormatKeys(formatKeys, content3));
 
                 await _contractFileService.AddAsync(financialResponsibilityFile);
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
 
             }
         }
@@ -288,8 +294,10 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
@@ -343,7 +351,10 @@ namespace SmartIntranet.Web.Controllers
                     }
 
                 }
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
