@@ -72,12 +72,12 @@ namespace SmartTicket.Web
             }
             //app.UseHttpsRedirection();
             //app.SeedTicketSystem();
-            IntranetDBSeed.SeedClause(app);
-            IntranetDBSeed.SeedVacationType(app);
-            IntranetDBSeed.SeedNonWorkingGraphics(app);
-            IntranetDBSeed.SeedPlace(app);
-            IntranetDBSeed.SeedTerminationItem(app);
-            IntranetDBSeed.SeedContractType(app);
+            //IntranetDBSeed.SeedClause(app);
+            //IntranetDBSeed.SeedVacationType(app);
+            //IntranetDBSeed.SeedNonWorkingGraphics(app);
+            //IntranetDBSeed.SeedPlace(app);
+            //IntranetDBSeed.SeedTerminationItem(app);
+            //IntranetDBSeed.SeedContractType(app);
             app.UseMiddleware<SecurityHeadersMiddleware>();
             app.UseStaticFiles();
             app.UseRouting();
