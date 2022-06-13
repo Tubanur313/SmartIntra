@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -32,8 +33,10 @@ namespace SmartIntranet.Web.Controllers
             _clauseService = clauseService;
         }
         [Authorize(Policy = "clause.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
+            TempData["success"] = success;
+            TempData["error"] = error;
             IEnumerable<ClauseListDto> data = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(data);
         }
@@ -69,7 +72,10 @@ namespace SmartIntranet.Web.Controllers
                     model.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
                 }
                 await _clauseService.AddAsync(_map.Map<Clause>(model));
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -93,8 +99,10 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
@@ -109,7 +117,10 @@ namespace SmartIntranet.Web.Controllers
                 model.UpdateByUserId = current;
 
                 await _clauseService.UpdateAsync(_map.Map<Clause>(model));
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 

@@ -29,7 +29,7 @@ namespace SmartIntranet.Web.Controllers
         public CauseController(UserManager<IntranetUser> userManager,
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IntranetUser> signInManager,
-            IMapper mapper, ICauseService causeService) 
+            IMapper mapper, ICauseService causeService)
             : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _causeService = causeService;
@@ -59,18 +59,28 @@ namespace SmartIntranet.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CauseAddDto model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            else
+            if (ModelState.IsValid)
             {
                 var add = _map.Map<Cause>(model);
                 add.CreatedByUserId = GetSignInUserId();
                 await _causeService.AddAsync(add);
+                if (await _causeService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added
+                });
+            }
+            else
+            {
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
                 });
             }
         }
