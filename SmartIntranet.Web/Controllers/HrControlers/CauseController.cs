@@ -19,20 +19,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
     public class CauseController : BaseIdentityController
     {
         private readonly ICauseService _causeService;
-        public CauseController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ICauseService causeService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public CauseController(UserManager<IntranetUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            SignInManager<IntranetUser> signInManager,
+            IMapper mapper, ICauseService causeService)
+            : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _causeService = causeService;
         }
         [Authorize(Policy = "cause.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            IEnumerable<CauseListDto> data = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            TempData["success"] = success;
+            TempData["error"] = error;
+            IEnumerable<CauseListDto> data = _map.
+                Map<ICollection<CauseListDto>>(await _causeService
+                .GetAllIncAsync(x => !x.IsDeleted))
+                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                .ToList();
             return View(data);
         }
 
@@ -43,25 +54,34 @@ namespace SmartIntranet.Web.Controllers
             return View();
         }
 
-      
-
         [HttpPost]
         [Authorize(Policy = "cause.add")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CauseAddDto model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var add = _map.Map<Cause>(model);
+                add.CreatedByUserId = GetSignInUserId();
+                await _causeService.AddAsync(add);
+                if (await _causeService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow.AddHours(4);
-                model.IsDeleted = false;
-                await _causeService.AddAsync(_map.Map<Cause>(model));
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
 
@@ -69,13 +89,16 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "cause.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var listModel = _map.Map<CauseUpdateDto>(await _causeService.FindByIdAsync(id));
-            if (listModel == null)
+            var data = _map.Map<CauseUpdateDto>(await _causeService.FindByIdAsync(id));
+            if (data is null)
             {
-                return NotFound();
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
 
-            return View(listModel);
+            return View(data);
         }
 
         [HttpPost]
@@ -83,33 +106,40 @@ namespace SmartIntranet.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(CauseUpdateDto model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                var data = await _causeService.FindByIdAsync(model.Id);
+                var update = _map.Map<Cause>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+
+                await _causeService.UpdateAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
             else
             {
-                var current = GetSignInUserId();
-                
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
-                model.UpdateByUserId = current;
-
-                await _causeService.UpdateAsync(_map.Map<Cause>(model));
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
 
         [Authorize(Policy = "cause.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
-            var transactionModel = _map.Map<CauseListDto>(await _causeService.FindByIdAsync(id));
-            var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
-            transactionModel.DeleteByUserId = current;
-            transactionModel.IsDeleted = true;
-            await _causeService.UpdateAsync(_map.Map<Cause>(transactionModel));
-            return Ok();
+            var delete = await _causeService.FindByIdAsync(id);
+            delete.DeleteByUserId = GetSignInUserId();
+            delete.DeleteDate = DateTime.Now;
+            delete.IsDeleted = true;
+            await _causeService.UpdateAsync(delete);
         }
     }
 }

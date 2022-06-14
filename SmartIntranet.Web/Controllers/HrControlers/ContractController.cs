@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -60,8 +61,10 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "contract.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
+            TempData["success"] = success;
+            TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var contracts = _map.Map<List<ContractListDto>>(await _contractService.GetAllIncCompAsync(x => !x.IsDeleted));
@@ -177,6 +180,7 @@ namespace SmartIntranet.Web.Controllers
 
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
                 formatKeys.Add("contractDate", result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
+                formatKeys.Add("contractDatePlus", model.ContractStart.AddYears(1).ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (result_model.ContractEnd != null)
                     formatKeys.Add("contractDateEnd", result_model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 formatKeys.Add("contractNumber", result_model.ContractNumber);
@@ -251,7 +255,10 @@ namespace SmartIntranet.Web.Controllers
                 financialResponsibilityFile.FilePath = await AddContractFile(financial_clause.FilePath, PdfFormatKeys(formatKeys, content3));
 
                 await _contractFileService.AddAsync(financialResponsibilityFile);
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
 
             }
         }
@@ -288,8 +295,10 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
@@ -305,6 +314,7 @@ namespace SmartIntranet.Web.Controllers
 
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
                 formatKeys.Add("contractDate", model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
+                formatKeys.Add("contractDatePlus", model.ContractStart.AddYears(1).ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (model.ContractEnd != null)
                     formatKeys.Add("contractDateEnd", model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 formatKeys.Add("contractNumber", model.ContractNumber);
@@ -320,15 +330,32 @@ namespace SmartIntranet.Web.Controllers
                 var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.ContractId == model.Id && !x.IsDeleted);
                 foreach(var el in contract_files)
                 {
-                    if (el.Clause.Key == ContractFileReadyConst.recruitment_labor_contract && model.ContractFileType == ContractConst.UPLOAD_FILE)
+                    if(el.Clause.Key != ContractFileReadyConst.recruitment_command &&
+                        el.Clause.Key != ContractFileReadyConst.recruitment_financial_responsibility &&
+                        el.Clause.Key != ContractFileReadyConst.recruitment_privacy)
                     {
-                        if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
+                        if (model.ContractFileType == ContractConst.UPLOAD_FILE)
                         {
-                            DeleteFile("wwwroot/contractDocs/", el.FilePath);
-                            el.IsClause = false;
-                            el.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc);
-                            await _contractFileService.UpdateAsync(el);
+                            if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
+                            {
+                                DeleteFile("wwwroot/contractDocs/", el.FilePath);
+                                el.IsClause = false;
+                                el.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc);
+                                await _contractFileService.UpdateAsync(el);
 
+                            }
+                        }
+                        else
+                        {
+                            var clause = _clauseService.GetAllIncCompAsync(x => x.Id == model.ClauseId && !x.IsDeleted).Result[0];
+                            DeleteFile("wwwroot/contractDocs/", el.FilePath);
+
+                            StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys);
+                            var new_el = _contractFileService.FindByIdAsync(el.Id).Result;
+                            new_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content));
+                            new_el.IsClause = true;
+                            new_el.ClauseId = model.ClauseId;
+                            await _contractFileService.UpdateAsync(new_el);
                         }
                     }
                     else
@@ -341,9 +368,13 @@ namespace SmartIntranet.Web.Controllers
                         el.IsClause = true;
                         await _contractFileService.UpdateAsync(el);
                     }
+                        
 
                 }
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
