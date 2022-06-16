@@ -59,8 +59,8 @@ namespace SmartIntranet.Business.Extension
                 opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
                 opt.SlidingExpiration = true;
-                opt.Cookie.SameSite = SameSiteMode.Lax; //Top level navigasyonlara sebep olmayan requestlere Cookie'nin gönderilmemesini belirtiyoruz.
-                opt.Cookie.SecurePolicy = CookieSecurePolicy.Always; //HTTPS üzerinden erişilebilir yapıyoruz.
+                opt.Cookie.SameSite = SameSiteMode.Lax; 
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
                 //opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 opt.LoginPath = "/signin.html";
