@@ -14,7 +14,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Business.Extension;
-using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 
@@ -24,14 +23,14 @@ namespace SmartIntranet.Web.Controllers
     {
         private readonly ICompanyService _companyService;
         private readonly IAppUserService _appUserService;
-        private readonly IFileManager _upload;
+        private readonly IFileService _upload;
         public CompanyController(
             UserManager<IntranetUser> userManager,
             IAppUserService appUserService,
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IntranetUser> signInManager,
             IMapper mapper,
-            IFileManager upload,
+            IFileService upload,
             ICompanyService companyService
             ) : base(userManager, httpContextAccessor, signInManager, mapper)
         {

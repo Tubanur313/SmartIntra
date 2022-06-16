@@ -32,6 +32,7 @@ using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
 using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
+using System.IO.Compression;
 
 namespace SmartIntranet.Business.Extension
 {
@@ -54,16 +55,20 @@ namespace SmartIntranet.Business.Extension
             {
                 opt.Cookie.Name = "SmartIntranetCookie";
                 //opt.Cookie.SameSite = SameSiteMode.Strict;
-                opt.Cookie.HttpOnly = true;
+                opt.Cookie.HttpOnly = false;
+                opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
                 opt.SlidingExpiration = true;
+                opt.Cookie.SameSite = SameSiteMode.Lax; 
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
                 //opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 opt.LoginPath = "/signin.html";
                 opt.AccessDeniedPath = "/accessdenied.html";
             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie();
 
             services.AddAuthorization(cfg =>
             {
@@ -96,7 +101,7 @@ namespace SmartIntranet.Business.Extension
             });
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
-                options.Level = System.IO.Compression.CompressionLevel.Optimal;
+                options.Level = CompressionLevel.Optimal;
             });
 
         }

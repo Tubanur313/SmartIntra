@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Extensions;
-using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
@@ -26,12 +26,12 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         private readonly INewsFileService _newsfileService;
         private readonly ICategoryService _categoryService;
         private readonly ICategoryNewsService _categoryNewsService;
-        private readonly IFileManager _upload;
+        private readonly IFileService _upload;
 
         public NewsController
             (
             IMapper map,
-            IFileManager upload,
+            IFileService upload,
             UserManager<IntranetUser> userManager,
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IntranetUser> signInManager,

@@ -53,56 +53,7 @@
     <partial name="_FootScripts" />
     @RenderSection("ProfileJs", required: false)
     @RenderSection("CrudJs", required: false)
-    @*      <script language="javascript">
-        document.onmousedown = disableclick;
-        status = "Right Click Disabled";
-        function disableclick(e) {
-        if (event.button == 2) {
-        alert(status);
-        return false;
-        }
-        }
-        </script>
-        <script>
-
-        $(document).keypress("u", function (e) {
-        if (e.ctrlKey) {
-        return false;
-        }
-        else {
-        return true;
-        }
-        });
-
-        </script>*@
-    @*    <script>
-        // disable right click
-        document.addEventListener('contextmenu', event => event.preventDefault());
-
-        document.onkeydown = function (e) {
-
-        // disable F12 key
-        if (e.keyCode == 123) {
-        return false;
-        }
-
-        // disable I key
-        if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
-        return false;
-        }
-
-        // disable J key
-        if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
-        return false;
-        }
-
-        // disable U key
-        if (e.ctrlKey && e.keyCode == 85) {
-        return false;
-        }
-        }
-
-        </script>*@
+  
 <script class="removable">
     $(".removable").remove();
     $("#searchId").on("click",function(e){
