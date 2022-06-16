@@ -3,7 +3,7 @@
 @{
     Layout = null;
 }
-
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Update" class="main-signin-form">
@@ -30,32 +30,18 @@
 
             <div class="form-group row">
                 <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="floatLabel">  Şirkət: </label>
-                        <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
-
-                            @foreach (var item in ViewBag.companies)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-
-                        </select>
-                        <span asp-validation-for="CompanyId" class="text-danger"></span>
+                    <label class="floatLabel">   Şirkət: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
+                    <span class="CompanyId text-danger"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="floatLabel">Üst Şobə: </label>
-                        <select name="select" asp-for="ParentId" name="ParentId" class="form-control">
-                            <option value="" selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.departments)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
+                    <label class="floatLabel">   Üst Şöbə: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="ParentId" name="ParentId" style="width:100%">
                     </div>
                 </div>
-
             </div>
             <div class="form-group row ">
                 <div class="col-sm-12 d-flex justify-content-between">
@@ -70,7 +56,115 @@
 </div>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+
 <script class="removable">
+    $( document ).ready(function() {
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Department")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                var tree = $('#ParentId').combotree({
+                 prompt:'Seçim edin',
+                });
+                $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Department")`,
+                        type: "Get",
+                        data: {
+                            companyId: $('#CompanyId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                            $('#ParentId').combotree({
+                                 data:data,
+                                 prompt:'Seçim edin'
+                            });
+                            }
+                            else{
+                            var tree = $('#ParentId').combotree({
+                                 prompt:'Yoxdur !',
+                            });
+                            tree.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                $("#overlay").fadeOut(300);
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                })
+              //tree.combotree('disable')
+              $('#CompanyId').combotree({
+                data:data,
+                prompt:'Seçim edin',
+                onClick:function(){
+                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                    $("#overlay").fadeIn(300);
+                    $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Department")`,
+                        type: "Get",
+                        data: {
+                           companyId: $('#CompanyId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                            $('#ParentId').combotree({
+                                 data:data,
+                                 prompt:'Seçim edin'
+                            });
+                            }
+                            else{
+                            var tree = $('#ParentId').combotree({
+                                 prompt:'Yoxdur !',
+                            });
+                            tree.combotree('setValue', '');
+                            tree.combotree('disable');
+                            }
+                        },
+                        error: function (data) {
+                             $("#overlay").fadeOut(300);
+                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    })
+                 }
+              })
+            },
+            error: function (data) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
+        $("form").submit(function (e){
+            //e.preventDefault();
+            var val = $('#CompanyId').combotree('getValue');
+            if(val === ""){
+               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<script class="removable">
     $( document ).ready(function() {
          $(document).on('change','#CompanyId', function(){
         var _id = $(this).val();
@@ -108,4 +202,4 @@
         });
      });
      });
-</script>
+</script>*@

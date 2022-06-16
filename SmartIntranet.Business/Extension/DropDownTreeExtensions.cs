@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.DTO.DTOs.CommonUseDto;
+using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace SmartIntranet.Business.Extension
 {
     public static class DropDownTreeExtensions
     {
-        public static IList<TreeDto> BuildTreesCompany(this IList<Company> companies)
+        public static IList<TreeDto> BuildTrees(this IList<Company> companies)
         {
             var dtos = companies.Select(c => new TreeDto
             {
@@ -18,10 +19,20 @@ namespace SmartIntranet.Business.Extension
                 ParentId = c.ParentId
             }).ToList();
 
-            return BuildTreesCompany(null, dtos);
+            return BuildTrees(null, dtos);
         }
+        public static IList<TreeDto> BuildTrees(this IList<Department> companies)
+        {
+            var dtos = companies.Select(c => new TreeDto
+            {
+                Id = c.Id,
+                Text = c.Name,
+                ParentId = c.ParentId
+            }).ToList();
 
-        private static IList<TreeDto> BuildTreesCompany(int? pid, List<TreeDto> candicates)
+            return BuildTrees(null, dtos);
+        }
+        private static IList<TreeDto> BuildTrees(int? pid, List<TreeDto> candicates)
         {
             var subs = candicates.Where(c => c.ParentId == pid).ToList();
             if (subs.Count() == 0)
@@ -30,7 +41,7 @@ namespace SmartIntranet.Business.Extension
             }
             foreach (var i in subs)
             {
-                i.Children = BuildTreesCompany(i.Id, candicates);
+                i.Children = BuildTrees(i.Id, candicates);
             }
             return subs;
         }

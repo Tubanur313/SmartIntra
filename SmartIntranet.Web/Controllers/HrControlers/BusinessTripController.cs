@@ -37,7 +37,15 @@ namespace SmartIntranet.Web.Controllers
         private readonly IPlaceService _placeService;
         private readonly IntranetContext _db;
         private readonly IAppUserService _appUserService;
-        public BusinessTripController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IBusinessTripService businessTripService, ICompanyService companyService, ICauseService causeService, IAppUserService userService, IClauseService clauseService, IBusinessTripFileService businessTripFileService, IPlaceService placeService, IntranetContext db, IAppUserService appUserService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public BusinessTripController(UserManager<IntranetUser> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            SignInManager<IntranetUser> signInManager,
+            IMapper mapper, IBusinessTripService businessTripService,
+            ICompanyService companyService, ICauseService causeService,
+            IAppUserService userService, IClauseService clauseService,
+            IBusinessTripFileService businessTripFileService, IPlaceService placeService,
+            IntranetContext db, IAppUserService appUserService) 
+            : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _businessTripService = businessTripService;
             _companyService = companyService;

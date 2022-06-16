@@ -65,8 +65,9 @@ namespace SmartIntranet.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCompanyTree()
         {
-            var treecompnay = DropDownTreeExtensions.BuildTreesCompany(await _companyService.GetAllAsync(x => !x.IsDeleted));
-            return new JsonResult(treecompnay);
+            var tree = DropDownTreeExtensions.BuildTrees(await _companyService
+                .GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(tree);
         }
         [HttpPost]
         [Authorize(Policy = "company.add")]

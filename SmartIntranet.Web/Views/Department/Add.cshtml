@@ -3,7 +3,7 @@
 @{
     Layout = null;
 }
-
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Add" class="main-signin-form">
@@ -20,37 +20,23 @@
                     <div class="form-group">
                         <label class="floatLabel">  Təsvir: </label>
                         <input type="text" class="form-control" asp-for="Description">
-                        <span class="messages"></span>
                     </div>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="floatLabel">  Şirkət: </label>
-                        <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
-                            <option value="" disabled selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.companies)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
-                        <span asp-validation-for="CompanyId" class="text-danger"></span>
+                    <label class="floatLabel">   Şirkət: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
+                        <span class="CompanyId text-danger"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="floatLabel">Üst Şöbə: </label>
-                        <select name="select" disabled asp-for="ParentId" name="ParentId" class="form-control">
-                            <option value="" disabled selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.departments)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
+                    <label class="floatLabel">   Üst Şöbə: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="ParentId" name="ParentId" style="width:100%">
                     </div>
                 </div>
-
             </div>
 
             <div class="form-group row">
@@ -58,7 +44,6 @@
                     <button type="submit" class="btn btn-primary m-b-0  btn-block">
                         Təsdiqlə
                     </button>
-
                 </div>
             </div>
         </form>
@@ -66,47 +51,70 @@
 </div>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
-
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script class="removable">
     $( document ).ready(function() {
-             $(document).on('change','#CompanyId', function(){
-            var _id = $(this).val();
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Department")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+             var tree = $('#ParentId').combotree({
+                 prompt:'Seçim edin'
+              });
+              tree.combotree('disable')
+              $('#CompanyId').combotree({
+                data:data,
+                prompt:'Seçim edin',
+                onClick:function(node){
+                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                    $("#overlay").fadeIn(300);
+                    var _id = node.id;
                     $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetDepartment","Department")',
-                data: {
-                    companyId: _id,
-                },
-                success: function (response) {
-
-                    if (response.error == true) {
-                        
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#ParentId").empty();
-                    var html = "";
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-                    if(response.length>0)
-                    {
-                        $("#ParentId").prop('disabled', false);
-                        $("#ParentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                        $("#ParentId").prop('disabled', true);
-                        $("#ParentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`+ html);
-                    }
-                },
-                error: function (response) {
+                        url: `@Url.Action("GetDepartmentTree","Department")`,
+                        type: "Get",
+                        data: {
+                            companyId: _id,
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                            $('#ParentId').combotree({
+                                 data:data,
+                                 prompt:'Seçim edin'
+                            });
+                            }
+                            else{
+                            var tree = $('#ParentId').combotree({
+                                 prompt:'Yoxdur !',
+                            });
+                            tree.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                $("#overlay").fadeOut(300);
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    })
+                 }
+              })
+            },
+            error: function (data) {
                     $("#overlay").fadeOut(300);
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-            });
-         });
-        
+            }
+        });
+        $("form").submit(function (e){
+            //e.preventDefault();
+            var val = $('#CompanyId').combotree('getValue');
+            if(val === ""){
+               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+            }
+        });
     });
 </script>

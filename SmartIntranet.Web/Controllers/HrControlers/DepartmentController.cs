@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
@@ -59,6 +60,18 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 .GetAllAsync(x => !x.IsDeleted));
 
             return View();
+        }
+        public async Task<IActionResult> GetCompanyTree()
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _companyService
+                .GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(tree);
+        }
+        public async Task<IActionResult> GetDepartmentTree(int companyId)
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _departmentService
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted));
+            return new JsonResult(tree);
         }
         [HttpPost]
         [Authorize(Policy = "department.add")]
@@ -201,7 +214,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> GetDepartment(int companyId)
         {
             var department = await _departmentService
-                .GetAllAsync(x => x.CompanyId == companyId && x.IsDeleted == false);
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted);
             return Ok(department.Select(x => new { x.Id, x.Name }));
         }
 
