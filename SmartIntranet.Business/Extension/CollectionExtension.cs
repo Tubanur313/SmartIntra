@@ -51,16 +51,18 @@ namespace SmartIntranet.Business.Extension
              .AddEntityFrameworkStores<IntranetContext>();
 
 
+
+
             services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
             {
                 opt.Cookie.Name = "SmartIntranetCookie";
                 //opt.Cookie.SameSite = SameSiteMode.Strict;
                 opt.Cookie.HttpOnly = false;
-                opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
+                //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
                 opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
                 opt.SlidingExpiration = true;
-                opt.Cookie.SameSite = SameSiteMode.Lax; 
-                opt.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                opt.Cookie.SameSite = SameSiteMode.Lax;
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
                 //opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 opt.LoginPath = "/signin.html";

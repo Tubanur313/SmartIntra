@@ -105,6 +105,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     if (user != null)
                     {
+                        await _signInManager.SignOutAsync();
                         var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
                         if (identityResult.Succeeded)
                         {
@@ -112,7 +113,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             return RedirectToAction("Info", "News");
                         }
                     }
-                    ViewBag.error = "Email veya şifre sehvdir";
+                    ViewBag.error = "Email ve ya şifre sehvdir";
                 }
                 else
                 {

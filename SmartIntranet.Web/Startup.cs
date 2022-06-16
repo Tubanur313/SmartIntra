@@ -42,14 +42,14 @@ namespace SmartTicket.Web
             services.AddCustomValidator();
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
             services.AddAutoMapper(typeof(MapProfile));
-            services.AddSession(option =>
-            {
-                option.IdleTimeout = TimeSpan.FromMinutes(300);
-                option.Cookie.HttpOnly = true;
-                option.Cookie.IsEssential = true;
-                option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
-                option.Cookie.SameSite = _Env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict;
-            });
+            //services.AddSession(option =>
+            //{
+            //    option.IdleTimeout = TimeSpan.FromMinutes(300);
+            //    option.Cookie.HttpOnly = true;
+            //    option.Cookie.IsEssential = true;
+            //    option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+            //    option.Cookie.SameSite = _Env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict;
+            //});
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -84,7 +84,7 @@ namespace SmartTicket.Web
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
-            app.UseSession();
+            //app.UseSession();
 
 
             app.UseEndpoints(endpoints =>
