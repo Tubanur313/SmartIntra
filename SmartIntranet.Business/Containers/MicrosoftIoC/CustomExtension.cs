@@ -3,7 +3,6 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories;
 using SmartIntranet.DataAccess.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Business.Concrete.IntraTicket;
 using SmartIntranet.Business.Concrete.Intranet;
 using SmartIntranet.Business.Interfaces.Intranet;
@@ -45,7 +44,7 @@ namespace SmartIntranet.Business.Containers.MicrosoftIoC
             services.AddScoped<ICategoryNewsService, CategoryNewsManager>();
             services.AddScoped<ICategoryNewsDal, EfCategoryNewsRepository>();
 
-            services.AddSingleton<IFileManager, FileManager>();
+            services.AddSingleton<IFileService, FileManager>();
 
             services.AddScoped<ICategoryTicketService, CategoryTicketManager>();
             services.AddScoped<ICategoryTicketDal, EfCategoryTicketRepository>();

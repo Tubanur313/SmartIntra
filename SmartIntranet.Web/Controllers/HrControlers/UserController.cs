@@ -10,7 +10,6 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Extensions;
-using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
@@ -33,11 +32,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly ICompanyService _companyService;
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
-        private readonly IFileManager _uploadService;
+        private readonly IFileService _uploadService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
         public UserController(IOptions<GoogleConfigModel> googleConfig,  UserManager<IntranetUser> userManager,
              IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
-            IMapper map, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService, IFileManager uploadService,
+            IMapper map, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService, IFileService uploadService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
             IPositionService positionService) : base(userManager, httpContextAccessor, signInManager,map)
         {

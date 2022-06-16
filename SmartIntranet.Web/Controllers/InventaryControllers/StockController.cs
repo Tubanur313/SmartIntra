@@ -8,7 +8,6 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Inventary;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Extensions;
-using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
@@ -33,7 +32,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
         private readonly IStockImageService _stockImageService;
         private readonly IAppUserService _userService;
         private readonly ICompanyService _companyService;
-        private readonly IFileManager _upload;
+        private readonly IFileService _upload;
         public StockController(IMapper map,
             IStockService StockService,
             IStockCategoryService stockCategoryService,
@@ -43,7 +42,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             IStockDiscussService stockDiscussService,
             IHttpContextAccessor httpContextAccessor,
             IStockImageService stockImageService,
-            IFileManager upload,
+            IFileService upload,
             SignInManager<IntranetUser> signInManager)
             : base(userManager, httpContextAccessor, signInManager, map)
         {

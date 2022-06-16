@@ -1,21 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using SmartIntranet.Business.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SmartIntranet.Core.Utilities.FileUploader
+namespace SmartIntranet.Business.Concrete
 {
-    public interface IFileManager
-    {
-
-        Task<string> Upload(IFormFile file, string root = "wwwroot/uploads");
-        void Delete(string filename, string deletePath = "wwwroot/uploads");
-        string UploadResizedImg(IFormFile file, string root = "wwwroot/uploads");
-        void IsExistFolderCreate(string root);
-    }
-    public class FileManager : IFileManager
+    public class FileManager : IFileService
     {
         public async Task<string> Upload(IFormFile file, string root = "wwwroot/uploads")
         {

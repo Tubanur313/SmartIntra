@@ -13,10 +13,8 @@ using Newtonsoft.Json;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
-using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
-using SmartIntranet.Core.Utilities.FileUploader;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CategoryTicketDto;
@@ -54,7 +52,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly ITicketCheckListService _ticketCheckListService;
         private readonly IConfirmTicketUserService _confirmTicketUserService;
         private readonly ISmtpEmailService _emailService;
-        private readonly IFileManager _upload;
+        private readonly IFileService _upload;
         private readonly IDiscussionService _discuss;
         private readonly IPhotoService _photo;
         private readonly ICompanyService _companyService;
@@ -80,7 +78,7 @@ namespace SmartIntranet.Web.Controllers
             IPhotoService photo,
             IDiscussionService discuss,
             ICompanyService companyService,
-            IFileManager upload,
+            IFileService upload,
             IDiscussionService discussionService,
             IDepartmentService departmentService
 

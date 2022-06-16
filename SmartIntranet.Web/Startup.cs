@@ -37,7 +37,7 @@ namespace SmartTicket.Web
             }).AddFluentValidation();
             services.AddCustomCompression();
             services.AddDbContext<IntranetContext>();
-            services.AddDependencies();
+            //services.AddDependencies();
             services.AddCustomIdentity();
             services.AddCustomValidator();
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
