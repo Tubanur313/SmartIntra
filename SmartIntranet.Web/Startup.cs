@@ -37,11 +37,11 @@ namespace SmartTicket.Web
                 opt.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             }).AddFluentValidation();
             services.AddCustomCompression();
-            //services.AddDbContext<IntranetContext>();
-            services.AddDbContext<IntranetContext>(cfg =>
-            {
-                cfg.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
-            });
+            services.AddDbContext<IntranetContext>();
+            //services.AddDbContext<IntranetContext>(cfg =>
+            //{
+            //    cfg.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
+            //});
             //services.AddDependencies();
             services.AddCustomIdentity();
             services.AddCustomValidator();
