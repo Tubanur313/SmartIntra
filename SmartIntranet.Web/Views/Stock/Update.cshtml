@@ -51,7 +51,7 @@
                             <option value="">Yoxdur</option>
                             @foreach (AppUserDetailsDto item in ViewBag.users)
                             {
-                                <option value="@item.Id">@item.ToString()</option>
+                               <option value="@item.Id">@item.FullName | @item.Company | @item.Department | @item.Position</option>
                             }
                         </select>
                     </div>
