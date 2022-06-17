@@ -58,7 +58,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 return await context.Users.Include(z => z.Position).ThenInclude(z => z.Company).ThenInclude(z => z.Departments).Include(z => z.Grade).Where(filter)
 .OrderByDescending(c => c.Name).ToListAsync();
             }
-           
+
 
         }
 
