@@ -16,12 +16,15 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
     {
         public async Task<IntranetUser> FindByUserAllInc(int id)
         {
-            using var context = new IntranetContext();
-            return await context.Users.Include(x => x.Company).Include(y => y.Department)
-                .Include(y => y.UserContractFiles)
-                .Include(y => y.UserExperiences)
-                .Include(y => y.UserVacationRemains)
-                .Include(z => z.Position).Include(z => z.Grade).Where(x=>x.Id==id).FirstAsync();
+            using (var context = new IntranetContext())
+            {
+                return await context.Users.Include(x => x.Company).Include(y => y.Department)
+.Include(y => y.UserContractFiles)
+.Include(y => y.UserExperiences)
+.Include(y => y.UserVacationRemains)
+.Include(z => z.Position).Include(z => z.Grade).Where(x => x.Id == id).FirstAsync();
+
+            }
 
         }
 
@@ -39,17 +42,23 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
 
         public async Task<List<IntranetUser>> GetAllIncludeAsync()
         {
-            using var context = new IntranetContext();
-            return await context.Users.Include(z => z.Position).ThenInclude(z => z.Company).ThenInclude(z => z.Departments).Include(z => z.Grade)
-                .OrderByDescending(c => c.Name).ToListAsync();
+            using (var context = new IntranetContext())
+            {
+                return await context.Users.Include(z => z.Position).ThenInclude(z => z.Company).ThenInclude(z => z.Departments).Include(z => z.Grade)
+.OrderByDescending(c => c.Name).ToListAsync();
+            }
+
 
         }
 
         public async Task<List<IntranetUser>> GetAllIncludeAsync(Expression<Func<IntranetUser, bool>> filter)
         {
-            using var context = new IntranetContext();
-            return await context.Users.Include(z => z.Position).ThenInclude(z=>z.Company).ThenInclude(z=>z.Departments).Include(z => z.Grade).Where(filter)
-                .OrderByDescending(c => c.Name).ToListAsync();
+            using (var context = new IntranetContext())
+            {
+                return await context.Users.Include(z => z.Position).ThenInclude(z => z.Company).ThenInclude(z => z.Departments).Include(z => z.Grade).Where(filter)
+.OrderByDescending(c => c.Name).ToListAsync();
+            }
+           
 
         }
 
