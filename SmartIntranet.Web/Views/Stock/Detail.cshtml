@@ -114,7 +114,7 @@
                                     <label class="font-weight-bold">Dəstək:</label>
                                     <div class="d-flex">
                                         <p>
-                                            @(Model.IntranerUserId == 0 ? "Təyin edilməyib" : $"{Model.IntranetUser.Name+Model.IntranetUser.Surname} / {Model.IntranetUser.Company?.Name}/ {Model.IntranetUser.Department?.Name}/ {Model.IntranetUser.Position?.Name}" )
+                                            @(Model.IntranetUser == null ? "Təyin edilməyib" : $"{Model.IntranetUser.Name+Model.IntranetUser.Surname} / {Model.IntranetUser.Company?.Name}/ {Model.IntranetUser.Department?.Name}/ {Model.IntranetUser.Position?.Name}" )
                                         </p>
                                     </div>
                                 </div>

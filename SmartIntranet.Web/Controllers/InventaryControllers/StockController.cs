@@ -145,7 +145,8 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 });
             }
             ViewBag.StockCategories = _map.Map<List<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
+            ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService
+                .GetAllIncludeAsync());
             ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService
             .GetAllAsync(x => !x.IsDeleted));
             return View(data);
