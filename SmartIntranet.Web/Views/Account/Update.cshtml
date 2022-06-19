@@ -212,7 +212,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  Şöbə: </label>
                             <div style="margin-bottom:20px">
-                                <input type="text" class="form-control" asp-for="DepartmentId" name="DepartmentId" style="width:100%">
+                                <input type="text" class="form-control" asp-for="DepartmentId"  style="width:100%">
                                 <span class="DepartmentId text-danger"></span>
                             </div>
                         </div>
@@ -220,9 +220,9 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">   Üst Vəzifə: </label>
+                            <label class="floatLabel">   Vəzifə: </label>
                             <div style="margin-bottom:20px">
-                                <input type="text" class="form-control" asp-for="PositionId" name="PositionId" style="width:100%">
+                                <input type="text" class="form-control" asp-for="PositionId"  style="width:100%">
                                 <span class="PositionId text-danger"></span>
                             </div>
                         </div>
@@ -585,15 +585,16 @@
             var DepartmentId = $('#DepartmentId').combotree('getValue');
             var PositionId = $('#PositionId').combotree('getValue');
 
-            if(CompanyId === ""){
+            if(CompanyId.trim() === ""){
                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
                e.preventDefault();
              }
-            if(DepartmentId === ""){
+            if(DepartmentId.trim() === ""){
                $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
                e.preventDefault();
              }
-             if(PositionId === ""){
+             if(PositionId.trim() === ""){
+                 console.log(PositionId.trim())
                $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
                e.preventDefault();
              }
@@ -754,16 +755,14 @@
         $("#PhoneNumber").on("focus",function(){
                  $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
         });
-                $.ajax({
-            url: `@Url.Action("GetCompanyTree","Position")`,
+
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Account")`,
             type: "Get",
             data: "",
             dataType: "json",
             cache: false,
             success: function (data) {
-              var tree = $('#DepartmentId').combotree({
-                 prompt:'Seçim edin'
-              });
               $.ajax({
                         url: `@Url.Action("GetDepartmentTree","Account")`,
                         type: "Get",
@@ -774,7 +773,7 @@
                         cache: false,
                         success: function (data) {
                             if(data.length > 0){
-                               var tree =  $('#DepartmentId').combotree({
+                               var tree = $('#DepartmentId').combotree({
                                   data:data,
                                   prompt:'Seçim edin'
                                 });
@@ -791,10 +790,7 @@
                                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                         }
               })
-              tree.combotree('disable')
-              var tre = $('#PositionId').combotree({
-                 prompt:'Seçim edin'
-              });
+
               $.ajax({
                         url: `@Url.Action("GetPositionTree","Account")`,
                         type: "Get",
@@ -805,11 +801,11 @@
                         cache: false,
                         success: function (data) {
                             if(data.length > 0){
-                            var tree = $('#PositionId').combotree({
+                            var tre = $('#PositionId').combotree({
                                  data:data,
                                  prompt:'Seçim edin'
                             });
-                            tree.combotree('disable')
+                            tre.combotree('disable')
                             }
                             else{
                             var tree = $('#PositionId').combotree({
@@ -822,17 +818,17 @@
                                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                         }
               })
-              tre.combotree('disable')
+
               $('#CompanyId').combotree({
                 data:data,
                 prompt:'Seçim edin',
-                onClick:function(){
+                onClick:function(node){
                     $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
                     $.ajax({
                         url: `@Url.Action("GetDepartmentTree","Account")`,
                         type: "Get",
                         data: {
-                            companyId:  $('#CompanyId').val(),
+                            companyId:  node.id,
                         },
                         dataType: "json",
                         cache: false,
@@ -846,17 +842,17 @@
                                 var tree = $('#PositionId').combotree({
                                    prompt:'Seçim edin'
                                 });
-
+                                tree.combotree('disable')
                                 $('#DepartmentId').combotree({
                                 data:data,
                                 prompt:'Seçim edin',
-                                onClick:function() {
+                                onClick:function(node) {
                                 $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                                 $.ajax({
                                     url: `@Url.Action("GetPositionTree","Account")`,
                                     type: "Get",
                                     data: {
-                                        departmentId:  $('#DepartmentId').val(),
+                                        departmentId:  node.id,
                                     },
                                     dataType: "json",
                                     cache: false,
@@ -864,12 +860,10 @@
                                         if(data.length > 0){
                                          var tree =  $('#PositionId').combotree({
                                              data:data,
-                                             prompt:'Seçim edin',
-                                             onClick:function() {
-                                                 $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
-                                             }
+                                             prompt:'Seçim edin'
                                          });
                                          tree.combotree('enable')
+                                         $('#PositionId').combotree('setValue', '')
                                         }
                                         else{
                                            var tre = $('#PositionId').combotree({
@@ -892,7 +886,7 @@
                                  prompt:'Yoxdur !',
                              });
                              tree.combotree('disable')
-                             tree.combotree('setValue', '')
+                             tree.combotree('setValue', '') 
                              var tre = $('#PositionId').combotree({
                                  prompt:'Yoxdur !',
                              });
@@ -911,6 +905,142 @@
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
+        //$.ajax({
+        //            url: `@Url.Action("GetCompanyTree","Position")`,
+        //            type: "Get",
+        //            data: "",
+        //            dataType: "json",
+        //            cache: false,
+        //            success: function (data) {
+        //              $.ajax({
+        //                url: `@Url.Action("GetDepartmentTree","Account")`,
+        //                type: "Get",
+        //                data: {
+        //                    companyId: $('#CompanyId').val(),
+        //                },
+        //                dataType: "json",
+        //                cache: false,
+        //                success: function (data) {
+        //                    if(data.length > 0){
+        //                       var treeD =  $('#DepartmentId').combotree({
+        //                          data:data
+        //                        });
+        //                        treeD.combotree('disable')
+        //                        $.ajax({
+        //                                  url: `@Url.Action("GetPositionTree","Account")`,
+        //                                  type: "Get",
+        //                                  data: {
+        //                                      departmentId: $('#DepartmentId').val(),
+        //                                  },
+        //                                  dataType: "json",
+        //                                  cache: false,
+        //                                  success: function (data) {
+        //                                      if(data.length > 0){
+        //                                      var tree = $('#PositionId').combotree({
+        //                                           data:data
+        //                                      });
+        //                                      tree.combotree('disable')
+        //                                      }
+        //                                      else{
+        //                                      var tree = $('#PositionId').combotree({
+        //                                           prompt:'Yoxdur !',
+        //                                      });
+        //                                      tree.combotree('disable')
+        //                                      }
+        //                                  },
+        //                                  error: function (data) {
+        //                                          toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        //                                  }
+        //                        })
+        //                    }
+        //                    else{
+        //                         var tree = $('#DepartmentId').combotree({
+        //                            prompt:'Yoxdur !',
+        //                         });
+        //                         tree.combotree('disable')
+        //                    }
+        //                },
+        //                error: function (data) {
+        //                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        //                }
+        //              })
+
+        //              $('#CompanyId').combotree({
+        //                    data:data,
+        //                    onClick:function(node){
+        //                     $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none");
+        //                     $.ajax({
+        //                     url: `@Url.Action("GetDepartmentTree","Account")`,
+        //                     type: "Get",
+        //                     data: {
+        //                        companyId:  node.id,
+        //                     },
+        //                     dataType: "json",
+        //                     cache: false,
+        //                     success: function (data) {
+        //                        if(data.length > 0) {
+        //                            $('#DepartmentId').combotree({
+        //                                data:data,
+        //                                prompt:'Seçim edin'
+        //                            })
+        //                               $('#PositionId').combotree('setValue', '')
+        //                               $('#DepartmentId').combotree({
+        //                                    onClick:function(node){
+        //                                        $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+        //                                        $.ajax({
+        //                                            url: `@Url.Action("GetPositionTree","Account")`,
+        //                                            type: "Get",
+        //                                            data: {
+        //                                               departmentId:  node.id,
+        //                                            },
+        //                                            dataType: "json",
+        //                                            cache: false,
+        //                                            success: function (data){
+        //                                                if(data.length>0){
+        //                                               var treeP = $('#PositionId').combotree({
+        //                                                   data:data,
+
+        //                                                   onClick:function(node){
+        //                                                       $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
+        //                                                   }
+        //                                               });
+        //                                               treeP.combotree('enable')
+        //                                               $('#PositionId').combotree('setValue', '')
+        //                                                }
+        //                                                else{
+        //                                                var treeP = $('#PositionId').combotree({
+        //                                                         prompt:'Yoxdur !',
+        //                                                    });
+        //                                                    tree.combotree('disable')
+        //                                                }
+
+        //                                            }
+        //                                        })
+        //                                    }
+        //                               })
+        //                        }
+        //                        else{
+        //                             var treeD = $('#DepartmentId').combotree({
+        //                                  prompt:'Yoxdur !',
+        //                             });
+        //                             tree.combotree('disable')
+        //                             var treeP = $('#PositionId').combotree({
+        //                                  prompt:'Yoxdur !',
+        //                             });
+        //                             tree.combotree('disable')
+        //                            }
+        //                     },
+        //                    error: function (data) {
+        //                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        //                      }
+        //                  })
+        //                 }
+        //              })
+        //            },
+        //            error: function (data) {
+        //                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        //            }
+        //});
     });
 </script>
 @await Html.PartialAsync("_ValidationScriptsPartial")

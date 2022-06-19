@@ -238,7 +238,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">   Üst Vəzifə: </label>
+                            <label class="floatLabel">   Vəzifə: </label>
                             <div style="margin-bottom:20px">
                                 <input type="text" class="form-control" asp-for="PositionId" name="PositionId" style="width:100%">
                                 <span class="PositionId text-danger"></span>
@@ -479,15 +479,15 @@
             var DepartmentId = $('#DepartmentId').combotree('getValue');
             var PositionId = $('#PositionId').combotree('getValue');
 
-            if(CompanyId === ""){
+            if(CompanyId.trim() === ""){
                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
                e.preventDefault();
              }
-            if(DepartmentId === ""){
+            if(DepartmentId.trim() === ""){
                $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
                e.preventDefault();
              }            
-             if(PositionId === ""){
+             if(PositionId.trim() === ""){
                $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
                e.preventDefault();
              }
@@ -709,19 +709,20 @@
                                     cache: false,
                                     success: function (data) {
                                         if(data.length > 0){
-                                          $('#PositionId').combotree({
+                                          var tree = $('#PositionId').combotree({
                                              data:data,
                                              prompt:'Seçim edin',
                                              onClick:function() {
                                                  $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none");
                                              }
+
                                          });
                                         }
                                         else{
                                            var tree = $('#PositionId').combotree({
                                               prompt:'Yoxdur !'
                                               });
-                                           tree.combotree('disable')
+                                           tree.combotree('disable');
                                         }
                                     },
                                     error: function (data) {

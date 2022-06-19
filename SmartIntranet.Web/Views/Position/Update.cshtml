@@ -132,13 +132,13 @@
               $('#CompanyId').combotree({
                 data:data,
                 prompt:'Seçim edin',
-                onClick:function(){
+                onClick:function(node){
                     $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
                     $.ajax({
                         url: `@Url.Action("GetDepartmentTree","Position")`,
                         type: "Get",
                         data: {
-                            companyId:  $('#CompanyId').val(),
+                            companyId:  node.id,
                         },
                         dataType: "json",
                         cache: false,
@@ -152,17 +152,17 @@
                                 var tree = $('#ParentId').combotree({
                                    prompt:'Seçim edin'
                                 });
-
+                                tree.combotree('disable')
                                 $('#DepartmentId').combotree({
                                 data:data,
                                 prompt:'Seçim edin',
-                                onClick:function() {
+                                onClick:function(node) {
                                 $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                                 $.ajax({
                                     url: `@Url.Action("GetPositionTree","Position")`,
                                     type: "Get",
                                     data: {
-                                        departmentId:  $('#DepartmentId').val(),
+                                        departmentId:  node.id,
                                     },
                                     dataType: "json",
                                     cache: false,
@@ -173,6 +173,7 @@
                                              prompt:'Seçim edin'
                                          });
                                          tree.combotree('enable')
+                                         $('#ParentId').combotree('setValue', '')
                                         }
                                         else{
                                            var tre = $('#ParentId').combotree({
