@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Extension;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -154,22 +155,23 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             delete.IsDeleted = true;
             await _positionService.UpdateAsync(delete);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetPosition(int departmentId)
+        public async Task<IActionResult> GetCompanyTree()
         {
-            var position = await _positionService
-                .GetAllAsync(x => x.IsDeleted == false
-                && x.DepartmentId == departmentId);
-            return Ok(position.Select(x => new { x.Id, x.Name }));
+            var tree = DropDownTreeExtensions.BuildTrees(await _companyService
+                .GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(tree);
         }
-        [HttpGet]
-        public async Task<IActionResult> GetDepartment(int companyId)
+        public async Task<IActionResult> GetDepartmentTree(int companyId)
         {
-            var department = await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false
-                && x.CompanyId == companyId);
-            return Ok(department.Select(x => new { x.Id, x.Name }));
+            var tree = DropDownTreeExtensions.BuildTrees(await _departmentService
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted));
+            return new JsonResult(tree);
+        }        
+        public async Task<IActionResult> GetPositionTree(int departmentId)
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _positionService
+                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted));
+            return new JsonResult(tree);
         }
     }
 }

@@ -25,6 +25,7 @@ using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Business.Provider;
+using SmartIntranet.Business.Extension;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -301,16 +302,24 @@ namespace SmartIntranet.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetDepartment(int companyId)
+        public async Task<IActionResult> GetCompanyTree()
         {
-            var department = _map.Map<ICollection<DepartmentListDto>>(
-                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
-                .Select(x => new { x.Id, x.Name });
-            return Ok(department);
+            var tree = DropDownTreeExtensions.BuildTrees(await _companyService
+                .GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(tree);
         }
-
+        public async Task<IActionResult> GetDepartmentTree(int companyId)
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _departmentService
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted));
+            return new JsonResult(tree);
+        }
+        public async Task<IActionResult> GetPositionTree(int departmentId)
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _positionService
+                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted));
+            return new JsonResult(tree);
+        }
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetCompanyUsers(int companyId)
@@ -335,18 +344,6 @@ namespace SmartIntranet.Web.Controllers
             else if (experienceYears > 15)
                 vacationDay = 6;
             return Ok(vacationDay);
-        }
-
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetPosition(int departmentId)
-        {
-            var position = _map.Map<ICollection<PositionListDto>>(
-                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == departmentId))
-                 .Select(x => new { x.Id, x.Name });
-
-            return Ok(position);
         }
 
         [HttpGet]
@@ -542,6 +539,7 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.Citizenship = model.Citizenship;
                         updateUser.CompanyId = model.CompanyId;
                         updateUser.DepartmentId = model.DepartmentId;
+                        updateUser.PositionId = model.PositionId;
                         updateUser.GradeId = model.GradeId;
                         updateUser.Name = model.Name;
                         updateUser.Surname = model.Surname;

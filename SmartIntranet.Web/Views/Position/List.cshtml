@@ -31,8 +31,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
-                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
-                    <strong>x</strong>
+                <button id="closeBtn" type="button" style="z-index: 345;" data-dismiss="modal" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
+                    <strong  id="closeBtnX">x</strong>
                 </button>
             </div>
             <div class="modal-body">
@@ -44,4 +44,16 @@
 @section CrudJs{
     <!-- delete_ajax-->
     <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+    <script>
+    $(document).ready(function(){
+        $(document).on("click","#form-modal",function(e){
+                if(
+                 $(e.target).attr('id') == 'form-modal' || 
+                 $(e.target).attr('id') =='closeBtn'|| 
+                 $(e.target).attr('id') =='closeBtnX'){
+                    location.reload();
+                }
+        })
+    });
+    </script>
 }

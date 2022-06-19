@@ -210,13 +210,5 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             delete.IsDeleted = true;
             await _departmentService.UpdateAsync(delete);
         }
-        [HttpGet]
-        public async Task<IActionResult> GetDepartment(int companyId)
-        {
-            var department = await _departmentService
-                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted);
-            return Ok(department.Select(x => new { x.Id, x.Name }));
-        }
-
     }
 }

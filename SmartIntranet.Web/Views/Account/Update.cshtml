@@ -10,6 +10,7 @@
 @{
     Layout = null;
 }
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 
 <div class="row">
     <div class="col-lg-12 col-xl-12">
@@ -202,49 +203,28 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şirkət: </label>
-                                <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
-                                    <option value="" selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.companies)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-
-                                </select>
-                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            <label class="floatLabel">   Şirkət: </label>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
+                                <span class="CompanyId text-danger"></span>
                             </div>
-
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şöbə: </label>
-                                <select name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
-                                    <option value="" selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.departments)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-
-                                </select>
-                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                            <label class="floatLabel">  Şöbə: </label>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" asp-for="DepartmentId" name="DepartmentId" style="width:100%">
+                                <span class="DepartmentId text-danger"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">  Vəzifə: </label>
-                            <input type="hidden" asp-for="PositionId" />
-                            <select name="select" asp-for="PositionId" name="PositionId" readonly class="form-control disabled_custom">
-                                <option value="" selected hidden>Seçim edin</option>
-                                @foreach (var item in ViewBag.position)
-                                {
-                                    <option value="@item.Id">@item.Name</option>
-                                }
-
-                            </select>
-                            <span asp-validation-for="PositionId" class="text-danger"></span>
+                            <label class="floatLabel">   Üst Vəzifə: </label>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" asp-for="PositionId" name="PositionId" style="width:100%">
+                                <span class="PositionId text-danger"></span>
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -526,32 +506,32 @@
                                 Əlavə et: <button type="button" id="addVacDay" class="btn btn-outline-success rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-plus m-0"></i></button>
                             </div>
                         </div>
-                      
-                            @foreach (var item in ViewBag.userVacationDisable)
-                            {
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="floatLabel"> Tarix: </label>
-                                            <div class="input-group input-daterange mb-0">
-                                                <input type="text" value="@item.FromDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
-                                                <div class="input-group-addon">to</div>
-                                                <input type="text" value="@item.ToDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
-                                            </div>
-                                            <span class="messages"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="floatLabel">  Qalıq gün: </label>
-                                            <input type="text" class="form-control disabled_custom" readonly value="@item.RemainCount" autocomplete="off">
 
-                                            <span class="messages"></span>
+                        @foreach (var item in ViewBag.userVacationDisable)
+                        {
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel"> Tarix: </label>
+                                        <div class="input-group input-daterange mb-0">
+                                            <input type="text" value="@item.FromDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" value="@item.ToDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
                                         </div>
+                                        <span class="messages"></span>
                                     </div>
                                 </div>
-                            }
-                      
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel">  Qalıq gün: </label>
+                                        <input type="text" class="form-control disabled_custom" readonly value="@item.RemainCount" autocomplete="off">
+
+                                        <span class="messages"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                     </div>
                 </div>
 
@@ -569,6 +549,7 @@
 
 </div>
 
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
@@ -600,6 +581,22 @@
                     return;
                 }
                 checkRemainCount(e);
+            var CompanyId = $('#CompanyId').combotree('getValue');
+            var DepartmentId = $('#DepartmentId').combotree('getValue');
+            var PositionId = $('#PositionId').combotree('getValue');
+
+            if(CompanyId === ""){
+               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }
+            if(DepartmentId === ""){
+               $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }
+             if(PositionId === ""){
+               $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }
          });
 
          function setDisableAndOld() {
@@ -757,86 +754,162 @@
         $("#PhoneNumber").on("focus",function(){
                  $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
         });
+                $.ajax({
+            url: `@Url.Action("GetCompanyTree","Position")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+              var tree = $('#DepartmentId').combotree({
+                 prompt:'Seçim edin'
+              });
+              $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Account")`,
+                        type: "Get",
+                        data: {
+                            companyId: $('#CompanyId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                               var tree =  $('#DepartmentId').combotree({
+                                  data:data,
+                                  prompt:'Seçim edin'
+                                });
+                                tree.combotree('disable')
+                            }
+                            else{
+                                 var tree = $('#DepartmentId').combotree({
+                                    prompt:'Yoxdur !',
+                                 });
+                                 tree.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+              })
+              tree.combotree('disable')
+              var tre = $('#PositionId').combotree({
+                 prompt:'Seçim edin'
+              });
+              $.ajax({
+                        url: `@Url.Action("GetPositionTree","Account")`,
+                        type: "Get",
+                        data: {
+                            departmentId: $('#DepartmentId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                            var tree = $('#PositionId').combotree({
+                                 data:data,
+                                 prompt:'Seçim edin'
+                            });
+                            tree.combotree('disable')
+                            }
+                            else{
+                            var tree = $('#PositionId').combotree({
+                                 prompt:'Yoxdur !',
+                            });
+                            tree.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+              })
+              tre.combotree('disable')
+              $('#CompanyId').combotree({
+                data:data,
+                prompt:'Seçim edin',
+                onClick:function(){
+                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                    $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Account")`,
+                        type: "Get",
+                        data: {
+                            companyId:  $('#CompanyId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0) {
+                                var tre =$('#DepartmentId').combotree({
+                                     data:data,
+                                     prompt:'Seçim edin'
+                                });
 
-          $(document).on('change','#CompanyId', function(){
-            var _id = $(this).val();
+                                var tree = $('#PositionId').combotree({
+                                   prompt:'Seçim edin'
+                                });
 
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetDepartment","Account")',
-                data: {
-                    companyId: _id,
-                },
-                success: function (response) {
-                    if (response.error == true) {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#DepartmentId").empty();
-                    var html = "";
-
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-                    if(response.length>0)
-                    {
-                        $("#DepartmentId").removeClass('disable');
-                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                        $("#DepartmentId").removeClass('disable');
-                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                        $("#PositionId").removeClass('disable');
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
+                                $('#DepartmentId').combotree({
+                                data:data,
+                                prompt:'Seçim edin',
+                                onClick:function() {
+                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                $.ajax({
+                                    url: `@Url.Action("GetPositionTree","Account")`,
+                                    type: "Get",
+                                    data: {
+                                        departmentId:  $('#DepartmentId').val(),
+                                    },
+                                    dataType: "json",
+                                    cache: false,
+                                    success: function (data) {
+                                        if(data.length > 0){
+                                         var tree =  $('#PositionId').combotree({
+                                             data:data,
+                                             prompt:'Seçim edin',
+                                             onClick:function() {
+                                                 $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
+                                             }
+                                         });
+                                         tree.combotree('enable')
+                                        }
+                                        else{
+                                           var tre = $('#PositionId').combotree({
+                                               prompt:'Yoxdur !',
+                                           });
+                                           tre.combotree('disable')
+                                           tre.combotree('setValue', '')
+                                        }
+                                    },
+                                    error: function (data) {
+                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                    }
+                                })
+                                 }
+                                })
+                                tre.combotree('enable')
+                            }
+                            else{
+                             var tree = $('#DepartmentId').combotree({
+                                 prompt:'Yoxdur !',
+                             });
+                             tree.combotree('disable')
+                             tree.combotree('setValue', '')
+                             var tre = $('#PositionId').combotree({
+                                 prompt:'Yoxdur !',
+                             });
+                             tre.combotree('disable')
+                             tre.combotree('setValue', '')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    })
+                 }
+              })
+            },
+            error: function (data) {
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-                });
-            });
-
-
-       $(document).on('change','#DepartmentId', function(){
-            var _id = $(this).val();
-
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetPosition","Account")',
-                data: {
-                    departmentId: _id,
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#PositionId").empty();
-                    var html = "";
-
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-                    if(response.length>0)
-                    {
-                        $("#PositionId").removeClass('disable');
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                        $("#PositionId").removeClass('disable');
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-           });
+            }
         });
     });
 </script>

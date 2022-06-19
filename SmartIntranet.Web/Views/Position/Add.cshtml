@@ -3,7 +3,7 @@
 @{
     Layout = null;
 }
-
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <div class="row">
     <div class="col-md-12">
         <form asp-action="Add" class="main-signin-form">
@@ -26,52 +26,24 @@
                 </div>
             </div>
             <div class="form-group row">
-
                 <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="floatLabel">
-                            Şirkət:
-                        </label>
-                        <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
-                            <option value="" disabled selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.companies)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-
-                        </select>
-                        <span asp-validation-for="CompanyId" class="text-danger"></span>
+                    <label class="floatLabel">   Şirkət: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
+                        <span class="CompanyId text-danger"></span>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="floatLabel">
-                            Şöbə:
-                        </label>
-                        <select name="select" disabled asp-for="DepartmentId" name="DepartmentId" class="form-control">
-                            <option value="" disabled selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.departments)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-
-                        </select>
-                         <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    <label class="floatLabel">  Şöbə: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="DepartmentId" name="DepartmentId" style="width:100%">
+                        <span class="DepartmentId text-danger"></span>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="floatLabel">
-                            Üst Vəzifə:
-                        </label>
-                        <select name="select" disabled asp-for="ParentId" name="ParentId" class="form-control">
-                            <option value="" disabled selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.positions)
-                            {
-                                <option  value="@item.Id">@item.Name</option>
-                            }
-
-                        </select>
+                    <label class="floatLabel">   Üst Vəzifə: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="ParentId" name="ParentId" style="width:100%">
                     </div>
                 </div>
             </div>
@@ -88,81 +60,119 @@
 </div>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script class="removable">
     $( document ).ready(function() {
-         $(document).on('change','#CompanyId', function(){   
-        var _id = $(this).val();
-                $.ajax({
-            type: 'Get',
-            url: '@Url.ActionLink("GetDepartment","Position")',
-            data: {
-                companyId: _id,
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Position")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+              var tree = $('#DepartmentId').combotree({
+                 prompt:'Seçim edin'
+              });
+              tree.combotree('disable')
+              var tre = $('#ParentId').combotree({
+                 prompt:'Seçim edin'
+              });
+              tre.combotree('disable')
+              $('#CompanyId').combotree({
+                data:data,
+                prompt:'Seçim edin',
+                onClick:function(node){
+                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                    var _id = node.id;
+                    $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Position")`,
+                        type: "Get",
+                        data: {
+                            companyId: _id,
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                            $('#DepartmentId').combotree({
+                                 data:data,
+                                 prompt:'Seçim edin'
+                            });
+                            var tree = $('#ParentId').combotree({
+                               prompt:'Seçim edin'
+                            });
+                            tree.combotree('disable')
+                            $('#DepartmentId').combotree({
+                            data:data,
+                            prompt:'Seçim edin',
+                            onClick:function(node) {
+                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                var _id = node.id;
+                                $.ajax({
+                                    url: `@Url.Action("GetPositionTree","Position")`,
+                                    type: "Get",
+                                    data: {
+                                        departmentId: _id,
+                                    },
+                                    dataType: "json",
+                                    cache: false,
+                                    success: function (data) {
+                                        if(data.length > 0){
+                                          $('#ParentId').combotree({
+                                             data:data,
+                                             prompt:'Seçim edin'
+                                         });
+                                        }
+                                        else{
+                                           var tree = $('#ParentId').combotree({
+                                              prompt:'Yoxdur !'
+                                              });
+                                           tree.combotree('disable')
+                                        }
+                                    },
+                                    error: function (data) {
+                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                    }
+                                })
+                             }
+                            })
+                            }
+                            else{
+                             var tree = $('#DepartmentId').combotree({
+                                 prompt:'Yoxdur !',
+                             });
+                             tree.combotree('disable')
+                             var tre = $('#ParentId').combotree({
+                                 prompt:'Yoxdur !',
+                             });
+                             tre.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    })
+                 }
+              })
             },
-            success: function (response) {
-                if (response.error == true) {
-                    toastr.error(response.message, "Xəta baş verdi!");
-                    return;
-                }
-                $("#DepartmentId").empty();
-                var html = "";
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-                if(response.length>0)
-                {
-                    $("#DepartmentId").prop('disabled', false);
-                    $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                }
-                else{
-                    $("#DepartmentId").prop('disabled', false);
-                    $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    $("#ParentId").prop('disabled', false);
-                    $("#ParentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    
-                }
-            },
-            error: function (response) {
-                $("#overlay").fadeOut(300);
-                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            error: function (data) {
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
-     });
-                 $(document).on('change','#DepartmentId', function(){   
-        var _id = $(this).val();
-                $.ajax({
-            type: 'Get',
-            url: '@Url.ActionLink("GetPosition","Position")',
-            data: {
-                departmentId: _id,
-            },
-            success: function (response) {
-                if (response.error == true) {
-                    toastr.error(response.message, "Xəta baş verdi!");
-                    return;
-                }
-                $("#ParentId").empty();
-                var html = "";
-                for (var i in response) {
-                    html += `<option value="${[response[i].id]}">
-                    ${[response[i].name]}</option>`
-                }
-                if(response.length>0)
-                {
-                    $("#ParentId").prop('disabled', false);
-                    $("#ParentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                }
-                else{
-                    $("#ParentId").prop('disabled', false);
-                    $("#ParentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`+ html);
-                }
-            },
-            error: function (response) {
-                $("#overlay").fadeOut(300);
-                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        $("form").submit(function (e){
+            //e.preventDefault();
+            var CompanyId = $('#CompanyId').combotree('getValue');
+            var DepartmentId = $('#DepartmentId').combotree('getValue');
+
+            if(CompanyId === ""){
+               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+              e.preventDefault(); 
             }
-        });
+            if(DepartmentId === ""){
+               $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }
         });
     });
 </script>

@@ -17,9 +17,9 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Vəzifə</th>
-                                    <th>Şirkət</th>
                                     <th>Üst Vəzifə</th>
                                     <th>Şöbə</th>
+                                    <th>Şirkət</th>
                                     @*<th>Status</th>*@
                                     @*<th>Silinmiş</th>*@
                                     @if (User.HasAccess("position.add"))
@@ -40,16 +40,6 @@
                                         </td>
                                         <td>@position.Name</td>
 
-                                        @if (position.Company != null)
-                                        {
-                                            <td> @position.Company.Name</td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                Təyin edilməyib
-                                            </td>
-                                        }
                                         @if (position.Parent != null)
                                         {
                                             <td> @position.Parent.Name</td>
@@ -71,6 +61,16 @@
                                                 Təyin edilməyib
                                             </td>
 
+                                        }
+                                        @if (position.Company != null)
+                                        {
+                                            <td> @position.Company.Name</td>
+                                        }
+                                        else
+                                        {
+                                            <td>
+                                                Təyin edilməyib
+                                            </td>
                                         }
                                         @*<td><span class="badge badge-@(position.IsDeleted? "warning" : "success")">@(position.IsDeleted ? "Inactive" : "Active" )</span></td>*@
                                         @*@if (position.DeleteByUserId == null)

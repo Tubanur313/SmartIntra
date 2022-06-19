@@ -11,6 +11,8 @@
     Layout = null;
 }
 <link href="~/files/assets/pages/advance-elements/css/bootstrap-datetimepicker.css" />
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
+
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
@@ -68,7 +70,7 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Əmək Haqqı: </label>
                                 <input type="number" class="form-control" asp-for="Salary" autocomplete="off">
-                                 <span asp-validation-for="Salary" class="text-danger"></span>
+                                <span asp-validation-for="Salary" class="text-danger"></span>
                             </div>
 
                         </div>
@@ -192,7 +194,7 @@
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
                                 <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
-                                   <span asp-validation-for="StartWorkDate" class="text-danger"></span>
+                                <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
                         </div>
@@ -219,47 +221,28 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şirkət: </label>
-                                <select name="select" asp-for="CompanyId" name="CompanyId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.companies)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-
-                                </select>
-                                <span asp-validation-for="CompanyId" class="text-danger"></span>
+                            <label class="floatLabel">   Şirkət: </label>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
+                                <span class="CompanyId text-danger"></span>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şöbə: </label>
-                                <select disabled name="select" asp-for="DepartmentId" name="DepartmentId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                    @foreach (var item in ViewBag.departments)
-                                    {
-                                        <option value="@item.Id">@item.Name</option>
-                                    }
-
-                                </select>
-                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                            <label class="floatLabel">  Şöbə: </label>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" asp-for="DepartmentId" name="DepartmentId" style="width:100%">
+                                <span class="DepartmentId text-danger"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">  Vəzifə: </label>
-                            <select disabled name="select" asp-for="PositionId" name="PositionId" class="form-control">
-                                <option value="" disabled selected hidden>Seçim edin</option>
-                                @foreach (var item in ViewBag.position)
-                                {
-                                    <option value="@item.Id">@item.Name</option>
-                                }
-
-                            </select>
-                            <span asp-validation-for="PositionId" class="text-danger"></span>
+                            <label class="floatLabel">   Üst Vəzifə: </label>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" asp-for="PositionId" name="PositionId" style="width:100%">
+                                <span class="PositionId text-danger"></span>
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -387,9 +370,9 @@
                         </div>
                     </div>
                     @* @for (var i = 0; i < 1; i++)
-        {
-        <div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" asp-for="UserExperiences[i].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control" autocomplete="off"> </div> <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span> <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span> <span class="messages"></span> </div> </div> </div>
-        }*@
+                        {
+                        <div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" asp-for="UserExperiences[i].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control" autocomplete="off"> </div> <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span> <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span> <span class="messages"></span> </div> </div> </div>
+                        }*@
                 </div>
                 <div class="tab-pane" id="profile1" role="tabpanel">
                     <div class="form-group">
@@ -430,7 +413,7 @@
 
                 <div class="tab-pane" id="vacationRemain" role="tabpanel">
                     <div class="form-group">
-                      
+
                         <div id="vac-box">
                             <input id="vacCount" type="hidden" value="0" />
                         </div>
@@ -444,7 +427,7 @@
 
 
 
-              
+
 
 
                 <div class="form-group row mt-3">
@@ -460,14 +443,15 @@
     </div>
 
 </div>
-
+@await Html.PartialAsync("_ValidationScriptsPartial")
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
 <!-- cust-validation js -->
 <script src="~/files/lib/cust_ajax/cust-validation.js"></script>
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
 
             let dateArray = [];
 
@@ -490,6 +474,23 @@
                     return;
                 }
                  checkRemainCount(e);
+
+            var CompanyId = $('#CompanyId').combotree('getValue');
+            var DepartmentId = $('#DepartmentId').combotree('getValue');
+            var PositionId = $('#PositionId').combotree('getValue');
+
+            if(CompanyId === ""){
+               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }
+            if(DepartmentId === ""){
+               $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }            
+             if(PositionId === ""){
+               $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
+               e.preventDefault();
+             }
             });
 
         function setDisableAndOld() {
@@ -655,92 +656,105 @@
                  $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
             });
 
-      $(document).on('change','#CompanyId', function(){
-            var _id = $(this).val();
-
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetDepartment","Account")',
-                data: {
-                    companyId: _id,
-                },
-                success: function (response) {
-                    if (response.error == true) {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#DepartmentId").empty();
-                    var html = "";
-
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-
-                    if(response.length>0)
-                    {
-                        $("#DepartmentId").prop('disabled', false);
-                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                         $("#DepartmentId").prop('disabled', false);
-                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                        $("#DepartmentId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
+           $.ajax({
+            url: `@Url.Action("GetCompanyTree","Account")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+              var tree = $('#DepartmentId').combotree({
+                 prompt:'Seçim edin'
+              });
+              tree.combotree('disable')
+              var tre = $('#PositionId').combotree({
+                 prompt:'Seçim edin'
+              });
+              tre.combotree('disable')
+              $('#CompanyId').combotree({
+                data:data,
+                prompt:'Seçim edin',
+                onClick:function(){
+                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                    $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Account")`,
+                        type: "Get",
+                        data: {
+                            companyId: $('#CompanyId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                           var tre = $('#DepartmentId').combotree({
+                                 data:data,
+                                 prompt:'Seçim edin'
+                            });
+                            var tree = $('#PositionId').combotree({
+                               prompt:'Seçim edin'
+                            });
+                            tree.combotree('disable')
+                            $('#DepartmentId').combotree({
+                            data:data,
+                            prompt:'Seçim edin',
+                            onClick:function() {
+                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                $.ajax({
+                                    url: `@Url.Action("GetPositionTree","Account")`,
+                                    type: "Get",
+                                    data: {
+                                        departmentId: $('#DepartmentId').val(),
+                                    },
+                                    dataType: "json",
+                                    cache: false,
+                                    success: function (data) {
+                                        if(data.length > 0){
+                                          $('#PositionId').combotree({
+                                             data:data,
+                                             prompt:'Seçim edin',
+                                             onClick:function() {
+                                                 $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none");
+                                             }
+                                         });
+                                        }
+                                        else{
+                                           var tree = $('#PositionId').combotree({
+                                              prompt:'Yoxdur !'
+                                              });
+                                           tree.combotree('disable')
+                                        }
+                                    },
+                                    error: function (data) {
+                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                    }
+                                })
+                             }
+                            })
+                            }
+                            else{
+                             var tree = $('#DepartmentId').combotree({
+                                 prompt:'Yoxdur !',
+                             });
+                             tree.combotree('disable')
+                             var tre = $('#PositionId').combotree({
+                                 prompt:'Yoxdur !',
+                             });
+                             tre.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                    })
+                 }
+              })
+            },
+            error: function (data) {
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-                });
-            });
-
-
-       $(document).on('change','#DepartmentId', function(){
-            var _id = $(this).val();
-
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetPosition","Account")',
-                data: {
-                    departmentId: _id,
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#PositionId").empty();
-                    var html = "";
-
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-
-                    if(response.length>0)
-                    {
-                        $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                         $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-           });
+            }
         });
+
     });
 
 
 </script>
-@await Html.PartialAsync("_ValidationScriptsPartial")

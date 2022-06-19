@@ -21,9 +21,20 @@ namespace SmartIntranet.Business.Extension
 
             return BuildTrees(null, dtos);
         }
-        public static IList<TreeDto> BuildTrees(this IList<Department> companies)
+        public static IList<TreeDto> BuildTrees(this IList<Department> departments)
         {
-            var dtos = companies.Select(c => new TreeDto
+            var dtos = departments.Select(c => new TreeDto
+            {
+                Id = c.Id,
+                Text = c.Name,
+                ParentId = c.ParentId
+            }).ToList();
+
+            return BuildTrees(null, dtos);
+        }        
+        public static IList<TreeDto> BuildTrees(this IList<Position> positions)
+        {
+            var dtos = positions.Select(c => new TreeDto
             {
                 Id = c.Id,
                 Text = c.Name,
