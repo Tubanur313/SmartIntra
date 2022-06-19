@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Business.Interfaces.Membership;
@@ -17,10 +18,11 @@ using System.Threading.Tasks;
 
 
 namespace SmartIntranet.Web.Controllers
-{ [Authorize]
+{ 
+    [Authorize]
     public class CategoryTicketController : BaseIdentityController
     {
-        private readonly ICategoryTicketService _CategoryTicketService;
+        private readonly ICategoryTicketService _categoryTicketService;
         private readonly IAppUserService _userService;
         public CategoryTicketController(
             IMapper map,
@@ -31,14 +33,14 @@ namespace SmartIntranet.Web.Controllers
             SignInManager<IntranetUser> signInManager
             ) : base(userManager, httpContextAccessor, signInManager, map)
         {
-            _CategoryTicketService = CategoryTicketService;
+            _categoryTicketService = CategoryTicketService;
             _userService = userService;
         }
         [HttpGet]
         [Authorize(Policy = "CategoryTicket.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var model = await _CategoryTicketService.GetAllIncludeAsync();
+            var model = await _categoryTicketService.GetAllIncludeAsync();
             if (model.Count > 0)
             {
                 TempData["success"] = success;
@@ -51,7 +53,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "CategoryTicket.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _CategoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
             ViewBag.supporters = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View();
         }
@@ -63,14 +65,14 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<CategoryTicket>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                if (await _CategoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                if (await _categoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
                 {
                     return RedirectToAction("List", new
                     {
                         error = Messages.Error.sameName
                     });
                 }
-                if (await _CategoryTicketService.AddReturnEntityAsync(add) is null)
+                if (await _categoryTicketService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
                     {
@@ -94,7 +96,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "CategoryTicket.update")]
         public async Task<IActionResult> Update(int Id)
         {
-            var data = _map.Map<CategoryTicketUpdateDto>(await _CategoryTicketService.FindByIdAsync(Id));
+            var data = _map.Map<CategoryTicketUpdateDto>(await _categoryTicketService.FindByIdAsync(Id));
             if (data == null)
             {
                 return RedirectToAction("List", new
@@ -102,7 +104,7 @@ namespace SmartIntranet.Web.Controllers
                     error = Messages.Error.notFound
                 });
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _CategoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
             ViewBag.supporters = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View(data);
         }
@@ -112,7 +114,7 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var data = await _CategoryTicketService.FindByIdAsync(model.Id);
+                var data = await _categoryTicketService.FindByIdAsync(model.Id);
                 var update = _map.Map<CategoryTicket>(model);
                 update.UpdateByUserId = GetSignInUserId();
                 update.CreatedByUserId = data.CreatedByUserId;
@@ -120,14 +122,14 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
-                if (await _CategoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                if (await _categoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
                 {
                     return RedirectToAction("List", new
                     {
                         error = Messages.Error.sameName
                     });
                 }
-                await _CategoryTicketService.UpdateAsync(update);
+                await _categoryTicketService.UpdateAsync(update);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -141,11 +143,17 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "CategoryTicket.delete")]
         public async Task Delete(int id)
         {
-            var delete = await _CategoryTicketService.FindByIdAsync(id);
+            var delete = await _categoryTicketService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
             delete.DeleteDate = DateTime.Now;
             delete.IsDeleted = true;
-            await _CategoryTicketService.UpdateAsync(delete);
+            await _categoryTicketService.UpdateAsync(delete);
+        }
+        public async Task<IActionResult> GetCategoryTicketTree()
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _categoryTicketService
+                .GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(tree);
         }
     }
 }

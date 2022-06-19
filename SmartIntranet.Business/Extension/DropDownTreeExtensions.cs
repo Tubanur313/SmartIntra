@@ -1,6 +1,7 @@
 ﻿using SmartIntranet.DTO.DTOs.CommonUseDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,17 @@ namespace SmartIntranet.Business.Extension
             return BuildTrees(null, dtos);
         }        
         public static IList<TreeDto> BuildTrees(this IList<Position> positions)
+        {
+            var dtos = positions.Select(c => new TreeDto
+            {
+                Id = c.Id,
+                Text = c.Name,
+                ParentId = c.ParentId
+            }).ToList();
+
+            return BuildTrees(null, dtos);
+        }        
+        public static IList<TreeDto> BuildTrees(this IList<CategoryTicket> positions)
         {
             var dtos = positions.Select(c => new TreeDto
             {

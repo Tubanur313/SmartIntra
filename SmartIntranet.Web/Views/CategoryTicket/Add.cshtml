@@ -3,6 +3,7 @@
 @{
     Layout = null;
 }
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 
 <div class="row">
     <div class="col-lg-12 col-xl-12">
@@ -17,15 +18,9 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="floatLabel">Üst Kateqoriya: </label>
-                        <select name="select" asp-for="ParentId" name="ParentId" class="form-control">
-                            <option value="" selected disabled hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.categories)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
+                    <label class="floatLabel">   Üst Kateqoriya: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" asp-for="ParentId" name="ParentId" style="width:100%">
                     </div>
                 </div>
 
@@ -72,6 +67,35 @@
 </div>
 <!-- cust-validation js -->
 <script src="~/files/lib/cust_ajax/cust-validation.js"></script>
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
 
+<script class="removable" type="text/javascript">
+    $(document).ready(function ($) {
+
+        $.ajax({
+            url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                $('#ParentId').combotree({
+                    data:data,
+                    prompt:'Seçim edin',
+                    onClick:function(node){
+                        console.log(node)
+                    }
+                });
+            },
+            error: function (data) {
+            }
+        });
+        $("form").submit(function (e){
+            var val = $('#ParentId')
+               .combotree('getValue');
+            $('#ParentId').val($('[name="ParentId"]').val());
+        });
+    });
+</script>
