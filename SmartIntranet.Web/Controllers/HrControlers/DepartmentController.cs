@@ -49,16 +49,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
         [HttpGet]
         [Authorize(Policy = "department.add")]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => !x.IsDeleted));
-
-            ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => !x.IsDeleted));
-
             return View();
         }
         public async Task<IActionResult> GetCompanyTree()
@@ -148,15 +140,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     error = Messages.Error.notFound
                 });
             }
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => !x.IsDeleted));
-
-            ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => !x.IsDeleted
-                && x.CompanyId == data.CompanyId));
-
             return View(data);
         }
         [HttpPost]

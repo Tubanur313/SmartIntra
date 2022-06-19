@@ -50,15 +50,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
         [HttpGet]
         [Authorize(Policy = "position.add")]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService.GetAllAsync(x => !x.IsDeleted));
-            ViewBag.positions = _map
-                .Map<List<PositionListDto>>(await _positionService.GetAllAsync(x => !x.IsDeleted));
-
             return View();
         }
         [HttpPost]
@@ -100,21 +93,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 TempData["error"] = Messages.Error.notFound;
                 return RedirectToAction("List");
             }
-            ViewBag.companies = _map
-                .Map<List<CompanyListDto>>(await _companyService
-                .GetAllAsync(x => x.IsDeleted == false));
-
-            ViewBag.departments = _map
-                .Map<List<DepartmentListDto>>(await _departmentService
-                .GetAllAsync(x => x.IsDeleted == false
-                && x.CompanyId == data.CompanyId));
-
-            ViewBag.positions = _map
-                .Map<List<PositionListDto>>(await _positionService
-               .GetAllAsync(x => x.IsDeleted == false
-                && x.CompanyId == data.CompanyId
-                && x.DepartmentId == data.DepartmentId));
-
             return View(data);
         }
         [HttpPost]

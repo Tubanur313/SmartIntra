@@ -158,7 +158,6 @@ namespace SmartIntranet.Web.Controllers
                     error = Messages.Error.notFound
                 });
             }
-            ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.Leader = _map.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => !x.IsDeleted && x.CompanyId == id));
             return View(data);
         }
