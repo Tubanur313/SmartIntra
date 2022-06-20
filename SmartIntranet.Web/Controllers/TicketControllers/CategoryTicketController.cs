@@ -14,6 +14,8 @@ using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -53,7 +55,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "CategoryTicket.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = DropDownTreeExtensions.BuildTrees(await _categoryTicketService
+            .GetAllAsync(x => !x.IsDeleted));
             ViewBag.supporters = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View();
         }

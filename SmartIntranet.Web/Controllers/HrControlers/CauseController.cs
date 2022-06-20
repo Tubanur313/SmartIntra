@@ -63,7 +63,6 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<Cause>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                await _causeService.AddAsync(add);
                 if (await _causeService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new

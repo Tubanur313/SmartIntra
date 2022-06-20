@@ -587,5 +587,40 @@
                 elem.value = numVal;
             }
 
+            //$("#CategoryTicketId").select2({
+            //    minimumResultsForSearch: -1,
+            //    placeholder: "Seçim edin",
+            //    ajax: {
+            //    url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
+            //    type: "Get",
+            //    data: "",
+            //    dataType: "json",
+            //    cache: true,
+            //    delay: 250,
+            //    contentType: "application/json; charset=utf-8",
+            //    processResults: function (data) {
+            //        return {
+            //            results: $.map(data, function (val, item) {
+            //                return {
+            //                    text: val.text ,
+            //                    children :getTree(val.children,val,item)
+            //                };
+            //            }),
+            //        };
+            //    }
+            //    },
+            //});
+
+            //function getTree(data,val, item){
+            //    $.map(data, function (v, item){
+            //      return {
+            //          id:v.id,
+            //          text:v.text
+            //         }
+            //      })
+            //    if(data.length > 0){
+            //        getTree(data,val, item)
+            //    }
+            //   }      
     });
 </script>
