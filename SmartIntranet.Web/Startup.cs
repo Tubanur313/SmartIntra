@@ -75,6 +75,7 @@ namespace SmartTicket.Web
                 app.UseExceptionHandler("/Home/Error");
                 //app.UseHsts();
             }
+            app.UseSession();
             //app.UseHttpsRedirection();
             //app.SeedTicketSystem();
             //IntranetDBSeed.SeedClause(app);
@@ -86,10 +87,10 @@ namespace SmartTicket.Web
             app.UseMiddleware<SecurityHeadersMiddleware>();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCookiePolicy();
-            //app.UseSession();
+            
 
 
             app.UseEndpoints(endpoints =>
