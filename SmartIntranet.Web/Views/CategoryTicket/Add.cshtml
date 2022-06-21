@@ -84,8 +84,11 @@
                 $('#ParentId').combotree({
                     data:data,
                     prompt:'Seçim edin',
-                    onClick:function(node){
-                        console.log(node)
+                    onBeforeSelect:function(node){
+                            console.log(node.children.length);
+                        if(node.parentId==null && node.children.length > 0){
+                        node.target.off("click")
+                        }
                     }
                 });
             },

@@ -76,12 +76,12 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Kateqoriya: </label>
                                 <select asp-for="CategoryTicketId" name="CategoryTicketId" class="form-control">
-                                    <option value="" hidden disabled selected>Seçim edin</option>
+@*                                    <option value="" hidden disabled selected>Seçim edin</option>
                                     @foreach (var item in ViewBag.categories)
                                     {
                                         <option data-type="@item.TicketType" value="@item.Id">@item.Name</option>
                                     }
-
+*@
                                 </select>
                                 <span asp-validation-for="CategoryTicketId" class="text-danger"></span>
                             </div>
@@ -587,5 +587,45 @@
                 elem.value = numVal;
             }
 
+            $("#CategoryTicketId").select2({
+                minimumResultsForSearch: -1,
+                placeholder: "Seçim edin",
+                ajax: {
+                url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
+                type: "Get",
+                data: "",
+                dataType: "json",
+                cache: true,
+                delay: 250,
+                contentType: "application/json; charset=utf-8",
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (val,item) {
+                            return [{
+                                "text": val.text, 
+                                "children" : [
+                                  {
+                                      "id": val.children.id,
+                                      "text": val.children.text,
+                                  }
+                                ]
+                            }];
+                        }),
+                    };
+                }
+                },
+            });
+
+            //function getTree(data,val, item){
+            //    $.map(data, function (v, item){
+            //      return {
+            //          id:v.id,
+            //          text:v.text
+            //         }
+            //      })
+            //    if(data.length > 0){
+            //        getTree(data,val, item)
+            //    }
+            //   }      
     });
 </script>
