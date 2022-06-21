@@ -38,14 +38,14 @@ namespace SmartTicket.Web
             }).AddFluentValidation();
             services.AddCustomCompression();
             services.AddDbContext<IntranetContext>();
-            services.AddSession(option =>
-            {
-                option.IdleTimeout = TimeSpan.FromMinutes(300);
-                option.Cookie.HttpOnly = true;
-                option.Cookie.IsEssential = true;
-                option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
-                option.Cookie.SameSite = _Env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict;
-            });
+            //services.AddSession(option =>
+            //{
+            //    option.IdleTimeout = TimeSpan.FromMinutes(300);
+            //    option.Cookie.HttpOnly = true;
+            //    option.Cookie.IsEssential = true;
+            //    option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+            //    option.Cookie.SameSite = _Env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict;
+            //});
             //services.AddDbContext<IntranetContext>(cfg =>
             //{
             //    cfg.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
@@ -56,11 +56,11 @@ namespace SmartTicket.Web
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
             services.AddAutoMapper(typeof(MapProfile));
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,7 +76,7 @@ namespace SmartTicket.Web
                 app.UseExceptionHandler("/Home/Error");
                 //app.UseHsts();
             }
-            app.UseSession();
+            
             //app.UseHttpsRedirection();
             //app.SeedTicketSystem();
             //IntranetDBSeed.SeedClause(app);
@@ -91,7 +91,7 @@ namespace SmartTicket.Web
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
-            
+            //app.UseSession();
 
 
             app.UseEndpoints(endpoints =>
