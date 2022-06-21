@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.CategoryDto;
@@ -152,6 +153,13 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             delete.DeleteByUserId = GetSignInUserId();
             delete.DeleteDate = DateTime.Now;
             await _categoryService.UpdateAsync(delete);
+        }
+
+        public async Task<IActionResult> GetCategoryTree()
+        {
+            var tree = DropDownTreeExtensions.BuildTrees(await _categoryService
+                .GetAllAsync(x => !x.IsDeleted));
+            return new JsonResult(tree);
         }
     }
 }
