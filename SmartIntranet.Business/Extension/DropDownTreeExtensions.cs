@@ -50,7 +50,9 @@ namespace SmartIntranet.Business.Extension
             {
                 Id = c.Id,
                 Text = c.Name,
-                ParentId = c.ParentId
+                ParentId = c.ParentId,
+                TicketType = c.TicketType
+                
             }).ToList();
 
             return BuildTrees(null, dtos);
