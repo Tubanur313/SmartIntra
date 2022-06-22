@@ -80,7 +80,11 @@ namespace SmartIntranet.Web.Controllers
             formatKeys.Add("salaryFull", usr.Salary + " (" + ConvertAmount(usr.Salary) + ")");
             formatKeys.Add("salaryShort", usr.Salary.ToString());
             formatKeys.Add("vacation", usr.VacationMainDay.ToString());
-            formatKeys.Add("extraVacation", usr.VacationExtraDay.ToString());
+            formatKeys.Add("extraVacation", (usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild).ToString());
+            formatKeys.Add("vacationExtraNature", usr.VacationExtraNature.ToString());
+            formatKeys.Add("vacationExtraExperience", usr.VacationExtraExperience.ToString());
+            formatKeys.Add("vacationExtraChild", usr.VacationExtraChild.ToString());
+            formatKeys.Add("vacationAll", (usr.VacationMainDay + usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild).ToString());
             formatKeys.Add("companyName", company.Name);
             formatKeys.Add("employeeAddress", usr.RegisterAdress);
             formatKeys.Add("companyAddress", company.Address);

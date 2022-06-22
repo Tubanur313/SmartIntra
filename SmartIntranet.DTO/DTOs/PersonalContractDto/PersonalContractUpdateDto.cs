@@ -25,6 +25,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public int? VacationDay { get; set; }
         public int? ClauseId { get; set; }
         public bool IsMainVacation { get; set; }
+        public int VacationExtraType { get; set; }
         public IntranetUser User { get; set; }
         public int? CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }

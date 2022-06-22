@@ -145,7 +145,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6" id="vacation_div">
+
+                     <div class="col-sm-6" id="vacation_div">
                     <div class="form-group">
                         <label class="floatLabel"> Məzuniyyət gün sayı: </label>
                         <input type="number" class="form-control" asp-for="VacationDay" autocomplete="off">
@@ -154,7 +155,23 @@
                     </div>
                 </div>
                 <input type="hidden" id="UserVacationDay" />
+
+                   <div class="col-sm-6" id="vacation_extra_div">
+                    <label class="floatLabel">  Əlavə Məzuniyyət Növü: </label>
+                    <select name="select" asp-for="VacationExtraType" name="VacationExtraType" class="form-control">
+                        <option value="null" disabled selected hidden>Seçim edin</option>
+                        <option value="0">Əmək stajına görə </option>
+                        <option value="1">Əmək şəraitinin xarakterinə görə</option>
+                        <option value="2">14 yaşadək ikidən çox uşağı olan qadına</option>
+                    </select>
+                    <span asp-validation-for="VacationExtraType" class="text-danger"></span>
+                </div>
+
+               
+              
             </div>
+
+         
 
             @*<div class="row">
                 <div id="salary_pos_div" class="col-sm-6">
@@ -188,6 +205,7 @@
         $("#place_div").css('display', "none");
         $("#graphic_div").css('display', "none");
         $("#vacation_div").css('display', "none");
+        $("#vacation_extra_div").css('display', "none");
         $("#clause_div").css('display', "none");
         $("#vacation_type_div").css('display', "none");
 
@@ -203,7 +221,9 @@
             let positionId = $("#PositionId").val();
             let workGraphicId = $("#WorkGraphicId").val();
             let vacationDay = $("#VacationDay").val();
+            let vacationExtraType = $("#VacationExtraType").val();
             let clauseId = $("#ClauseId").val();
+            let isMainVacation = $("#IsMainVacationTrue").val();
 
             if(type == 'SALARY' && !salary)
             {
@@ -239,6 +259,10 @@
             {
                 toastr.error(" Məzuniyyət gün sayı boş ola bilməz !", "Xəta!");
                 e.preventDefault();
+            } else if(type == 'VACATION' && isMainVacation=='False' && !vacationExtraType)
+            {
+                toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
+                e.preventDefault();
             }
         });
     });
@@ -258,6 +282,8 @@
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+
         }
         else if (_id == "POSITION") {
             var _id = $("#UserId").val();
@@ -271,6 +297,8 @@
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+
         }
         else if (_id == "SALARY_POSITION") {
             var _id = $("#UserId").val();
@@ -284,6 +312,7 @@
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (_id == "WORK_PLACE") {
             $("#salary_div").css('display', "none");
@@ -293,6 +322,7 @@
             $("#clause_div").css('display', "none");
             $("#vacation_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (_id == "WORK_GRAPHIC") {
             $("#salary_div").css('display', "none");
@@ -302,6 +332,7 @@
             $("#clause_div").css('display', "block");
             $("#vacation_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (_id == "VACATION") {
             $("#salary_div").css('display', "none");
@@ -342,10 +373,12 @@
 
     $(document).on('click','#IsMainVacationFalse', function(){
          $('#VacationDay').val($('#UserVacationDay').val());
+           $("#vacation_extra_div").css('display', "block");
     })
 
     $(document).on('click','#IsMainVacationTrue', function(){
          $('#VacationDay').val('');
+         $("#vacation_extra_div").css('display', "none");
     })
 
     function getPos(_id) {

@@ -378,7 +378,7 @@ namespace SmartIntranet.Web.Controllers
                     ur.CreatedDate = DateTime.Now;
                     ur.AppUserId = user_id;
                     ur.UsedCount = 0;
-                    ur.VacationCount = usr.VacationMainDay + usr.VacationExtraDay;
+                    ur.VacationCount = usr.VacationMainDay + usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                     ur.RemainCount = ur.VacationCount;
                     remain_list.Add(ur);
                     await _userVacationRemainService.AddAsync(ur);
@@ -436,13 +436,13 @@ namespace SmartIntranet.Web.Controllers
 
                     double after_day_count = Math.Round((double)((DateTime.Now - fromDateTmp).TotalDays) * main_day) / 365;
                     result.RemainCount += (int)after_day_count;
-                    result.RemainCount += usr.VacationExtraDay;
+                    result.RemainCount += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                 }
                 else
                 {
                     double after_day_count = Math.Round((double)((DateTime.Now - start_interval).TotalDays) * usr.VacationMainDay) / 365;
                     result.RemainCount += (int)after_day_count;
-                    result.RemainCount += usr.VacationExtraDay;
+                    result.RemainCount += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                 }
                 result.RemainCount -= this_year_remain;
                

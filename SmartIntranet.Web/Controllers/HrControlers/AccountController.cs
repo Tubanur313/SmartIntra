@@ -264,7 +264,9 @@ namespace SmartIntranet.Web.Controllers
                     RegisterAdress = user.RegisterAdress,
                     Salary = user.Salary,
                     VacationMainDay = user.VacationMainDay,
-                    VacationExtraDay = user.VacationExtraDay,
+                    VacationExtraChild = user.VacationExtraChild,
+                    VacationExtraExperience = user.VacationExtraExperience,
+                    VacationExtraNature = user.VacationExtraNature,
                     CompanyId = user.CompanyId,
                     DepartmentId = user.DepartmentId,
                     WorkGraphicId = user.WorkGraphicId,
@@ -389,7 +391,8 @@ namespace SmartIntranet.Web.Controllers
                     ur.CreatedDate = DateTime.Now;
                     ur.AppUserId = id;
                     ur.UsedCount = 0;
-                    ur.VacationCount = listModel.VacationMainDay + listModel.VacationExtraDay;
+                    ur.VacationCount = listModel.VacationMainDay + listModel.VacationExtraNature + listModel.VacationExtraExperience
+                         + listModel.VacationExtraChild; 
                     ur.RemainCount = ur.VacationCount;
 
                     await _userVacationRemains.AddAsync(ur);
@@ -523,7 +526,9 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.Profession = model.Profession;
                         updateUser.RegisterAdress = model.RegisterAdress;
                         updateUser.VacationMainDay = model.VacationMainDay;
-                        updateUser.VacationExtraDay = model.VacationExtraDay;
+                        updateUser.VacationExtraChild = model.VacationExtraChild;
+                        updateUser.VacationExtraExperience = model.VacationExtraExperience;
+                        updateUser.VacationExtraNature = model.VacationExtraNature;
                         updateUser.IdCardType = model.IdCardType;
                         updateUser.Citizenship = model.Citizenship;
                         updateUser.CompanyId = model.CompanyId;

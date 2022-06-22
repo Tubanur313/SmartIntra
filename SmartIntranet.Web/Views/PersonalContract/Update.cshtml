@@ -154,7 +154,7 @@
                                     <div class="radio radio-inline radio-disable">
                                         <label for="IsMainVacationTrue">
                                             <input disabled type="radio" id="IsMainVacationTrue" value="True" asp-for="IsMainVacation"
-                                                   checked="checked">
+                                                  >
                                             <i class="helper"></i>Əsas
                                         </label>
                                     </div>
@@ -177,6 +177,21 @@
                         </div>
                         <input type="hidden" id="UserVacationDay" />
                         <input type="hidden" id="UserVacationDayDb" value="@Model.VacationDay" />
+
+                
+                <div class="col-sm-6" id="vacation_extra_div">
+                    <label class="floatLabel">  Əlavə Məzuniyyət Növü: </label>
+                    <select name="select" asp-for="VacationExtraType" name="VacationExtraType" class="form-control">
+                        <option value="null" disabled selected hidden>Seçim edin</option>
+                        <option value="0">Əmək stajına görə </option>
+                        <option value="1">Əmək şəraitinin xarakterinə görə</option>
+                        <option value="2">14 yaşadək ikidən çox uşağı olan qadına</option>
+                    </select>
+                    <span asp-validation-for="VacationExtraType" class="text-danger"></span>
+                </div>
+
+               
+
                     </div>
 
                     @*<div class="row">
@@ -246,6 +261,74 @@
         $("#vacation_div").css('display', "none");
         $("#clause_div").css('display', "none");
         $("#vacation_type_div").css('display', "none");
+        $("#vacation_extra_div").css('display', "none");
+        let IsMainVac = $("#IsMainVacationTrue").is(":checked")
+        let type_contract = $("#Type").val();
+        if(type_contract == 'VACATION' && IsMainVac==false){
+                $("#vacation_extra_div").css('display', "block");
+       
+        }
+
+          if (type_contract == "SALARY") {
+            $("#salary_div").css('display', "block");
+            $("#pos_div").css('display', "none");
+            $("#place_div").css('display', "none");
+            $("#graphic_div").css('display', "none");
+            $("#vacation_div").css('display', "none");
+            $("#clause_div").css('display', "none");
+            $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+        }
+        else if (type_contract == "POSITION") {
+            $("#salary_div").css('display', "none");
+            $("#pos_div").css('display', "block");
+            $("#place_div").css('display', "none");
+            $("#graphic_div").css('display', "none");
+            $("#vacation_div").css('display', "none");
+            $("#clause_div").css('display', "none");
+            $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+        }
+        else if (type_contract == "SALARY_POSITION") {
+            $("#salary_div").css('display', "block");
+            $("#pos_div").css('display', "block");
+            $("#place_div").css('display', "none");
+            $("#graphic_div").css('display', "none");
+            $("#vacation_div").css('display', "none");
+            $("#clause_div").css('display', "none");
+            $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+        }
+        else if (type_contract == "WORK_PLACE") {
+            $("#salary_div").css('display', "none");
+            $("#pos_div").css('display', "none");
+            $("#place_div").css('display', "block");
+            $("#graphic_div").css('display', "none");
+            $("#clause_div").css('display', "none");
+            $("#vacation_div").css('display', "none");
+            $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+        }
+        else if (type_contract == "WORK_GRAPHIC") {
+            $("#salary_div").css('display', "none");
+            $("#pos_div").css('display', "none");
+            $("#place_div").css('display', "none");
+            $("#graphic_div").css('display', "block");
+            $("#clause_div").css('display', "block");
+            $("#vacation_div").css('display', "none");
+            $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
+        }
+        else if (type_contract == "VACATION") {
+            $("#salary_div").css('display', "none");
+            $("#pos_div").css('display', "none");
+            $("#place_div").css('display', "none");
+            $("#graphic_div").css('display', "none");
+            $("#clause_div").css('display', "none");
+            $("#vacation_div").css('display', "block");
+            $("#vacation_type_div").css('display', "block");
+            $("#inputDate").addClass('disabled_custom').prop('readonly', true);
+        }
 
         $('.input-daterange input').each(function () {
             $(this).datepicker({
@@ -260,8 +343,11 @@
                 let isMainPlace = $("#IsMainPlace").val();
                 let workGraphicId = $("#WorkGraphicId").val();
                 let vacationDay = $("#VacationDay").val();
-                 let clauseId = $("#ClauseId").val();
+                let vacationExtraType = $("#VacationExtraType").val();
+                let clauseId = $("#ClauseId").val();
+                let isMainVacation = $("#IsMainVacationTrue").is(":checked")
 
+               
                 if(type == 'SALARY' && !salary)
                 {
                     toastr.error(" Maaş boş ola bilməz !", "Xəta!");
@@ -292,15 +378,15 @@
                     toastr.error(" Şablon boş ola bilməz !", "Xəta!");
                     e.preventDefault();
                 }
-                else if(type == 'VACATION' && !vacationDay)
+                 else if(type == 'VACATION' && isMainVacation==false && !vacationExtraType)
                 {
-                    toastr.error(" Məzuniyyət gün sayı boş ola bilməz !", "Xəta!");
+                    toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
                     e.preventDefault();
                 }
             });
 
         var type_id = $("#Type").val();
-        console.log(type_id)
+  
         if (type_id == "SALARY") {
             $("#salary_div").css('display', "block");
             $("#pos_div").css('display', "none");
@@ -309,6 +395,7 @@
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (type_id == "POSITION") {
             $("#salary_div").css('display', "none");
@@ -318,6 +405,7 @@
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (type_id == "SALARY_POSITION") {
             $("#salary_div").css('display', "block");
@@ -327,6 +415,7 @@
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (type_id == "WORK_PLACE") {
             $("#salary_div").css('display', "none");
@@ -336,6 +425,7 @@
             $("#clause_div").css('display', "none");
             $("#vacation_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (type_id == "WORK_GRAPHIC") {
             $("#salary_div").css('display', "none");
@@ -345,6 +435,7 @@
             $("#clause_div").css('display', "block");
             $("#vacation_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
+            $("#vacation_extra_div").css('display', "none");
         }
         else if (type_id == "VACATION") {
             $("#salary_div").css('display', "none");
@@ -428,10 +519,12 @@
 
     $(document).on('click','#IsMainVacationFalse', function(){
          $('#VacationDay').val($('#UserVacationDay').val());
+           $("#vacation_extra_div").css('display', "block");
     });
 
     $(document).on('click','#IsMainVacationTrue', function(){
          $('#VacationDay').val($('#UserVacationDayDb').val());
+           $("#vacation_extra_div").css('display', "none");
     });
 
     function getPos(_id) {

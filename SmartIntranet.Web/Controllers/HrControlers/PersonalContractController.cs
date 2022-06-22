@@ -86,12 +86,14 @@ namespace SmartIntranet.Web.Controllers
                
                 if (model.Type == PersonalContractConst.VACATION)
                 {
-                    model.LastFullVacationDay = usr2.VacationMainDay + usr2.VacationExtraDay;
+                    model.LastFullVacationDay = usr2.VacationMainDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
+                        + usr2.VacationExtraChild;
                     model.LastMainVacationDay = usr2.VacationMainDay;
 
                     if (model.IsMainVacation)
                     {
-                        model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraDay;
+                        model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
+                        + usr2.VacationExtraChild;
                         model.NewMainVacationDay = model.VacationDay;
                     }
                     else
@@ -251,8 +253,21 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        usr.VacationExtraDay = (int)result_model.VacationDay;
-                        usr2.VacationExtraDay = (int)result_model.VacationDay;
+                        if (result_model.VacationExtraType == 0)
+                        {
+                            usr.VacationExtraExperience = (int)result_model.VacationDay;
+                            usr2.VacationExtraExperience = (int)result_model.VacationDay;
+                        }else if (result_model.VacationExtraType == 1)
+                        {
+                            usr.VacationExtraNature = (int)result_model.VacationDay;
+                            usr2.VacationExtraNature = (int)result_model.VacationDay;
+                        }
+                        else if (result_model.VacationExtraType == 2)
+                        {
+                            usr.VacationExtraChild = (int)result_model.VacationDay;
+                            usr2.VacationExtraChild = (int)result_model.VacationDay;
+                        }
+
                     }
 
 
@@ -289,7 +304,7 @@ namespace SmartIntranet.Web.Controllers
                                 ur.CreatedDate = DateTime.Now;
                                 ur.AppUserId = usr2.Id;
                                 ur.UsedCount = 0;
-                                ur.VacationCount = usr.VacationMainDay + usr.VacationExtraDay;
+                                ur.VacationCount = usr.VacationMainDay + usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
                                 ur.RemainCount = ur.VacationCount;
 
                                 result_remain_model = await _userVacationRemains.AddReturnEntityAsync(ur);
@@ -317,13 +332,13 @@ namespace SmartIntranet.Web.Controllers
 
                                 double after_day_count = Math.Round((double)((end_interval - fromDateTmp).TotalDays) * main_day) / 365;
                                 new_count += (int)after_day_count;
-                                new_count += usr.VacationExtraDay;
+                                new_count += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                             }
                             else
                             {
                                 double after_day_count = Math.Round((double)((end_interval - start_interval).TotalDays) * usr.VacationMainDay) / 365;
                                 new_count += (int)after_day_count;
-                                new_count += usr.VacationExtraDay;
+                                new_count += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                             }
                             result_remain_model.VacationCount = new_count;
                             result_remain_model.RemainCount = result_remain_model.VacationCount - result_remain_model.UsedCount;
@@ -388,7 +403,7 @@ namespace SmartIntranet.Web.Controllers
                 {
                     if (model.IsMainVacation)
                     {
-                        model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraDay;
+                        model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
                         model.NewMainVacationDay = model.VacationDay;
                     }
                     else
@@ -460,8 +475,22 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        usr.VacationExtraDay = (int)model.VacationDay;
-                        usr2.VacationExtraDay = (int)model.VacationDay;
+                        if (model.VacationExtraType == 0)
+                        {
+                            usr.VacationExtraExperience = (int)model.VacationDay;
+                            usr2.VacationExtraExperience = (int)model.VacationDay;
+                        }
+                        else if (model.VacationExtraType == 1)
+                        {
+                            usr.VacationExtraNature = (int)model.VacationDay;
+                            usr2.VacationExtraNature = (int)model.VacationDay;
+                        }
+                        else if (model.VacationExtraType == 2)
+                        {
+                            usr.VacationExtraChild = (int)model.VacationDay;
+                            usr2.VacationExtraChild = (int)model.VacationDay;
+                        }
+
                     }
 
 
@@ -512,7 +541,19 @@ namespace SmartIntranet.Web.Controllers
                         var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval).Result.OrderBy(x => x.CommandDate).ToList();
 
                         usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
-                        usr2.VacationExtraDay = (int)personal_contract_chgs[0].LastFullVacationDay-usr2.VacationMainDay;
+                        if (personal_contract_chgs[0].VacationExtraType == 0)
+                        {
+                            usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay;
+                        }
+                        else if (personal_contract_chgs[0].VacationExtraType == 1)
+                        {
+                            usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay;
+                        }
+                        else if (personal_contract_chgs[0].VacationExtraType == 2)
+                        {
+                            usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay;
+                        }
+                     
                         await _userManager.UpdateAsync(usr2);
 
                         foreach (var el in personal_contract_chgs)
@@ -545,7 +586,7 @@ namespace SmartIntranet.Web.Controllers
                         {
                             if (i == 0)
                             {
-                                el.VacationCount = usr2.VacationExtraDay + usr2.VacationMainDay;
+                                el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
                                 el.RemainCount = el.VacationCount - el.UsedCount;
                             }
 

@@ -20,7 +20,9 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public string Pin { get; set; }
         public int WorkGraphicId { get; set; }
         public int VacationMainDay { get; set; }
-        public int VacationExtraDay { get; set; }
+        public int VacationExtraChild { get; set; }
+        public int VacationExtraExperience { get; set; }
+        public int VacationExtraNature { get; set; }
         public string EducationLevel { get; set; }
         public string Citizenship { get; set; }
         public string IdCardType { get; set; }

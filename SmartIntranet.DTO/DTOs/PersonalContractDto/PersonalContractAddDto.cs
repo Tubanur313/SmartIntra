@@ -12,6 +12,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public string CommandNumber { get; set; }
         public DateTime? CommandDate { get; set; }
         public string Type { get; set; }
+        public int VacationExtraType { get; set; } // experience 0 , nature 1, child 2
         public int? PositionId { get; set; }
         public double? Salary { get; set; }
         public int UserId { get; set; }

@@ -21,7 +21,6 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation
             RuleFor(I => I.DepartmentId).NotNull().WithMessage("Şöbə boş ola bilməz");
             RuleFor(I => I.PositionId).NotNull().WithMessage("Vəzifə boş ola bilməz");
             RuleFor(I => I.VacationMainDay).NotNull().WithMessage("Məzuniyyət əsas günü sayı boş ola bilməz");
-            RuleFor(I => I.VacationExtraDay).NotNull().WithMessage("Məzuniyyət əlavə günü sayı boş ola bilməz");
             RuleFor(I => I.EducationLevel).NotNull().WithMessage("Təhsilin növü sayı boş ola bilməz");
             RuleFor(I => I.IsMainPlace).NotNull().WithMessage("Təhsilin növü sayı boş ola bilməz");
             RuleFor(I => I.IdCardNumber).NotNull().WithMessage("Vəsiqənin seriyası və nömrəsi boş ola bilməz");

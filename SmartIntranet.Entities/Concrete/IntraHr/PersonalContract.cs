@@ -24,6 +24,7 @@ namespace SmartIntranet.Entities.Concrete
         public int VacationDay { get; set; }
         public int? ClauseId { get; set; }
         public bool IsMainVacation { get; set; }
+        public int VacationExtraType { get; set; }
         public Clause Clause { get; set; }
         public IntranetUser User { get; set; }
 
