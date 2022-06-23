@@ -191,10 +191,10 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(z => z.CategoryTicket)
                 .ToListAsync();
         }
-        public async Task<Ticket> GetIncludeMailAsync(int id)
+        public Ticket GetIncludeMail(int id)
         {
             using var context = new IntranetContext();
-            return await context.Tickets
+            return context.Tickets
                 .Where(x => x.Id == id)
                 .Include(z => z.Employee)
                 .ThenInclude(z => z.Company)
@@ -211,7 +211,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.IntranetUser)
                 .Include(z => z.Watchers)
                 .Include(z => z.Discussions)
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
         }
         public async Task<List<Ticket>> GetNonRedirectedAsync()
         {

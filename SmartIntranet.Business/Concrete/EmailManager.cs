@@ -1,7 +1,8 @@
 ﻿using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
-using SmartIntranet.Business.Email;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using System;
 using System.Collections.Generic;
@@ -15,52 +16,47 @@ namespace SmartIntranet.Business.Concrete
     public class EmailManager : IEmailService
     {
         private readonly ISmtpEmailService _emailService;
+        private readonly ITicketService _ticketService;
 
-        public EmailManager(ISmtpEmailService emailService)
+        public EmailManager(ISmtpEmailService emailService, ITicketService ticketService)
         {
             _emailService = emailService;
+            _ticketService = ticketService;
         }
 
-        public void SendEmail(Message message)
+        public void TicketSendEmail(int ticketId,string ticketMessages, List<string> ToEmail)
         {
-            var emailMessage = CreateEmailMessage(message);
+            var emailMessage = CreateEmailMessage(ticketId, ticketMessages, ToEmail);
 
             Send(emailMessage);
         }
 
-        public async Task SendEmailAsync(Message message)
-        {
-            var mailMessage = CreateEmailMessage(message);
+        //public async Task TicketSendEmailAsync(int ticketId)
+        //{
+        //    var mailMessage = CreateEmailMessage(ticketId);
 
-            await SendAsync(mailMessage);
-        }
+        //    await SendAsync(mailMessage);
+        //}
 
-        private MimeMessage CreateEmailMessage(Message message)
+        private MimeMessage CreateEmailMessage(int ticketId,string ticketMessage, List<string> ToEmail)
         {
-            var smtpSettings =_emailService.Get();
+            var smtpSettings = _emailService.Get();
+            var ticket = _ticketService.GetIncludeMail(ticketId);
+            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
+
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(smtpSettings.FromEmail));
-            emailMessage.To.AddRange(message.To);
-            emailMessage.Subject = message.Subject;
+            emailMessage.From.Add(new MailboxAddress("No-Reply",smtpSettings.FromEmail));
+            //emailMessage.To.Add(MailboxAddress.Parse("mahir.tahiroghlu@srgroupco.com"));
+            //var toMail = 
+            foreach (var item in ToEmail)
+            {
+                emailMessage.To.Add(MailboxAddress.Parse(item));
+            }
+            
+            emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h2 style='color:red;'>{0}</h2>", message.Content) };
-
-            //if (message.Attachments != null && message.Attachments.Any())
-            //{
-            //    byte[] fileBytes;
-            //    foreach (var attachment in message.Attachments)
-            //    {
-            //        using (var ms = new MemoryStream())
-            //        {
-            //            attachment.CopyTo(ms);
-            //            fileBytes = ms.ToArray();
-            //        }
-
-            //        bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
-            //    }
-            //}
-
-            emailMessage.Body = bodyBuilder.ToMessageBody();
+            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h2 style='color:red;'>{0}</h2>", "<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + ticketMessage + "</a></h1>") };
+           emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
 
@@ -71,9 +67,9 @@ namespace SmartIntranet.Business.Concrete
             {
                 try
                 {
-                    client.Connect(smtpSettings.Host, smtpSettings.Port, smtpSettings.IsSSL);
+                    client.Connect(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(smtpSettings.UserName, smtpSettings.Password);
+                    client.Authenticate(smtpSettings.FromEmail, smtpSettings.Password);
 
                     client.Send(mailMessage);
                 }
@@ -90,30 +86,30 @@ namespace SmartIntranet.Business.Concrete
             }
         }
 
-        private async Task SendAsync(MimeMessage mailMessage)
-        {
-            var smtpSettings = _emailService.Get();
-            using (var client = new SmtpClient())
-            {
-                try
-                {
-                    await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, smtpSettings.IsSSL);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    await client.AuthenticateAsync(smtpSettings.UserName, smtpSettings.Password);
+        //private async Task SendAsync(MimeMessage mailMessage)
+        //{
+        //    var smtpSettings = _emailService.Get();
+        //    using (var client = new SmtpClient())
+        //    {
+        //        try
+        //        {
+        //            await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
+        //            client.AuthenticationMechanisms.Remove("XOAUTH2");
+        //            await client.AuthenticateAsync(smtpSettings.UserName, smtpSettings.Password);
 
-                    await client.SendAsync(mailMessage);
-                }
-                catch
-                {
-                    //log an error message or throw an exception, or both.
-                    throw;
-                }
-                finally
-                {
-                    await client.DisconnectAsync(true);
-                    client.Dispose();
-                }
-            }
-        }
+        //            await client.SendAsync(mailMessage);
+        //        }
+        //        catch
+        //        {
+        //            //log an error message or throw an exception, or both.
+        //            throw;
+        //        }
+        //        finally
+        //        {
+        //            await client.DisconnectAsync(true);
+        //            client.Dispose();
+        //        }
+        //    }
+        //}
     }
 }

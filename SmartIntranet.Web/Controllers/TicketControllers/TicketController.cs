@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using MimeKit.Text;
 using Newtonsoft.Json;
-using SmartIntranet.Business.Email;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
@@ -185,147 +184,147 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [NonAction]
-        private async void SendEmailAsync(string messageType, int ticketId)
-        {
-            List<string> toEmail2 = new List<string>();
-            string watchers = string.Empty;
-            //string orderList = string.Empty;
-            StringBuilder confirmers = new StringBuilder();
-            StringBuilder checklists = new StringBuilder();
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
-            var ticket = await _ticketService.GetIncludeMailAsync(ticketId);
-            //var watchersEmail= await _watcherService.GetAllAsync(y => y.TicketId==model.Id);
-            //var confirmersEmail = await _confirmTicketUserService.GetAllAsync(y => y.TicketId == model.Id);
+        //private async void SendEmailAsync(string messageType, int ticketId)
+        //{
+        //    List<string> toEmail2 = new List<string>();
+        //    string watchers = string.Empty;
+        //    //string orderList = string.Empty;
+        //    //StringBuilder confirmers = new StringBuilder();
+        //    //StringBuilder checklists = new StringBuilder();
+        //    //var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+        //    var ticket = _ticketService.GetIncludeMail(ticketId);
+        //    //var watchersEmail= await _watcherService.GetAllAsync(y => y.TicketId==model.Id);
+        //    //var confirmersEmail = await _confirmTicketUserService.GetAllAsync(y => y.TicketId == model.Id);
 
 
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(smtpSettings.FromEmail));
+        //    var email = new MimeMessage();
+        //    //email.From.Add(MailboxAddress.Parse(smtpSettings.FromEmail));
 
-            if (ticket.Watchers.Count != 0)
-            {
-                foreach (var item in ticket.Watchers)
-                {
-                    watchers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(item.IntranetUser.Id)).ToString() + "</br>";
-                    toEmail2.Add(item.IntranetUser.Email);
+        //    //if (ticket.Watchers.Count != 0)
+        //    //{
+        //    //    foreach (var item in ticket.Watchers)
+        //    //    {
+        //    //        watchers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(item.IntranetUser.Id)).ToString() + "</br>";
+        //    //        toEmail2.Add(item.IntranetUser.Email);
 
-                }
-            }
+        //    //    }
+        //    //}
 
-            if (ticket.ConfirmTicketUsers.Count != 0)
-            {
-                foreach (var item in ticket.ConfirmTicketUsers)
-                {
-                    confirmers.Append(_map.Map<AppUserDetailsDto>(item.IntranetUser) + "  adlı nəzarətçi sifarişi");
-                    confirmers.Append(item.ConfirmTicket ? "  təsdiq etdi ! </br>" : " təsdiq etməyib ! </br>");
-                    toEmail2.Add(item.IntranetUser.Email);
-                }
-            }
-            if (ticket.TicketCheckLists.Count != 0)
-            {
-                foreach (var item in ticket.TicketCheckLists)
-                {
-                    checklists.Append(item.CheckList.Name + "  adlı çeklist");
-                    checklists.Append(item.Confirm ? "  həll olundu ! </br>" : " həll olunmayıb ! </br>");
-                }
-            }
-            if (ticket.Supporter != null)
-            {
-                toEmail2.Add(ticket.Supporter.Email);
-            }
-            else
-            {
-                toEmail2.Add(smtpSettings.UserName);
-            }
+        //    //if (ticket.ConfirmTicketUsers.Count != 0)
+        //    //{
+        //    //    foreach (var item in ticket.ConfirmTicketUsers)
+        //    //    {
+        //    //        confirmers.Append(_map.Map<AppUserDetailsDto>(item.IntranetUser) + "  adlı nəzarətçi sifarişi");
+        //    //        confirmers.Append(item.ConfirmTicket ? "  təsdiq etdi ! </br>" : " təsdiq etməyib ! </br>");
+        //    //        toEmail2.Add(item.IntranetUser.Email);
+        //    //    }
+        //    //}
+        //    //if (ticket.TicketCheckLists.Count != 0)
+        //    //{
+        //    //    foreach (var item in ticket.TicketCheckLists)
+        //    //    {
+        //    //        checklists.Append(item.CheckList.Name + "  adlı çeklist");
+        //    //        checklists.Append(item.Confirm ? "  həll olundu ! </br>" : " həll olunmayıb ! </br>");
+        //    //    }
+        //    //}
+        //    if (ticket.Supporter != null)
+        //    {
+        //        toEmail2.Add(ticket.Supporter.Email);
+        //    }
+        //    else
+        //    {
+        //        toEmail2.Add(smtpSettings.UserName);
+        //    }
 
-            foreach (var item in toEmail2)
-            {
-                email.To.Add(MailboxAddress.Parse(item));
-            }
+        //    foreach (var item in toEmail2)
+        //    {
+        //        email.To.Add(MailboxAddress.Parse(item));
+        //    }
 
-            email.Subject = ticket.Title;
-            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticket.Id;
-            if (ticket.Supporter != null && ticket.CategoryTicket.TicketType == TicketType.Task)
-            {
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-                    "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-                    "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-                    "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
-                    //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                    "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
-                    "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
-                    "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-                    "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-                    "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
-            }
-            else if (ticket.Supporter != null && ticket.CategoryTicket.TicketType != TicketType.Task)
-            {
-                //string filepath = await ExportToPdf(ticketId);
+        //    email.Subject = ticket.Title;
+        //    string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticket.Id;
+        //    if (ticket.Supporter != null && ticket.CategoryTicket.TicketType == TicketType.Task)
+        //    {
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //            "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //            "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //            "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
+        //            //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //            "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
+        //            "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
+        //            "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //            "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //            "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
+        //    }
+        //    else if (ticket.Supporter != null && ticket.CategoryTicket.TicketType != TicketType.Task)
+        //    {
+        //        //string filepath = await ExportToPdf(ticketId);
 
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-           "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-           "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-            "<a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a>" +
-           "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
-           //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-           "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
-           "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
-           "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-           "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-           "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
-
-
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //   "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //   "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //    "<a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a>" +
+        //   "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
+        //   //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //   "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
+        //   "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
+        //   "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //   "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //   "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
 
 
-            }
-            else if (ticket.Supporter == null && ticket.CategoryTicket.TicketType == TicketType.Task)
-            {
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-                   "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-                   "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-                   "<p><strong>" + "Status : </strong>" + ticket.StatusType.GetDisplayName() + "</p>" +
-                   //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                   "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
-                   //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
-                   "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-                   "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-                   "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
-            }
-            else
-            {
-                //string filepath = await ExportToPdf(ticketId);
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-                "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-                "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-                "<h3><a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a></h3>" +
-                "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
-                //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + "</p>" +
-                //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
-                "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-                "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-                "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
 
-            }
-            // send email
 
-            SmtpClient smtp = new SmtpClient();
-            smtp.Connect(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(smtpSettings.FromEmail, smtpSettings.Password);
-            await smtp.SendAsync(email);
-            smtp.Disconnect(true);
-        }
+        //    }
+        //    else if (ticket.Supporter == null && ticket.CategoryTicket.TicketType == TicketType.Task)
+        //    {
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //           "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //           "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //           "<p><strong>" + "Status : </strong>" + ticket.StatusType.GetDisplayName() + "</p>" +
+        //           //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //           "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
+        //           //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
+        //           "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //           "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //           "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
+        //    }
+        //    else
+        //    {
+        //        //string filepath = await ExportToPdf(ticketId);
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //        "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //        "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //        "<h3><a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a></h3>" +
+        //        "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
+        //        //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //        "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + "</p>" +
+        //        //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
+        //        "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //        "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //        "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
+
+        //    }
+        //    // send email
+
+        //    SmtpClient smtp = new SmtpClient();
+        //    smtp.Connect(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
+        //    smtp.Authenticate(smtpSettings.FromEmail, smtpSettings.Password);
+        //    await smtp.SendAsync(email);
+        //    smtp.Disconnect(true);
+        //}
 
         #endregion
         #region Ticket Listing 
@@ -737,7 +736,7 @@ namespace SmartIntranet.Web.Controllers
                         {
                             if (CategoryTicketSupporter.Supporter != null)
                             {
-                                SendEmailAsync(" Nomreli Task Yaradildi", result.Id);
+                                //SendEmailAsync(" Nomreli Task Yaradildi", result.Id);
                             }
                             return RedirectToAction("List", new
                             {
@@ -750,13 +749,35 @@ namespace SmartIntranet.Web.Controllers
                 {
                    await ExportToPdf(result.Id);
                 }
-                var message = " Nomreli Task Yaradildi";
+                //var message = " Nomreli Task Yaradildi";
+                var ticket = _ticketService.GetIncludeMail(result.Id);
+                string watchers = string.Empty; 
+                string confirmers = string.Empty; 
+                List<string> toEmail = new List<string>(); 
+                string ticketMessage = " Nomreli Task Yarandi";
+                if (ticket.Watchers.Count != 0)
+                {
+                    foreach (var item in ticket.Watchers)
+                    {
+                        toEmail.Add(item.IntranetUser.Email);
+
+                    }
+                }
+
+                if (ticket.ConfirmTicketUsers.Count != 0)
+                {
+                    foreach (var item in ticket.ConfirmTicketUsers)
+                    {
+                        toEmail.Add(item.IntranetUser.Email);
+                    }
+                }
                 if (CategoryTicketSupporter.Supporter != null)
                 {
-                    //SendEmailAsync(message, result.Id);
-                    var messages = new Message(new string[] { "mahir.tahiroghlu@srgroupco.com" }, "Test mail with Attachments", "This is the content from our mail with attachments.");
-                    await _emailSender.SendEmailAsync(messages);
+                    toEmail.Add(ticket.Supporter.Email);
+                   
                 }
+                _emailSender.TicketSendEmail(result.Id, ticketMessage, toEmail);
+
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added
@@ -829,7 +850,7 @@ namespace SmartIntranet.Web.Controllers
         {
            await ExportToPdf(ticketId);
             string message = " Taskın Order faylında dəyişiklik olundu";
-            SendEmailAsync(message, ticketId);
+            //SendEmailAsync(message, ticketId);
             return Ok();
         }
 
@@ -870,7 +891,7 @@ namespace SmartIntranet.Web.Controllers
                 data.CategoryTicketId = model.CategoryTicketId;
                 await _ticketService.UpdateModifiedAsync(data);
 
-                SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
+                //SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -921,7 +942,7 @@ namespace SmartIntranet.Web.Controllers
                         }
                     }
                 }
-                SendEmailAsync(" Nomreli Task Checklistler Yeniləndi", model.Id);
+                //SendEmailAsync(" Nomreli Task Checklistler Yeniləndi", model.Id);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -988,7 +1009,7 @@ namespace SmartIntranet.Web.Controllers
                     TempData["success"] = "Təsdiqləyənlər siyahısı yeniləndi";
                     return RedirectToAction("Confirmed");
                 }
-                SendEmailAsync(" Nomreli Task Tesdiqlendi", model.Id);
+                //SendEmailAsync(" Nomreli Task Tesdiqlendi", model.Id);
                 return RedirectToAction("Confirmed");
             }
             TempData["error"] = Messages.Error.notComplete;
@@ -1062,7 +1083,7 @@ namespace SmartIntranet.Web.Controllers
                 update.SupporterId = model.SupporterId;
 
                 await _ticketService.UpdateAsync(update);
-                SendEmailAsync("Nomreli Task Yönləndirildi", model.Id);
+                //SendEmailAsync("Nomreli Task Yönləndirildi", model.Id);
                 TempData["success"] = "Ticket Yönləndirildi";
                 return RedirectToAction("NonRedirect");
             }
@@ -1092,7 +1113,7 @@ namespace SmartIntranet.Web.Controllers
                 update.StatusType = model.StatusType;
 
                 await _ticketService.UpdateAsync(update);
-                SendEmailAsync(" Nomreli Taskın Statusu Dəyişdirildi", model.Id);
+                //SendEmailAsync(" Nomreli Taskın Statusu Dəyişdirildi", model.Id);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
