@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using MimeKit.Text;
 using Newtonsoft.Json;
+using SmartIntranet.Business.Email;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
@@ -58,10 +59,11 @@ namespace SmartIntranet.Web.Controllers
         private readonly ICompanyService _companyService;
         private readonly IDiscussionService _discussionService;
         private readonly IDepartmentService _departmentService;
-
+        private readonly IEmailService _emailSender;
 
         public TicketController(
             IMapper map,
+            IEmailService emailSender,
             ITicketService ticketService,
             ICheckListService checkListService,
             ICategoryTicketService CategoryTicketService,
@@ -84,6 +86,7 @@ namespace SmartIntranet.Web.Controllers
 
             ) : base(userManager, httpContextAccessor, signInManager, map)
         {
+            _emailSender = emailSender;
             _emailService = emailService;
             _ticketService = ticketService;
             _checkListService = checkListService;
@@ -750,7 +753,9 @@ namespace SmartIntranet.Web.Controllers
                 var message = " Nomreli Task Yaradildi";
                 if (CategoryTicketSupporter.Supporter != null)
                 {
-                    SendEmailAsync(message, result.Id);
+                    //SendEmailAsync(message, result.Id);
+                    var messages = new Message(new string[] { "mahir.tahiroghlu@srgroupco.com" }, "Test mail with Attachments", "This is the content from our mail with attachments.");
+                    await _emailSender.SendEmailAsync(messages);
                 }
                 return RedirectToAction("List", new
                 {
