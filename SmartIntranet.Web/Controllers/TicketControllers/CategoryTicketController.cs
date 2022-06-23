@@ -55,8 +55,6 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "CategoryTicket.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.categories = DropDownTreeExtensions.BuildTrees(await _categoryTicketService
-            .GetAllAsync(x => !x.IsDeleted));
             ViewBag.supporters = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View();
         }
@@ -107,7 +105,6 @@ namespace SmartIntranet.Web.Controllers
                     error = Messages.Error.notFound
                 });
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
             ViewBag.supporters = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View(data);
         }

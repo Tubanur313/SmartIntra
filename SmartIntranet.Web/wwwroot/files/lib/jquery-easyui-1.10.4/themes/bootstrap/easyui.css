@@ -1053,10 +1053,10 @@
     overflow: hidden;
     white-space: nowrap;
     margin: 0;
-    padding: 0;
-    -moz-border-radius: 5px 5px 5px 5px;
-    -webkit-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
+    padding: 4px;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
 }
 
     .textbox .textbox-text {
@@ -1100,7 +1100,7 @@
 
     .textbox .textbox-prompt {
         font-size: 16px;
-        color: #aaa;
+        color: #495057;
     }
 
     .textbox .textbox-bgicon {
@@ -1189,9 +1189,10 @@
     background-position: center center;
     cursor: pointer;
     opacity: 0.6;
-    filter: alpha(opacity=60);
+/*    filter: alpha(opacity=60);*/
     text-decoration: none;
     outline-style: none;
+    filter: invert(1%) sepia(1%) saturate(1%) hue-rotate(1deg) brightness(0%) contrast(85%);
 }
 
 .textbox-icon-disabled,
@@ -1278,14 +1279,15 @@
 }
 
 .combo-arrow {
-    width: 18px;
-    height: 20px;
+    width: 17px !important;
+    height: 35px !important;
     overflow: hidden;
     display: inline-block;
     vertical-align: top;
     cursor: pointer;
     opacity: 0.6;
     filter: alpha(opacity=60);
+    background-color: black;
 }
 
 .combo-arrow-hover {
@@ -1305,17 +1307,17 @@
     background-color: #ffffff;
 }
 
-.combo-arrow {
+/*.combo-arrow {
     background-color: #F2F2F2;
-}
+}*/
 
 .combo-arrow-hover {
     background-color: #e6e6e6;
 }
 
-.combo-arrow:hover {
+/*.combo-arrow:hover {
     background-color: #e6e6e6;
-}
+}*/
 
 .combo .textbox-icon-disabled:hover {
     cursor: default;
@@ -3801,17 +3803,17 @@
 }
 
 .tree-folder {
-    background: url('images/tree_icons.png') no-repeat -240px 0;
+    background: url('images/spinner_arrows.png') no-repeat -32px center
     /*    -208px 0*/
 }
 
 .tree-folder-open {
-    background: url('images/tree_icons.png') no-repeat -240px 0;
-/*    -224px 0*/
+    background: url('images/spinner_arrows.png') no-repeat -45px center
+    /*    -224px 0*/
 }
 
 .tree-file {
-    background: url('images/tree_icons.png') no-repeat -240px 0;
+    background: url('images/spinner_arrows.png') no-repeat -45px center
 }
 
 .tree-loading {
@@ -3831,13 +3833,13 @@
 }
 
 .tree-title {
-    font-size: 12px;
+    font-size: 15px;
     display: inline-block;
     text-decoration: none;
     vertical-align: middle;
     white-space: nowrap;
-    padding: 0 2px;
-    margin: 4px 0;
+    padding: 0px 2px;
+    margin: 4px 7px;
     height: 18px;
     line-height: 18px;
 }
@@ -3907,7 +3909,7 @@
 }
 
 .tree-node-selected {
-    background: #0081c2;
+    background: #01dbdf;
     color: #fff;
 }
 

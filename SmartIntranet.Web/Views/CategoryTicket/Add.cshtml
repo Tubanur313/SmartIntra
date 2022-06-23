@@ -83,22 +83,11 @@
             success: function (data) {
                 $('#ParentId').combotree({
                     data:data,
-                    prompt:'Seçim edin',
-                    onBeforeSelect:function(node){
-                            console.log(node.children.length);
-                        if(node.parentId==null && node.children.length > 0){
-                        node.target.off("click")
-                        }
-                    }
+                    prompt:'Seçim edin'
                 });
             },
             error: function (data) {
             }
-        });
-        $("form").submit(function (e){
-            var val = $('#ParentId')
-               .combotree('getValue');
-            $('#ParentId').val($('[name="ParentId"]').val());
         });
     });
 </script>

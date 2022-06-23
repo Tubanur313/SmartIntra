@@ -845,7 +845,7 @@ namespace SmartIntranet.Web.Controllers
             return Ok();
         }
         [HttpGet]
-        [Authorize(Policy = "ticket.checklist")]
+        [Authorize(Policy = "ticket.categoryticket")]
         public async Task<IActionResult> CategoryTicket(int id)
         {
             TicketCategoryDto data = _map.Map<TicketCategoryDto>(await _ticketService.FindByIdAsync(id));
@@ -859,7 +859,7 @@ namespace SmartIntranet.Web.Controllers
             return View(data);
         }
         [HttpPost]
-        [Authorize(Policy = "ticket.checklist")]
+        [Authorize(Policy = "ticket.categoryticket")]
         public async Task<IActionResult> CategoryTicket(TicketCategoryDto model)
         {
             if (ModelState.IsValid)

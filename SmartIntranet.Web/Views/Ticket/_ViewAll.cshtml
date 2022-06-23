@@ -178,7 +178,7 @@
                                                 @if (User.HasAccess("ticket.category") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
-                                                        <button onclick="showInPopupSm('@Url.Action("Category","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Kateqoriya')"
+                                                        <button onclick="showInPopupSm('@Url.Action("CategoryTicket","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Kateqoriya')"
                                                         class="btn  btn-default waves-effect md-trigger text-info">
                                                             <i class="icofont icofont-navigation-menu text-info  p-r-15"></i>
                                                             Kateqoriya
