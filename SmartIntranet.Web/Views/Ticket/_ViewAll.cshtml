@@ -1,7 +1,15 @@
 ﻿@model IEnumerable<TicketListDto>
 
 <style>
-
+    .modal-dialog.modal-xl.ui-draggable{
+        position:relative !important;
+    }
+    .modal-dialog.modal-xl{
+        position:relative !important;
+    }
+    .modal-dialog{
+        position:relative !important;
+    }
     .blobs-container {
         display: inline-flex;
     }
@@ -80,9 +88,8 @@
                                     <tr data-toggle="tooltip"
                                     data-html="true"
                                     data-placement="right" title="Ətraflı: @Html.Raw(ticket.Description)">
-                                        <td>
+                                        <td data-ticketId="@ticket.Id">
                                             #@ticket.Id
-
                                         </td>
                                         <td data-toggle="tooltip"
                                         data-html="true"
@@ -95,7 +102,7 @@
                                             @(ticket.Employee.Company == null ? "Təyin Olunmayıb" : ticket.Employee.Company.Name)/
                                             @(ticket.Employee.Department == null ? "Təyin Olunmayıb" : ticket.Employee.Department.Name)/
                                             @(ticket.Employee.Position == null ? "Təyin Olunmayıb" : ticket.Employee.Position.Name)">
-                                            @ticket.Employee.Name+@ticket.Employee.Surname
+                                            @ticket.Employee.Name @ticket.Employee.Surname
 
                                         </td>
                                         @if (ticket.Supporter is null)
@@ -112,7 +119,7 @@
                                             @(ticket.Supporter.Company == null ? "Təyin Olunmayıb" : ticket.Supporter.Company.Name)/
                                             @(ticket.Supporter.Department == null ? "Təyin Olunmayıb" : ticket.Supporter.Department.Name)/
                                             @(ticket.Supporter.Position == null ? "Təyin Olunmayıb" : ticket.Supporter.Position.Name)">
-                                                @ticket.Supporter.Name+@ticket.Supporter.Surname
+                                                @ticket.Supporter.Name @ticket.Supporter.Surname
                                             </td>
                                         }
 
