@@ -1,6 +1,7 @@
 ﻿@model TicketAddDto
 @{
     Layout = null;
+
 }
 
 
@@ -18,8 +19,8 @@
     <!-- img-upload -->
     <link rel="stylesheet" type="text/css" href="~/files/lib/ticket-img-uploader/ticket-img-uploader.css" />
     <!-- Date-range picker css  -->
-    <link rel="stylesheet" type="text/css"
-          href="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 </head>
 <style>
     .pt-3-half {
@@ -75,14 +76,17 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Kateqoriya: </label>
-                                <select asp-for="CategoryTicketId" name="CategoryTicketId" class="form-control">
+                                <div style="margin-bottom:20px">
+                                    <input type="text" class="form-control" asp-for="CategoryTicketId" style="width:100%">
+                                </div>
+                                @*  <select asp-for="CategoryTicketId" name="CategoryTicketId" class="form-control">
                                     <option value="" hidden disabled selected>Seçim edin</option>
                                     @foreach (var item in ViewBag.categories)
                                     {
-                                        <option data-type="@item.TicketType" value="@item.Id">@item.Name</option>
+                                    <option data-type="@item.TicketType" value="@item.Id">@item.Name</option>
                                     }
 
-                                </select>
+                                    </select>*@
                                 <span asp-validation-for="CategoryTicketId" class="text-danger"></span>
                             </div>
                         </div>
@@ -196,29 +200,21 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="page-body">
-                                    <div class="card">
-                                        <div class="card-block">
-                                            <div class="panel panel-primary">
+                                <div class="panel panel-primary">
 
-                                                <div class="panel-heading">
-                                                    <h3 class="">Fayl Yüklə</h3>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-sm-2">
-                                                            <div class="form-group">
-                                                                <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
-                                                                <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-10">
-                                                            <div class="form-group">
-                                                                <div id="image_preview" class="row" @*style="width:100%;"*@>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    <div class="panel-heading">
+                                        <h3 class="">Fayl Yüklə</h3>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                                                <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-10">
+                                            <div class="form-group">
+                                                <div id="image_preview" class="row" @*style="width:100%;"*@>
                                                 </div>
                                             </div>
                                         </div>
@@ -256,7 +252,7 @@
                                 <tr>
                                     <th colspan="8"></th>
                                     <th>Ümumi məbləğ: </th>
-                                    <th class="disable"><input asp-for="GrandTotal"/></th>
+                                    <th class="disable"><input asp-for="GrandTotal" /></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -297,8 +293,10 @@
 <!-- ticket img upload js -->
 <script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
 <!-- Date-range picker js -->
-<script type="text/javascript"
-        src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- combotree -->
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+
 <script class="removable">
     $.validator.setDefaults({ ignore:''});
     $(document).ready(function() {
@@ -518,57 +516,15 @@
               $("#ConfirmedId").addClass( 'd-none');
               $("#ConfirmTicketUserId").prop( "disabled" , true);
         });
-        //Category and validation of ckeditor
 
-        $(document).on("change","#CategoryId",function(){
-           var type = $(this).find(':selected').data('type');
-           var $this =$(this).parents("form")
-          
-            if(type =="Purchasing"){
-              $("#PurcId").removeClass( 'd-none');
-            }
-            else{
-              $this.on("submit",function(e){
-              var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
-              if( !(Description)) {
-                   toastr.error("  Zəhmət olmasa Ətraflı tabına keçid edin", "Təsvir boş ola bilməz !");
-               e.preventDefault();
-               }
-              });
-               $("#PurcId").addClass( 'd-none');
-               $("#generated").empty();
-               var Ids = new Array();
-               $(".editTable").each(function(){
-                  var id= $(this).attr('value-id');
-                   Ids.push(id);
-               });
-               $.ajax({
-                  type: 'get',
-                  url: '@Url.ActionLink("AllDelete","Order")',
-                  datatype: 'json',
-                  traditional: true,
-                  data:({Ids:Ids}),
-                  success: function (response) {
-                  if (response.error == true) {
-                      toastr.error(response.message, "Xəta baş verdi!");
-                      location.reload();
-                      return;
-                  }
-                  },
-                  error: function (response) {
-                      toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                  }
-              });
-            }
-        });
 
         // Total price
 
-        $(document).on("mouseover","#generated",function(){  
+        $(document).on("mouseover","#generated",function(){
         var r = 0;
-        
+
         $("textarea[name='Total']").each(function( index ) {
-            
+
 
              if(parseFloat($(this).val()) === NaN){
              r+= 0;
@@ -585,42 +541,75 @@
                 const value = elem.value;
                 const numVal = value.replace(/\D/,"");
                 elem.value = numVal;
-            }
+        }
+                $.ajax({
+                url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
+                type: "Get",
+                data: "",
+                dataType: "json",
+                cache: false,
+                success: function(data) {
+                    $('#CategoryTicketId').combotree({
+                        data: data,
+                        prompt: 'Seçim edin',
+                        onBeforeSelect: function(node) {
+                            if( node.children.length > 0) {
+                                return false
+                            }
+                            else{
 
-            //$("#CategoryTicketId").select2({
-            //    minimumResultsForSearch: -1,
-            //    placeholder: "Seçim edin",
-            //    ajax: {
-            //    url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
-            //    type: "Get",
-            //    data: "",
-            //    dataType: "json",
-            //    cache: true,
-            //    delay: 250,
-            //    contentType: "application/json; charset=utf-8",
-            //    processResults: function (data) {
-            //        return {
-            //            results: $.map(data, function (val, item) {
-            //                return {
-            //                    text: val.text ,
-            //                    children :getTree(val.children,val,item)
-            //                };
-            //            }),
-            //        };
-            //    }
-            //    },
-            //});
-
-            //function getTree(data,val, item){
-            //    $.map(data, function (v, item){
-            //      return {
-            //          id:v.id,
-            //          text:v.text
-            //         }
-            //      })
-            //    if(data.length > 0){
-            //        getTree(data,val, item)
-            //    }
-            //   }      
+                            var type = node.ticketType;
+                            var $this = $("form")
+                            if(type == @((int) TicketType.Purchasing)) {
+                                $("#PurcId").removeClass('d-none');
+                            $("#True").prop('checked', true);
+                            $("#ConfirmedId").removeClass( 'd-none');
+                            $("#ConfirmTicketUserId").prop( "disabled" , false);
+                            }
+                            else {
+                                $("#False").prop('checked', true);
+                                $("#ConfirmedId").addClass( 'd-none');
+                                $("#ConfirmTicketUserId").prop( "disabled" , true);
+                                $this.on("submit", function(e) {
+                                    var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
+                                    if(!(Description)) {
+                                        toastr.error("  Zəhmət olmasa Ətraflı tabına keçid edin", "Təsvir boş ola bilməz !");
+                                        e.preventDefault();
+                                    }
+                                });
+                                $("#PurcId").addClass('d-none');
+                                $("#generated").empty();
+                                var Ids = new Array();
+                                $(".editTable").each(function() {
+                                    var id = $(this).attr('value-id');
+                                    Ids.push(id);
+                                });
+                                $.ajax({
+                                    type: 'get',
+                                    url: '@Url.ActionLink("AllDelete","Order")',
+                                    datatype: 'json',
+                                    traditional: true,
+                                    data: ({
+                                        Ids: Ids
+                                    }),
+                                    success: function(response) {
+                                        if(response.error == true) {
+                                            console.log(response);
+                                            toastr.error(response.message, "Xəta baş verdi!");
+                                            location.reload();
+                                            return;
+                                        }
+                                    },
+                                    error: function(response) {
+                                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                    }
+                                });
+                            }
+                            }
+                        },
+                    });
+                },
+                error: function(data) {}
+                });
     });
 </script>

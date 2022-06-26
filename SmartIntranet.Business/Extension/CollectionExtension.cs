@@ -51,30 +51,40 @@ namespace SmartIntranet.Business.Extension
              .AddEntityFrameworkStores<IntranetContext>();
 
 
-
-
-            services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
+            services.ConfigureApplicationCookie(_ =>
             {
-                opt.Cookie.Name = "SmartIntranetCookie";
-                //opt.Cookie.SameSite = SameSiteMode.Strict;
-                opt.Cookie.HttpOnly = false;
-                //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
-                opt.SlidingExpiration = true;
-                opt.Cookie.SameSite = SameSiteMode.Lax;
-                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-
-                //opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                opt.LoginPath = "/signin.html";
-                opt.AccessDeniedPath = "/accessdenied.html";
+                _.LoginPath = new PathString("/signin.html");
+                _.AccessDeniedPath = new PathString("/accessdenied.html");
+                _.Cookie = new CookieBuilder
+                {
+                    Name = "SmartIntranetCookie",
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.Always
+                };
+                _.SlidingExpiration = true;
+                _.ExpireTimeSpan = TimeSpan.FromMinutes(300);
             });
+
+            //services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
+            //{
+            //    opt.Cookie.Name = "SmartIntranetCookie";
+            //    //opt.Cookie.SameSite = SameSiteMode.Strict;
+            //    opt.Cookie.HttpOnly = false;
+            //    //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
+            //    opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+            //    opt.SlidingExpiration = true;
+            //    opt.Cookie.SameSite = SameSiteMode.Lax;
+            //    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            //    opt.LoginPath = "/signin.html";
+            //    opt.AccessDeniedPath = "/accessdenied.html";
+            //});
 
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //    .AddCookie();
 
             services.AddAuthorization(cfg =>
             {
-
                 foreach (var claimName in AppClaimProvider.policies)
                 {
                     cfg.AddPolicy(claimName, p =>
@@ -89,10 +99,7 @@ namespace SmartIntranet.Business.Extension
                         //p.RequireClaim(claimName, "1");
                     });
                 }
-
-
             });
-
         }
         public static void AddCustomCompression(this IServiceCollection services)
         {
