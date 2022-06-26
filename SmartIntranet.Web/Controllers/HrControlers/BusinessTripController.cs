@@ -98,7 +98,7 @@ namespace SmartIntranet.Web.Controllers
 
                 for (int i = 0; i < users.Count; i++)
                 {
-                    formatKeys.Add($"employeeFull_{i}", users[i].Fullname);
+                    formatKeys.Add($"employeeFull_{i}", $"{users[i].Surname} {users[i].Name} {users[i].Fathername} {(users[i].Gender == "MALE" ? "oğlu" : users[i].Gender == "FEMALE" ? "qızı" : "")}");
                     formatKeys.Add($"position_{i}", users[i].Position.Name);
                 }
                 var company = await _companyService.FindByIdAsync((int)users[0].CompanyId);
@@ -178,7 +178,7 @@ namespace SmartIntranet.Web.Controllers
 
                 for (int i = 0; i < users.Count; i++)
                 {
-                    formatKeys.Add($"employeeFull_{i}", users[i].Fullname);
+                    formatKeys.Add($"employeeFull_{i}", $"{users[i].Surname} {users[i].Name} {users[i].Fathername} {(users[i].Gender == "MALE" ? "oğlu" : users[i].Gender == "FEMALE" ? "qızı" : "")}");
                     formatKeys.Add($"position_{i}", users[i].Position.Name);
                 }
                 var company = await _companyService.FindByIdAsync((int)users[0].CompanyId);

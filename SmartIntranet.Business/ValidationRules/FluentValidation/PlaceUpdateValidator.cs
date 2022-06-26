@@ -13,8 +13,6 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation
         public PlaceUpdateValidator()
         {
             RuleFor(I => I.Name).NotNull().WithMessage("Ad boş ola bilməz");
-            RuleFor(I => I.Amount).NotNull().WithMessage("Xərc boş ola bilməz");
-            RuleFor(I => I.Currency).NotNull().WithMessage("Valyuta boş ola bilməz");
         }
     }
 }

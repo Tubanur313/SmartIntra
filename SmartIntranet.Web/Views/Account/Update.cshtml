@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Əmək Haqqı: </label>
                                 <input type="hidden" asp-for="Salary" />
-                                <input type="number" class="form-control disabled_custom" readonly asp-for="Salary" autocomplete="off">
+                                <input type="number" class="form-control" asp-for="Salary" autocomplete="off">
                                 <span class="messages"></span>
                             </div>
 
@@ -153,7 +153,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input readonly asp-for="StartWorkDate" type="date" class="form-control disabled_custom" id="inputDate">
+                                <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -236,7 +236,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  Vəzifə: </label>
                             <input type="hidden" asp-for="PositionId" />
-                            <select name="select" asp-for="PositionId" name="PositionId" readonly class="form-control disabled_custom">
+                            <select name="select" asp-for="PositionId" name="PositionId" class="form-control">
                                 <option value="" selected hidden>Seçim edin</option>
                                 @foreach (var item in ViewBag.position)
                                 {
@@ -328,7 +328,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
-                                <input type="number" readonly class="form-control disabled_custom" asp-for="VacationMainDay" autocomplete="off">
+                                <input type="number" class="form-control" asp-for="VacationMainDay" autocomplete="off">
                                 <span asp-validation-for="VacationMainDay" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -337,15 +337,11 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əlavə Gün Sayı: </label>
-                                <input type="number" readonly class="form-control disabled_custom" asp-for="VacationExtraDay" autocomplete="off">
+                                <input type="number" class="form-control" asp-for="VacationExtraDay" autocomplete="off">
                                 <span asp-validation-for="VacationExtraDay" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
                         </div>
-
-
-
-
                     </div>
 
                     <div class="row">
@@ -362,7 +358,7 @@
                         <div class="col-sm-6">
                             <input type="hidden" asp-for="WorkGraphicId" />
                             <label class="floatLabel">  İstehsalat təqvimi: </label>
-                            <select readonly asp-for="WorkGraphicId" class="form-control disabled_custom">
+                            <select asp-for="WorkGraphicId" class="form-control">
                                 <option value="" disabled selected hidden>Seçim edin</option>
                                 @foreach (var item in ViewBag.workGraphics)
                                 {

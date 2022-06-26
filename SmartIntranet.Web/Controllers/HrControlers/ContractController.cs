@@ -281,7 +281,7 @@ namespace SmartIntranet.Web.Controllers
 
             ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
-            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Id == usr.Id && x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.ContractId == id && !x.IsDeleted);
@@ -316,7 +316,7 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("contractDate", model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 formatKeys.Add("contractDatePlus", model.ContractStart.AddYears(1).ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (model.ContractEnd != null)
-                    formatKeys.Add("contractDateEnd", model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
+                    formatKeys.Add("contractDateEnd", model.ContractEnd?.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 formatKeys.Add("contractNumber", model.ContractNumber);
                 formatKeys.Add("commandNumber", model.CommandNumber);
                 formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));

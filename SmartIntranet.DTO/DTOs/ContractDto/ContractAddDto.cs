@@ -11,7 +11,7 @@ namespace SmartIntranet.DTO.DTOs.ContractDto
         public int Id { get; set; }
         public string ContractFileType { get; set; }
         public DateTime ContractStart { get; set; }
-        public DateTime ContractEnd { get; set; }
+        public DateTime? ContractEnd { get; set; }
         public DateTime CommandDate { get; set; }
         public string ContractNumber { get; set; }
         public string CommandNumber { get; set; }

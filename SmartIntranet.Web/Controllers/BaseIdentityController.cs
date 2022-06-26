@@ -39,7 +39,8 @@ namespace SmartIntranet.Web.Controllers
             _signInManager = signInManager;
             _map = map;
 
-            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.PRIMARY_VOCATIONAL, Name = "İlkin peşə təhsili" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta təhsil" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.MASTER, Name = "Magistratura" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.VOCATIONAL, Name = "Orta ixtisas" });
@@ -67,9 +68,10 @@ namespace SmartIntranet.Web.Controllers
         protected Dictionary<string, string> PdfStaticKeys(Dictionary<string, string> formatKeys, IntranetUser usr, Company company, IntranetUser company_director)
         {
             formatKeys.Add("companyDirector", company_director.Name + " " + company_director.Surname + " " + company_director.Fathername);
-            formatKeys.Add("employeeFull", usr.Fullname);
+            formatKeys.Add("employeeFull", $"{usr.Surname} {usr.Name} {usr.Fathername} {(usr.Gender == "MALE" ? "oğlu" : usr.Gender == "FEMALE" ? "qızı" : "")}");
             formatKeys.Add("employeeStartWork", usr.StartWorkDate.ToString("dd.MM.yyyy"));
             formatKeys.Add("position", usr.Position.Name);
+            formatKeys.Add("leaderPosition", company.LeaderPosition);
             formatKeys.Add("nationality", usr.Citizenship);
             formatKeys.Add("idCardNumber", usr.IdCardNumber);
             formatKeys.Add("idCardGivenDate", usr.IdCardGiveDate.ToString("dd.MM.yyyy"));

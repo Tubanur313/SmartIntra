@@ -53,7 +53,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Add()
         {
             ViewBag.years = _map.Map<ICollection<NonWorkingYear>>(await _nonWorkingYearService.GetAllAsync(x => x.IsDeleted  == false));
-            ViewBag.Names = JsonConvert.SerializeObject((await _workGraphicService.GetAllIncCompAsync(x => x.DeleteByUserId == null)).Select(x => x.Name));
+            ViewBag.Names = JsonConvert.SerializeObject((await _workGraphicService.GetAllIncCompAsync(x => !x.IsDeleted)).Select(x => x.Name));
             return View();
         }
 
@@ -81,7 +81,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "workgraphic.update")]
         public async Task<IActionResult> Update(int id)
         {
-            ViewBag.Names = JsonConvert.SerializeObject((await _workGraphicService.GetAllIncCompAsync(x => x.Id != id && x.DeleteByUserId == null)).Select(x => x.Name));
+            ViewBag.Names = JsonConvert.SerializeObject((await _workGraphicService.GetAllIncCompAsync(x => x.Id != id && !x.IsDeleted)).Select(x => x.Name));
             var listModel = _map.Map<WorkGraphicUpdateDto>(await _workGraphicService.FindByIdAsync(id));
             if (listModel == null)
             {
