@@ -200,7 +200,7 @@ namespace SmartIntranet.Web.Controllers
 
             ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
-
+            ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted != true));
             return View();
         }
 
@@ -429,7 +429,7 @@ namespace SmartIntranet.Web.Controllers
 
             listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && x.IsEditable).ToListAsync();
             ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsEditable).ToListAsync();
-
+            ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             return View(listModel);
         }
