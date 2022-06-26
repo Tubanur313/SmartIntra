@@ -137,7 +137,7 @@ namespace SmartIntranet.Web.Controllers
                             }
                         }
 
-                        foreach (var day in date_list)
+                        foreach (var day in date_list.ToList())
                         {
                             if (last_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
                             {
@@ -179,6 +179,35 @@ namespace SmartIntranet.Web.Controllers
 
                             next_to_day += remain_date_list.Where(x => x.Value).Count();
                             next_date = next_date.AddDays(next_to_day);
+
+                            var week_day = next_date.DayOfWeek;
+                            if (graph.Key == "five_day")
+                            {
+                                if (week_day == DayOfWeek.Saturday)
+                                {
+                                    next_date = next_date.AddDays(2);
+                                }
+                                else if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+                            else if (graph.Key == "six_day")
+                            {
+                                if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+
+                            if (last_year_days.Any(x => x.StartDate <= next_date && next_date <= x.EndDate))
+                            {
+                                next_date = last_year_days.FirstOrDefault(x => x.StartDate <= next_date && next_date <= x.EndDate).EndDate.AddDays(1);
+                            }
+                            else if (next_year_days.Any(x => x.StartDate <= next_date && next_date <= x.EndDate))
+                            {
+                                next_date = next_year_days.FirstOrDefault(x => x.StartDate <= next_date && next_date <= x.EndDate).EndDate.AddDays(1);
+                            }
 
                         }
                         var remain_from_date = (DateTime)model.FromWorkYearDate; 
@@ -224,24 +253,7 @@ namespace SmartIntranet.Web.Controllers
                         }
                     }
                    
-                    var week_day = next_date.DayOfWeek;
-                    if (graph.Key== "five_day")
-                    {
-                        if (week_day == DayOfWeek.Saturday)
-                        {
-                            next_date = next_date.AddDays(2);
-                        }else if(week_day == DayOfWeek.Sunday)
-                        {
-                            next_date = next_date.AddDays(1);
-                        }
-                    }
-                    else if (graph.Key == "six_day")
-                    {
-                        if (week_day == DayOfWeek.Sunday)
-                        {
-                            next_date = next_date.AddDays(1);
-                        }
-                    }
+                 
                     formatKeys.Add("fromVacDate", model.FromDate.ToString("dd.MM.yyyy"));
                     formatKeys.Add("toVacDate", model.ToDate.ToString("dd.MM.yyyy"));
                     formatKeys.Add("vacDayCount", model.CalendarDay.ToString());
@@ -261,6 +273,7 @@ namespace SmartIntranet.Web.Controllers
                 if (vac_type == VacationTypeConst.LABOR)
                 {
                     doc_key = ContractFileReadyConst.vacation_labor;
+                    await DelVacPersonalAfterDate(model.UserId, model.CommandDate);
                 }
                 else if (vac_type == VacationTypeConst.EDU)
                 {
@@ -489,167 +502,173 @@ namespace SmartIntranet.Web.Controllers
                 DateTime work_start_date = usr.StartWorkDate;
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
-                //if (work_start_date != null)
-                //{
-                //    DateTime start_interval;
-                //    DateTime end_interval;
-                //    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
-                //    {
-                //        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                //        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
-                //    }
-                //    else
-                //    {
-                //        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                //        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                //    }
-                //    var graph = _workGraphicService.FindByIdAsync(usr.WorkGraphicId).Result;
+                if (work_start_date != null)
+                {
+                    DateTime start_interval;
+                    DateTime end_interval;
+                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                    {
+                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                    }
+                    else
+                    {
+                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                    }
+                    var graph = _workGraphicService.FindByIdAsync((int)usr.WorkGraphicId).Result;
 
-                //    var next_date = model.ToDate.AddDays(1);
-                //    if (_vacationTypeService.FindByIdAsync(model.VacationTypeId).Result.Key == if (vacation_type.Key == VacationTypeConst.LABOR))
-                //    {
-                //        var last_year_days = _nonWorkingDayService.GetAllIncCompAsync(x => x.NonWorkingYear.Year == start_interval.Year.ToString() && x.IsActive).Result;
+                    var next_date = model.ToDate.AddDays(1);
+                    var vacation_type = _vacationTypeService.FindByIdAsync(model.VacationTypeId).Result;
+                    if (vacation_type.Key == VacationTypeConst.LABOR)
+                    {
+                        var last_year_days = _nonWorkingDayService.GetAllIncCompAsync(x => x.NonWorkingYear.Year == start_interval.Year.ToString() && !x.IsDeleted).Result;
 
-                //        var next_year_days = _nonWorkingDayService.GetAllIncCompAsync(x => x.NonWorkingYear.Year == end_interval.Year.ToString() && x.IsActive).Result;
+                        var next_year_days = _nonWorkingDayService.GetAllIncCompAsync(x => x.NonWorkingYear.Year == end_interval.Year.ToString() && !x.IsDeleted).Result;
 
-                //        //last_year_days = last_year_days.Where(x => x.StartDate <= model.FromDate).ToList();
+                        //last_year_days = last_year_days.Where(x => x.StartDate <= model.FromDate).ToList();
 
-                //        //next_year_days = next_year_days.Where(x => x.EndDate.Month <= model.ToDate.Month).ToList();
+                        //next_year_days = next_year_days.Where(x => x.EndDate.Month <= model.ToDate.Month).ToList();
 
-                //        Dictionary<DateTime, bool> date_list = new Dictionary<DateTime, bool>();
-                //        bool flag = false;
-                //        DateTime date_item = model.FromDate;
-                //        while (!flag)
-                //        {
-                //            date_list.Add(date_item, false);
-                //            date_item = date_item.AddDays(1);
-                //            if (date_item == model.ToDate.AddDays(1))
-                //            {
-                //                flag = true;
-                //            }
-                //        }
+                        Dictionary<DateTime, bool> date_list = new Dictionary<DateTime, bool>();
+                        bool flag = false;
+                        DateTime date_item = model.FromDate;
+                        while (!flag)
+                        {
+                            date_list.Add(date_item, false);
+                            date_item = date_item.AddDays(1);
+                            if (date_item == model.ToDate.AddDays(1))
+                            {
+                                flag = true;
+                            }
+                        }
 
-                //        foreach (var day in date_list)
-                //        {
-                //            if (last_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
-                //            {
-                //                date_list[day.Key] = true;
-                //            }
-                //            else if (next_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
-                //            {
-                //                date_list[day.Key] = true;
-                //            }
-                //        }
+                        foreach (var day in date_list.ToList())
+                        {
+                            if (last_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
+                            {
+                                date_list[day.Key] = true;
+                            }
+                            else if (next_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
+                            {
+                                date_list[day.Key] = true;
+                            }
+                        }
 
-                //        var next_to_day = date_list.Where(x => x.Value).Count();
-                //        if (next_to_day > 0)
-                //        {
-                //            Dictionary<DateTime, bool> remain_date_list = new Dictionary<DateTime, bool>();
-                //            flag = false;
-                //            DateTime remain_date_item = model.FromDate.AddDays(1);
-                //            while (!flag)
-                //            {
-                //                remain_date_list.Add(remain_date_item, false);
-                //                remain_date_item = remain_date_item.AddDays(1);
-                //                if (remain_date_item == model.FromDate.AddDays(next_to_day + 1))
-                //                {
-                //                    flag = true;
-                //                }
-                //            }
+                        var next_to_day = date_list.Where(x => x.Value).Count();
+                        if (next_to_day > 0)
+                        {
+                            Dictionary<DateTime, bool> remain_date_list = new Dictionary<DateTime, bool>();
+                            flag = false;
+                            DateTime remain_date_item = model.FromDate.AddDays(1);
+                            while (!flag)
+                            {
+                                remain_date_list.Add(remain_date_item, false);
+                                remain_date_item = remain_date_item.AddDays(1);
+                                if (remain_date_item == model.FromDate.AddDays(next_to_day + 1))
+                                {
+                                    flag = true;
+                                }
+                            }
 
-                //            foreach (var day in remain_date_list)
-                //            {
-                //                if (last_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
-                //                {
-                //                    date_list[day.Key] = true;
-                //                }
-                //                else if (next_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
-                //                {
-                //                    date_list[day.Key] = true;
-                //                }
-                //            }
+                            foreach (var day in remain_date_list)
+                            {
+                                if (last_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
+                                {
+                                    date_list[day.Key] = true;
+                                }
+                                else if (next_year_days.Any(x => x.StartDate <= day.Key && day.Key <= x.EndDate))
+                                {
+                                    date_list[day.Key] = true;
+                                }
+                            }
 
-                //            next_to_day += remain_date_list.Where(x => x.Value).Count();
-                //            next_date = next_date.AddDays(next_to_day);
+                            next_to_day += remain_date_list.Where(x => x.Value).Count();
+                            next_date = next_date.AddDays(next_to_day);
 
-                //        }
-                //        var remain_from_date = (DateTime)model.FromWorkYearDate;
-                //        var remain_to_date = (DateTime)model.ToWorkYearDate;
+                            var week_day = next_date.DayOfWeek;
+                            if (graph.Key == "five_day")
+                            {
+                                if (week_day == DayOfWeek.Saturday)
+                                {
+                                    next_date = next_date.AddDays(2);
+                                }
+                                else if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+                            else if (graph.Key == "six_day")
+                            {
+                                if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+                            if (last_year_days.Any(x => x.StartDate <= next_date && next_date <= x.EndDate))
+                            {
+                                next_date = last_year_days.FirstOrDefault(x => x.StartDate <= next_date && next_date <= x.EndDate).EndDate.AddDays(1);
+                            }
+                            else if (next_year_days.Any(x => x.StartDate <= next_date && next_date <= x.EndDate))
+                            {
+                                next_date = next_year_days.FirstOrDefault(x => x.StartDate <= next_date && next_date <= x.EndDate).EndDate.AddDays(1);
+                            }
 
-                //        formatKeys.Add("remainFromDate", remain_from_date.ToString("dd.MM.yyyy"));
-                //        formatKeys.Add("remainToDate", remain_to_date.ToString("dd.MM.yyyy"));
-                //        var diff = remain_to_date.Year - remain_from_date.Year;
-                //        if (diff == 1)
-                //        {
-                //            var user_vacation_remain = _userVacationRemainService.GetAllIncCompAsync(x => x.FromDate.Year == remain_from_date.Year && x.ToDate.Year == remain_to_date.Year).Result;
+                        }
+                        var remain_from_date = (DateTime)model.FromWorkYearDate;
+                        var remain_to_date = (DateTime)model.ToWorkYearDate;
 
-                //            var usr_vr = _userVacationRemainService.FindByIdAsync(user_vacation_remain[0].Id).Result;
-                //            usr_vr.UsedCount += model.CalendarDay;
-                //            usr_vr.RemainCount -= model.CalendarDay;
-                //            await _userVacationRemainService.UpdateAsync(usr_vr);
-                //        }
-                //        else
-                //        {
-                //            var active_year = remain_from_date.Year;
-                //            decimal keep_count = 0;
-                //            while (diff != 0)
-                //            {
-                //                var user_vacation_remain = _userVacationRemainService.GetAllIncCompAsync(x => x.FromDate.Year == active_year).Result;
-                //                var usr_vr = _userVacationRemainService.FindByIdAsync(user_vacation_remain[0].Id).Result;
+                        formatKeys.Add("remainFromDate", remain_from_date.ToString("dd.MM.yyyy"));
+                        formatKeys.Add("remainToDate", remain_to_date.ToString("dd.MM.yyyy"));
+                        var diff = remain_to_date.Year - remain_from_date.Year;
+                        if (diff == 1)
+                        {
+                            var user_vacation_remain = _userVacationRemainService.GetAllIncCompAsync(x => !x.IsDeleted && x.FromDate.Year == remain_from_date.Year && x.ToDate.Year == remain_to_date.Year && x.AppUserId == model.UserId).Result;
 
-                //                if (diff != 1)
-                //                {
-                //                    keep_count += usr_vr.RemainCount;
-                //                    usr_vr.UsedCount += usr_vr.RemainCount;
-                //                    usr_vr.RemainCount = 0;
-                //                }
-                //                else
-                //                {
-                //                    usr_vr.UsedCount += model.CalendarDay - keep_count;
-                //                    usr_vr.RemainCount -= model.CalendarDay - keep_count;
-                //                }
+                            var usr_vr = _userVacationRemainService.FindByIdAsync(user_vacation_remain[0].Id).Result;
+                            usr_vr.UsedCount += model.CalendarDay;
+                            usr_vr.RemainCount -= model.CalendarDay;
+                            await _userVacationRemainService.UpdateAsync(usr_vr);
+                        }
+                        else
+                        {
+                            var active_year = remain_from_date.Year;
+                            decimal keep_count = 0;
+                            while (diff != 0)
+                            {
+                                var user_vacation_remain = _userVacationRemainService.GetAllIncCompAsync(x => !x.IsDeleted && x.FromDate.Year == active_year && x.AppUserId == model.UserId).Result;
+                                var usr_vr = _userVacationRemainService.FindByIdAsync(user_vacation_remain[0].Id).Result;
 
-                //                await _userVacationRemainService.UpdateAsync(usr_vr);
-                //                diff--;
-                //                active_year += 1;
-                //            }
-                //        }
-                //    }
+                                if (diff != 1)
+                                {
+                                    keep_count += usr_vr.RemainCount;
+                                    usr_vr.UsedCount += usr_vr.RemainCount;
+                                    usr_vr.RemainCount = 0;
+                                }
+                                else
+                                {
+                                    usr_vr.UsedCount += model.CalendarDay - keep_count;
+                                    usr_vr.RemainCount -= model.CalendarDay - keep_count;
+                                }
 
-                //    var week_day = next_date.DayOfWeek;
-                //    if (graph.Key == "five_day")
-                //    {
-                //        if (week_day == DayOfWeek.Saturday)
-                //        {
-                //           next_date = next_date.AddDays(2);
-                //        }
-                //        else if (week_day == DayOfWeek.Sunday)
-                //        {
-                //           next_date =  next_date.AddDays(1);
-                //        }
-                //    }
-                //    else if (graph.Key == "six_day")
-                //    {
-                //        if (week_day == DayOfWeek.Sunday)
-                //        {
-                //           next_date =  next_date.AddDays(1);
-                //        }
-                //    }
-                //    formatKeys.Add("fromVacDate", model.FromDate.ToString("dd.MM.yyyy"));
-                //    formatKeys.Add("toVacDate", model.ToDate.ToString("dd.MM.yyyy"));
-                //    formatKeys.Add("vacDayCount", model.CalendarDay.ToString());
-                //    formatKeys.Add("contractBase", model.Description);
-                //    formatKeys.Add("nextWorkDate", next_date.ToString("dd.MM.yyyy"));
+                                await _userVacationRemainService.UpdateAsync(usr_vr);
+                                diff--;
+                                active_year += 1;
+                            }
+                        }
+                    }
 
-                //}
+                  
+                    formatKeys.Add("fromVacDate", model.FromDate.ToString("dd.MM.yyyy"));
+                    formatKeys.Add("toVacDate", model.ToDate.ToString("dd.MM.yyyy"));
+                    formatKeys.Add("vacDayCount", model.CalendarDay.ToString());
+                    formatKeys.Add("contractBase", model.Description);
+                    formatKeys.Add("nextWorkDate", next_date.ToString("dd.MM.yyyy"));
+                    model.NextWorkDate = next_date;
+                    await _contractService.UpdateAsync(_map.Map<VacationContract>(model));
 
-                if (model.FromWorkYearDate!=null) formatKeys.Add("remainFromDate", ((DateTime)model.FromWorkYearDate).ToString("dd.MM.yyyy"));
-                if (model.ToWorkYearDate != null) formatKeys.Add("remainToDate", ((DateTime)model.ToWorkYearDate).ToString("dd.MM.yyyy"));
-                formatKeys.Add("fromVacDate", model.FromDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("toVacDate", model.ToDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("vacDayCount", model.CalendarDay.ToString());
-                formatKeys.Add("contractBase", model.Description);
-                formatKeys.Add("nextWorkDate", model.NextWorkDate.ToString("dd.MM.yyyy"));
+                }
+
                 formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", model.CommandNumber);
                 var doc_key = "";
@@ -659,6 +678,7 @@ namespace SmartIntranet.Web.Controllers
                 if (vac_type == VacationTypeConst.LABOR)
                 {
                     doc_key = ContractFileReadyConst.vacation_labor;
+                    await DelVacPersonalAfterDate(model.UserId, model.CommandDate);
                 }
                 else if (vac_type == VacationTypeConst.EDU)
                 {
@@ -681,7 +701,7 @@ namespace SmartIntranet.Web.Controllers
                 var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.VacationContractId == model.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
-                    var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted).Result[0];
+                    var clause = _clauseService.GetAllIncCompAsync(x => x.Key == doc_key && !x.IsDeleted).Result[0];
                     DeleteFile("wwwroot/contractDocs/", el.FilePath);
                     StringBuilder content = await GetDocxContent(el.Clause.FilePath, formatKeys);
                     el.FilePath = await AddContractFile(el.Clause.FilePath, PdfFormatKeys(formatKeys, content));
@@ -697,92 +717,147 @@ namespace SmartIntranet.Web.Controllers
             var current = GetSignInUserId();
             var transactionModel = _map.Map<VacationContractListDto>(await _contractService.FindByIdAsync(id));
             var vacation_type = _vacationTypeService.FindByIdAsync(transactionModel.VacationTypeId).Result;
+         
             if (vacation_type.Key == VacationTypeConst.LABOR)
             {
+                await DelVacPersonalAfterDate(transactionModel.UserId, transactionModel.CommandDate);
+
+                decimal day_count = transactionModel.CalendarDay;
                 var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
-                var work_start_date = usr2.StartWorkDate;
-                if (work_start_date != null)
+
+                var remain_list = _userVacationRemainService.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
+
+                int i = 0;
+                foreach (var el in remain_list)
                 {
-                    DateTime start_interval;
-                    DateTime end_interval;
-                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                    if (i == 0)
                     {
-                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                        el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
+                        el.RemainCount = el.VacationCount - el.UsedCount;
+                    }
+
+                    if (day_count >= el.UsedCount)
+                    {
+                        day_count -= el.UsedCount;
+                        el.RemainCount += el.UsedCount;
+                        el.UsedCount = 0;
+                        await _userVacationRemainService.UpdateAsync(el);
                     }
                     else
                     {
-                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+
+                        el.UsedCount -= day_count;
+                        el.RemainCount += day_count;
+                        await _userVacationRemainService.UpdateAsync(el);
+                        day_count = 0;
                     }
 
-                    if (transactionModel.FromDate >= start_interval)
+                    if (day_count == 0)
                     {
-                      
-                        var del_list = _contractService.GetAllIncCompAsync(x => x.FromDate >= start_interval && !x.IsDeleted).Result;
-                        decimal day_count = 0;
-                        foreach (var el in del_list)
-                        {
-                            if(el.VacationType.Key == VacationTypeConst.LABOR)
-                            {
-                                day_count += el.CalendarDay;
-                            }
-                         
-                            el.DeleteDate = DateTime.UtcNow.AddHours(4);
-                            el.DeleteByUserId = current;
-                            el.IsDeleted = true;
-                            await _contractService.UpdateAsync(_map.Map<VacationContract>(el));
-                        }
-
-                        var remain_list = _userVacationRemainService.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
-
-                        foreach (var el in remain_list)
-                        {
-                            if (day_count >= el.UsedCount)
-                            {
-                                day_count -= el.UsedCount;
-                                el.RemainCount += el.UsedCount;
-                                el.UsedCount = 0;
-                                await _userVacationRemainService.UpdateAsync(el);
-                            }
-                            else
-                            {
-
-                                el.UsedCount -= day_count;
-                                el.RemainCount += day_count;
-                                await _userVacationRemainService.UpdateAsync(el);
-                                day_count = 0;
-                            }
-
-                            if (day_count == 0)
-                            {
-                                break;
-                            }
-
-                        }
-
-
+                        break;
                     }
-                    else
-                    {
-                        // Message alert
-                    }
-
+                    i++;
                 }
             }
-            else
-            {
-                transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
-                transactionModel.DeleteByUserId = current;
-                transactionModel.IsDeleted = true;
-                await _contractService.UpdateAsync(_map.Map<VacationContract>(transactionModel));
-            }
 
+            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteByUserId = current;
+            transactionModel.IsDeleted = true;
+            await _contractService.UpdateAsync(_map.Map<VacationContract>(transactionModel));
 
             return Ok();
 
         }
 
+
+        public async Task DelVacPersonalAfterDate(int userId, DateTime commandDate)
+        {
+            var current = GetSignInUserId();
+
+            var usr2 = await _userManager.FindByIdAsync(userId.ToString());
+
+            var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate > commandDate).Result.OrderBy(x => x.CommandDate).ToList();
+
+            if(personal_contract_chgs.Count() > 0)
+            {
+                usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
+                var diff = (int)personal_contract_chgs[0].NewFullVacationDay - (int)personal_contract_chgs[0].LastFullVacationDay;
+                if (personal_contract_chgs[0].VacationExtraType == 0)
+                {
+                    usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay - diff;
+                }
+                else if (personal_contract_chgs[0].VacationExtraType == 1)
+                {
+                    usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay - diff;
+                }
+                else if (personal_contract_chgs[0].VacationExtraType == 2)
+                {
+                    usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay - diff;
+                }
+                await _userManager.UpdateAsync(usr2);
+            }
+          
+
+            foreach (var el in personal_contract_chgs)
+            {
+                var el_del = _personalContractService.FindByIdAsync(el.Id).Result;
+                el_del.DeleteDate = DateTime.UtcNow.AddHours(4);
+                el_del.DeleteByUserId = current;
+                el_del.IsDeleted = true;
+                await _personalContractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
+            }
+
+            var del_list = _contractService.GetAllIncCompAsync(x => x.CommandDate > commandDate).Result;
+            decimal day_count = 0;
+            foreach (var el in del_list)
+            {
+                if (el.VacationType.Key == VacationTypeConst.LABOR)
+                {
+                    day_count += el.CalendarDay;
+                }
+                el.DeleteDate = DateTime.UtcNow.AddHours(4);
+                el.DeleteByUserId = current;
+                el.IsDeleted = true;
+                await _contractService.UpdateAsync(_map.Map<VacationContract>(el));
+            }
+
+            var remain_list = _userVacationRemainService.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
+
+            int i = 0;
+            foreach (var el in remain_list)
+            {
+                if (i == 0)
+                {
+                    el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
+                    el.RemainCount = el.VacationCount - el.UsedCount;
+                }
+
+                if (day_count >= el.UsedCount)
+                {
+                    day_count -= el.UsedCount;
+                    el.RemainCount += el.UsedCount;
+                    el.UsedCount = 0;
+                    await _userVacationRemainService.UpdateAsync(el);
+                }
+                else
+                {
+
+                    el.UsedCount -= day_count;
+                    el.RemainCount += day_count;
+                    await _userVacationRemainService.UpdateAsync(el);
+                    day_count = 0;
+                }
+
+                if (day_count == 0)
+                {
+                    break;
+                }
+                i++;
+            }
+
+
+
+        }
 
     }
 }

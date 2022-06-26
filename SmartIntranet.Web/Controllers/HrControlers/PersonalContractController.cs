@@ -86,6 +86,7 @@ namespace SmartIntranet.Web.Controllers
                
                 if (model.Type == PersonalContractConst.VACATION)
                 {
+                    await DelVacPersonalAfterDate(model.UserId, (DateTime) model.CommandDate);
                     model.LastFullVacationDay = usr2.VacationMainDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
                         + usr2.VacationExtraChild;
                     model.LastMainVacationDay = usr2.VacationMainDay;
@@ -98,8 +99,25 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay;
                         model.NewMainVacationDay = usr2.VacationMainDay;
+
+                        if (model.VacationExtraType == 0)
+                        {
+                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay +usr2.VacationExtraNature
+                        + usr2.VacationExtraChild;
+
+                        }
+                        else if (model.VacationExtraType == 1)
+                        {
+                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraExperience
+                         + usr2.VacationExtraChild;
+                        }
+                        else if (model.VacationExtraType == 2)
+                        {
+                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
+                         + usr2.VacationExtraExperience;
+                        }
+
                     }
                 }else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
                 {
@@ -401,6 +419,7 @@ namespace SmartIntranet.Web.Controllers
 
                 if (model.Type == PersonalContractConst.VACATION)
                 {
+                    await DelVacPersonalAfterDate(model.UserId, (DateTime)model.CommandDate);
                     if (model.IsMainVacation)
                     {
                         model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
@@ -408,8 +427,25 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay;
+                   
                         model.NewMainVacationDay = usr2.VacationMainDay;
+                        if (model.VacationExtraType == 0)
+                        {
+                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
+                        + usr2.VacationExtraChild;
+
+                        }
+                        else if (model.VacationExtraType == 1)
+                        {
+                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraExperience
+                         + usr2.VacationExtraChild;
+                        }
+                        else if (model.VacationExtraType == 2)
+                        {
+                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
+                         + usr2.VacationExtraExperience;
+                        }
+
                     }
                 }
                 else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
@@ -517,116 +553,127 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _contractService.FindByIdAsync(id).Result;
             var current = GetSignInUserId();
+        
             if (transactionModel.Type == "VACATION")
             {
+                await DelVacPersonalAfterDate(transactionModel.UserId, transactionModel.CommandDate);
                 var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
-                var work_start_date = usr2.StartWorkDate;
-                if (work_start_date != null)
+
+                usr2.VacationMainDay = (int)transactionModel.LastMainVacationDay;
+                var diff = (int)transactionModel.NewFullVacationDay - (int)transactionModel.LastFullVacationDay;
+                if (transactionModel.VacationExtraType == 0)
                 {
-                    DateTime start_interval;
-                    DateTime end_interval;
-                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
-                    {
-                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
-                    }
-                    else
-                    {
-                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                    }
-
-                    if (transactionModel.CommandDate >= start_interval && transactionModel.CommandDate <= end_interval)
-                    {
-                        var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval).Result.OrderBy(x => x.CommandDate).ToList();
-
-                        usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
-                        if (personal_contract_chgs[0].VacationExtraType == 0)
-                        {
-                            usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay;
-                        }
-                        else if (personal_contract_chgs[0].VacationExtraType == 1)
-                        {
-                            usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay;
-                        }
-                        else if (personal_contract_chgs[0].VacationExtraType == 2)
-                        {
-                            usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay;
-                        }
-                     
-                        await _userManager.UpdateAsync(usr2);
-
-                        foreach (var el in personal_contract_chgs)
-                        {
-                            var el_del = _contractService.FindByIdAsync(el.Id).Result;
-                            el_del.DeleteDate = DateTime.UtcNow.AddHours(4);
-                            el_del.DeleteByUserId = current;
-                            el_del.IsDeleted = true;
-                            await _contractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
-                        }
-
-                        var del_list = _vacationContractService.GetAllIncCompAsync(x => x.FromDate >= start_interval).Result;
-                        decimal day_count = 0;
-                        foreach (var el in del_list)
-                        {
-                            if (el.VacationType.Key == VacationTypeConst.LABOR)
-                            {
-                                day_count += el.CalendarDay;
-                            }
-                            el.DeleteDate = DateTime.UtcNow.AddHours(4);
-                            el.DeleteByUserId = current;
-                            el.IsDeleted = true;
-                            await _vacationContractService.UpdateAsync(_map.Map<VacationContract>(el));
-                        }
-
-                        var remain_list = _userVacationRemains.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
-
-                        int i = 0;
-                        foreach (var el in remain_list)
-                        {
-                            if (i == 0)
-                            {
-                                el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
-                                el.RemainCount = el.VacationCount - el.UsedCount;
-                            }
-
-                            if (day_count >= el.UsedCount)
-                            {
-                                day_count -= el.UsedCount;
-                                el.RemainCount += el.UsedCount;
-                                el.UsedCount = 0;
-                                await _userVacationRemains.UpdateAsync(el);
-                            }
-                            else
-                            {
-
-                                el.UsedCount -= day_count;
-                                el.RemainCount += day_count;
-                                await _userVacationRemains.UpdateAsync(el);
-                                day_count = 0;
-                            }
-
-                            if (day_count == 0)
-                            {
-                                break;
-                            }
-                            i++;
-                        }
-                    }
-                    else
-                    {
-                        return StatusCode(StatusCodes.Status500InternalServerError, "Cari il üçün məzuniyyət dəyişikliyi silinə bilməz !");
-                    }
+                    usr2.VacationExtraExperience = (int)transactionModel.VacationDay - diff;
                 }
+                else if (transactionModel.VacationExtraType == 1)
+                {
+                    usr2.VacationExtraNature = (int)transactionModel.VacationDay - diff;
+                }
+                else if (transactionModel.VacationExtraType == 2)
+                {
+                    usr2.VacationExtraChild = (int)transactionModel.VacationDay - diff;
+                }
+
+                await _userManager.UpdateAsync(usr2);
+
             }
-            else
-            {
-                transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
-                transactionModel.DeleteByUserId = current;
-                transactionModel.IsDeleted = true;
-                await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
-            }
+
+            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteByUserId = current;
+            transactionModel.IsDeleted = true;
+            await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
+
             return Ok();
         }
+
+        public async Task DelVacPersonalAfterDate(int userId, DateTime commandDate)
+        {
+            var current = GetSignInUserId();
+
+            var usr2 = await _userManager.FindByIdAsync(userId.ToString());
+
+                var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate > commandDate).Result.OrderBy(x => x.CommandDate).ToList();
+
+                if (personal_contract_chgs.Count() > 0)
+                {
+                    usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
+                    var diff = (int)personal_contract_chgs[0].NewFullVacationDay - (int)personal_contract_chgs[0].LastFullVacationDay;
+                    if (personal_contract_chgs[0].VacationExtraType == 0)
+                    {
+                        usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay - diff;
+                    }
+                    else if (personal_contract_chgs[0].VacationExtraType == 1)
+                    {
+                        usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay - diff;
+                }
+                    else if (personal_contract_chgs[0].VacationExtraType == 2)
+                    {
+                        usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay - diff;
+                }
+
+                    await _userManager.UpdateAsync(usr2);
+                }
+
+                foreach (var el in personal_contract_chgs)
+                {
+                    var el_del = _contractService.FindByIdAsync(el.Id).Result;
+                    el_del.DeleteDate = DateTime.UtcNow.AddHours(4);
+                    el_del.DeleteByUserId = current;
+                    el_del.IsDeleted = true;
+                    await _contractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
+                }
+
+                var del_list = _vacationContractService.GetAllIncCompAsync(x => x.CommandDate > commandDate).Result;
+                decimal day_count = 0;
+                foreach (var el in del_list)
+                {
+                    if (el.VacationType.Key == VacationTypeConst.LABOR)
+                    {
+                        day_count += el.CalendarDay;
+                    }
+                    el.DeleteDate = DateTime.UtcNow.AddHours(4);
+                    el.DeleteByUserId = current;
+                    el.IsDeleted = true;
+                    await _vacationContractService.UpdateAsync(_map.Map<VacationContract>(el));
+                }
+
+                var remain_list = _userVacationRemains.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
+
+                int i = 0;
+                foreach (var el in remain_list)
+                {
+                    if (i == 0)
+                    {
+                        el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
+                        el.RemainCount = el.VacationCount - el.UsedCount;
+                    }
+
+                    if (day_count >= el.UsedCount)
+                    {
+                        day_count -= el.UsedCount;
+                        el.RemainCount += el.UsedCount;
+                        el.UsedCount = 0;
+                        await _userVacationRemains.UpdateAsync(el);
+                    }
+                    else
+                    {
+
+                        el.UsedCount -= day_count;
+                        el.RemainCount += day_count;
+                        await _userVacationRemains.UpdateAsync(el);
+                        day_count = 0;
+                    }
+
+                    if (day_count == 0)
+                    {
+                        break;
+                    }
+                    i++;
+                }
+
+            
+
+        }
+
     }
 }

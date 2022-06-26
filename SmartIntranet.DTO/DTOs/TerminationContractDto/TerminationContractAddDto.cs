@@ -18,7 +18,7 @@ namespace SmartIntranet.DTO.DTOs.TerminationContractDto
         public DateTime? DeleteDate { get; set; }
         public string Description { get; set; } // emrin esasi
         public string Content { get; set; } // emrin mezmunu
-        public int RemainVacationCount { get; set; } // emrin mezmunu
+        public int RemainVacationCount { get; set; } 
         public bool IsReduction { get; set; }
         public bool IsAgree { get; set; }
         public DateTime TerminationDate { get; set; }

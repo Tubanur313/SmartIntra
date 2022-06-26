@@ -26,6 +26,7 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Business.Provider;
 using SmartIntranet.Business.Extension;
+using SmartIntranet.DTO.DTOs;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -35,6 +36,9 @@ namespace SmartIntranet.Web.Controllers
         private readonly IntranetContext _db;
         private readonly IAppUserService _appUserService;
         private readonly IWorkGraphicService _workGraphicService;
+        private readonly IPersonalContractService _personalContractService;
+        private readonly IVacationContractService _vacationContractService;
+        private readonly IContractService _contractService;
         private readonly IAppRoleService _appRoleService;
         private readonly IUserVacationRemainService _userVacationRemains;
         private readonly Business.Interfaces.Membership.IUserContractService _userContractService;
@@ -43,7 +47,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public AccountController(IntranetContext db, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
+        public AccountController(IPersonalContractService personalContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
@@ -51,6 +55,9 @@ namespace SmartIntranet.Web.Controllers
         {
             _appRoleService = appRoleService;
             _workGraphicService = workGraphicService;
+            _contractService = contractService;
+            _personalContractService = personalContractService;
+            _vacationContractService = vacationContractService;
             _userVacationRemains = userVacationRemains;
             _db = db;
             _passwordHasher = passwordHasher;
@@ -512,6 +519,21 @@ namespace SmartIntranet.Web.Controllers
                             }
                         }
 
+                        if (updateUser.VacationMainDay != model.VacationMainDay ||
+                            updateUser.VacationExtraChild != model.VacationExtraChild ||
+                            updateUser.VacationExtraExperience != model.VacationExtraExperience ||
+                            updateUser.VacationExtraNature != model.VacationExtraNature ||
+                            updateUser.StartWorkDate != model.StartWorkDate)
+                        {
+                            await DelUserInfos(updateUser.Id, PersonalContractConst.VACATION);
+                        }else if (updateUser.Salary != model.Salary)
+                        {
+                            await DelUserInfos(updateUser.Id, PersonalContractConst.SALARY);
+                        }
+                        else if (updateUser.PositionId != model.PositionId)
+                        {
+                            await DelUserInfos(updateUser.Id, PersonalContractConst.POSITION);
+                        }
                         updateUser.IsDeleted = model.IsDeleted;
                         updateUser.UserName = CreateUsername.FixUsername(model.Name + "." + model.Surname);
                         updateUser.Fathername = model.Fathername;
@@ -802,6 +824,62 @@ namespace SmartIntranet.Web.Controllers
                     message = $"{name} istifadeciden {claimName} imtiyazi alindi"
                 });
             }
+        }
+
+
+        //
+        public async Task DelUserInfos(int userId, string type)
+        {
+            var current = GetSignInUserId();
+
+            var usr2 = await _userManager.FindByIdAsync(userId.ToString());
+
+            var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == type).Result.OrderBy(x => x.CommandDate).ToList();
+
+            
+            foreach (var el in personal_contract_chgs)
+            {
+                var el_del = _personalContractService.FindByIdAsync(el.Id).Result;
+                el_del.DeleteDate = DateTime.Now;
+                el_del.DeleteByUserId = current;
+                el_del.IsDeleted = true;
+                await _personalContractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
+            }
+
+            if(type == PersonalContractConst.VACATION)
+            {
+                var del_list = _vacationContractService.GetAllIncCompAsync().Result;
+                foreach (var el in del_list)
+                {
+                    el.DeleteDate = DateTime.Now;
+                    el.DeleteByUserId = current;
+                    el.IsDeleted = true;
+                    await _vacationContractService.UpdateAsync(_map.Map<VacationContract>(el));
+                }
+
+                var del_con_list = _contractService.GetAllIncCompAsync().Result;
+                foreach (var el in del_con_list)
+                {
+                    el.DeleteDate = DateTime.Now;
+                    el.DeleteByUserId = current;
+                    el.IsDeleted = true;
+                    await _contractService.UpdateAsync(_map.Map<Contract>(el));
+                }
+
+                var remain_list = _userVacationRemains.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
+
+                foreach (var el in remain_list)
+                {
+                    el.DeleteDate = DateTime.Now;
+                    el.DeleteByUserId = current;
+                    el.IsDeleted = true;
+                    await _userVacationRemains.UpdateAsync(_map.Map<UserVacationRemain>(el));
+                }
+
+
+            }
+
+
         }
     }
 }
