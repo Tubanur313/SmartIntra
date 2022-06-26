@@ -16,7 +16,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
             //Xadica's local connection string
              optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranetSmart2;Trusted_Connection=False;MultipleActiveResultSets=true"); 
 
-            optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet3;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet3;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
 
             //Ilkin's local connection string
             //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmart;Trusted_Connection=False;MultipleActiveResultSets=true");
