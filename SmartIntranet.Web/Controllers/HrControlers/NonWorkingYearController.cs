@@ -38,7 +38,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "nonworkingyear.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.Years = JsonConvert.SerializeObject((await _nonWorkingYearService.GetAllIncCompAsync(x => x.DeleteByUserId == null)).Select(x => x.Year));
+            ViewBag.Years = JsonConvert.SerializeObject((await _nonWorkingYearService.GetAllIncCompAsync(x => !x.IsDeleted)).Select(x => x.Year));
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedByUserId = current;
                 model.CreatedDate = DateTime.UtcNow.AddHours(4);
                 model.IsDeleted = false;
-                if ((await _nonWorkingYearService.GetAllAsync()).Any(x => x.Year == model.Year && x.DeleteByUserId == null))
+                if ((await _nonWorkingYearService.GetAllAsync()).Any(x => x.Year == model.Year && !x.IsDeleted))
                 {
                     ModelState.AddModelError("Year", "Bu il artıq mövcuddur");
                     return RedirectToAction("Add");
@@ -88,7 +88,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Years = JsonConvert.SerializeObject((await _nonWorkingYearService.GetAllIncCompAsync(x => x.Id != id && x.DeleteByUserId == null)).Select(x => x.Year));
+            ViewBag.Years = JsonConvert.SerializeObject((await _nonWorkingYearService.GetAllIncCompAsync(x => x.Id != id && !x.IsDeleted)).Select(x => x.Year));
             return View(listModel);
         }
 

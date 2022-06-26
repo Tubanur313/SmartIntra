@@ -7,6 +7,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
 {
     public class EducationLevelConstant
     {
+        public const string PRIMARY_VOCATIONAL = "PRIMARY_VOCATIONAL"; // İlkin peşə təhsili
         public const string GENERAL_SECONDARY = "GENERAL_SECONDARY"; // umumi orta
         public const string VOCATIONAL = "VOCATIONAL"; // orta ixtisas
         public const string BACHELORS = "BACHELORS"; // bakalavr

@@ -45,8 +45,8 @@ namespace SmartIntranet.Web.Controllers
             var graph = _workGraphicService.FindByIdAsync(id).Result;
             ViewBag.year =_nonWOrkingYearService.FindByIdAsync(year_id).Result.Year;
 
-            var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id).Result;
-            var list = _map.Map<ICollection<WorkCalendarListDto>>(await _workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, id));
+            var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted, year_id).Result;
+            var list = _map.Map<ICollection<WorkCalendarListDto>>(await _workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, year_id, id));
             for (int m = 0; m < CalendarConstant.Month.Length; m++)
             {
                 var nonWorkDaysToMonth = nonWorkDays.Where(x => x.StartDate.Month <= m + 1 || x.EndDate.Month >= m + 1);

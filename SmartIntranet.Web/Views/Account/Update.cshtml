@@ -68,7 +68,7 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Əmək Haqqı: </label>
                                 <input type="hidden" asp-for="Salary" />
-                                <input type="number" class="form-control disabled_custom" readonly asp-for="Salary" autocomplete="off">
+                                <input type="number" class="form-control" asp-for="Salary" autocomplete="off">
                                 <span class="messages"></span>
                             </div>
 
@@ -154,7 +154,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input readonly asp-for="StartWorkDate" type="date" class="form-control disabled_custom" id="inputDate">
+                                <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -220,11 +220,17 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">   Vəzifə: </label>
-                            <div style="margin-bottom:20px">
-                                <input type="text" class="form-control" asp-for="PositionId"  style="width:100%">
-                                <span class="PositionId text-danger"></span>
-                            </div>
+                            <label class="floatLabel">  Vəzifə: </label>
+                            <input type="hidden" asp-for="PositionId" />
+                            <select name="select" asp-for="PositionId" name="PositionId" class="form-control">
+                                <option value="" selected hidden>Seçim edin</option>
+                                @foreach (var item in ViewBag.position)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                            </select>
+                            <span asp-validation-for="PositionId" class="text-danger"></span>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -357,7 +363,7 @@
                         <div class="col-sm-6">
                             <input type="hidden" asp-for="WorkGraphicId" />
                             <label class="floatLabel">  İstehsalat təqvimi: </label>
-                            <select readonly asp-for="WorkGraphicId" class="form-control disabled_custom">
+                            <select asp-for="WorkGraphicId" class="form-control">
                                 <option value="" disabled selected hidden>Seçim edin</option>
                                 @foreach (var item in ViewBag.workGraphics)
                                 {

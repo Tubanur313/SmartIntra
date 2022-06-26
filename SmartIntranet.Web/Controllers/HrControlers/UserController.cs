@@ -101,7 +101,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user.IsDeleted != true && user.DeleteByUserId == null && isValid)
+                if (user.IsDeleted != true && !user.IsDeleted && isValid)
                 {
                     if (user != null)
                     {

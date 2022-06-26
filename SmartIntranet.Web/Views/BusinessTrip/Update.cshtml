@@ -161,25 +161,6 @@
                             <button type="button" id="addRow" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12 form-group ">
-                            <div class="form-radio">
-                                <div class="radio radio-inline">
-                                    <label for="True">
-                                        <input type="radio" id="True" value="False" asp-for="IsDeleted"
-                                               checked="checked">
-                                        <i class="helper"></i>Active
-                                    </label>
-                                </div>
-                                <div class="radio radio-inline">
-                                    <label for="False">
-                                        <input type="radio" id="False" value="True" asp-for="IsDeleted">
-                                        <i class="helper"></i>InActive
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="tab-pane" id="file1" role="tabpanel">
                     @foreach (var el in ViewBag.contractFiles)

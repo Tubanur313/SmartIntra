@@ -1,8 +1,9 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions{
+@functions {
     public string GetAntiXsrfRequestToken()
     {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;    }
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
 }
 @model ContractUpdateDto
 
@@ -12,7 +13,7 @@
 
 <div class="row">
     <div class="col-md-12">
-       
+
         <ul class="nav nav-tabs  tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
@@ -25,7 +26,7 @@
 
         </ul>
 
-        <form asp-action="Update" class="main-signin-form"  enctype="multipart/form-data">
+        <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
             <div class="tab-content tabs card-block">
                 <div class="tab-pane active" id="home1"
                      role="tabpanel">
@@ -36,21 +37,26 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Şirkət: </label>
-                                <select name="select" disabled id="CompanyId" class="form-control">
-                                   
-                                        <option>@ViewBag.company.Name</option>
-                                   
-
+                                <select id="CompanyId" class="form-control">
+                                    @foreach (var item in ViewBag.companies)
+                                    {
+                                        if (item.Id == ViewBag.company.Id)
+                                        {
+                                            <option selected value="@item.Id">@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
                                 </select>
-
                             </div>
                         </div>
 
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Əməkdaşlar: </label>
-                                <input type="hidden"  asp-for="UserId" />
-                                <select name="select" asp-for="UserId" disabled name="UserId" class="form-control">
+                                <select name="select" asp-for="UserId" name="UserId" class="form-control">
                                     <option value="" disabled selected hidden>Seçim edin</option>
                                     @foreach (var item in ViewBag.users)
                                     {
@@ -142,7 +148,7 @@
                             </div>
                         </div>
 
-                      
+
 
 
                     </div>
@@ -179,16 +185,16 @@
                                 <label>  İş Yerinin Növü: </label>
                                 <div class="form-radio">
                                     <input type="hidden" asp-for="IsMainPlace" />
-                                    <div class="radio radio-inline radio-disable">
+                                    <div class="radio radio-inline">
                                         <label for="IsMainPlaceTrue">
-                                            <input disabled type="radio" id="IsMainPlaceTrue" value="True" asp-for="IsMainPlace"
+                                            <input type="radio" id="IsMainPlaceTrue" value="True" asp-for="IsMainPlace"
                                                    checked="checked">
                                             <i class="helper"></i>Əsas
                                         </label>
                                     </div>
-                                    <div class="radio radio-inline radio-disable">
+                                    <div class="radio radio-inline">
                                         <label for="IsMainPlaceFalse">
-                                            <input disabled type="radio" id="IsMainPlaceFalse" value="False" asp-for="IsMainPlace">
+                                            <input type="radio" id="IsMainPlaceFalse" value="False" asp-for="IsMainPlace">
                                             <i class="helper"></i>Əlavə
                                         </label>
                                     </div>
@@ -197,7 +203,7 @@
                             </div>
                         </div>
 
-                      
+
                     </div>
 
                     <div class="row">
@@ -226,7 +232,7 @@
                             </div>
 
                         </div>
-                       
+
                     </div>
 
 
@@ -283,11 +289,11 @@
                     </div>
 
                     <div class="row">
-        
+
                         <div class="col-sm-6">
                             <label class="floatLabel">  İstehsalat Təqvimi: </label>
                             <input type="hidden" asp-for="WorkGraphicId" />
-                            <select name="select" disabled asp-for="WorkGraphicId" name="WorkGraphicId" class="form-control">
+                            <select name="select" asp-for="WorkGraphicId" name="WorkGraphicId" class="form-control">
                                 <option value="" disabled selected hidden>Seçim edin</option>
                                 @foreach (var item in ViewBag.workGraphics)
                                 {
@@ -403,6 +409,47 @@
 
     });
 
+    $(document).on('change','#CompanyId', function(){
+            var _id = $(this).val();
 
+            $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetCompanyUsers", "Account")',
+                data: {
+                    companyId: _id,
+                },
+                success: function (response)
+                {
+                    if (response.error == true)
+                    {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    console.log($("#UserId"))
+                    $("#UserId").empty();
+                    var html = "";
+
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                        ${[response[i].name]}</option>`
+                    }
+
+                    if(response.length>0)
+                    {
+                        $("#UserId").prop('disabled', false);
+                        $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    }
+                    else{
+                        $("#UserId").prop('disabled', false);
+                        $("#UserId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+           });
+        });
 
 </script>

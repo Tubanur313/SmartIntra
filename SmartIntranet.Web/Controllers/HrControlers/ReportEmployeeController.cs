@@ -313,7 +313,7 @@ namespace SmartIntranet.Web.Controllers
 
                 // DB get data
                 var year_id = _nonWorkingYearService.GetAllIncCompAsync(x => x.Year == model.ReportDate.Year.ToString()).Result[0].Id;
-                var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id).Result;
+                var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted, year_id).Result;
                 var nonWorkDaysToMonth = nonWorkDays.Where(x => x.StartDate.Month <= model.ReportDate.Month || x.EndDate.Month >= model.ReportDate.Month);
                 List<ExcellTemplateModel> model_result = new List<ExcellTemplateModel>();
                 foreach (var item in users)
@@ -330,7 +330,7 @@ namespace SmartIntranet.Web.Controllers
 
                     }
                     var graph = _workGraphicService.FindByIdAsync(graph_id).Result;
-                    var calendar_list = _map.Map<ICollection<WorkCalendarListDto>>( _workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
+                    var calendar_list = _map.Map<ICollection<WorkCalendarListDto>>( _workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, year_id, graph.Id).Result);
 
                     for (int i = 1; i <= 31; i++)
                     {
@@ -352,13 +352,13 @@ namespace SmartIntranet.Web.Controllers
                                     if (mn.CommandDate > day)
                                     {
                                         graph = _workGraphicService.FindByIdAsync(mn.LastWorkGraphicId).Result;
-                                        calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
+                                        calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, year_id, graph.Id).Result);
                                         break;
                                     }
                                     else
                                     {
                                         graph = _workGraphicService.FindByIdAsync(mn.WorkGraphicId).Result;
-                                        calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => x.DeleteByUserId == null, year_id, graph.Id).Result);
+                                        calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, year_id, graph.Id).Result);
                                     }
                                 }
                             }

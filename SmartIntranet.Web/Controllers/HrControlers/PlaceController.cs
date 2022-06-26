@@ -72,6 +72,8 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedByUserId = current;
                 model.CreatedDate = DateTime.UtcNow.AddHours(4);
                 model.IsDeleted = false;
+                if (model.Currency == null)
+                    model.Currency = "";
                 await _placeService.AddAsync(_map.Map<Place>(model));
                 return RedirectToAction("List");
             }
@@ -106,6 +108,8 @@ namespace SmartIntranet.Web.Controllers
 
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
+                if (model.Currency == null)
+                    model.Currency = "";
 
                 await _placeService.UpdateAsync(_map.Map<Place>(model));
                 return RedirectToAction("List");
@@ -137,14 +141,14 @@ namespace SmartIntranet.Web.Controllers
 
         public string GetCurrencyNameByKey(string key)
         {
-            return GetCurrencies().FirstOrDefault(x => x.Key == key).Name;
+            return GetCurrencies().FirstOrDefault(x => x.Key == key)?.Name;
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetPlaces()
         {
-            IEnumerable<PlaceListDto> data = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => x.DeleteByUserId == null)).Select(x =>
+            IEnumerable<PlaceListDto> data = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted)).Select(x =>
              new PlaceListDto()
              {
                  Id = x.Id,

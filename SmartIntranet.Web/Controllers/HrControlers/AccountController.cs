@@ -183,7 +183,8 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Add()
         {
             var levels = new List<LevelType>();
-            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.PRIMARY_VOCATIONAL, Name = "İlkin peşə təhsili" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta təhsil" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.MASTER, Name = "Magistratura" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.VOCATIONAL, Name = "Orta ixtisas" });
@@ -231,13 +232,13 @@ namespace SmartIntranet.Web.Controllers
 
                 if (profile != null && profile.FileName != "default.png")
                 {
-                   // user.Picture = AddResizedImage("wwwroot/profile/", profile);
+                    // user.Picture = AddResizedImage("wwwroot/profile/", profile);
                 }
                 var current = GetSignInUserId();
                 List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
                 if (user.UserVacationRemains!=null && user.UserVacationRemains.Count() > 0)
                 {
-                   foreach (var el in user.UserVacationRemains)
+                    foreach (var el in user.UserVacationRemains)
                     {
                         el.IsDeleted = false;
                         el.IsEditable = true;
@@ -371,7 +372,7 @@ namespace SmartIntranet.Web.Controllers
             }
 
             DateTime work_start_date = listModel.StartWorkDate;
-          
+
             if (work_start_date != null)
             {
                 DateTime start_interval;
@@ -387,7 +388,7 @@ namespace SmartIntranet.Web.Controllers
                     end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
                 }
 
-                var remains =  _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval);
+                var remains = _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval);
 
                 if (!remains)
                 {
@@ -407,8 +408,9 @@ namespace SmartIntranet.Web.Controllers
 
             }
 
-                var levels = new List<LevelType>();
-            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta" });
+            var levels = new List<LevelType>();
+            levels.Add(new LevelType() { Id = EducationLevelConstant.PRIMARY_VOCATIONAL, Name = "İlkin peşə təhsili" });
+            levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta təhsil" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.MASTER, Name = "Magistratura" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.VOCATIONAL, Name = "Orta ixtisas" });
@@ -448,7 +450,7 @@ namespace SmartIntranet.Web.Controllers
                         return RedirectToAction("List");
                     }
 
-                   // model.Picture = AddResizedImage("wwwroot/profile/", profile);
+                    // model.Picture = AddResizedImage("wwwroot/profile/", profile);
                 }
 
                 else if (profile != null)
