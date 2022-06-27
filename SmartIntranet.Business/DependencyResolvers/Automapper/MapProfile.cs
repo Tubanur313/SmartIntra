@@ -251,11 +251,13 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
 
             #region Ticket <-> TicketDto
             CreateMap<TicketAddDto, Ticket>()
+                .ForMember(t => t.CategoryTicketId, opt => opt.MapFrom(src => src.TicketCategoryId))
                 .ForMember(u => u.DeadLineStart, opt => opt.MapFrom(src =>
                 DateTime.ParseExact(src.DeadLine.Split('-', StringSplitOptions.None).FirstOrDefault(), "dd/MM/yyyy", null)))
                 .ForMember(u => u.DeadLineEnd, opt => opt.MapFrom(src =>
                 DateTime.ParseExact(src.DeadLine.Split('-', StringSplitOptions.None).LastOrDefault(), "dd/MM/yyyy", null)));
-            CreateMap<Ticket, TicketAddDto>();
+            CreateMap<Ticket, TicketAddDto>()
+                .ForMember(t => t.TicketCategoryId, opt => opt.MapFrom(src =>src.CategoryTicketId));
             CreateMap<TicketUpdateDto, Ticket>();
             CreateMap<Ticket, TicketUpdateDto>()
                 .ForMember(d => d.DeadLine, opt => opt
@@ -270,9 +272,10 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<Ticket, TicketCheklistDto>();
             CreateMap<TicketCheklistDto, Ticket>();
             CreateMap<Ticket, TicketListDto>();
-            CreateMap<Ticket, TicketCategoryDto>();
+            CreateMap<Ticket, TicketCategoryDto>()
+                .ForMember(t => t.TicketCategoryId, opt => opt.MapFrom(src => src.CategoryTicketId));
             #endregion
-            
+
             #region Watcher <-> WatcherDto
             CreateMap<WatcherAddDto, Watcher>();
             CreateMap<Watcher, WatcherAddDto>();

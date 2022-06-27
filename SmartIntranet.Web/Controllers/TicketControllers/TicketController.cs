@@ -609,7 +609,7 @@ namespace SmartIntranet.Web.Controllers
             if (ModelState.IsValid)
             {
 
-                var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.CategoryTicketId));
+                var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var add = _map.Map<Ticket>(model);
                 add.CreatedByUserId = GetSignInUserId();
                 add.EmployeeId = GetSignInUserId();
@@ -861,7 +861,7 @@ namespace SmartIntranet.Web.Controllers
                 var data = await _ticketService.FindByIdAsync(model.Id);
                 data.UpdateByUserId = GetSignInUserId();
                 data.UpdateDate = DateTime.Now;
-                data.CategoryTicketId = model.CategoryTicketId;
+                data.CategoryTicketId = model.TicketCategoryId;
                 await _ticketService.UpdateModifiedAsync(data);
 
                 SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);

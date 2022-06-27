@@ -78,8 +78,8 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Kateqoriya: </label>
                                 <div style="margin-bottom:20px">
-                                    <input type="text" class="form-control" asp-for="CategoryTicketId" style="width:100%">
-                                    <span asp-validation-for="CategoryTicketId" class="text-danger"></span>
+                                    <input type="text" class="form-control" asp-for="TicketCategoryId" style="width:100%">
+                                    <span asp-validation-for="TicketCategoryId" class="text-danger"></span>
                                 </div>
                                 @*  <select asp-for="CategoryTicketId" name="CategoryTicketId" class="form-control">
                                     <option value="" hidden disabled selected>Seçim edin</option>
@@ -526,7 +526,7 @@
                 dataType: "json",
                 cache: false,
                 success: function(data) {
-                    $('#CategoryTicketId').combotree({
+                    $('#TicketCategoryId').combotree({
                         data: data,
                         prompt: 'Seçim edin',
                         onBeforeSelect: function(node) {
