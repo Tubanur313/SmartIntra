@@ -311,8 +311,8 @@ namespace SmartIntranet.Web.Controllers
 
                         if (model.CommandDate>= start_interval && model.CommandDate <= end_interval)
                         {
-                            var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && x.FromDate == start_interval);
-                            var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && x.FromDate == start_interval);
+                            var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
+                            var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
                             if (!remains)
                             {
                                 UserVacationRemain ur = new UserVacationRemain();

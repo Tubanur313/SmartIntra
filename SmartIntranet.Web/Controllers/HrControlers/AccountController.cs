@@ -388,7 +388,7 @@ namespace SmartIntranet.Web.Controllers
                     end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
                 }
 
-                var remains = _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval);
+                var remains = _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval && !x.IsDeleted);
 
                 if (!remains)
                 {
@@ -427,8 +427,8 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.docs = _map.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(id));
 
-            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && x.IsEditable).ToListAsync();
-            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsEditable).ToListAsync();
+            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted  && x.IsEditable).ToListAsync();
+            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted && !x.IsEditable).ToListAsync();
             ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.department = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
@@ -440,7 +440,7 @@ namespace SmartIntranet.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(AppUserUpdateDto model, IFormFile profile, IFormFile pdf)
         {
-            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsEditable).ToListAsync();
+            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsDeleted && !x.IsEditable).ToListAsync();
             if (ModelState.IsValid)
             {
                 if (profile != null && profile.FileName != "default.png")
@@ -494,10 +494,10 @@ namespace SmartIntranet.Web.Controllers
                         List<UserExperience> userExperiences = await _db.UserExperiences.Where(x => x.UserId == model.Id).ToListAsync();
                         _db.UserExperiences.RemoveRange(userExperiences);
 
-                        List<UserVacationRemain> userVacRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && x.IsEditable).ToListAsync();
+                        List<UserVacationRemain> userVacRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && x.IsEditable).ToListAsync();
                         _db.UserVacationRemains.RemoveRange(userVacRemains);
 
-                        List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsEditable).ToListAsync();
+                        List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsEditable).ToListAsync();
 
                         List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
                         if (model.UserVacationRemains != null && model.UserVacationRemains.Count() > 0)
