@@ -406,10 +406,10 @@ namespace SmartIntranet.Web.Controllers
                     {
                         if (el.CommandDate <= DateTime.Now)
                         {
-                            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * el.VacationDay) / 365;
+                            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
                             result_remain_day += (int)before_day_count;
                             fromDateTmp = el.CommandDate;
-                            main_day = (int)el.LastMainVacationDay;
+                            main_day = (int)el.VacationDay;
                         }
 
                     }

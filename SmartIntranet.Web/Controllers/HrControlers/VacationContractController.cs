@@ -442,10 +442,10 @@ namespace SmartIntranet.Web.Controllers
                     {
                         if(el.CommandDate<= DateTime.Now)
                         {
-                            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * el.VacationDay) / 365;
+                            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
                             result.RemainCount += (int)before_day_count;
                             fromDateTmp = el.CommandDate;
-                            main_day = (int)el.LastMainVacationDay;
+                            main_day = (int)el.VacationDay;
                         }
                      
                     }
@@ -749,18 +749,21 @@ namespace SmartIntranet.Web.Controllers
             if(personal_contract_chgs.Count() > 0)
             {
                 usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
-                var diff = (int)personal_contract_chgs[0].NewFullVacationDay - (int)personal_contract_chgs[0].LastFullVacationDay;
-                if (personal_contract_chgs[0].VacationExtraType == 0)
+                if (!personal_contract_chgs[0].IsMainVacation)
                 {
-                    usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay - diff;
-                }
-                else if (personal_contract_chgs[0].VacationExtraType == 1)
-                {
-                    usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay - diff;
-                }
-                else if (personal_contract_chgs[0].VacationExtraType == 2)
-                {
-                    usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay - diff;
+                    var diff = (int)personal_contract_chgs[0].NewFullVacationDay - (int)personal_contract_chgs[0].LastFullVacationDay;
+                    if (personal_contract_chgs[0].VacationExtraType == 0)
+                    {
+                        usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay - diff;
+                    }
+                    else if (personal_contract_chgs[0].VacationExtraType == 1)
+                    {
+                        usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay - diff;
+                    }
+                    else if (personal_contract_chgs[0].VacationExtraType == 2)
+                    {
+                        usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay - diff;
+                    }
                 }
                 await _userManager.UpdateAsync(usr2);
             }
