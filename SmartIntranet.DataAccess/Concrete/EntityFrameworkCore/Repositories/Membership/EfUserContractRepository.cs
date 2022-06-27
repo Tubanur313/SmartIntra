@@ -16,7 +16,10 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         public async Task<List<UserContractFile>> GetContractsByActiveUserIdAsync(int Id)
         {
             using var context = new IntranetContext();
-            return await context.UserContractFiles.Where(i=>i.AppUserId==Id&&i.IsDeleted == false).ToListAsync();
+            return await context.UserContractFiles
+                .Where(i=>i.AppUserId==Id && !i.IsDeleted)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
         }
 
     }

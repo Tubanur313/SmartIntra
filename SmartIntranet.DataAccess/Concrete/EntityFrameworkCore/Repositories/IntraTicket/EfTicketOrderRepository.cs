@@ -19,6 +19,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .Where(z => z.TicketId == Id)
                .Include(z => z.Order)
                .Include(z => z.Ticket)
+               .OrderByDescending(z => z.Id)
                .ToListAsync();
         }
 
@@ -35,8 +36,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.TicketOrders
-                .Where(z => z.IsDeleted == false && z.TicketId == ticketId)
+                .Where(z => !z.IsDeleted && z.TicketId == ticketId)
                 .Include(z => z.Order)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
         }
     }

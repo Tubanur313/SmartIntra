@@ -14,7 +14,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.CategoryTickets
-                .Where(z => z.IsDeleted == false)
+                .Where(z => !z.IsDeleted)
                 .Include(z => z.Supporter)
                 .ToListAsync();
         }
@@ -24,7 +24,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             using var context = new IntranetContext();
             return await context.CategoryTickets
                 .Include(z => z.Supporter)
-                .Where(z => z.IsDeleted == false && z.Id==id).FirstOrDefaultAsync();
+                .Where(z => !z.IsDeleted && z.Id==id)
+                .FirstOrDefaultAsync();
         }
     }
 }

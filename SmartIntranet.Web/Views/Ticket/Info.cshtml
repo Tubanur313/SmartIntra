@@ -22,6 +22,17 @@
     .pt-3-half {
         padding-top: 1.4rem;
     }
+    .info-item{
+     margin-bottom:30px;
+    }
+    .info-item p{
+        margin-bottom:0 !important;
+    }
+    .icon-in-info{
+            align-items: center;
+         margin-right: 10px;
+         display: flex;
+    }
 </style>
 
 <div class="row">
@@ -56,7 +67,134 @@
         <div class="tab-content tabs card-block">
             <div class="tab-pane active" id="home1" role="tabpanel">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-12  col-lg-4">
+                        <ul>
+                            <li class="d-flex  info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-regular fa-hashtag mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Ticket Nömrəsi:</label>
+                                    <p>
+                                        @Model.Id
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="d-flex  info-item">
+                                <div class="icon-in-info">
+                                    <i class="mr-2 fas fa-paperclip text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Başlıq:</label>
+                                    <p>
+                                        @Model.Title
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="d-flex info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-solid fa-c mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Kateqoriya</label>
+                                    <p>
+                                        @Model.CategoryTicket.Name
+                                    </p>
+                                </div>
+                            </li>
+                               <li class="d-flex info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
+                                    <p>
+                                        @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <ul>
+                            <li class="d-flex info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-solid fa-calendar-days mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Son dəyişiklik Tarixi:</label>
+                                    <p>
+                                        @(Model.UpdateDate == null ? "Yenilənməyib":Model.UpdateDate.Value.ToString("dd.MM.yyyy hh:mm"))
+                                    </p>
+                                </div>
+                            </li>
+                             <li class="d-flex info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-regular fa-calendar-xmark mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Deadline Tarixi:</label>
+                                    <p>
+                                        @( Model.DeadLineEnd ==null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(Model.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : Model.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
+                                    </p>
+                                </div>
+                            </li>
+                             <li class="d-flex  info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-solid fa-s mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Status :</label>
+                                    <p>
+                                        @Model.StatusType.GetDisplayName()
+                                    </p>
+                                </div>
+                            </li>
+                          
+                        </ul>
+
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <ul>
+                            <li class="d-flex  info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-regular fa-circle-check mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Ticket Təsdiq Sorğusu Əlavə Edilibmi:</label>
+                                    <p>
+                                        @(Model.Confirmed == true ? "Bəli" : "Xeyr")
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="d-flex  info-item">
+                                <div class="icon-in-info">
+                                    <i class=""></i>
+                                    <i class="fa-solid fa-user-gear mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Dəstək:</label>
+                                    <p>
+                                        @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.Name+Model.Supporter.Surname} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}" )
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="d-flex  info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-solid fa-user-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Ticket əlavə edən:</label>
+                                    <p>
+                                        @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.Name+Model.Employee.Surname} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}" )
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
                         <div class="form-group">
                             @*<span asp-validation-for="Description" class="text-danger"></span>*@
                             <label class="font-weight-bold">  Ətraflı: </label>
@@ -64,130 +202,6 @@
                             <span class="messages"></span>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-8">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Ticket Nömrəsi:</label>
-                                    <div class="d-flex">
-                                        <i class="fa-regular fa-hashtag mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @Model.Id
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Başlıq:</label>
-                                    <div class="d-flex">
-                                        <i class="mr-2 fas fa-paperclip text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @Model.Title
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Kateqoriya</label>
-                                    <div class="d-flex">
-                                        <i class="fa-solid fa-c mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @Model.CategoryTicket.Name
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
-                                    <div class="d-flex">
-                                        <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Son dəyişiklik Tarixi:</label>
-                                    <div class="d-flex">
-                                        <i class="fa-solid fa-calendar-days mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @(Model.UpdateDate == null ? "Yenilənməyib":Model.UpdateDate.Value.ToString("dd.MM.yyyy hh:mm"))
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Deadline Tarixi:</label>
-                                    <div class="d-flex">
-                                        <i class="fa-regular fa-calendar-xmark mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                             @( Model.DeadLineEnd ==null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(Model.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : Model.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Status :</label>
-                                    <div class="d-flex">
-                                        <i class="fa-solid fa-s mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @Model.StatusType.GetDisplayName()
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-6">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Ticket Təsdiq Sorğusu Əlavə Edilibmi :</label>
-                                    <div class="d-flex">
-                                        <i class="fa-regular fa-circle-check mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @(Model.Confirmed == true ? "Bəli" : "Xeyr")
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-5">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Dəstək:</label>
-                                    <div class="d-flex">
-                                        <i class=""></i>
-                                        <i class="fa-solid fa-user-gear mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.Name+Model.Supporter.Surname} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}" )
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="offset-1 col-md-12 col-lg-5">
-                                <div class="basic-list list-icons">
-                                    <label class="font-weight-bold">Ticket əlavə edən:</label>
-                                    <div class="d-flex">
-                                        <i class="fa-solid fa-user-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                        <p>
-                                            @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.Name+Model.Employee.Surname} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}" )
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="tab-pane" id="discuss" role="tabpanel">
@@ -357,7 +371,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <!-- slick js -->
 <script type="text/javascript" src="~/files/lib/slick-carousel/slick.min.js"></script>

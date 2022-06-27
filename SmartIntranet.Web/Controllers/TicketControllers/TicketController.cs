@@ -559,8 +559,7 @@ namespace SmartIntranet.Web.Controllers
                 return View(new List<TicketListDto>());
             }
             List<TicketListDto> model = _map.Map<List<TicketListDto>>(await _ticketService
-               .GetByUserDepartmentAllIncAsync((int)user.DepartmentId)
-            );
+               .GetByUserDepartmentAllIncAsync((int)user.DepartmentId));
             if (model is null)
             {
                 ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());

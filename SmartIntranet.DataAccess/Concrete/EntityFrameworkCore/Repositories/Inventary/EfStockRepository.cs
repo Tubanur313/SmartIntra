@@ -21,6 +21,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Inv
                 .ThenInclude(x => x.Departments)
                 .ThenInclude(x => x.Positions)
                 .Include(x => x.StockCategory)
+                .OrderByDescending(x => x.Id)               
                 .FirstOrDefaultAsync();
         }
 
@@ -34,6 +35,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Inv
                 .ThenInclude(x=>x.Departments)
                 .ThenInclude(x=>x.Positions)
                 .Include(x => x.StockCategory)
+                .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
     }

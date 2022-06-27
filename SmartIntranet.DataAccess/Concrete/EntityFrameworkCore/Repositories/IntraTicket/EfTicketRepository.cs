@@ -17,26 +17,26 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             if (userId != 0)
             {
                 return await context.Tickets
-               .Where(x => x.SupporterId == userId || x.EmployeeId == userId && x.IsDeleted == false)
+               .Where(x => x.SupporterId == userId || x.EmployeeId == userId && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
             }
             else
             {
                 return await context.Tickets
-               .Where(x => x.SupporterId == userId || x.EmployeeId == userId && x.IsDeleted == false)
+               .Where(x => x.SupporterId == userId || x.EmployeeId == userId && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
             }
 
         }
@@ -52,54 +52,54 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .Where(x =>
                  x.CategoryTicketId == CategoryTicketId
                  && x.StatusType == statusType
-                 && x.IsDeleted == false)
+                 && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId > 0 && statusType == 0)
                 {
                     return await context.Tickets
                .Where(x => x.SupporterId == userId || x.EmployeeId == userId)
                .Where(x =>
-                 x.CategoryTicketId == CategoryTicketId && x.IsDeleted == false)
+                 x.CategoryTicketId == CategoryTicketId && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
                 {
                     return await context.Tickets
                .Where(x => x.SupporterId == userId || x.EmployeeId == userId)
                .Where(x =>
-                 x.StatusType == statusType && x.IsDeleted == false)
+                 x.StatusType == statusType && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
                 {
                     return await context.Tickets
-                   .Where(x => x.SupporterId == userId || x.EmployeeId == userId && x.IsDeleted == false)
+                   .Where(x => x.SupporterId == userId || x.EmployeeId == userId && !x.IsDeleted)
                    .Include(z => z.Employee)
                    .ThenInclude(z => z.Company)
                    .ThenInclude(z => z.Departments)
                    .ThenInclude(z => z.Positions)
                    .Include(z => z.Supporter)
                    .Include(z => z.CategoryTicket)
-                   .ToListAsync();
+                   .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
             else
@@ -111,54 +111,54 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .Where(x =>
                  x.CategoryTicketId == CategoryTicketId
                  && x.StatusType == statusType
-                 && x.IsDeleted == false)
+                 && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId > 0 && statusType == 0)
                 {
                     return await context.Tickets
                .Where(x => x.SupporterId == userId || x.EmployeeId == userId)
                .Where(x =>
-                 x.CategoryTicketId == CategoryTicketId && x.IsDeleted == false)
+                 x.CategoryTicketId == CategoryTicketId && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
                 {
                     return await context.Tickets
                .Where(x => x.SupporterId == userId || x.EmployeeId == userId)
                .Where(x =>
-                 x.StatusType == statusType && x.IsDeleted == false)
+                 x.StatusType == statusType && !x.IsDeleted)
                .Include(z => z.Employee)
                .ThenInclude(z => z.Company)
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
                 {
                     return await context.Tickets
-                   .Where(x => x.SupporterId == userId || x.EmployeeId == userId && x.IsDeleted == false)
+                   .Where(x => x.SupporterId == userId || x.EmployeeId == userId && !x.IsDeleted)
                    .Include(z => z.Employee)
                    .ThenInclude(z => z.Company)
                    .ThenInclude(z => z.Departments)
                    .ThenInclude(z => z.Positions)
                    .Include(z => z.Supporter)
                    .Include(z => z.CategoryTicket)
-                   .ToListAsync();
+                   .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.Tickets
-                .Where(z => z.Id == id && z.IsDeleted == false)
+                .Where(z => z.Id == id && !z.IsDeleted)
                 .Include(z => z.Employee)
                 .ThenInclude(z => z.Company)
                 .ThenInclude(z => z.Departments)
@@ -189,7 +189,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.Supporter)
                 .Include(z => z.CategoryTicket)
-                .ToListAsync();
+                .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<Ticket> GetIncludeMailAsync(int id)
         {
@@ -217,14 +217,17 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.Tickets
-                .Where(u => u.SupporterId == null && u.IsDeleted == false)
+                .Where(u => u.SupporterId == null && !u.IsDeleted)
                 .Include(z => z.Employee)
                 .ThenInclude(z => z.Company)
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.Supporter)
+                .ThenInclude(z => z.Company)
+                .ThenInclude(z => z.Departments)
+                .ThenInclude(z => z.Positions)
                 .Include(z => z.CategoryTicket)
-                .ToListAsync();
+                .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetNonRedirectedAsync(int CategoryTicketId, StatusType statusType, int companyId)
         {
@@ -237,55 +240,67 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     && x.CategoryTicketId == CategoryTicketId
                     && x.StatusType == statusType
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
                 {
                     return await context.Tickets.Where(x => x.SupporterId == null
                     && x.CategoryTicketId == CategoryTicketId
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
                 {
                     return await context.Tickets.Where(x => x.SupporterId == null
                     && x.StatusType == statusType
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
                 {
                     return await context.Tickets.Where(x => x.SupporterId == null
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
             else
@@ -295,52 +310,64 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     return await context.Tickets.Where(x => x.SupporterId == null
                     && x.CategoryTicketId == CategoryTicketId
                     && x.StatusType == statusType
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
                 {
                     return await context.Tickets.Where(x => x.SupporterId == null
                     && x.CategoryTicketId == CategoryTicketId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
                 {
                     return await context.Tickets.Where(x => x.SupporterId == null
                     && x.StatusType == statusType
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
                 {
                     return await context.Tickets.Where(x => x.SupporterId == null
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
 
@@ -389,8 +416,11 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.Supporter)
+                .ThenInclude(z => z.Company)
+                .ThenInclude(z => z.Departments)
+                .ThenInclude(z => z.Positions)
                 .Include(z => z.CategoryTicket)
-                .ToListAsync();
+                .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetForAdminAsync(int CategoryTicketId, StatusType statusType, int companyId)
         {
@@ -403,55 +433,67 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     x.CategoryTicketId == CategoryTicketId
                     && x.StatusType == statusType
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
                 {
                     return await context.Tickets.Where(x =>
                     x.CategoryTicketId == CategoryTicketId
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
                 {
                     return await context.Tickets.Where(x =>
                     x.StatusType == statusType
                     && x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
                 {
                     return await context.Tickets.Where(x =>
                     x.Employee.CompanyId == companyId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
             else
@@ -461,40 +503,49 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     return await context.Tickets.Where(x =>
                     x.CategoryTicketId == CategoryTicketId
                     && x.StatusType == statusType
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
                 {
                     return await context.Tickets.Where(x =>
                     x.CategoryTicketId == CategoryTicketId
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
                 {
                     return await context.Tickets.Where(x =>
                     x.StatusType == statusType
-                    && x.IsDeleted == false)
+                    && !x.IsDeleted)
                     .Include(z => z.Employee)
                     .ThenInclude(z => z.Company)
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
                 {
@@ -505,8 +556,11 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.Supporter)
+                    .ThenInclude(z => z.Company)
+                    .ThenInclude(z => z.Departments)
+                    .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
 
@@ -520,7 +574,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Company)
                 .ThenInclude(z => z.Departments)
                 .Where(z => z.Supporter.DepartmentId == departId)
-                .ToListAsync();
+                .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departId)
         {
@@ -536,7 +590,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.CategoryTicket)
-                .ToListAsync();
+                .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departId, int categoryId, StatusType statusType)
         {
@@ -548,7 +602,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .Where(x =>
              x.CategoryTicketId == categoryId
              && x.StatusType == statusType
-             && x.IsDeleted == false)
+             && !x.IsDeleted)
            .Include(z => z.Employee)
            .ThenInclude(z => z.Company)
            .ThenInclude(z => z.Departments)
@@ -558,14 +612,14 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .ThenInclude(z => z.Departments)
            .ThenInclude(z => z.Positions)
            .Include(z => z.CategoryTicket)
-           .ToListAsync();
+           .OrderByDescending(x => x.Id).ToListAsync();
             }
             else if (categoryId > 0 && statusType == 0)
             {
                 return await context.Tickets
            .Where(x => x.Supporter.DepartmentId == departId || x.Employee.DepartmentId == departId)
            .Where(x =>
-             x.CategoryTicketId == categoryId && x.IsDeleted == false)
+             x.CategoryTicketId == categoryId && !x.IsDeleted)
            .Include(z => z.Employee)
            .ThenInclude(z => z.Company)
            .ThenInclude(z => z.Departments)
@@ -575,14 +629,14 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .ThenInclude(z => z.Departments)
            .ThenInclude(z => z.Positions)
            .Include(z => z.CategoryTicket)
-           .ToListAsync();
+           .OrderByDescending(x => x.Id).ToListAsync();
             }
             else if (categoryId == 0 && statusType != 0)
             {
                 return await context.Tickets
            .Where(x => x.Supporter.DepartmentId == departId || x.Employee.DepartmentId == departId)
            .Where(x =>
-             x.StatusType == statusType && x.IsDeleted == false)
+             x.StatusType == statusType && !x.IsDeleted)
            .Include(z => z.Employee)
            .ThenInclude(z => z.Company)
            .ThenInclude(z => z.Departments)
@@ -592,7 +646,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .ThenInclude(z => z.Departments)
            .ThenInclude(z => z.Positions)
            .Include(z => z.CategoryTicket)
-           .ToListAsync();
+           .OrderByDescending(x => x.Id).ToListAsync();
             }
             else
             {
@@ -607,7 +661,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.CategoryTicket)
-               .ToListAsync();
+               .OrderByDescending(x => x.Id).ToListAsync();
             }
         }
 
