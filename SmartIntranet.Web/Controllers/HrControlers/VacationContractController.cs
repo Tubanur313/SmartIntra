@@ -87,6 +87,32 @@ namespace SmartIntranet.Web.Controllers
             {
                 model.IsDeleted = false;
                 model.CreatedDate = DateTime.Now;
+                var doc_key = "";
+
+                var vac_type = _vacationTypeService.FindByIdAsync(model.VacationTypeId).Result.Key;
+                if (vac_type == VacationTypeConst.LABOR)
+                {
+                    doc_key = ContractFileReadyConst.vacation_labor;
+                    await DelVacPersonalAfterDate(model.UserId, model.CommandDate);
+                }
+                else if (vac_type == VacationTypeConst.EDU)
+                {
+                    doc_key = ContractFileReadyConst.vacation_edu;
+                }
+                else if (vac_type == VacationTypeConst.WITHOUT_PRICE)
+                {
+                    doc_key = ContractFileReadyConst.vacation_without_price;
+                }
+                else if (vac_type == VacationTypeConst.PREGNANCY)
+                {
+                    doc_key = ContractFileReadyConst.vacation_pregnancy;
+                }
+                else if (vac_type == VacationTypeConst.SOCIAL)
+                {
+                    doc_key = ContractFileReadyConst.vacation_social;
+                }
+
+
                 var current = GetSignInUserId();
                 var result_model = _contractService.AddReturnEntityAsync(_map.Map<VacationContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
@@ -266,32 +292,9 @@ namespace SmartIntranet.Web.Controllers
                
                 formatKeys.Add("commandDate", result_model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", result_model.CommandNumber);
-                var doc_key = "";
                 usr = await _userService.FindByUserAllInc(model.UserId);
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
-                var vac_type = _vacationTypeService.FindByIdAsync(model.VacationTypeId).Result.Key;
-                if (vac_type == VacationTypeConst.LABOR)
-                {
-                    doc_key = ContractFileReadyConst.vacation_labor;
-                    await DelVacPersonalAfterDate(model.UserId, model.CommandDate);
-                }
-                else if (vac_type == VacationTypeConst.EDU)
-                {
-                    doc_key = ContractFileReadyConst.vacation_edu;
-                }
-                else if (vac_type == VacationTypeConst.WITHOUT_PRICE)
-                {
-                    doc_key = ContractFileReadyConst.vacation_without_price;
-                }
-                else if (vac_type == VacationTypeConst.PREGNANCY)
-                {
-                    doc_key = ContractFileReadyConst.vacation_pregnancy;
-                }
-                else if (vac_type == VacationTypeConst.SOCIAL)
-                {
-                    doc_key = ContractFileReadyConst.vacation_social;
-                }
-
+              
                 var file_extra = new VacationContractFile();
                 file_extra.VacationContractId = result_model.Id;
                 file_extra.IsDeleted = false;
@@ -495,6 +498,30 @@ namespace SmartIntranet.Web.Controllers
                 model.UpdateDate = DateTime.UtcNow.AddHours(4);
                 model.UpdateByUserId = current;
                 await _contractService.UpdateAsync(_map.Map<VacationContract>(model));
+                var doc_key = "";
+                var vac_type = _vacationTypeService.FindByIdAsync(model.VacationTypeId).Result.Key;
+
+                if (vac_type == VacationTypeConst.LABOR)
+                {
+                    doc_key = ContractFileReadyConst.vacation_labor;
+                    await DelVacPersonalAfterDate(model.UserId, model.CommandDate);
+                }
+                else if (vac_type == VacationTypeConst.EDU)
+                {
+                    doc_key = ContractFileReadyConst.vacation_edu;
+                }
+                else if (vac_type == VacationTypeConst.WITHOUT_PRICE)
+                {
+                    doc_key = ContractFileReadyConst.vacation_without_price;
+                }
+                else if (vac_type == VacationTypeConst.PREGNANCY)
+                {
+                    doc_key = ContractFileReadyConst.vacation_pregnancy;
+                }
+                else if (vac_type == VacationTypeConst.SOCIAL)
+                {
+                    doc_key = ContractFileReadyConst.vacation_social;
+                }
 
                 var usr = await _userService.FindByUserAllInc(model.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -671,32 +698,9 @@ namespace SmartIntranet.Web.Controllers
 
                 formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", model.CommandNumber);
-                var doc_key = "";
                 usr = await _userService.FindByUserAllInc(model.UserId);
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
-                var vac_type = _vacationTypeService.FindByIdAsync(model.VacationTypeId).Result.Key;
-                if (vac_type == VacationTypeConst.LABOR)
-                {
-                    doc_key = ContractFileReadyConst.vacation_labor;
-                    await DelVacPersonalAfterDate(model.UserId, model.CommandDate);
-                }
-                else if (vac_type == VacationTypeConst.EDU)
-                {
-                    doc_key = ContractFileReadyConst.vacation_edu;
-                }
-                else if (vac_type == VacationTypeConst.WITHOUT_PRICE)
-                {
-                    doc_key = ContractFileReadyConst.vacation_without_price;
-                }
-                else if (vac_type == VacationTypeConst.PREGNANCY)
-                {
-                    doc_key = ContractFileReadyConst.vacation_pregnancy;
-                }
-                else if (vac_type == VacationTypeConst.SOCIAL)
-                {
-                    doc_key = ContractFileReadyConst.vacation_social;
-                }
-
+               
 
                 var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.VacationContractId == model.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
@@ -721,43 +725,7 @@ namespace SmartIntranet.Web.Controllers
             if (vacation_type.Key == VacationTypeConst.LABOR)
             {
                 await DelVacPersonalAfterDate(transactionModel.UserId, transactionModel.CommandDate);
-
-                decimal day_count = transactionModel.CalendarDay;
-                var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
-
-                var remain_list = _userVacationRemainService.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
-
-                int i = 0;
-                foreach (var el in remain_list)
-                {
-                    if (i == 0)
-                    {
-                        el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
-                        el.RemainCount = el.VacationCount - el.UsedCount;
-                    }
-
-                    if (day_count >= el.UsedCount)
-                    {
-                        day_count -= el.UsedCount;
-                        el.RemainCount += el.UsedCount;
-                        el.UsedCount = 0;
-                        await _userVacationRemainService.UpdateAsync(el);
-                    }
-                    else
-                    {
-
-                        el.UsedCount -= day_count;
-                        el.RemainCount += day_count;
-                        await _userVacationRemainService.UpdateAsync(el);
-                        day_count = 0;
-                    }
-
-                    if (day_count == 0)
-                    {
-                        break;
-                    }
-                    i++;
-                }
+ 
             }
 
             transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
@@ -819,6 +787,12 @@ namespace SmartIntranet.Web.Controllers
                 el.DeleteByUserId = current;
                 el.IsDeleted = true;
                 await _contractService.UpdateAsync(_map.Map<VacationContract>(el));
+            }
+
+            var this_item = _contractService.GetAllIncCompAsync(x => x.CommandDate == commandDate).Result;
+            if (this_item.Count() > 0)
+            {
+                day_count += this_item[0].CalendarDay;
             }
 
             var remain_list = _userVacationRemainService.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
