@@ -175,7 +175,7 @@
                                     }
 
                                 </select>
-                                <span asp-validation-for="ConfirmTicketUserId" class="text-danger"></span>
+                                @*<span asp-validation-for="ConfirmTicketUserId" class="text-danger"></span>*@
                                 <span class="text-danger"></span>
                             </div>
                         </div>
@@ -495,11 +495,20 @@
         $("#True").on("change",function(){
               $("#ConfirmedId").removeClass( 'd-none');
               $("#ConfirmTicketUserId").prop( "disabled" , false);
+
+        $("form").submit(function(e){
+        if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+          toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
+          e.preventDefault();
+        }
+        })
+
         });
         $("#False").on("change",function(){
               $("#ConfirmedId").addClass( 'd-none');
               $("#ConfirmTicketUserId").prop( "disabled" , true);
         });
+
         // Total price
         $(document).on("mouseover","#generated",function(){
         var r = 0;
@@ -542,6 +551,12 @@
                                 $("#False" ).prop( "checked", false );
                                 $("#ConfirmedId").removeClass( 'd-none');
                                 $("#ConfirmTicketUserId").prop( "disabled" , false);
+                                $this.on("submit", function(e) {
+                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+                                      toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
+                                      e.preventDefault();
+                                    }
+                                });
                             }
                             else {
                                 $("#True" ).prop( "checked", false );
