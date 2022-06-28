@@ -74,13 +74,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var add = _map.Map<Department>(model);
                 add.CreatedByUserId = GetSignInUserId();
                 add.CreatedDate = DateTime.UtcNow;
-                if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 if (await _departmentService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -159,13 +159,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
-                if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 if (await _departmentService.UpdateReturnEntityAsync(update) is null)
                 {
                     return RedirectToAction("List", new

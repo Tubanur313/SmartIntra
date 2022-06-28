@@ -85,14 +85,14 @@ namespace SmartIntranet.Web.Controllers
                         model.LogoPath = _upload.UploadResizedImg(logo, "wwwroot/logo/");
                     }
                 }
-                if (await _companyService.AnyAsync(x => x.Name.ToUpper()
-                .Contains(model.Name.ToUpper()) && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _companyService.AnyAsync(x => x.Name.ToUpper()
+                //.Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 var add = _map.Map<Company>(model);
                 add.CreatedByUserId = GetSignInUserId();
                 add.CreatedDate = DateTime.UtcNow;
@@ -190,13 +190,13 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
-                if (await _companyService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _companyService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 await _companyService.UpdateReturnEntityAsync(update);
                 return RedirectToAction("List", new
                 {
