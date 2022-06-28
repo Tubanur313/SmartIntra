@@ -193,7 +193,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control" id="inputDate">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -472,6 +472,10 @@
     $(document).ready(function () {
 
             let dateArray = [];
+
+            $('#inputDate').datepicker({
+                format: "dd.mm.yyyy"
+            });
 
             $("form").submit( function(e) {
                 let isEmpty = false;

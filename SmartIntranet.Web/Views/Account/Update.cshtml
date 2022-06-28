@@ -153,7 +153,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control" id="inputDate" value="@Model.StartWorkDate.ToString("dd.MM.yyyy")">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -390,7 +390,7 @@
                                         <label class="floatLabel"> Tarix: </label>
                                         <div class="input-group input-daterange mb-0">
                                             <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control experience-history" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
+                                            <span class="input-group-addon">to</span>
                                             <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control experience-history" autocomplete="off">
                                         </div>
                                         <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span>
@@ -497,7 +497,7 @@
 
                                             <div class="input-group input-daterange mb-0">
                                                 <input type="text" asp-for="UserVacationRemains[i].FromDate" value="@Model.UserVacationRemains[i].FromDate.ToString("dd.MM.yyyy")" class="form-control vacation-remain start old" autocomplete="off">
-                                                <div class="input-group-addon">to</div>
+                                                <span class="input-group-addon">to</span>
                                                 <input type="text" asp-for="UserVacationRemains[i].ToDate" value="@Model.UserVacationRemains[i].ToDate.ToString("dd.MM.yyyy")" class="form-control vacation-remain end old" autocomplete="off">
                                             </div>
 
@@ -533,7 +533,7 @@
                                         <label class="floatLabel"> Tarix: </label>
                                         <div class="input-group input-daterange mb-0">
                                             <input type="text" value="@item.FromDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
+                                            <span class="input-group-addon">to</span>
                                             <input type="text" value="@item.ToDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
                                         </div>
                                         <span class="messages"></span>
@@ -578,6 +578,10 @@
     $(document).ready(function () {
 
         let dateArray = [];
+
+         $('#inputDate').datepicker({
+             format: "dd.mm.yyyy"
+         });
 
          $("form").submit( function(e) {
                 let isEmpty = false;
@@ -720,11 +724,10 @@
              return valid;
          }
 
-          $('.input-daterange input').each(function () {
-                $(this).datepicker({
-                    //format: "dd.mm.yyyy"
-                });
+          $('.input-daterange').datepicker({
+              format: "dd.mm.yyyy"
           });
+
           $("#addRow").click(function () {
                 let rowCount = parseInt($("#rowCount").val());
                 rowCount++;
@@ -732,10 +735,8 @@
                 let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
                 $('#row-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        //format: "dd.mm.yyyy"
-                    });
+                $('.input-daterange').datepicker({
+                    format: "dd.mm.yyyy"
                 });
           });
 
@@ -750,14 +751,10 @@
             let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
             $('#vac-box').append(html);
 
-            $('.input-daterange input').each(function () {
-                $(this).datepicker({
-                    //format: "dd.mm.yyyy"
-                });
+            $('.input-daterange').datepicker({
+                format: "dd.mm.yyyy"
             });
         });
-
-
 
         $("#Profile").change(function (e) {
                 $("#lview").show();
@@ -795,13 +792,13 @@
                                   data:data,
                                   prompt:'Seçim edin'
                                 });
-                                tree.combotree('disable')
+                                //tree.combotree('disable')
                             }
                             else{
                                  var tree = $('#DepartmentId').combotree({
                                     prompt:'Yoxdur !',
                                  });
-                                 tree.combotree('disable')
+                                 //tree.combotree('disable')
                             }
                         },
                         error: function (data) {
@@ -823,13 +820,13 @@
                                  data:data,
                                  prompt:'Seçim edin'
                             });
-                            tre.combotree('disable')
+                            //tre.combotree('disable')
                             }
                             else{
                             var tree = $('#PositionId').combotree({
                                  prompt:'Yoxdur !',
                             });
-                            tree.combotree('disable')
+                            //tree.combotree('disable')
                             }
                         },
                         error: function (data) {
@@ -860,7 +857,7 @@
                                 var tree = $('#PositionId').combotree({
                                    prompt:'Seçim edin'
                                 });
-                                tree.combotree('disable')
+                                //tree.combotree('disable')
                                 $('#DepartmentId').combotree({
                                 data:data,
                                 prompt:'Seçim edin',
@@ -887,7 +884,7 @@
                                            var tre = $('#PositionId').combotree({
                                                prompt:'Yoxdur !',
                                            });
-                                           tre.combotree('disable')
+                                           //tre.combotree('disable')
                                            tre.combotree('setValue', '')
                                         }
                                     },
@@ -903,12 +900,12 @@
                              var tree = $('#DepartmentId').combotree({
                                  prompt:'Yoxdur !',
                              });
-                             tree.combotree('disable')
+                             //tree.combotree('disable')
                              tree.combotree('setValue', '') 
                              var tre = $('#PositionId').combotree({
                                  prompt:'Yoxdur !',
                              });
-                             tre.combotree('disable')
+                             //tre.combotree('disable')
                              tre.combotree('setValue', '')
                             }
                         },
@@ -957,13 +954,13 @@
                                               var tree = $('#PositionId').combotree({
                                                    data:data
                                               });
-                                              tree.combotree('disable')
+                                              //tree.combotree('disable')
                                               }
                                               else{
                                               var tree = $('#PositionId').combotree({
                                                    prompt:'Yoxdur !',
                                               });
-                                              tree.combotree('disable')
+                                              //tree.combotree('disable')
                                               }
                                           },
                                           error: function (data) {
@@ -975,7 +972,7 @@
                                  var tree = $('#DepartmentId').combotree({
                                     prompt:'Yoxdur !',
                                  });
-                                 tree.combotree('disable')
+                                 //tree.combotree('disable')
                             }
                         },
                         error: function (data) {
@@ -1029,7 +1026,7 @@
                                                         var treeP = $('#PositionId').combotree({
                                                                  prompt:'Yoxdur !',
                                                             });
-                                                            tree.combotree('disable')
+                                                            //tree.combotree('disable')
                                                         }
 
                                                     }
@@ -1041,11 +1038,11 @@
                                      var treeD = $('#DepartmentId').combotree({
                                           prompt:'Yoxdur !',
                                      });
-                                     tree.combotree('disable')
+                                     //tree.combotree('disable')
                                      var treeP = $('#PositionId').combotree({
                                           prompt:'Yoxdur !',
                                      });
-                                     tree.combotree('disable')
+                                     //tree.combotree('disable')
                                     }
                              },
                             error: function (data) {
