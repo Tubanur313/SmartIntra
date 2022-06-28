@@ -30,7 +30,7 @@ namespace SmartIntranet.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await _emailService.GetAsync();
+            var model =_emailService.Get();
             if (model != null )
             {
                 return View(_map.Map<EmailListDto>(model));

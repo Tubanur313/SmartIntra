@@ -8,11 +8,11 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
 {
     public class EfSmtpEmailRepository : EfGenericRepository<SMTPEmailSetting>, ISmtpEmailDal
     {
-        public Task<SMTPEmailSetting> GetAsync()
+        public SMTPEmailSetting Get()
         {
             using (var context = new IntranetContext())
             {
-                return Task.FromResult(context.SMTPEmailSettings.FirstOrDefault());
+                return context.SMTPEmailSettings.FirstOrDefault();
             }
 
         }

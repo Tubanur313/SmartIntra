@@ -21,7 +21,6 @@ namespace SmartIntranet.Web.Controllers
     public class BaseIdentityController : Controller
     {
         protected readonly UserManager<IntranetUser> _userManager;
-        //protected readonly RoleManager<IntranetUser> _roleManager;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly SignInManager<IntranetUser> _signInManager;
         protected readonly IMapper _map;
@@ -54,7 +53,10 @@ namespace SmartIntranet.Web.Controllers
         //{
         //    return _userManager.GetRolesAsync()
         //}
-
+        protected string GetSignInFullName()
+        {
+            return _userManager.FindByNameAsync(User.Identity.Name).Result.Fullname;
+        }
 
         protected void AddError(IEnumerable<IdentityError> errors)
         {
