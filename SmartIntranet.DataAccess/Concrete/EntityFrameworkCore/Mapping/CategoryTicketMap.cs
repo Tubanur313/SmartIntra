@@ -15,7 +15,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Name).IsRequired();
 
             builder.Property(I => I.IsDeleted);
-            builder.Property(I => I.TicketType).HasDefaultValue(TicketType.Task);
+            builder.Property(I => I.TicketType).HasDefaultValue(null);
 
             builder.Property(I => I.CreatedDate).HasDefaultValue(null);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);
