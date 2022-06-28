@@ -81,7 +81,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 IdentityResult result = await _userManager.UpdateAsync(updateUser);
             }
             else
-                TempData["msg"] = " İstifadəçi tapılmadı !";
+                TempData["error"] = " İstifadəçi tapılmadı !";
             return RedirectToAction("Profile");
         }
 
@@ -219,7 +219,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             }
             else
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("Profile", new { id = appUserPass.Id });
             }
 
@@ -256,7 +256,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     if (!MimeTypeCheckExtension.İsImage(profile))
                     {
-                        TempData["msg"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
+                        TempData["error"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
                         return RedirectToAction("List");
                     }
 
@@ -272,7 +272,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     }
                     else
                     {
-                        TempData["msg"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
+                        TempData["error"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
                         return RedirectToAction("List");
                     }
                 }
@@ -310,13 +310,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     }
                 }
                 else
-                    TempData["msg"] = " İstifadəçi tapılmadı !";
+                    TempData["error"] = " İstifadəçi tapılmadı !";
                 return RedirectToAction("List");
 
             }
 
-            //TempData["msg"] = " Daxil edilən fayllar image, png və ya gif formatında olmalıdır !";
-            TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+            //TempData["error"] = " Daxil edilən fayllar image, png və ya gif formatında olmalıdır !";
+            TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
             return RedirectToAction("List");
         }
 

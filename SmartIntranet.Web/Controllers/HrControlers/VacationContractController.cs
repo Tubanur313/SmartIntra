@@ -86,7 +86,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                model.CreatedDate = DateTime.UtcNow;
                 var current = GetSignInUserId();
                 var result_model = _contractService.AddReturnEntityAsync(_map.Map<VacationContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
@@ -100,15 +100,15 @@ namespace SmartIntranet.Web.Controllers
                 {
                     DateTime start_interval;
                     DateTime end_interval;
-                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                    if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                     {
-                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                     }
                     else
                     {
-                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                     }
                     var graph = _workGraphicService.FindByIdAsync((int)usr.WorkGraphicId).Result;
 
@@ -340,15 +340,15 @@ namespace SmartIntranet.Web.Controllers
             {
                 DateTime start_interval;
                 DateTime end_interval;
-                if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                 {
-                    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                 }
                 else
                 {
-                    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                 }
 
                 var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
@@ -375,7 +375,7 @@ namespace SmartIntranet.Web.Controllers
                     ur.FromDate = start_interval;
                     ur.ToDate = end_interval;
                     ur.IsDeleted = false;
-                    ur.CreatedDate = DateTime.Now;
+                    ur.CreatedDate = DateTime.UtcNow;
                     ur.AppUserId = user_id;
                     ur.UsedCount = 0;
                     ur.VacationCount = usr.VacationMainDay + usr.VacationExtraDay;
@@ -424,7 +424,7 @@ namespace SmartIntranet.Web.Controllers
                     var main_day = 0;
                     foreach (var el in personal_contract_chgs)
                     {
-                        if(el.CommandDate<= DateTime.Now)
+                        if(el.CommandDate<= DateTime.UtcNow)
                         {
                             double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * el.VacationDay) / 365;
                             result.RemainCount += (int)before_day_count;
@@ -434,13 +434,13 @@ namespace SmartIntranet.Web.Controllers
                      
                     }
 
-                    double after_day_count = Math.Round((double)((DateTime.Now - fromDateTmp).TotalDays) * main_day) / 365;
+                    double after_day_count = Math.Round((double)((DateTime.UtcNow - fromDateTmp).TotalDays) * main_day) / 365;
                     result.RemainCount += (int)after_day_count;
                     result.RemainCount += usr.VacationExtraDay;
                 }
                 else
                 {
-                    double after_day_count = Math.Round((double)((DateTime.Now - start_interval).TotalDays) * usr.VacationMainDay) / 365;
+                    double after_day_count = Math.Round((double)((DateTime.UtcNow - start_interval).TotalDays) * usr.VacationMainDay) / 365;
                     result.RemainCount += (int)after_day_count;
                     result.RemainCount += usr.VacationExtraDay;
                 }
@@ -473,13 +473,13 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List", "Contract");
             }
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _contractService.UpdateAsync(_map.Map<VacationContract>(model));
 
@@ -493,15 +493,15 @@ namespace SmartIntranet.Web.Controllers
                 //{
                 //    DateTime start_interval;
                 //    DateTime end_interval;
-                //    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                //    if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                 //    {
-                //        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                //        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                //        start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                //        end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                 //    }
                 //    else
                 //    {
-                //        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                //        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                //        start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                //        end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                 //    }
                 //    var graph = _workGraphicService.FindByIdAsync(usr.WorkGraphicId).Result;
 
@@ -705,15 +705,15 @@ namespace SmartIntranet.Web.Controllers
                 {
                     DateTime start_interval;
                     DateTime end_interval;
-                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                    if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                     {
-                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                     }
                     else
                     {
-                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                     }
 
                     if (transactionModel.FromDate >= start_interval)
@@ -728,7 +728,7 @@ namespace SmartIntranet.Web.Controllers
                                 day_count += el.CalendarDay;
                             }
                          
-                            el.DeleteDate = DateTime.UtcNow.AddHours(4);
+                            el.DeleteDate = DateTime.UtcNow;
                             el.DeleteByUserId = current;
                             el.IsDeleted = true;
                             await _contractService.UpdateAsync(_map.Map<VacationContract>(el));
@@ -772,7 +772,7 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-                transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+                transactionModel.DeleteDate = DateTime.UtcNow;
                 transactionModel.DeleteByUserId = current;
                 transactionModel.IsDeleted = true;
                 await _contractService.UpdateAsync(_map.Map<VacationContract>(transactionModel));

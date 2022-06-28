@@ -59,6 +59,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             {
                 var add = _map.Map<Category>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _categoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
                 {
                     return RedirectToAction("List", new
@@ -121,7 +122,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 if (await _categoryService.UpdateReturnEntityAsync(update) is null)
@@ -151,7 +152,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             var delete = await _categoryService.FindByIdAsync(id);
             delete.IsDeleted = true;
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             await _categoryService.UpdateAsync(delete);
         }
 

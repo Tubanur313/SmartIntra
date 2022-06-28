@@ -352,15 +352,33 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #endregion
 
             #region  Stock <-> StockDto
-            CreateMap<StockAddDto, Stock>();
-            CreateMap<Stock, StockAddDto>();
+            CreateMap<StockAddDto, Stock>()
+            .ForMember(dest => dest.DepreciationPercent,
+              opt => opt.MapFrom(src => Convert.ToString(src.DepreciationPercent
+              .Split(" ", StringSplitOptions.None).FirstOrDefault()).Replace(".", ",")))
+            .ForMember(dest => dest.Price,
+              opt => opt.MapFrom(src => Convert.ToString(src.Price.Replace(",", "").Replace(".", ","))));
+            CreateMap<Stock, StockAddDto>()
+                .ForMember(dest => dest.DepreciationPercent,
+                  opt => opt.MapFrom(src => Convert.ToDecimal(src.DepreciationPercent)))
+            .ForMember(dest => dest.Price,
+                  opt => opt.MapFrom(src => Convert.ToDecimal(src.Price)));
             CreateMap<StockListDto, Stock>();
             CreateMap<Stock, StockListDto>();
-            CreateMap<StockUpdateDto, Stock>();
-            CreateMap<Stock, StockUpdateDto>();
+            CreateMap<StockUpdateDto, Stock>()
+            .ForMember(dest => dest.DepreciationPercent,
+              opt => opt.MapFrom(src => Convert.ToString(src.DepreciationPercent
+              .Split(" ", StringSplitOptions.None).FirstOrDefault()).Replace(".", ",")))
+            .ForMember(dest => dest.Price,
+              opt => opt.MapFrom(src => Convert.ToString(src.Price.Replace(",", "").Replace(".", ","))));
+            CreateMap<Stock, StockUpdateDto>()
+                .ForMember(dest => dest.DepreciationPercent,
+                  opt => opt.MapFrom(src => Convert.ToDecimal(src.DepreciationPercent)))
+                .ForMember(dest => dest.Price,
+                  opt => opt.MapFrom(src => src.Price.ToString()));
 
             #endregion 
-            #region  Stock <-> StockDto
+            #region  StockCategory <-> StockCategoryDto
             CreateMap<StockCategoryAddDto, StockCategory>();
             CreateMap<StockCategory, StockCategoryAddDto>();
             CreateMap<StockCategoryListDto, StockCategory>();

@@ -57,7 +57,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                model.CreatedDate = DateTime.UtcNow;
                 var current = GetSignInUserId();
                 var result_model = _contractService.AddReturnEntityAsync(_map.Map<LongContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
@@ -81,6 +81,7 @@ namespace SmartIntranet.Web.Controllers
                 file_extra.ClauseId = clause_result_extra.Id;
                 StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                 file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                file_extra.CreatedDate = DateTime.UtcNow;
                 await _contractFileService.AddAsync(file_extra);
 
                 return RedirectToAction("List", "Contract");
@@ -115,13 +116,13 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List", "Contract");
             }
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _contractService.UpdateAsync(_map.Map<LongContract>(model));
 
@@ -156,7 +157,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<LongContractListDto>(await _contractService.FindByIdAsync(id));
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<LongContract>(transactionModel));

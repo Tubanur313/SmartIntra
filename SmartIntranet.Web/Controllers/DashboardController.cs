@@ -58,9 +58,9 @@ namespace SmartIntranet.Web.Controllers
             decimal pauseCountTicket = _ticketservice.GetAllAsync(x => x.StatusType == StatusType.Pause && x.IsDeleted == false).Result.Count;
             ViewBag.NullSupportedCountTicket = _ticketservice.GetAllAsync(x => !x.IsDeleted && x.SupporterId == null).Result.Count;
 
-            ViewBag.todayCloseCountTicket = _ticketservice.GetAllAsync(x => x.StatusType == StatusType.Close && x.IsDeleted == false && x.CreatedDate == DateTime.Now).Result.Count;
-            ViewBag.todayOpenCountTicket = _ticketservice.GetAllAsync(x => x.StatusType != StatusType.Close && x.IsDeleted == false && x.CreatedDate == DateTime.Now).Result.Count;
-            ViewBag.todayTotalCountTicket = _ticketservice.GetAllAsync(x => x.IsDeleted == false && x.CreatedDate == DateTime.Now).Result.Count;
+            ViewBag.todayCloseCountTicket = _ticketservice.GetAllAsync(x => x.StatusType == StatusType.Close && x.IsDeleted == false && x.CreatedDate == DateTime.UtcNow).Result.Count;
+            ViewBag.todayOpenCountTicket = _ticketservice.GetAllAsync(x => x.StatusType != StatusType.Close && x.IsDeleted == false && x.CreatedDate == DateTime.UtcNow).Result.Count;
+            ViewBag.todayTotalCountTicket = _ticketservice.GetAllAsync(x => x.IsDeleted == false && x.CreatedDate == DateTime.UtcNow).Result.Count;
 
             ViewBag.totalCountUsers = _userservice.GetAllAsync(x => x.IsDeleted == false).Result.Count;
             ViewBag.totalCountOrders = _orderservice.GetAllAsync(x => x.IsDeleted == false).Result.Count;

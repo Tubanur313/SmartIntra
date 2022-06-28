@@ -45,7 +45,7 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public int? PositionId { get; set; }
         public Position Position { get; set; }
         public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public int? UpdateByUserId { get; set; }
         public DateTime? UpdateDate { get; set; }
         public int? DeleteByUserId { get; set; }

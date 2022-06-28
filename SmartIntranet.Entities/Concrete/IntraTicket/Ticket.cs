@@ -12,7 +12,7 @@ namespace SmartIntranet.Entities.Concrete.IntraTicket
 
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime? OpenDate { get; set; } = DateTime.Now;
+        public DateTime? OpenDate { get; set; }
         public DateTime? CloseDate { get; set; }
         public DateTime? DeadLineStart { get; set; }
         public DateTime? DeadLineEnd { get; set; }

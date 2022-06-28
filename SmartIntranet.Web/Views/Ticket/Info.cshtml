@@ -22,16 +22,19 @@
     .pt-3-half {
         padding-top: 1.4rem;
     }
-    .info-item{
-     margin-bottom:30px;
+
+    .info-item {
+        margin-bottom: 30px;
     }
-    .info-item p{
-        margin-bottom:0 !important;
-    }
-    .icon-in-info{
-            align-items: center;
-         margin-right: 10px;
-         display: flex;
+
+        .info-item p {
+            margin-bottom: 0 !important;
+        }
+
+    .icon-in-info {
+        align-items: center;
+        margin-right: 10px;
+        display: flex;
     }
 </style>
 
@@ -102,17 +105,7 @@
                                     </p>
                                 </div>
                             </li>
-                               <li class="d-flex info-item">
-                                <div class="icon-in-info">
-                                    <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                </div>
-                                <div>
-                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
-                                    <p>
-                                        @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
-                                    </p>
-                                </div>
-                            </li>
+
                         </ul>
                     </div>
                     <div class="col-md-12 col-lg-4">
@@ -128,7 +121,7 @@
                                     </p>
                                 </div>
                             </li>
-                             <li class="d-flex info-item">
+                            <li class="d-flex info-item">
                                 <div class="icon-in-info">
                                     <i class="fa-regular fa-calendar-xmark mr-2 text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
@@ -139,7 +132,7 @@
                                     </p>
                                 </div>
                             </li>
-                             <li class="d-flex  info-item">
+                            <li class="d-flex  info-item">
                                 <div class="icon-in-info">
                                     <i class="fa-solid fa-s mr-2 text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
@@ -150,20 +143,31 @@
                                     </p>
                                 </div>
                             </li>
-                          
+
                         </ul>
 
                     </div>
                     <div class="col-md-12 col-lg-4">
                         <ul>
-                            <li class="d-flex  info-item">
+                            @*                            <li class="d-flex  info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-regular fa-circle-check mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                <i class="fa-regular fa-circle-check mr-2 text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Ticket Təsdiq Sorğusu Əlavə Edilibmi:</label>
+                                <label class="font-weight-bold">Ticket Təsdiq Sorğusu Əlavə Edilibmi:</label>
+                                <p>
+                                @(Model.Confirmed == true ? "Bəli" : "Xeyr")
+                                </p>
+                                </div>
+                                </li>*@
+                            <li class="d-flex info-item">
+                                <div class="icon-in-info">
+                                    <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                </div>
+                                <div>
+                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
                                     <p>
-                                        @(Model.Confirmed == true ? "Bəli" : "Xeyr")
+                                        @(Model.OpenDate!=null?Model.OpenDate.Value.ToString("dd.MM.yyyy hh:mm"):"Təyin edilməyib"))
                                     </p>
                                 </div>
                             </li>
@@ -384,7 +388,7 @@
 <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
-<script  class="removable">
+<script class="removable">
     $(document).ready(function(){
         $(".get-count-discuss").click(function(){
             $("#countId").html(`Müzakirələr (@(ViewBag.DiscCount>0 ? ViewBag.DiscCount:0))`);
@@ -509,7 +513,7 @@
             });
         });
         $(document).on("click","#custom-button",function ()
-        {   
+        {
             $("#sub-btn").removeClass("disable");
             $("#photo").hide("slow");
             $("#fayl-photos").text("Göstər");

@@ -110,7 +110,7 @@ namespace SmartIntranet.Web.Controllers
             var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(ticketId);
 
             int pdfRowIndex = 1;
-            string filename = "OrderDetails-" + DateTime.Now.ToString("dd-MM-yyyy hh_mm_s_tt");
+            string filename = "OrderDetails-" + DateTime.UtcNow.ToString("dd-MM-yyyy hh_mm_s_tt");
             string filepath = Path.Combine(Directory.GetCurrentDirectory()) + "/wwwroot/order/" + filename + ".pdf";
 
             string orderPath = "/order/" + filename + ".pdf";
@@ -614,7 +614,8 @@ namespace SmartIntranet.Web.Controllers
                 add.CreatedByUserId = GetSignInUserId();
                 add.EmployeeId = GetSignInUserId();
                 add.SupporterId = CategoryTicketSupporter.SupporterId;
-
+                add.CreatedDate = DateTime.UtcNow;
+                add.OpenDate= DateTime.UtcNow;
                 var result = await _ticketService.AddReturnEntityAsync(add);
 
                 if (result is null)
@@ -636,6 +637,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapWatcher = _map.Map<Watcher>(watcher);
                         mapWatcher.CreatedByUserId = GetSignInUserId();
+                        mapWatcher.CreatedDate = DateTime.UtcNow;
                         var watchResult = await _watcherService
                             .AddReturnEntityAsync(mapWatcher);
                         //wathcers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(intranetUserId)).ToString() + "</br>";
@@ -654,6 +656,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapConfirm = _map.Map<ConfirmTicketUser>(confirm);
                         mapConfirm.CreatedByUserId = GetSignInUserId();
+                        mapConfirm.CreatedDate = DateTime.UtcNow;
                         var confirmResult = await _confirmTicketUserService
                         .AddReturnEntityAsync(mapConfirm);
                         //confirmers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(intranetUserId)).ToString() + "</br>";
@@ -672,6 +675,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapCheck = _map.Map<TicketCheckList>(check);
                         mapCheck.CreatedByUserId = GetSignInUserId();
+                        mapCheck.CreatedDate = DateTime.UtcNow;
                         var checklistResult = await _ticketCheckListService
                              .AddReturnEntityAsync(mapCheck);
                         //checklists += _map.Map<CheckListListDto>(await _checkListService.FindByIdAsync(checkId)).Name + "</br>";
@@ -690,6 +694,7 @@ namespace SmartIntranet.Web.Controllers
 
                         var mappedTO = _map.Map<TicketOrder>(ticketOrder);
                         mappedTO.CreatedByUserId = GetSignInUserId();
+                        mappedTO.CreatedDate = DateTime.UtcNow;
                         await _ticketOrderService.AddReturnEntityAsync(mappedTO);
 
                     }
@@ -711,6 +716,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var photo = _map.Map<Photo>(dto);
                             photo.CreatedByUserId = GetSignInUserId();
+                            photo.CreatedDate = DateTime.UtcNow;
                             await _photo.AddAsync(photo);
 
                         }
@@ -727,6 +733,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var photo = _map.Map<Photo>(dto);
                             photo.CreatedByUserId = GetSignInUserId();
+                            photo.CreatedDate = DateTime.UtcNow;
                             await _photo.AddAsync(photo);
                         }
                         else
@@ -783,7 +790,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _ticketService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _ticketService.UpdateAsync(delete);
         }
@@ -858,10 +865,12 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var data = await _ticketService.FindByIdAsync(model.Id);
                 data.UpdateByUserId = GetSignInUserId();
-                data.UpdateDate = DateTime.Now;
+                data.UpdateDate = DateTime.UtcNow;
                 data.CategoryTicketId = model.TicketCategoryId;
+                data.SupporterId = CategoryTicketSupporter.SupporterId;
                 await _ticketService.UpdateModifiedAsync(data);
 
                 SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
@@ -910,6 +919,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var mapTcl = _map.Map<TicketCheckList>(tcl);
                             mapTcl.CreatedByUserId = GetSignInUserId();
+                            mapTcl.CreatedDate = DateTime.UtcNow;
                             await _ticketCheckListService
                             .AddReturnEntityAsync(mapTcl);
                         }
@@ -971,6 +981,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var mapConfirm = _map.Map<ConfirmTicketUser>(confirm);
                             mapConfirm.CreatedByUserId = GetSignInUserId();
+                            mapConfirm.CreatedDate = DateTime.UtcNow;
                             var confirmers = await _confirmTicketUserService
                             .AddReturnEntityAsync(mapConfirm);
                         }
@@ -1019,6 +1030,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapConfirm = _map.Map<Watcher>(watchers);
                         mapConfirm.CreatedByUserId = GetSignInUserId();
+                        mapConfirm.CreatedDate = DateTime.UtcNow;
                         var confirmers = await _watcherService
                         .AddReturnEntityAsync(mapConfirm);
                     }
@@ -1052,7 +1064,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.SupporterId = model.SupporterId;
 
                 await _ticketService.UpdateAsync(update);
@@ -1082,7 +1094,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.StatusType = model.StatusType;
 
                 await _ticketService.UpdateAsync(update);
@@ -1116,7 +1128,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.PriorityType = model.PriorityType;
 
                 await _ticketService.UpdateAsync(update);
@@ -1157,6 +1169,7 @@ namespace SmartIntranet.Web.Controllers
             var add = _map.Map<Discussion>(model);
             add.CreatedByUserId = GetSignInUserId();
             add.IntranetUserId = GetSignInUserId();
+            add.CreatedDate = DateTime.UtcNow;
             var result = await _discuss.AddReturnEntityAsync(add);
             var count = await _discuss.GetAllAsync(x => x.TicketId == result.TicketId);
 
@@ -1190,6 +1203,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var photo = _map.Map<Photo>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
+                        photo.CreatedDate = DateTime.UtcNow;
                         await _photo.AddAsync(photo);
 
                     }
@@ -1205,6 +1219,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var photo = _map.Map<Photo>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
+                        photo.CreatedDate = DateTime.UtcNow;
                         await _photo.AddAsync(photo);
                     }
                     else

@@ -73,6 +73,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Department>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
                 {
                     return RedirectToAction("List", new
@@ -108,6 +109,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Department>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _departmentService.AddReturnEntityAsync(add) is null)
                 {
                     return BadRequest(Messages.Add.notAdded);
@@ -155,7 +157,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
                 if (await _departmentService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
                 {
@@ -189,7 +191,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var delete = await _departmentService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _departmentService.UpdateAsync(delete);
         }

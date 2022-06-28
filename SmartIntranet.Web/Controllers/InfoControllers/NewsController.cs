@@ -87,6 +87,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 var add = _map.Map<News>(model);
                 add.AppUserId = GetSignInUserId();
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 var result = await _newsService.AddReturnEntityAsync(add);
                 if (result.Id == 0)
                 {
@@ -107,7 +108,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                             NewsFileAddDto file = new NewsFileAddDto()
                             {
                                 Name = _upload.UploadResizedImg(upload, "wwwroot/news/"),
-                                NewsId = result.Id
+                                NewsId = result.Id,
                             };
                             await _newsfileService.AddAsync(_map.Map<NewsFile>(file));
                         }
@@ -124,6 +125,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                         };
                         var map = _map.Map<CategoryNews>(confirm);
                         map.CreatedByUserId = GetSignInUserId();
+                        map.CreatedDate = DateTime.UtcNow;
                         if (await _categoryNewsService.AddReturnEntityAsync(map) is null)
                         {
                             return RedirectToAction("List", new
@@ -175,7 +177,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 var result = await _newsService.UpdateReturnEntityAsync(update);
@@ -219,6 +221,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                             };
                             var map = _map.Map<CategoryNews>(confirm);
                             map.CreatedByUserId = GetSignInUserId();
+                            map.CreatedDate = DateTime.UtcNow;
                             var confirmers = await _categoryNewsService
                             .AddReturnEntityAsync(map);
                         }
@@ -243,7 +246,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         {
             var delete = await _newsService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _newsService.UpdateAsync(delete);
         }

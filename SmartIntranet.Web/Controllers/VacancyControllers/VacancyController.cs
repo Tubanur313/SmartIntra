@@ -41,7 +41,7 @@ namespace SmartIntranet.Web.Controllers
             var vacancies = _map.Map<ICollection<VacancyUpdateDto>>(await _vacancyService.ShowAllWithIncludeAsync());
             foreach (var vc in vacancies)
             {
-                if (DateTime.Now > vc.EndDate)
+                if (DateTime.UtcNow > vc.EndDate)
                 {
                     vc.IsDeleted = true;
                     await _vacancyService.UpdateModifiedAsync(_map.Map<Vacancy>(vc));
@@ -90,9 +90,10 @@ namespace SmartIntranet.Web.Controllers
             {
                 var image = await _companyService.FindByIdAsync(model.CompanyId);
                 var add = _map.Map<Vacancy>(model);
-                add.StartDate = DateTime.Now;
+                add.StartDate = DateTime.UtcNow;
                 add.ImagePath = image.LogoPath;
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _vacancyService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -141,7 +142,7 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 if (await _vacancyService.UpdateReturnEntityAsync(update) is null)
@@ -170,7 +171,7 @@ namespace SmartIntranet.Web.Controllers
             var delete = await _vacancyService.FindByIdAsync(id);
             delete.IsDeleted = true;
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             await _vacancyService.UpdateAsync(delete);
         }
     }
