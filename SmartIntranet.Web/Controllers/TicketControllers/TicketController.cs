@@ -867,7 +867,7 @@ namespace SmartIntranet.Web.Controllers
                 await _ticketService.UpdateModifiedAsync(data);
 
                 //SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
-                _emailSender.TicketSendEmail(model.CategoryTicketId, TicketChangeType.TicketCategory, GetSignInFullName());
+                _emailSender.TicketSendEmail(model.TicketCategoryId, TicketChangeType.TicketCategory, GetSignInFullName());
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
