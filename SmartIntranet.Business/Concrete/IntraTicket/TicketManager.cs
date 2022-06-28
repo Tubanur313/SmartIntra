@@ -49,9 +49,9 @@ namespace SmartIntranet.Business.Concrete.IntraTicket
             return await _ticketDal.GetAllIncludeAsync(id);
         }
 
-        public Ticket GetIncludeMail(int id)
+        public async Task<Ticket> GetIncludeMail(int id)
         {
-            return _ticketDal.GetIncludeMail(id);
+            return await _ticketDal.GetIncludeMail(id);
         }
 
         public async Task<List<Ticket>> GetNonRedirectedAsync()

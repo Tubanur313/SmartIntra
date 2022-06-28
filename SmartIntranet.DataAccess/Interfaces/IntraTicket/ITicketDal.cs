@@ -8,7 +8,7 @@ namespace SmartIntranet.DataAccess.Interfaces
     public interface ITicketDal : IGenericDal<Ticket>
     {
         Task<List<Ticket>> GetAllIncludeAsync(int id);
-        Ticket GetIncludeMail(int id);
+        Task<Ticket> GetIncludeMail(int id);
         Task<List<Ticket>> GetListedBySignInUserIdAsync(int userId);
         Task<List<Ticket>> GetListedBySignInUserIdAsync(int userId, int categoryId, StatusType statusType);
         Task<List<Ticket>> GetNonRedirectedAsync();
