@@ -57,12 +57,12 @@
             </li>
             @if (Model.CategoryTicket.TicketType == TicketType.Purchasing)
             {
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#order" role="tab">
-                        <i class="icofont icofont-table"></i>&nbsp; Sifariş
-                    </a>
-                    <div class="slide"></div>
-                </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#order" role="tab">
+                                <i class="icofont icofont-table"></i>&nbsp; Sifariş
+                            </a>
+                            <div class="slide"></div>
+                        </li>
             }
 
         </ul>
@@ -149,15 +149,16 @@
                     </div>
                     <div class="col-md-12 col-lg-4">
                         <ul>
-                            @*                            <li class="d-flex  info-item">
+                            
+                            <li class="d-flex info-item">
                                 <div class="icon-in-info">
-                                <i class="fa-regular fa-circle-check mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                <label class="font-weight-bold">Ticket Təsdiq Sorğusu Əlavə Edilibmi:</label>
-                                <p>
-                                @(Model.Confirmed == true ? "Bəli" : "Xeyr")
-                                </p>
+                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
+                                    <p>
+                                        @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
+                                    </p>
                                 </div>
                                 </li>*@
                             <li class="d-flex info-item">
@@ -343,18 +344,18 @@
                                                 {
                                                     @foreach (var order in Model.TicketOrders)
                                                     {
-                                                        <tr>
-                                                            <td>@order.Order.Id</td>
-                                                            <td>@order.Order.Product</td>
-                                                            <td>@order.Order.Currency</td>
-                                                            <td>@order.Order.Quantity</td>
-                                                            <td>@order.Order.WithoutVat</td>
-                                                            <td>@order.Order.TotalWithoutTax</td>
-                                                            <td>@order.Order.TaxType</td>
-                                                            <td>@order.Order.Total</td>
-                                                            <td>@order.Order.Seller</td>
-                                                            <td>@order.Order.Description</td>
-                                                        </tr>
+                                                                        <tr>
+                                                                            <td>@order.Order.Id</td>
+                                                                            <td>@order.Order.Product</td>
+                                                                            <td>@order.Order.Currency</td>
+                                                                            <td>@order.Order.Quantity</td>
+                                                                            <td>@order.Order.WithoutVat</td>
+                                                                            <td>@order.Order.TotalWithoutTax</td>
+                                                                            <td>@order.Order.TaxType</td>
+                                                                            <td>@order.Order.Total</td>
+                                                                            <td>@order.Order.Seller</td>
+                                                                            <td>@order.Order.Description</td>
+                                                                        </tr>
                                                     }
                                                 }
                                             </tbody>

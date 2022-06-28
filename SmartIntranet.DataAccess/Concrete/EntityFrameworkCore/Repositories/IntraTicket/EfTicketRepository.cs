@@ -191,7 +191,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(z => z.CategoryTicket)
                 .OrderByDescending(x => x.Id).ToListAsync();
         }
-        public async Task<Ticket> GetIncludeMailAsync(int id)
+        public async Task<Ticket> GetIncludeMail(int id)
         {
             using var context = new IntranetContext();
             return await context.Tickets

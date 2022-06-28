@@ -16,9 +16,9 @@ namespace SmartIntranet.Business.Concrete
             _emailDal = emailDal;
         }
 
-        async Task<SMTPEmailSetting> ISmtpEmailService.GetAsync()
+       public SMTPEmailSetting Get()
         {
-            return await _emailDal.GetAsync();
+            return _emailDal.Get();
         }
     }
 }
