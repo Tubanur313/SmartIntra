@@ -251,7 +251,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "recruitment_labor_contract",
                         FilePath = "recruitment_labor_contract.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = false
                     };
@@ -262,7 +262,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "recruitment_privacy",
                         FilePath = "recruitment_privacy.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -273,7 +273,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "recruitment_command",
                         FilePath = "recruitment_command.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -284,7 +284,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "recruitment_financial_responsibility",
                         FilePath = "recruitment_financial_responsibility.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -295,7 +295,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_extra_work_place",
                         FilePath = "personal_change_extra_work_place.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -306,7 +306,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_extra_work_graphic",
                         FilePath = "personal_change_extra_work_graphic.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = false
                     };
@@ -317,7 +317,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_extra_vacation",
                         FilePath = "personal_change_extra_vacation.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -327,7 +327,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_command_salary",
                         FilePath = "personal_change_command_salary.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -337,7 +337,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_extra_salary",
                         FilePath = "personal_change_extra_salary.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -348,7 +348,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_command_position",
                         FilePath = "personal_change_command_position.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -358,7 +358,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_extra_position",
                         FilePath = "personal_change_extra_position.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -369,7 +369,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_command_salary_position",
                         FilePath = "personal_change_command_salary_position.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -380,7 +380,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "personal_change_extra_salary_position",
                         FilePath = "personal_change_extra_salary_position.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -392,7 +392,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "business_trip_command",
                         FilePath = "business_trip_command.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -403,7 +403,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "vacation_labor",
                         FilePath = "vacation_labor.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -414,7 +414,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "vacation_without_price",
                         FilePath = "vacation_without_price.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -425,7 +425,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "vacation_edu",
                         FilePath = "vacation_edu.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -436,7 +436,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "vacation_pregnancy",
                         FilePath = "vacation_pregnancy.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -447,7 +447,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "vacation_social",
                         FilePath = "vacation_social.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -460,7 +460,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "termination_base",
                         FilePath = "termination_base.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -471,7 +471,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "termination_reduction_agree",
                         FilePath = "termination_reduction_agree.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -482,7 +482,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "termination_reduction_not_agree",
                         FilePath = "termination_reduction_not_agree.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -495,7 +495,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Key = "long_contract",
                         FilePath = "long_contract.docx",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow,
+                        CreatedDate = DateTime.Now,
                         IsDeletable = false,
                         IsBackground = true
                     };
@@ -557,7 +557,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "İşə qəbul",
                         Key = "WORK_ACCEPT",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var personal_chg = new ContractType()
@@ -565,7 +565,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Kadr dəyişikliyi",
                         Key = "PERSONAL_CHG",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var vacation = new ContractType()
@@ -573,7 +573,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Məzuniyyət",
                         Key = "VACATION",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var business_trip = new ContractType()
@@ -581,7 +581,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Ezamiyyət",
                         Key = "BUSINESS_TRIP",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var termination = new ContractType()
@@ -589,7 +589,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Xitam",
                         Key = "TERMINATION",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var longContract = new ContractType()
@@ -597,7 +597,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Müqavilə uzadılması",
                         Key = "LONG_CONTRACT",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     db.ContractTypes.Add(work_accept);
@@ -628,7 +628,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Əmək məzuniyyəti",
                         Key = "labor",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var without_price = new VacationType()
@@ -636,7 +636,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Ödənişsiz məzuniyyət",
                         Key = "without_price",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var pregnancy = new VacationType()
@@ -644,7 +644,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Analıq məzuniyyəti",
                         Key = "pregnancy",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var edu = new VacationType()
@@ -652,7 +652,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Təhsil məzuniyyəti",
                         Key = "edu",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var social = new VacationType()
@@ -660,7 +660,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Name = "Sosial qulluq məzuniyyəti",
                         Key = "social",
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     db.VacationTypes.Add(labor);
@@ -687,9 +687,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                 {
                     var working_year = new NonWorkingYear()
                     {
-                        Year = DateTime.UtcNow.ToString("yyyy"),
+                        Year = DateTime.Now.ToString("yyyy"),
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
 
@@ -701,7 +701,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
 
                 if (!db.WorkGraphics.Any())
                 {
-                    var year = DateTime.UtcNow.ToString("yyyy");
+                    var year = DateTime.Now.ToString("yyyy");
                     var day_5 = new WorkGraphic()
                     {
                         Name = "5 günlük",
@@ -717,7 +717,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         WorkStart = DateTime.ParseExact("09:00", "HH:mm", null),
                         WorkEnd = DateTime.ParseExact("18:00", "HH:mm", null),
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
                     var day_6 = new WorkGraphic()
@@ -735,7 +735,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         WorkStart = DateTime.ParseExact("09:00", "HH:mm", null),
                         WorkEnd = DateTime.ParseExact("17:00", "HH:mm", null),
                         IsDeleted = false,
-                        CreatedDate = DateTime.UtcNow
+                        CreatedDate = DateTime.Now
                     };
 
 
@@ -781,7 +781,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                     string filePath = "wwwroot/seedJson/termination_item.json";
                     string json = File.ReadAllText(filePath);
                     List<TerminationItem> places = JsonConvert.DeserializeObject<List<TerminationItem>>(json);
-                    places.Select(c => { c.IsDeleted = false; c.CreatedDate = DateTime.UtcNow; return c; }).ToList();
+                    places.Select(c => { c.IsDeleted = false; c.CreatedDate = DateTime.Now; return c; }).ToList();
 
                     db.TerminationItems.AddRange(places);
                     db.SaveChanges();

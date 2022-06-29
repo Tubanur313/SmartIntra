@@ -17,17 +17,18 @@
         <!-- Nav tabs -->
          <ul class="nav nav-tabs  tabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab"
+            <a class="nav-link active" data-toggle="tab"
+                href="#home3" role="tab">Müqavilə  </a>
+           </li>
+            <li class="nav-item">
+                <a class="nav-link " data-toggle="tab"
                    href="#home1" role="tab">Şəxsi Məlumatlar</a>
             </li>
                <li class="nav-item">
                 <a class="nav-link" data-toggle="tab"
                    href="#home2" role="tab">ŞV</a>
             </li>
-               <li class="nav-item">
-                <a class="nav-link" data-toggle="tab"
-                   href="#home3" role="tab">Müqavilə  </a>
-            </li>
+             
                <li class="nav-item">
                 <a class="nav-link" data-toggle="tab"
                    href="#home4" role="tab">Əmək fəaliyyəti</a>
@@ -46,7 +47,7 @@
         <!-- Tab panes -->
         <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
             <div class="tab-content tabs card-block">
-                <div class="tab-pane active" id="home1"
+                <div class="tab-pane " id="home1"
                      role="tabpanel">
                     <input type="hidden" asp-for="Id" />
                     <div class="row">
@@ -225,7 +226,7 @@
                 </div>
 
 
-                <div class="tab-pane" id="home3" role="tabpanel">
+                <div class="tab-pane active" id="home3" role="tabpanel">
                     <div class="row">
 
                           <div class="col-sm-6">
@@ -803,7 +804,7 @@
         $("#PhoneNumber").on("focus",function(){
                  $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
         });
-        $('a[href="#home3"]').on('click', function(event) {
+        @* $('a[href="#home3"]').on('click', function(event) { *@
             $.ajax({
                 url: `@Url.Action("GetCompanyTree","Account")`,
                 type: "Get",
@@ -1130,7 +1131,7 @@
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
             });
-        });
+        @* }); *@
     });
 </script>
 @await Html.PartialAsync("_ValidationScriptsPartial")

@@ -68,7 +68,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
                 if (model.Currency == null)
                     model.Currency = "";
@@ -104,7 +104,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
 
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
                 if (model.Currency == null)
                     model.Currency = "";
@@ -119,7 +119,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<PlaceListDto>(await _placeService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _placeService.UpdateAsync(_map.Map<Place>(transactionModel));

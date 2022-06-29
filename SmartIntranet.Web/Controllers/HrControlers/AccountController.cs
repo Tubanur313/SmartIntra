@@ -243,7 +243,7 @@ namespace SmartIntranet.Web.Controllers
                         el.IsDeleted = false;
                         el.IsEditable = true;
                         el.CreatedByUserId = current;
-                        el.CreatedDate = DateTime.UtcNow;
+                        el.CreatedDate = DateTime.Now;
                         el.VacationCount = el.RemainCount;
                         UserVacationRemainsNew.Add(el);
                     }
@@ -288,7 +288,7 @@ namespace SmartIntranet.Web.Controllers
                     Address = user.Address,
                     Picture = user.Picture,
                     CreatedByUserId = current,
-                    CreatedDate = DateTime.UtcNow,
+                    CreatedDate = DateTime.Now,
                     UserExperiences = user.UserExperiences,
                     UserVacationRemains = UserVacationRemainsNew
                 };
@@ -338,7 +338,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetUserVacationDay(int userId)
         {
             var usr = await _appUserService.FindByUserAllInc(userId);
-            double experienceYears = (usr.UserExperiences.Sum(x => (x.ExperienceEnd - x.ExperienceStart).TotalDays) + (DateTime.UtcNow - usr.StartWorkDate).TotalDays) / 365;
+            double experienceYears = (usr.UserExperiences.Sum(x => (x.ExperienceEnd - x.ExperienceStart).TotalDays) + (DateTime.Now - usr.StartWorkDate).TotalDays) / 365;
             int vacationDay = 0;
             if (experienceYears >= 5 && experienceYears <= 10)
                 vacationDay = 2;
@@ -378,15 +378,15 @@ namespace SmartIntranet.Web.Controllers
             {
                 DateTime start_interval;
                 DateTime end_interval;
-                if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
+                if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
                 {
-                    start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
                 }
                 else
                 {
-                    start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
                 }
 
                 var remains = _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval && !x.IsDeleted);
@@ -397,7 +397,7 @@ namespace SmartIntranet.Web.Controllers
                     ur.FromDate = start_interval;
                     ur.ToDate = end_interval;
                     ur.IsDeleted = false;
-                    ur.CreatedDate = DateTime.UtcNow;
+                    ur.CreatedDate = DateTime.Now;
                     ur.AppUserId = id;
                     ur.UsedCount = 0;
                     ur.VacationCount = listModel.VacationMainDay + listModel.VacationExtraNature + listModel.VacationExtraExperience
@@ -508,9 +508,9 @@ namespace SmartIntranet.Web.Controllers
                                 el.IsEditable = true;
                                 el.IsDeleted = false;
                                 el.CreatedByUserId = current;
-                                el.CreatedDate = DateTime.UtcNow;
+                                el.CreatedDate = DateTime.Now;
                                 el.UpdateByUserId = current;
-                                el.UpdateDate = DateTime.UtcNow;
+                                el.UpdateDate = DateTime.Now;
                                 el.VacationCount = el.RemainCount;
                                 UserVacationRemainsNew.Add(el);
                             }
@@ -570,7 +570,7 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.PhoneNumber = model.PhoneNumber;
                         updateUser.Address = model.Address;
                         updateUser.Picture = model.Picture;
-                        updateUser.UpdateDate = DateTime.UtcNow;
+                        updateUser.UpdateDate = DateTime.Now;
                         updateUser.UpdateByUserId = current;
                         updateUser.UserExperiences = model.UserExperiences;
                         updateUser.UserVacationRemains = UserVacationRemainsNew;
@@ -589,7 +589,7 @@ namespace SmartIntranet.Web.Controllers
                                 FilePath = await AddFile("wwwroot/userContractDocs/", pdf),
                                 AppUserId = model.Id,
                                 CreatedByUserId = current,
-                                CreatedDate = DateTime.UtcNow
+                                CreatedDate = DateTime.Now
                             };
                             await _userContractService.AddAsync(_map.Map<UserContractFile>(appContract));
                         }
@@ -631,7 +631,7 @@ namespace SmartIntranet.Web.Controllers
             var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == id);
             updateUser.IsDeleted = true;
             updateUser.DeleteByUserId = current;
-            updateUser.DeleteDate = DateTime.UtcNow;
+            updateUser.DeleteDate = DateTime.Now;
             await _userManager.UpdateAsync(updateUser);
             return Ok();
 
@@ -643,7 +643,7 @@ namespace SmartIntranet.Web.Controllers
             var updateUser = await _userContractService.FindByIdAsync(id);
             updateUser.IsDeleted = true;
             updateUser.DeleteByUserId = GetSignInUserId();
-            updateUser.DeleteDate = DateTime.UtcNow;
+            updateUser.DeleteDate = DateTime.Now;
             await _userContractService.UpdateAsync(updateUser);
             return Ok("Uğurla silindi!");
 
@@ -663,7 +663,7 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
 
-            int? currentUserId = User.GetPrincipalId();
+            int? currentUserId = GetSignInUserId();
 
             if (userId == currentUserId)
             {
@@ -754,7 +754,7 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
 
-            int? currentUserId = User.GetPrincipalId();
+            int? currentUserId = GetSignInUserId();
             if (userId == currentUserId)
             {
                 return Ok(new

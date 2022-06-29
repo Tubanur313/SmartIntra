@@ -9,33 +9,33 @@ namespace SmartIntranet.Core.Extensions
 {
     static public partial class IdentityExtension
     {
-        static public string ClaimValue(this ClaimsPrincipal principal, string name)
-        {
-            return principal.Claims.FirstOrDefault(c => c.Type.Equals(name))?.Value;
-        }
-        static public int? GetPrincipalId(this ClaimsPrincipal principal)
-        {
-            var idData = principal.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value;
+        //static public string ClaimValue(this ClaimsPrincipal principal, string name)
+        //{
+        //    return principal.Claims.FirstOrDefault(c => c.Type.Equals(name))?.Value;
+        //}
+        //static public int? GetPrincipalId(this ClaimsPrincipal principal)
+        //{
+        //    var idData = principal.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value;
 
-            if (idData == null)
-                return null;
+        //    if (idData == null)
+        //        return null;
 
-            return Convert.ToInt32(idData);
-
-
-        }
-        static public int? GetPrincipalId(this IActionContextAccessor ctx)
-        {
-            var idData = ctx.ActionContext.HttpContext.User
-                .Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value;
-
-            if (idData == null)
-                return null;
-
-            return Convert.ToInt32(idData);
+        //    return Convert.ToInt32(idData);
 
 
-        }
+        //}
+        //static public int? GetPrincipalId(this IActionContextAccessor ctx)
+        //{
+        //    var idData = ctx.ActionContext.HttpContext.User
+        //        .Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value;
+
+        //    if (idData == null)
+        //        return null;
+
+        //    return Convert.ToInt32(idData);
+
+
+        //}
 
 
         static public bool HasAccess(this ClaimsPrincipal principal, string claimName)

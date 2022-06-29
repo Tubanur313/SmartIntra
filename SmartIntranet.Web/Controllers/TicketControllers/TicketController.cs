@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-using MimeKit.Text;
 using Newtonsoft.Json;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
@@ -34,7 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 
@@ -42,7 +37,9 @@ namespace SmartIntranet.Web.Controllers
 {
     public class TicketController : BaseIdentityController
     {
+
         private readonly ITicketService _ticketService;
+        private readonly IExportPdfService _exportPdfService;
         private readonly ICheckListService _checkListService;
         private readonly ICategoryTicketService _categoryTicketService;
         private readonly IAppUserService _userService;
@@ -63,6 +60,7 @@ namespace SmartIntranet.Web.Controllers
         public TicketController(
             IMapper map,
             IEmailService emailSender,
+            IExportPdfService exportPdf,
             ITicketService ticketService,
             ICheckListService checkListService,
             ICategoryTicketService CategoryTicketService,
@@ -87,6 +85,7 @@ namespace SmartIntranet.Web.Controllers
         {
             _emailSender = emailSender;
             _emailService = emailService;
+            _exportPdfService = exportPdf;
             _ticketService = ticketService;
             _checkListService = checkListService;
             _categoryTicketService = CategoryTicketService;
@@ -105,83 +104,83 @@ namespace SmartIntranet.Web.Controllers
 
         }
         #region Ticket Mail
-        [NonAction]
-        private async Task<string> ExportToPdf(int ticketId)
-        {
+        //[NonAction]
+        //private async Task<string> ExportToPdf(int ticketId)
+        //{
 
-            var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(ticketId);
+        //    var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(ticketId);
 
-            int pdfRowIndex = 1;
-            string filename = "OrderDetails-" + DateTime.UtcNow.ToString("dd-MM-yyyy hh_mm_s_tt");
-            string filepath = Path.Combine(Directory.GetCurrentDirectory()) + "/wwwroot/order/" + filename + ".pdf";
+        //    int pdfRowIndex = 1;
+        //    string filename = "OrderDetails-" + DateTime.Now.ToString("dd-MM-yyyy hh_mm_s_tt");
+        //    string filepath = Path.Combine(Directory.GetCurrentDirectory()) + "/wwwroot/order/" + filename + ".pdf";
 
-            string orderPath = "/order/" + filename + ".pdf";
+        //    string orderPath = "/order/" + filename + ".pdf";
 
-            var update = await _ticketService.FindByIdAsync(ticketId);
-            update.OrderPath = orderPath;
-            await _ticketService.UpdateAsync(update);
+        //    var update = await _ticketService.FindByIdAsync(ticketId);
+        //    update.OrderPath = orderPath;
+        //    await _ticketService.UpdateAsync(update);
 
-            Document document = new Document(PageSize.A4, 5f, 5f, 10f, 10f);
-            FileStream fs = new FileStream(filepath, FileMode.Create);
-            PdfWriter writer = PdfWriter.GetInstance(document, fs);
-            document.Open();
+        //    Document document = new Document(PageSize.A4, 5f, 5f, 10f, 10f);
+        //    FileStream fs = new FileStream(filepath, FileMode.Create);
+        //    PdfWriter writer = PdfWriter.GetInstance(document, fs);
+        //    document.Open();
 
-            Font font1 = FontFactory.GetFont(FontFactory.COURIER_BOLD, 10);
-            Font font2 = FontFactory.GetFont(FontFactory.COURIER, 8);
+        //    Font font1 = FontFactory.GetFont(FontFactory.COURIER_BOLD, 10);
+        //    Font font2 = FontFactory.GetFont(FontFactory.COURIER, 8);
 
-            float[] columnDefinitionSize = { 1F, 1F, 1F, 1F, 1F, 1F, 1F, 1F, 1F };
-            PdfPTable table;
-            PdfPCell cell;
+        //    float[] columnDefinitionSize = { 1F, 1F, 1F, 1F, 1F, 1F, 1F, 1F, 1F };
+        //    PdfPTable table;
+        //    PdfPCell cell;
 
-            table = new PdfPTable(columnDefinitionSize)
-            {
-                WidthPercentage = 100
-            };
+        //    table = new PdfPTable(columnDefinitionSize)
+        //    {
+        //        WidthPercentage = 100
+        //    };
 
-            cell = new PdfPCell
-            {
-                BackgroundColor = new BaseColor(0xC0, 0xC0, 0xC0)
-            };
+        //    cell = new PdfPCell
+        //    {
+        //        BackgroundColor = new BaseColor(0xC0, 0xC0, 0xC0)
+        //    };
 
-            //table.AddCell(new Phrase("Id", font1));
-            table.AddCell(new Phrase("Mehsul", font1));
-            table.AddCell(new Phrase("Ö/V", font1));
-            table.AddCell(new Phrase("Say", font1));
-            table.AddCell(new Phrase("Qiymet(EDV/Xaric)", font1));
-            table.AddCell(new Phrase("Cemi(V/X)", font1));
-            table.AddCell(new Phrase("Vergi Növü", font1));
-            table.AddCell(new Phrase("Yekun Mebleg(V/D)", font1));
-            table.AddCell(new Phrase("Satici", font1));
-            table.AddCell(new Phrase("Qeyd", font1));
-            table.HeaderRows = 1;
+        //    //table.AddCell(new Phrase("Id", font1));
+        //    table.AddCell(new Phrase("Mehsul", font1));
+        //    table.AddCell(new Phrase("Ö/V", font1));
+        //    table.AddCell(new Phrase("Say", font1));
+        //    table.AddCell(new Phrase("Qiymet(EDV/Xaric)", font1));
+        //    table.AddCell(new Phrase("Cemi(V/X)", font1));
+        //    table.AddCell(new Phrase("Vergi Növü", font1));
+        //    table.AddCell(new Phrase("Yekun Mebleg(V/D)", font1));
+        //    table.AddCell(new Phrase("Satici", font1));
+        //    table.AddCell(new Phrase("Qeyd", font1));
+        //    table.HeaderRows = 1;
 
-            foreach (var data in ticketOrderList)
-            {
-                //table.AddCell(new Phrase(data.Order.Id.ToString(), font2));
-                table.AddCell(new Phrase(data.Order.Product != null ? data.Order.Product.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.Currency != null ? data.Order.Currency.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.Quantity != null ? data.Order.Quantity.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.WithoutVat != null ? data.Order.WithoutVat.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.TotalWithoutTax != null ? data.Order.TotalWithoutTax.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.TaxType != null ? data.Order.TaxType.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.Total != null ? data.Order.Total.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.Seller != null ? data.Order.Seller.ToString() : "", font2));
-                table.AddCell(new Phrase(data.Order.Description != null ? data.Order.Description.ToString() : "", font2));
+        //    foreach (var data in ticketOrderList)
+        //    {
+        //        //table.AddCell(new Phrase(data.Order.Id.ToString(), font2));
+        //        table.AddCell(new Phrase(data.Order.Product != null ? data.Order.Product.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.Currency != null ? data.Order.Currency.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.Quantity != null ? data.Order.Quantity.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.WithoutVat != null ? data.Order.WithoutVat.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.TotalWithoutTax != null ? data.Order.TotalWithoutTax.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.TaxType != null ? data.Order.TaxType.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.Total != null ? data.Order.Total.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.Seller != null ? data.Order.Seller.ToString() : "", font2));
+        //        table.AddCell(new Phrase(data.Order.Description != null ? data.Order.Description.ToString() : "", font2));
 
-                pdfRowIndex++;
-            }
+        //        pdfRowIndex++;
+        //    }
 
-            document.Add(table);
-            document.Close();
-            document.CloseDocument();
-            document.Dispose();
-            writer.Close();
-            writer.Dispose();
-            fs.Close();
-            fs.Dispose();
-            return orderPath;
+        //    document.Add(table);
+        //    document.Close();
+        //    document.CloseDocument();
+        //    document.Dispose();
+        //    writer.Close();
+        //    writer.Dispose();
+        //    fs.Close();
+        //    fs.Dispose();
+        //    return orderPath;
 
-        }
+        //}
 
         //[NonAction]
         //private async void SendEmailAsync(string messageType, int ticketId)
@@ -603,22 +602,21 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "ticket.add")]
-        [RequestFormLimits(MultipartBodyLengthLimit = 4200000000)]
-        [RequestSizeLimit(4200000000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 52430000)]
+        [RequestSizeLimit(52430000)]
         public async Task<IActionResult> Add(TicketAddDto model, List<IFormFile> uploads)
         {
 
             if (ModelState.IsValid)
             {
-
                 var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var add = _map.Map<Ticket>(model);
                 int GetUserId = GetSignInUserId();
                 add.CreatedByUserId = GetUserId;
                 add.EmployeeId = GetUserId;
                 add.SupporterId = CategoryTicketSupporter.SupporterId;
-                add.CreatedDate = DateTime.UtcNow;
-                add.OpenDate= DateTime.UtcNow;
+                add.CreatedDate = DateTime.Now;
+                add.OpenDate= DateTime.Now;
                 var result = await _ticketService.AddReturnEntityAsync(add);
 
                 if (result is null)
@@ -640,7 +638,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapWatcher = _map.Map<Watcher>(watcher);
                         mapWatcher.CreatedByUserId = GetSignInUserId();
-                        mapWatcher.CreatedDate = DateTime.UtcNow;
+                        mapWatcher.CreatedDate = DateTime.Now;
                         var watchResult = await _watcherService
                             .AddReturnEntityAsync(mapWatcher);
                         //wathcers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(intranetUserId)).ToString() + "</br>";
@@ -659,7 +657,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapConfirm = _map.Map<ConfirmTicketUser>(confirm);
                         mapConfirm.CreatedByUserId = GetSignInUserId();
-                        mapConfirm.CreatedDate = DateTime.UtcNow;
+                        mapConfirm.CreatedDate = DateTime.Now;
                         var confirmResult = await _confirmTicketUserService
                         .AddReturnEntityAsync(mapConfirm);
                         //confirmers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(intranetUserId)).ToString() + "</br>";
@@ -678,7 +676,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapCheck = _map.Map<TicketCheckList>(check);
                         mapCheck.CreatedByUserId = GetSignInUserId();
-                        mapCheck.CreatedDate = DateTime.UtcNow;
+                        mapCheck.CreatedDate = DateTime.Now;
                         var checklistResult = await _ticketCheckListService
                              .AddReturnEntityAsync(mapCheck);
                         //checklists += _map.Map<CheckListListDto>(await _checkListService.FindByIdAsync(checkId)).Name + "</br>";
@@ -697,7 +695,7 @@ namespace SmartIntranet.Web.Controllers
 
                         var mappedTO = _map.Map<TicketOrder>(ticketOrder);
                         mappedTO.CreatedByUserId = GetSignInUserId();
-                        mappedTO.CreatedDate = DateTime.UtcNow;
+                        mappedTO.CreatedDate = DateTime.Now;
                         await _ticketOrderService.AddReturnEntityAsync(mappedTO);
 
                     }
@@ -719,7 +717,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var photo = _map.Map<Photo>(dto);
                             photo.CreatedByUserId = GetSignInUserId();
-                            photo.CreatedDate = DateTime.UtcNow;
+                            photo.CreatedDate = DateTime.Now;
                             await _photo.AddAsync(photo);
 
                         }
@@ -736,7 +734,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var photo = _map.Map<Photo>(dto);
                             photo.CreatedByUserId = GetSignInUserId();
-                            photo.CreatedDate = DateTime.UtcNow;
+                            photo.CreatedDate = DateTime.Now;
                             await _photo.AddAsync(photo);
                         }
                         else
@@ -754,7 +752,7 @@ namespace SmartIntranet.Web.Controllers
                 }
                 if(ticketResult.CategoryTicket.TicketType == TicketType.Purchasing)
                 {
-                   await ExportToPdf(result.Id);
+                   await _exportPdfService.GeneratePdf(result.Id);
                 }
                
                 _emailSender.TicketSendEmail(result.Id,TicketChangeType.TicketAdd, GetSignInFullName());
@@ -791,7 +789,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _ticketService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.UtcNow;
+            delete.DeleteDate = DateTime.Now;
             delete.IsDeleted = true;
             await _ticketService.UpdateAsync(delete);
         }
@@ -829,8 +827,8 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.orderUpdate")]
         public async Task<IActionResult> OrderUpdate(int ticketId)
         {
-           await ExportToPdf(ticketId);
-            string message = " Taskın Order faylında dəyişiklik olundu";
+           await _exportPdfService.GeneratePdf(ticketId);
+            //string message = " Taskın Order faylında dəyişiklik olundu";
             //SendEmailAsync(message, ticketId);
             return Ok();
         }
@@ -869,7 +867,7 @@ namespace SmartIntranet.Web.Controllers
                 var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var data = await _ticketService.FindByIdAsync(model.Id);
                 data.UpdateByUserId = GetSignInUserId();
-                data.UpdateDate = DateTime.UtcNow;
+                data.UpdateDate = DateTime.Now;
                 data.CategoryTicketId = model.TicketCategoryId;
                 data.SupporterId = CategoryTicketSupporter.SupporterId;
                 await _ticketService.UpdateModifiedAsync(data);
@@ -922,7 +920,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var mapTcl = _map.Map<TicketCheckList>(tcl);
                             mapTcl.CreatedByUserId = GetSignInUserId();
-                            mapTcl.CreatedDate = DateTime.UtcNow;
+                            mapTcl.CreatedDate = DateTime.Now;
                             await _ticketCheckListService
                             .AddReturnEntityAsync(mapTcl);
                         }
@@ -988,7 +986,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var mapConfirm = _map.Map<ConfirmTicketUser>(confirm);
                             mapConfirm.CreatedByUserId = GetSignInUserId();
-                            mapConfirm.CreatedDate = DateTime.UtcNow;
+                            mapConfirm.CreatedDate = DateTime.Now;
                             var confirmers = await _confirmTicketUserService
                             .AddReturnEntityAsync(mapConfirm);
                         }
@@ -1040,7 +1038,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapConfirm = _map.Map<Watcher>(watchers);
                         mapConfirm.CreatedByUserId = GetSignInUserId();
-                        mapConfirm.CreatedDate = DateTime.UtcNow;
+                        mapConfirm.CreatedDate = DateTime.Now;
                         var confirmers = await _watcherService
                         .AddReturnEntityAsync(mapConfirm);
                     }
@@ -1076,7 +1074,7 @@ namespace SmartIntranet.Web.Controllers
                 int GetSignUserId = GetSignInUserId();
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.SupporterId = model.SupporterId;
 
                 await _ticketService.UpdateAsync(update);
@@ -1108,7 +1106,7 @@ namespace SmartIntranet.Web.Controllers
                 int GetSignUserId = GetSignInUserId();
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.StatusType = model.StatusType;
 
                 await _ticketService.UpdateAsync(update);
@@ -1144,7 +1142,7 @@ namespace SmartIntranet.Web.Controllers
                 int GetSignUserId = GetSignInUserId();
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.PriorityType = model.PriorityType;
 
                 await _ticketService.UpdateAsync(update);
@@ -1188,7 +1186,7 @@ namespace SmartIntranet.Web.Controllers
             var add = _map.Map<Discussion>(model);
             add.CreatedByUserId = GetSignInUserId();
             add.IntranetUserId = GetSignInUserId();
-            add.CreatedDate = DateTime.UtcNow;
+            add.CreatedDate = DateTime.Now;
             var result = await _discuss.AddReturnEntityAsync(add);
             var count = await _discuss.GetAllAsync(x => x.TicketId == result.TicketId);
 
@@ -1226,7 +1224,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var photo = _map.Map<Photo>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
-                        photo.CreatedDate = DateTime.UtcNow;
+                        photo.CreatedDate = DateTime.Now;
                         await _photo.AddAsync(photo);
 
                     }
@@ -1242,7 +1240,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var photo = _map.Map<Photo>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
-                        photo.CreatedDate = DateTime.UtcNow;
+                        photo.CreatedDate = DateTime.Now;
                         await _photo.AddAsync(photo);
                     }
                     else

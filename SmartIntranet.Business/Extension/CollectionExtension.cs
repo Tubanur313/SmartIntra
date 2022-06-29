@@ -33,6 +33,7 @@ using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
 using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using System.IO.Compression;
+using static SmartIntranet.Core.Extensions.IdentityExtension;
 
 namespace SmartIntranet.Business.Extension
 {
@@ -50,56 +51,38 @@ namespace SmartIntranet.Business.Extension
             })
              .AddEntityFrameworkStores<IntranetContext>();
 
-
-            services.ConfigureApplicationCookie(_ =>
+            services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
             {
-                _.LoginPath = new PathString("/signin.html");
-                _.AccessDeniedPath = new PathString("/accessdenied.html");
-                _.Cookie = new CookieBuilder
-                {
-                    Name = "SmartIntranetCookie",
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.Lax,
-                    SecurePolicy = CookieSecurePolicy.Always
-                };
-                _.SlidingExpiration = true;
-                _.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+                opt.Cookie.Name = "SmartIntranetCookie";
+                //opt.Cookie.SameSite = SameSiteMode.Strict;
+                opt.Cookie.HttpOnly = false;
+                //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+                opt.SlidingExpiration = true;
+                opt.Cookie.SameSite = SameSiteMode.Lax;
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                opt.LoginPath = "/signin.html";
+                opt.AccessDeniedPath = "/accessdenied.html";
             });
-
-            //services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
-            //{
-            //    opt.Cookie.Name = "SmartIntranetCookie";
-            //    //opt.Cookie.SameSite = SameSiteMode.Strict;
-            //    opt.Cookie.HttpOnly = false;
-            //    //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-            //    opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
-            //    opt.SlidingExpiration = true;
-            //    opt.Cookie.SameSite = SameSiteMode.Lax;
-            //    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-            //    opt.LoginPath = "/signin.html";
-            //    opt.AccessDeniedPath = "/accessdenied.html";
-            //});
-
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie();
-
             services.AddAuthorization(cfg =>
             {
-                foreach (var claimName in AppClaimProvider.policies)
+                foreach (var item in AppClaimProvider.policies)
                 {
-                    cfg.AddPolicy(claimName, p =>
+                    cfg.AddPolicy(item, p =>
                     {
-                        p.RequireAssertion(a =>
+                        p.RequireAssertion(assertion =>
                         {
-
-                            return a.User.HasClaim(claimName, "1")
-                            || a.User.IsInRole("SuperAdmin");
+                            return
+                            assertion.User.IsInRole("SuperAdmin") ||
+                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
 
                         });
-                        //p.RequireClaim(claimName, "1");
                     });
+
                 }
+
             });
+
         }
         public static void AddCustomCompression(this IServiceCollection services)
         {
@@ -136,7 +119,7 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<CheckListAddDto>, CheckListAddValidator>();
             services.AddTransient<IValidator<CheckListUpdateDto>, CheckListUpdateValidator>();
-             
+
             services.AddTransient<IValidator<TicketAddDto>, TicketAddValidator>();
             services.AddTransient<IValidator<TicketUpdateDto>, TicketUpdateValidator>();
 
@@ -154,13 +137,13 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<GradeAddDto>, GradeAddValidator>();
             services.AddTransient<IValidator<GradeUpdateDto>, GradeUpdateValidator>();
-            
+
             services.AddTransient<IValidator<StockAddDto>, StockAddValidator>();
             services.AddTransient<IValidator<StockUpdateDto>, StockUpdateValidator>();
-            
+
             services.AddTransient<IValidator<StockCategoryAddDto>, StockCategoryAddValidator>();
             services.AddTransient<IValidator<StockCategoryUpdateDto>, StockCategoryUpdateValidator>();
-        
+
 
             services.AddTransient<IValidator<AppRoleAddDto>, AppRoleAddValidator>();
             services.AddTransient<IValidator<AppRoleUpdateDto>, AppRoleUpdateValidator>();

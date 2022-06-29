@@ -55,7 +55,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Grade>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                add.CreatedDate = DateTime.UtcNow;
+                add.CreatedDate = DateTime.Now;
                 //if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && !x.IsDeleted))
                 //{
                 //    return RedirectToAction("List", new
@@ -106,7 +106,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
 
                 await _gradeService.UpdateAsync(update);
@@ -143,7 +143,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var delete = await _gradeService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.UtcNow;
+            delete.DeleteDate = DateTime.Now;
             delete.IsDeleted = true;
             await _gradeService.UpdateAsync(delete);
         }

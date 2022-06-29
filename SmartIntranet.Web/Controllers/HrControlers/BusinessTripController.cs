@@ -80,7 +80,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
 
                 var result_model = _map.Map<BusinessTrip>(model);
@@ -88,7 +88,7 @@ namespace SmartIntranet.Web.Controllers
                 {
                     item.IsDeleted = false;
                 }
-                result_model.CreatedDate = DateTime.UtcNow;
+                result_model.CreatedDate = DateTime.Now;
                 result_model = _businessTripService.AddReturnEntityAsync(result_model).Result;
                 List<BusinessTripUser> businessTripUsers = result_model.BusinessTripUsers.ToList();
                 List<IntranetUser> users = new List<IntranetUser>();
@@ -120,12 +120,12 @@ namespace SmartIntranet.Web.Controllers
                 var file = new BusinessTripFile();
                 file.BusinessTripId = result_model.Id;
                 file.IsDeleted = false;
-                file.CreatedDate = DateTime.UtcNow;
+                file.CreatedDate = DateTime.Now;
                 var clause_result = (await _clauseService.GetAllIncCompAsync(x => x.Key == clause && !x.IsDeleted))[0];
                 file.ClauseId = clause_result.Id;
                 StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
                 file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content, businessTripUsers.Count));
-                file.CreatedDate= DateTime.UtcNow;
+                file.CreatedDate= DateTime.Now;
                 await _businessTripFileService.AddAsync(file);
                 return RedirectToAction("List", "Contract");
             }
@@ -163,7 +163,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
 
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
 
                 IEnumerable<BusinessTripUser> businessTripUsersDb = _db.BusinessTripUsers.Where(x => x.BusinessTripId == model.Id);
@@ -217,7 +217,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<BusinessTripListDto>(await _businessTripService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _businessTripService.UpdateAsync(_map.Map<BusinessTrip>(transactionModel));
