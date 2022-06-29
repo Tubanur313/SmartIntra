@@ -510,7 +510,7 @@
         });
 
         // Total price
-        $(document).on("mouseover","#generated",function(){
+        $(document).on("change","#generated",function(){
         var r = 0;
         $("textarea[name='Total']").each(function( index ) {
              if(parseFloat($(this).val()) === NaN){
