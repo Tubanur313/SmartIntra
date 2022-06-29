@@ -57,7 +57,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 var current = GetSignInUserId();
                 var result_model = _contractService.AddReturnEntityAsync(_map.Map<LongContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
@@ -81,7 +81,7 @@ namespace SmartIntranet.Web.Controllers
                 file_extra.ClauseId = clause_result_extra.Id;
                 StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                 file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
-                file_extra.CreatedDate = DateTime.UtcNow;
+                file_extra.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(file_extra);
 
                 return RedirectToAction("List", "Contract");
@@ -122,7 +122,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
                 await _contractService.UpdateAsync(_map.Map<LongContract>(model));
 
@@ -157,7 +157,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<LongContractListDto>(await _contractService.FindByIdAsync(id));
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<LongContract>(transactionModel));

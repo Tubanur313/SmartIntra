@@ -136,7 +136,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 await _workCalendarService.AddAsync(_map.Map<WorkCalendar>(model));
                 return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
 
@@ -172,7 +172,7 @@ namespace SmartIntranet.Web.Controllers
                 //    return RedirectToAction("Delete", new { id = model.Id });
                 //}
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
                 await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(model));
                 return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
@@ -184,7 +184,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<WorkCalendarListDto>(await _workCalendarService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(transactionModel));

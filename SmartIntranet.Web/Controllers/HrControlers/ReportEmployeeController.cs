@@ -77,7 +77,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
 
                 model.FilePath = Guid.NewGuid() +".xlsx";
@@ -115,7 +115,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
                 DeleteFile("wwwroot/reportDocs/", model.FilePath);
                 ExcellGenerate(model);
@@ -129,7 +129,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<ReportEmployeeListDto>(await _reportService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _reportService.UpdateAsync(_map.Map<ReportEmployee>(transactionModel));
