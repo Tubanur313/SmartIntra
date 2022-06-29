@@ -10,14 +10,21 @@ $(document).ready(function () {
 
     var fileArr = [];
     $("#files").change(function () {
-        
-        // check if fileArr length is greater than 0
-        if (fileArr.length > 0) fileArr = [];
 
-        $('#image_preview').html("");
-        var total_file = document.getElementById("files").files;
-        if (!total_file.length) return;
-        for (var i = 0; i < total_file.length; i++) {
+        var fileLimit = 51202;//kilobyte
+        var files = realFileBtn.files;
+        var fileSize = files[0].size;
+        var fileSizeInKB = (fileSize/1024);
+
+        if (fileSizeInKB < fileLimit)
+        {
+            // check if fileArr length is greater than 0
+            if (fileArr.length > 0) fileArr = [];
+
+            $('#image_preview').html("");
+            var total_file = document.getElementById("files").files;
+            if (!total_file.length) return;
+            for (var i = 0; i < total_file.length; i++) {
                 var fileExt = total_file[i].name.split('.').pop();
                 fileArr.push(total_file[i]);
                 if (
@@ -37,8 +44,7 @@ $(document).ready(function () {
                         + total_file[i].name + "'><div class='badge badge-danger'><button id='action-icon' value='img-div" +
                         i + "' class='btn btn-danger' role='" + total_file[i].name
                         + "'><i class='fa fa-trash'></i></button></div></div>");
-                } else
-                {
+                } else {
 
                     $('#image_preview').append("<div class='img-div col-sm-3' id='img-div" + i + "'><label>'" + (total_file[i].name.length > 10 ? total_file[i].name.substring(0, 10) : total_file[i].name.substring(0, 8)) + "...'</label><img src='"
                         + '/uploads/file.png'
@@ -49,6 +55,14 @@ $(document).ready(function () {
                 }
 
             }
+        } else
+        {
+            toastr.error("Fayl 50 mb-dan böyük olmamaıldır !")
+            return
+        }
+
+
+
     });
 
     $('body').on('click', '#action-icon', function (evt) {
