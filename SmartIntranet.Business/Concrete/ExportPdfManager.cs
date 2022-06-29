@@ -24,7 +24,7 @@ namespace SmartIntranet.Business.Concrete
             var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(ticketId);
 
             int pdfRowIndex = 1;
-            string filename = "OrderDetails-" + DateTime.UtcNow.ToString("dd-MM-yyyy hh_mm_s_tt");
+            string filename = "OrderDetails-" + DateTime.Now.ToString("dd-MM-yyyy hh_mm_s_tt");
             string filepath = Path.Combine(Directory.GetCurrentDirectory()) + "/wwwroot/order/" + filename + ".pdf";
 
             string orderPath = "/order/" + filename + ".pdf";

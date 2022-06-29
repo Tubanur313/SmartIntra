@@ -85,7 +85,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
                 model.NonWorkingYearId = _nonWorkingYearId;
                 
@@ -123,7 +123,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
 
                 await _nonWorkingDayService.UpdateAsync(_map.Map<NonWorkingDay>(model));
@@ -136,7 +136,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<NonWorkingDayListDto>(await _nonWorkingDayService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _nonWorkingDayService.UpdateAsync(_map.Map<NonWorkingDay>(transactionModel));

@@ -55,7 +55,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
                 if ((await _nonWorkingYearService.GetAllAsync()).Any(x => x.Year == model.Year && !x.IsDeleted))
                 {
@@ -105,7 +105,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
                 await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(model));
                 return RedirectToAction("List");
@@ -117,7 +117,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<NonWorkingYearListDto>(await _nonWorkingYearService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(transactionModel));

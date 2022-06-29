@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
-using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
@@ -34,11 +33,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly IPositionService _positionService;
         private readonly IFileService _uploadService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public UserController(IOptions<GoogleConfigModel> googleConfig,  UserManager<IntranetUser> userManager,
+        public UserController(IOptions<GoogleConfigModel> googleConfig, UserManager<IntranetUser> userManager,
              IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper map, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService, IFileService uploadService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
-            IPositionService positionService) : base(userManager, httpContextAccessor, signInManager,map)
+            IPositionService positionService) : base(userManager, httpContextAccessor, signInManager, map)
         {
 
             _googleConfig = googleConfig.Value;
@@ -100,25 +99,30 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             var isValid = IsReCaptchValidV3(model.captcha);
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user.IsDeleted != true && !user.IsDeleted && isValid)
+                if (model.Email.IsEmail())
                 {
-                    if (user != null)
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if(user== null)
                     {
-                        await _signInManager.SignOutAsync();
-                        var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
-                        if (identityResult.Succeeded)
-                        {
-                            var roller = await _userManager.GetRolesAsync(user);
-                            return RedirectToAction("Info", "News");
-                        }
+                        ViewBag.error = "Email ve ya şifre sehvdir";
+                        return View("SignIn", model);
                     }
-                    ViewBag.error = "Email ve ya şifre sehvdir";
-                }
-                else
-                {
-                    ViewBag.error = "Sizin Akkount Deaktiv edilib";
-                    return View("SignIn", model);
+
+                    if (user.IsDeleted != true && !user.IsDeleted && isValid)
+                    {
+                            //await _signInManager.SignOutAsync();
+                            var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
+                            if (identityResult.Succeeded)
+                            {
+                                var roller = await _userManager.GetRolesAsync(user);
+                                return RedirectToAction("Info", "News");
+                            }
+                    }
+                    else
+                    {
+                        ViewBag.error = "Sizin Akkount Deaktiv edilib";
+                        return View("SignIn", model);
+                    }
                 }
             }
             return View("SignIn", model);
@@ -232,10 +236,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> Update(int id)
         {
             var model = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted != true));
-           ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted != true));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted != true));
-           var listModel = _map.Map<AppUserUpdateDto>(await _appUserService.FindByIdAsync(id));
+            var listModel = _map.Map<AppUserUpdateDto>(await _appUserService.FindByIdAsync(id));
             if (listModel == null)
             {
                 return NotFound();
@@ -306,7 +310,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                         IdentityResult result = await _userManager.UpdateAsync(updateUser);
 
-                       
+
                     }
                 }
                 else

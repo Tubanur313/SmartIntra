@@ -157,7 +157,7 @@
                                         }
                                         <td>@ticket.OpenDate.Value.ToString("dd/MM/yyyy")</td>
                                         <td class="text-center">
-                                            <span class="badge badge-@(((ticket.DeadLineEnd - DateTime.UtcNow).Value.Days  <= 3 && Convert.ToDateTime("0001-01-01") != Convert.ToDateTime(ticket.DeadLineEnd.ToString()))?"danger":"info")">
+                                            <span class="badge badge-@(((ticket.DeadLineEnd - DateTime.Now).Value.Days  <= 3 && Convert.ToDateTime("0001-01-01") != Convert.ToDateTime(ticket.DeadLineEnd.ToString()))?"danger":"info")">
                                                 @( ticket.DeadLineEnd ==null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(ticket.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : ticket.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
                                             </span>
                                         </td>
