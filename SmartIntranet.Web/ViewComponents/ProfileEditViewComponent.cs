@@ -26,8 +26,8 @@ namespace SmartIntranet.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var identityUserName = _userManager.FindByNameAsync(User.Identity.Name).Result;
-           var models=  _map.Map<AppUserProfileDto>(await _appUserService.FindByUserAllInc(identityUserName.Id));
+            int identityUserName = _userManager.FindByNameAsync(User.Identity.Name).Result.Id;
+           var models=  _map.Map<AppUserProfileDto>(await _appUserService.FindByUserAllInc(identityUserName));
             return View(models);
         }
     }

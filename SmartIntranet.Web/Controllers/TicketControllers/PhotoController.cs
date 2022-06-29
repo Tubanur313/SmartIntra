@@ -26,7 +26,7 @@ namespace SmartIntranet.Web.Controllers
             _photoService = photoService;
         }
         [HttpGet]
-        [Authorize(Policy = "Photo.GetPhoto")]
+        [Authorize(Policy = "photo.getPhoto")]
         public async Task<IActionResult> GetPhoto(int ticketId)
         {
             var photo =_map.Map<List<PhotoListDto>>( await _photoService.GetAllByTicketAsync(ticketId));
