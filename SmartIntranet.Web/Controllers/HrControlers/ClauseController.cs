@@ -63,7 +63,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow.AddHours(4);
+                model.CreatedDate = DateTime.UtcNow;
                 model.IsDeleted = false;
                 model.IsDeletable = true;
                 model.IsBackground = false;
@@ -113,7 +113,7 @@ namespace SmartIntranet.Web.Controllers
                 }
                 var current = GetSignInUserId();
 
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
 
                 await _clauseService.UpdateAsync(_map.Map<Clause>(model));
@@ -129,7 +129,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<ClauseListDto>(await _clauseService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);

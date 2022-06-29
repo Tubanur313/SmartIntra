@@ -55,13 +55,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Grade>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                add.CreatedDate = DateTime.UtcNow;
+                //if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 if (await _gradeService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -105,17 +106,17 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 await _gradeService.UpdateAsync(update);
-                if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _gradeService.AnyAsync(x => x.GradeName.ToUpper().Contains(model.GradeName.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 if (await _gradeService.UpdateReturnEntityAsync(update) is null)
                 {
                     return RedirectToAction("List", new
@@ -142,7 +143,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var delete = await _gradeService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _gradeService.UpdateAsync(delete);
         }

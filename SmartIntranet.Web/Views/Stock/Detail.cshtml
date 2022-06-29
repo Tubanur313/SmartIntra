@@ -71,7 +71,7 @@
                                     <label class="font-weight-bold">Yaradılma Tarixi:</label>
                                     <div class="d-flex">
                                         <p>
-                                            @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
+                                            @Model.CreatedDate.Value.ToString("dd.MM.yyyy")
                                         </p>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                     <label class="font-weight-bold">Mac Address:</label>
                                     <div class="d-flex">
                                         <p>
-                                            @Model.MacAddress
+                                            @(Model.MacAddress==null?"Təyin olunmayıb":Model.MacAddress)
                                         </p>
                                     </div>
                                 </div>
@@ -119,7 +119,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-6 col-lg-6">
                                 <div class="basic-list list-icons">
                                     <label class="font-weight-bold">Son dəyişiklik Tarixi:</label>
@@ -140,6 +139,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Alış Dəyəri:</label>
+                                    <div class="d-flex">
+                                        <p>
+                                            @Model.Price.ToString().Replace(",",".")&nbsp;₼
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="basic-list list-icons">
+                                    <label class="font-weight-bold">Hazırki Dəyər:</label>
+                                    <div class="d-flex">
+                                        <p class="depreciation">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -209,7 +228,7 @@
                             <h3 class="">Fayl Yüklə</h3>
                         </div>
                         <div id="formData" method="POST" class="form-group" enctype="multipart/form-data">
-                           
+
                             <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
                             <input hidden="hidden" type="file" name="files" id="files" multiple class="form-control">
                             <input type="hidden" asp-for="Id" />
@@ -345,7 +364,6 @@
             nextArrow: false
         });
         $('#send').on("click",function(){
-
             let comment = CKEDITOR.instances['comments'].getData();
             let id = $("#comments").data("id");
             var lenght = CKEDITOR.instances['comments'].getData().replace(/<[^>]*>/gi, '').length;
@@ -353,7 +371,6 @@
                 toastr.error("Şərh boş ola bilməz", "Xəta!");
                 return;
             }
-
             var formData = $('#data-input').getFormData({
             Content: comment,
             StockId: id
@@ -380,7 +397,6 @@
                 $("#discussing").prepend(html);
                 $("#countId").text(`Müzakirələr (${[response.count]})`);
                 CKEDITOR.instances['comments'].setData('');
-
             },
             error: function (response) {
             }
@@ -412,7 +428,7 @@
             }
             data.append("__RequestVerificationToken",token);
             data.append("Id",id);
-            console.log($('[name=__RequestVerificationToken]').val());
+
             $.ajax({
                 url: `@Url.ActionLink("load","Stock")`,
                 type: 'post',
@@ -446,12 +462,13 @@
              window.location.reload();
          }
         });
+        var percent = @Model.DepreciationPercent ;
+        var amount =parseFloat('@Model.Price.ToString().Replace(",",".")').toFixed(2);
+        var year = @((DateTime.UtcNow - Model.BuyDate).Days/365) ;
+        function depreciation(percent , amount ,year){
+            var result = amount - (year*((amount * percent) / 100));
+            $(".depreciation").text(result.toFixed(2) + "  ₼")
+        }
+        depreciation(percent , amount ,year)
     });
 </script>
-
-
-
-
-
-
-

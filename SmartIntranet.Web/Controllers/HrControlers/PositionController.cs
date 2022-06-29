@@ -62,13 +62,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Position>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                add.CreatedDate = DateTime.UtcNow;
+                //if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 if (await _positionService.AddReturnEntityAsync(add) is null)
                 {
                     TempData["error"] = Messages.Add.notAdded;
@@ -108,15 +109,15 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
-                if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 await _positionService.UpdateAsync(update);
                 TempData["success"] = "Yeniləndi";
                 return RedirectToAction("List");
@@ -129,7 +130,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var delete = await _positionService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _positionService.UpdateAsync(delete);
         }

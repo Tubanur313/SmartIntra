@@ -38,13 +38,17 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
             return await context.CategoryNews.Include(x => x.News).Include(y => y.Category)
-                .Where(x => x.NewsId == id).ToListAsync();
+                .Where(x => x.NewsId == id)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
         }
 
         public async Task<List<CategoryNews>> GetAllIncludeAsync()
         {
             using var context = new IntranetContext();
-            return await context.CategoryNews.Include(x => x.News).Include(y => y.Category).ToListAsync();
+            return await context.CategoryNews.Include(x => x.News).Include(y => y.Category)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
 
         }
 
@@ -54,7 +58,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             return await context.CategoryNews
                 .Include(y => y.Category)
                 .Include(x => x.News).ThenInclude(u=>u.AppUser)
-                .OrderBy(c => c.Id).ToListAsync();
+                .OrderBy(c => c.Id)
+                .ToListAsync();
         }
     }
 }

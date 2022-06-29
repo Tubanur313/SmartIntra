@@ -5,6 +5,6 @@ namespace SmartIntranet.Business.Interfaces
 {
     public interface ISmtpEmailService : IGenericService<SMTPEmailSetting>
     {
-        Task<SMTPEmailSetting> GetAsync();
+        SMTPEmailSetting Get();
     }
 }

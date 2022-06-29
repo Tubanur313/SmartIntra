@@ -23,7 +23,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
                 .WithMany(s => s.Contracts)
                 .HasForeignKey(s => s.UserId).OnDelete(DeleteBehavior.Restrict);
 
-            builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
+            builder.Property(I => I.CreatedDate).HasDefaultValue(null);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateByUserId).HasDefaultValue(null);

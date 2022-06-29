@@ -35,7 +35,7 @@ namespace SmartIntranet.Web.Controllers
             if (conf != null)
             {
                 conf.UpdateByUserId = GetSignInUserId();
-                conf.UpdateDate = DateTime.Now;
+                conf.UpdateDate = DateTime.UtcNow;
                 conf.ConfirmTicket = active;
                 await _confirmTicketUserService.UpdateModifiedAsync(conf);
                 return Ok(new

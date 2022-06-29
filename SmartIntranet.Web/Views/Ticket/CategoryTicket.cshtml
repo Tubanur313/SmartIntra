@@ -13,17 +13,9 @@
                 <div class="form-group">
                     <label class="floatLabel">  Kateqoriya: </label>
                     <div style="margin-bottom:20px">
-                        <input type="text" class="form-control" asp-for="CategoryTicketId" style="width:100%">
+                        <input type="text" class="form-control" asp-for="TicketCategoryId" style="width:100%">
                     </div>
-                    @*                    <select asp-for="CategoryTicketId" name="CategoryTicketId" class="form-control">
-                        <option value="" hidden disabled selected>Seçim edin</option>
-                        @foreach (var item in ViewBag.categories)
-                        {
-                        <option value="@item.Id">@item.Name</option>
-                        }
-
-                        </select>*@
-                    <span asp-validation-for="CategoryTicketId" class="text-danger"></span>
+                    <span asp-validation-for="TicketCategoryId" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-sm-12 d-flex justify-content-between">
@@ -47,7 +39,7 @@
             dataType: "json",
             cache: false,
             success: function (data) {
-                $('#CategoryTicketId').combotree({
+                $('#TicketCategoryId').combotree({
                     data:data,
                     prompt:'Seçim edin',
                     onBeforeSelect:function(node){

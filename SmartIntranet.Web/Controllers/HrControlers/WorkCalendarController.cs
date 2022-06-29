@@ -136,6 +136,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
                 model.IsDeleted = false;
+                model.CreatedDate = DateTime.UtcNow;
                 await _workCalendarService.AddAsync(_map.Map<WorkCalendar>(model));
                 return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
 
@@ -161,7 +162,7 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
             else
@@ -171,7 +172,7 @@ namespace SmartIntranet.Web.Controllers
                 //    return RedirectToAction("Delete", new { id = model.Id });
                 //}
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(model));
                 return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
@@ -183,7 +184,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<WorkCalendarListDto>(await _workCalendarService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(transactionModel));

@@ -63,6 +63,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<Cause>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _causeService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -113,7 +114,7 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 await _causeService.UpdateAsync(update);
@@ -136,7 +137,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _causeService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _causeService.UpdateAsync(delete);
         }

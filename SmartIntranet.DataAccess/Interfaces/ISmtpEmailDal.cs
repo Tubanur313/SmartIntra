@@ -5,6 +5,6 @@ namespace SmartIntranet.DataAccess.Interfaces
 {
     public interface ISmtpEmailDal : IGenericDal<SMTPEmailSetting>
     {
-        Task<SMTPEmailSetting> GetAsync();
+        SMTPEmailSetting Get();
     }
 }

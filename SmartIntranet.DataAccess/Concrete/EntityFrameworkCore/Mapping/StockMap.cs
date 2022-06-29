@@ -14,13 +14,13 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Id).UseIdentityColumn();
             builder.Property(I => I.Name).IsRequired();
             builder.Property(I => I.StockCategoryId).IsRequired();
-            //builder.Property(I => I.Description).HasColumnType("ntext");
             builder.Property(I => I.Price);
             builder.Property(I => I.MacAddress);
             builder.Property(I => I.SKU);
             builder.Property(I => I.CompanyId).IsRequired();
             builder.Property(I => I.IntranerUserId);
-
+            builder.Property(I => I.BuyDate);
+            builder.Property(I => I.DepreciationPercent);
             //Relation's
             builder.HasOne(d => d.StockCategory)
                     .WithMany(p => p.Stocks)
@@ -31,7 +31,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 
             builder.Property(I => I.IsDeleted);
 
-            builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
+            builder.Property(I => I.CreatedDate).HasDefaultValue(null);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateByUserId).HasDefaultValue(null);

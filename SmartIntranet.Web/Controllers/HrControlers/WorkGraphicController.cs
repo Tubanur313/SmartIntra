@@ -71,6 +71,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
                 model.IsDeleted = false;
+                model.CreatedDate = DateTime.UtcNow;
                 await _workGraphicService.AddAsync(_map.Map<WorkGraphic>(model));
                 return RedirectToAction("List");
 
@@ -98,14 +99,14 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
             else
             {
                 var current = GetSignInUserId();
              
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(model));
                 return RedirectToAction("List");
@@ -117,7 +118,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<WorkGraphicListDto>(await _workGraphicService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(transactionModel));

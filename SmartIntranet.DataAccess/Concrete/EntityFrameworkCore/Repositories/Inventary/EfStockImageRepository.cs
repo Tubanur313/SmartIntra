@@ -15,6 +15,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Inv
             using var context = new IntranetContext();
             return await context.StockImages.Where(x => x.StockId == stockId
                 && !x.IsDeleted)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
         }
     }

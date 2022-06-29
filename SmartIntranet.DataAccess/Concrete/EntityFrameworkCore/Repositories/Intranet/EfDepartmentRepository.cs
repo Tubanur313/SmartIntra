@@ -16,6 +16,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             return await context.Departments
                 .Where(z => !z.IsDeleted)
                 .Include(z => z.Company)
+                .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
     }
