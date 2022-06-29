@@ -663,7 +663,7 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
 
-            int? currentUserId = User.GetPrincipalId();
+            int? currentUserId = GetSignInUserId();
 
             if (userId == currentUserId)
             {
@@ -754,7 +754,7 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
 
-            int? currentUserId = User.GetPrincipalId();
+            int? currentUserId = GetSignInUserId();
             if (userId == currentUserId)
             {
                 return Ok(new

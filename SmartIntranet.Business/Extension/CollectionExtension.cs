@@ -33,6 +33,7 @@ using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
 using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using System.IO.Compression;
+using static SmartIntranet.Core.Extensions.IdentityExtension;
 
 namespace SmartIntranet.Business.Extension
 {
@@ -72,7 +73,7 @@ namespace SmartIntranet.Business.Extension
             //    //opt.Cookie.SameSite = SameSiteMode.Strict;
             //    opt.Cookie.HttpOnly = false;
             //    //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-            //    opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+            //    opt.ExpireTimeSpan = new System.TimeSpan(5, 0, 0);
             //    opt.SlidingExpiration = true;
             //    opt.Cookie.SameSite = SameSiteMode.Lax;
             //    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
@@ -83,23 +84,44 @@ namespace SmartIntranet.Business.Extension
             //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //    .AddCookie();
 
+            //services.AddAuthorization(cfg =>
+            //{
+            //    foreach (var claimName in AppClaimProvider.policies)
+            //    {
+            //        cfg.AddPolicy(claimName, p =>
+            //        {
+            //            p.RequireAssertion(a =>
+            //            {
+
+            //                return a.User.HasClaim(claimName, "1")
+            //                || a.User.IsInRole("SuperAdmin");
+
+            //            });
+            //            //p.RequireClaim(claimName, "1");
+            //        });
+            //    }
+            //});
+
+            services.AddAuthentication();
             services.AddAuthorization(cfg =>
             {
-                foreach (var claimName in AppClaimProvider.policies)
+                foreach (var item in AppClaimProvider.policies)
                 {
-                    cfg.AddPolicy(claimName, p =>
+                    cfg.AddPolicy(item, p =>
                     {
-                        p.RequireAssertion(a =>
+                        p.RequireAssertion(assertion =>
                         {
-
-                            return a.User.HasClaim(claimName, "1")
-                            || a.User.IsInRole("SuperAdmin");
+                            return
+                            assertion.User.IsInRole("SuperAdmin") ||
+                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
 
                         });
-                        //p.RequireClaim(claimName, "1");
                     });
+
                 }
+
             });
+
         }
         public static void AddCustomCompression(this IServiceCollection services)
         {

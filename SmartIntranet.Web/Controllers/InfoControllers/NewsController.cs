@@ -255,9 +255,13 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         {
             var newsfile = await _newsfileService.FindByIdAsync(id);
             var oldFileImg = await _newsfileService.FindByIdAsync(id);
+            if (newsfile is null || oldFileImg is null)
+            {
+                return NotFound(Messages.Error.notFound);
+            }
             _upload.Delete(oldFileImg.Name, "wwwroot/news/");
             await _newsfileService.RemoveAsync(newsfile);
-            return RedirectToAction("List");
+            return Ok(Messages.Delete.Deleted);
 
         }
         [Authorize(Policy = "news.DeleteCategoryFromCategoryNews")]

@@ -159,7 +159,7 @@ function removeUserTicketCheks(_id, _name, _path, elem) {
 }
 
 function removeNewsImg(_id, _name, _path, elem) {
-    console.log(_id)
+    console.log($(elem).parent().parent())
     swal({
         title: `Diqqət`,
         text: `Əminsiniz ki, '${_name}' siyahıdan silinsin?`,
@@ -176,17 +176,11 @@ function removeNewsImg(_id, _name, _path, elem) {
                     id: _id,
                 },
                 success: function (response) {
-                    //sorgu ugurla neticelenende
-                    if (response.error == true) {
-
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-
-                    $(elem).parent().parent().parent().remove();
+                    toastr.success(response, "Məlumat!");
+                    $(elem).parent().parent().remove();
                 },
                 error: function (response) {
-                    //sorgu ugursuz neticelenende
+                    toastr.error(response, "Xəta baş verdi!");
 
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
