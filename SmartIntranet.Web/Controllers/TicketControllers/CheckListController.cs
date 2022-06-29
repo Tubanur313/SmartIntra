@@ -56,7 +56,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<CheckList>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                add.CreatedDate = DateTime.UtcNow;
+                add.CreatedDate = DateTime.Now;
                 //if (await _checkListService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
                 //{
                 //    return RedirectToAction("List", new
@@ -105,7 +105,7 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
                 //if (await _checkListService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
                 //{
@@ -131,7 +131,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _checkListService.GetAsync(x=>x.Id==id && x.IsDeleted==false);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.UtcNow;
+            delete.DeleteDate = DateTime.Now;
             delete.IsDeleted = true;
             await _checkListService.UpdateAsync(delete);
         }

@@ -87,7 +87,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             {
                 var add = _map.Map<Stock>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                add.CreatedDate = DateTime.UtcNow;
+                add.CreatedDate = DateTime.Now;
                 if (await _stockService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -109,7 +109,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                         };
                         var photo = _map.Map<StockImage>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
-                        photo.CreatedDate = DateTime.UtcNow;
+                        photo.CreatedDate = DateTime.Now;
                         await _stockImageService.AddAsync(photo);
                     }
                     else
@@ -165,7 +165,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
 
                 if (await _stockService.UpdateReturnEntityAsync(update) is null)
@@ -208,7 +208,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var add = _map.Map<StockDiscuss>(model);
             add.CreatedByUserId = GetSignInUserId();
             add.IntranetUserId = GetSignInUserId();
-            add.CreatedDate = DateTime.UtcNow;
+            add.CreatedDate = DateTime.Now;
             var result = await _stockDiscussService.AddReturnEntityAsync(add);
             var count = await _stockDiscussService.GetAllAsync(x => x.StockId == result.StockId);
 
@@ -254,7 +254,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                     };
                     var photo = _map.Map<StockImage>(dto);
                     photo.CreatedByUserId = GetSignInUserId();
-                    photo.CreatedDate = DateTime.UtcNow;
+                    photo.CreatedDate = DateTime.Now;
                     await _stockImageService.AddAsync(photo);
                 }
                 else
@@ -270,7 +270,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var delete = await _stockService.FindByIdAsync(id);
             delete.IsDeleted = true;
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.UtcNow;
+            delete.DeleteDate = DateTime.Now;
             await _stockService.UpdateAsync(delete);
         }
     }
