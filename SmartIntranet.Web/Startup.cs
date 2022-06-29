@@ -55,11 +55,11 @@ namespace SmartTicket.Web
             services.AddCustomIdentity();
             services.AddCustomValidator();
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
-            services.Configure<FormOptions>(o => {
-                o.ValueLengthLimit = int.MaxValue;
-                o.MultipartBodyLengthLimit = int.MaxValue;
-                o.MemoryBufferThreshold = int.MaxValue;
-            });
+            //services.Configure<FormOptions>(o => {
+            //    o.ValueLengthLimit = int.MaxValue;
+            //    o.MultipartBodyLengthLimit = int.MaxValue;
+            //    o.MemoryBufferThreshold = int.MaxValue;
+            //});
             services.AddAutoMapper(typeof(MapProfile));
 
             //services.Configure<CookiePolicyOptions>(options =>
@@ -84,13 +84,13 @@ namespace SmartTicket.Web
             }
 
             app.UseHttpsRedirection();
-            //app.SeedTicketSystem();
-            //IntranetDBSeed.SeedClause(app);
-            //IntranetDBSeed.SeedVacationType(app);
-            //IntranetDBSeed.SeedNonWorkingGraphics(app);
-            //IntranetDBSeed.SeedPlace(app);
-            //IntranetDBSeed.SeedTerminationItem(app);
-            //IntranetDBSeed.SeedContractType(app);
+            app.SeedTicketSystem();
+            IntranetDBSeed.SeedClause(app);
+            IntranetDBSeed.SeedVacationType(app);
+            IntranetDBSeed.SeedNonWorkingGraphics(app);
+            IntranetDBSeed.SeedPlace(app);
+            IntranetDBSeed.SeedTerminationItem(app);
+            IntranetDBSeed.SeedContractType(app);
             app.UseMiddleware<SecurityHeadersMiddleware>();
             app.UseStaticFiles();
             app.UseRouting();

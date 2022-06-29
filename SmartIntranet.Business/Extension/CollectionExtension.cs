@@ -51,6 +51,25 @@ namespace SmartIntranet.Business.Extension
             })
              .AddEntityFrameworkStores<IntranetContext>();
 
+            services.AddAuthentication();
+            services.AddAuthorization(cfg =>
+            {
+                foreach (var item in AppClaimProvider.policies)
+                {
+                    cfg.AddPolicy(item, p =>
+                    {
+                        p.RequireAssertion(assertion =>
+                        {
+                            return
+                            assertion.User.IsInRole("SuperAdmin") ||
+                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
+
+                        });
+                    });
+
+                }
+
+            });
 
             services.ConfigureApplicationCookie(_ =>
             {
@@ -102,25 +121,7 @@ namespace SmartIntranet.Business.Extension
             //    }
             //});
 
-            services.AddAuthentication();
-            services.AddAuthorization(cfg =>
-            {
-                foreach (var item in AppClaimProvider.policies)
-                {
-                    cfg.AddPolicy(item, p =>
-                    {
-                        p.RequireAssertion(assertion =>
-                        {
-                            return
-                            assertion.User.IsInRole("SuperAdmin") ||
-                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
-
-                        });
-                    });
-
-                }
-
-            });
+            
 
         }
         public static void AddCustomCompression(this IServiceCollection services)
