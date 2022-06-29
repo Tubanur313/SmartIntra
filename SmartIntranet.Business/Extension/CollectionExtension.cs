@@ -34,8 +34,6 @@ using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using System.IO.Compression;
 using static SmartIntranet.Core.Extensions.IdentityExtension;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
 
 namespace SmartIntranet.Business.Extension
 {
@@ -68,7 +66,13 @@ namespace SmartIntranet.Business.Extension
                 _.ExpireTimeSpan = TimeSpan.FromMinutes(300);
             });
 
-            services.AddAuthentication();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/accessdenied.html";
+    });
             services.AddAuthorization(cfg =>
             {
                 foreach (var item in AppClaimProvider.policies)
@@ -87,8 +91,6 @@ namespace SmartIntranet.Business.Extension
                 }
 
             });
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddScoped<IClaimsTransformation, AppClaimProvider>();
 
         }
         public static void AddCustomCompression(this IServiceCollection services)
@@ -126,7 +128,7 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<CheckListAddDto>, CheckListAddValidator>();
             services.AddTransient<IValidator<CheckListUpdateDto>, CheckListUpdateValidator>();
-             
+
             services.AddTransient<IValidator<TicketAddDto>, TicketAddValidator>();
             services.AddTransient<IValidator<TicketUpdateDto>, TicketUpdateValidator>();
 
@@ -144,13 +146,13 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<GradeAddDto>, GradeAddValidator>();
             services.AddTransient<IValidator<GradeUpdateDto>, GradeUpdateValidator>();
-            
+
             services.AddTransient<IValidator<StockAddDto>, StockAddValidator>();
             services.AddTransient<IValidator<StockUpdateDto>, StockUpdateValidator>();
-            
+
             services.AddTransient<IValidator<StockCategoryAddDto>, StockCategoryAddValidator>();
             services.AddTransient<IValidator<StockCategoryUpdateDto>, StockCategoryUpdateValidator>();
-        
+
 
             services.AddTransient<IValidator<AppRoleAddDto>, AppRoleAddValidator>();
             services.AddTransient<IValidator<AppRoleUpdateDto>, AppRoleUpdateValidator>();
