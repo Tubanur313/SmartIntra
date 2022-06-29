@@ -1,8 +1,9 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions{
+@functions {
     public string GetAntiXsrfRequestToken()
     {
-        return Xsrf.GetAndStoreTokens(Context).RequestToken;    }
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
 }
 @model NonWorkingDayUpdateDto
 
@@ -29,10 +30,9 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Gün: </label>
-                        @*<input type="text" class="form-control" asp-for="Year" autocomplete="off" id="inputDate">*@
                         <div class="input-group input-daterange mb-0">
                             <input type="text" asp-for="StartDate" class="form-control" autocomplete="off">
-                            <div class="input-group-addon">to</div>
+                            <span class="input-group-addon">to</span>
                             <input type="text" asp-for="EndDate" class="form-control" autocomplete="off">
                         </div>
                         <span asp-validation-for="StartDate" class="text-danger"></span>
@@ -71,10 +71,8 @@
 <script>
 
     $( document ).ready(function() {
-         $('.input-daterange input').each(function () {
-            $(this).datepicker({
-                format: "dd.mm.yyyy"
-            });
+         $('.input-daterange').datepicker({
+         format: "dd.mm.yyyy"
         });
      });
 
