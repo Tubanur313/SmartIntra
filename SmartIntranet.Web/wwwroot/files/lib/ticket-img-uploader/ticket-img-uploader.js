@@ -37,10 +37,11 @@ $(document).ready(function () {
                         + total_file[i].name + "'><div class='badge badge-danger'><button id='action-icon' value='img-div" +
                         i + "' class='btn btn-danger' role='" + total_file[i].name
                         + "'><i class='fa fa-trash'></i></button></div></div>");
-                } else {
+                } else
+                {
 
                     $('#image_preview').append("<div class='img-div col-sm-3' id='img-div" + i + "'><label>'" + (total_file[i].name.length > 10 ? total_file[i].name.substring(0, 10) : total_file[i].name.substring(0, 8)) + "...'</label><img src='"
-                        + 'uploads/file.png'
+                        + '/uploads/file.png'
                         + "' class='img-responsive image img-thumbnail' title='"
                         + total_file[i].name + "'><div class='badge badge-danger'><button id='action-icon' value='img-div" +
                         i + "' class='btn btn-danger' role='" + total_file[i].name
