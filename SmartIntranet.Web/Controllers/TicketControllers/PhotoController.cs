@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers
 {
-    public class NewsController : BaseIdentityController
+    public class PhotoController : BaseIdentityController
     {
         private readonly IPhotoService _photoService;
-        public NewsController
+        public PhotoController
             (
             IMapper map,
             UserManager<IntranetUser> userManager,
@@ -26,7 +26,7 @@ namespace SmartIntranet.Web.Controllers
             _photoService = photoService;
         }
         [HttpGet]
-        [Authorize(Policy = "Photo.GetPhoto")]
+        [Authorize(Policy = "photo.getPhoto")]
         public async Task<IActionResult> GetPhoto(int ticketId)
         {
             var photo =_map.Map<List<PhotoListDto>>( await _photoService.GetAllByTicketAsync(ticketId));
