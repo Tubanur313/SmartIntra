@@ -602,14 +602,13 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "ticket.add")]
-        [RequestFormLimits(MultipartBodyLengthLimit = 4200000000)]
-        [RequestSizeLimit(4200000000)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 52430000)]
+        [RequestSizeLimit(52430000)]
         public async Task<IActionResult> Add(TicketAddDto model, List<IFormFile> uploads)
         {
 
             if (ModelState.IsValid)
             {
-
                 var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var add = _map.Map<Ticket>(model);
                 int GetUserId = GetSignInUserId();
