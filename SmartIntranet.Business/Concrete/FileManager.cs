@@ -15,7 +15,7 @@ namespace SmartIntranet.Business.Concrete
         public async Task<string> Upload(IFormFile file, string root = "wwwroot/uploads")
         {
             IsExistFolderCreate(root);
-            var fileName = DateTime.Now.ToString("yyyyMMddHHmmssff") + Path.GetExtension(file.FileName);
+            var fileName = DateTime.UtcNow.ToString("yyyyMMddHHmmssff") + Path.GetExtension(file.FileName);
 
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), root, fileName);
 

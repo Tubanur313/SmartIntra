@@ -1,6 +1,7 @@
 ﻿using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Membership;
+using System;
 
 namespace SmartIntranet.DTO.DTOs.InventaryDtos.StockDto
 {
@@ -8,7 +9,8 @@ namespace SmartIntranet.DTO.DTOs.InventaryDtos.StockDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string DepreciationPercent { get; set; }
+        public DateTime BuyDate { get; set; }
         public string Price { get; set; }
         public string MacAddress { get; set; }
         public string SKU { get; set; }

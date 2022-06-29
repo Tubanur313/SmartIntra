@@ -13,7 +13,7 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime? OpenDate { get; set; }
         public DateTime? CloseDate { get; set; }
         public DateTime? DeadLineEnd { get; set; }
         public DateTime? UpdateDate { get; set; }

@@ -21,6 +21,18 @@
                 <a class="nav-link active" data-toggle="tab"
                    href="#home1" role="tab">Şəxsi Məlumatlar</a>
             </li>
+               <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#home2" role="tab">ŞV</a>
+            </li>
+               <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#home3" role="tab">Müqavilə  </a>
+            </li>
+               <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#home4" role="tab">Əmək fəaliyyəti</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab"
                    href="#profile1" role="tab">Fayllar</a>
@@ -37,7 +49,7 @@
             <div class="tab-content tabs card-block">
                 <div class="tab-pane active" id="home1" role="tabpanel">
 
-                    @*            <input type="hidden" asp-for="Id" />*@
+                
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -66,17 +78,84 @@
 
                             </div>
                         </div>
+
+                           <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>  Cinsi: </label>
+                                <div class="form-radio">
+
+
+                                    <div class="radio radio-inline">
+                                        <label for="FEMALE">
+                                            <input type="radio" id="FEMALE" value="FEMALE" asp-for="Gender"
+                                                   checked="checked">
+                                            <i class="helper"></i>Qadın
+                                        </label>
+                                    </div>
+                                    <div class="radio radio-inline">
+                                        <label for="MALE">
+                                            <input type="radio" id="MALE" value="MALE" asp-for="Gender">
+                                            <i class="helper"></i>Kişi
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                      
+                    </div>
+
+                  
+
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="floatLabel">  Əmək Haqqı: </label>
-                                <input type="number" class="form-control" asp-for="Salary" autocomplete="off">
-                                <span asp-validation-for="Salary" class="text-danger"></span>
+                                <label class="floatLabel">  Email: </label>
+                                <input type="email" class="form-control" asp-for="Email" autocomplete="off">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şifrə: </label>
+                                <input type="password" class="form-control" asp-for="Password" autocomplete="off">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Tel: </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PhoneNumber" autocomplete="off">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Yaşadığı Ünvanı: </label>
+                                <input type="text" class="form-control" asp-for="Address" autocomplete="off">
+                                <span class="messages"></span>
                             </div>
 
                         </div>
                     </div>
 
-                    <div class="row">
+
+       
+                  
+                </div>
+
+                 <div class="tab-pane" id="home2" role="tabpanel">
+                       <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Seriyası və Nömrəsi: </label>
@@ -141,47 +220,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Email: </label>
-                                <input type="email" class="form-control" asp-for="Email" autocomplete="off">
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Şifrə: </label>
-                                <input type="password" class="form-control" asp-for="Password" autocomplete="off">
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Tel: </label>
-                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PhoneNumber" autocomplete="off">
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Yaşadığı Ünvanı: </label>
-                                <input type="text" class="form-control" asp-for="Address" autocomplete="off">
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
+                          <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Fin kod: </label>
                                 <input type="text" class="form-control" asp-for="Pin" autocomplete="off">
@@ -190,7 +229,14 @@
                             </div>
 
                         </div>
-                        <div class="col-sm-6">
+                    </div>
+                </div>
+
+
+                <div class="tab-pane" id="home3" role="tabpanel">
+                    <div class="row">
+
+                          <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
                                 <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control" id="inputDate">
@@ -198,9 +244,18 @@
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
                         </div>
+
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Əmək Haqqı: </label>
+                                <input type="number" class="form-control" asp-for="Salary" autocomplete="off">
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="row">
+                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Qeydiyyat Ünvanı: </label>
@@ -261,46 +316,7 @@
 
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>  Cinsi: </label>
-                                <div class="form-radio">
-
-
-                                    <div class="radio radio-inline">
-                                        <label for="FEMALE">
-                                            <input type="radio" id="FEMALE" value="FEMALE" asp-for="Gender"
-                                                   checked="checked">
-                                            <i class="helper"></i>Qadın
-                                        </label>
-                                    </div>
-                                    <div class="radio radio-inline">
-                                        <label for="MALE">
-                                            <input type="radio" id="MALE" value="MALE" asp-for="Gender">
-                                            <i class="helper"></i>Kişi
-                                        </label>
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Bitirdiyi İxtisasın adı: </label>
-                                <input type="text" class="form-control" asp-for="Profession" autocomplete="off">
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="row">
+                      <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Təhsilin növü: </label>
@@ -365,7 +381,14 @@
                     </div>
 
                     <div class="row">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Bitirdiyi İxtisasın adı: </label>
+                                <input type="text" class="form-control" asp-for="Profession" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
 
+                        </div>
                         <div class="col-sm-6" id="graphic_div">
                             <label class="floatLabel">  İstehsalat təqvimi: </label>
                             <select asp-for="WorkGraphicId" class="form-control">
@@ -379,7 +402,11 @@
                         </div>
 
                     </div>
-                    <div id="row-box">
+                </div>
+
+                
+                 <div class="tab-pane" id="home4" role="tabpanel">
+                       <div id="row-box">
                         <input id="rowCount" type="hidden" value="0" />
                     </div>
                     <div class="row">
@@ -392,6 +419,8 @@
                         <div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" asp-for="UserExperiences[i].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control" autocomplete="off"> </div> <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span> <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span> <span class="messages"></span> </div> </div> </div>
                         }*@
                 </div>
+
+
                 <div class="tab-pane" id="profile1" role="tabpanel">
                     <div class="form-group">
                         <div class="row">
@@ -500,7 +529,6 @@
             var CompanyId = $('#CompanyId').combotree('getValue');
             var DepartmentId = $('#DepartmentId').combotree('getValue');
             var PositionId = $('#PositionId').combotree('getValue');
-
             if(CompanyId.trim() === ""){
                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
                e.preventDefault();
@@ -702,27 +730,15 @@
                  $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
             });
 
-           $.ajax({
+            $('a[href="#home3"]').on('click', function(event){
+                 $.ajax({
             url: `@Url.Action("GetCompanyTree","Account")`,
             type: "Get",
             data: "",
             dataType: "json",
             cache: false,
             success: function (data) {
-              var tree = $('#DepartmentId').combotree({
-                 prompt:'Seçim edin'
-              });
-              tree.combotree('disable')
-              var tre = $('#PositionId').combotree({
-                 prompt:'Seçim edin'
-              });
-              tre.combotree('disable')
-              $('#CompanyId').combotree({
-                data:data,
-                prompt:'Seçim edin',
-                onClick:function(){
-                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
-                    $.ajax({
+              $.ajax({
                         url: `@Url.Action("GetDepartmentTree","Account")`,
                         type: "Get",
                         data: {
@@ -732,61 +748,126 @@
                         cache: false,
                         success: function (data) {
                             if(data.length > 0){
-                           var tre = $('#DepartmentId').combotree({
+                               var tree = $('#DepartmentId').combotree({
+                                  data:data,
+                                  prompt:'Seçim edin'
+                                });
+                                //tree.combotree('disable')
+                            }
+                            else{
+                                 var tree = $('#DepartmentId').combotree({
+                                    prompt:'Yoxdur !',
+                                 });
+                                 tree.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+              })
+
+              $.ajax({
+                        url: `@Url.Action("GetPositionTree","Account")`,
+                        type: "Get",
+                        data: {
+                            departmentId: $('#DepartmentId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                            var tre = $('#PositionId').combotree({
                                  data:data,
                                  prompt:'Seçim edin'
                             });
+                            //tre.combotree('disable')
+                            }
+                            else{
                             var tree = $('#PositionId').combotree({
-                               prompt:'Seçim edin'
+                                 prompt:'Yoxdur !',
                             });
                             tree.combotree('disable')
-                            $('#DepartmentId').combotree({
-                            data:data,
-                            prompt:'Seçim edin',
-                            onClick:function() {
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+              })
+
+              $('#CompanyId').combotree({
+                data:data,
+                prompt:'Seçim edin',
+                onClick:function(node){
+                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                    $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Account")`,
+                        type: "Get",
+                        data: {
+                            companyId:  node.id,
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0) {
+                                var tre =$('#DepartmentId').combotree({
+                                     data:data,
+                                     prompt:'Seçim edin'
+                                });
+
+                                var tree = $('#PositionId').combotree({
+                                   prompt:'Seçim edin'
+                                });
+                                tree.combotree('disable')
+                                $('#DepartmentId').combotree({
+                                data:data,
+                                prompt:'Seçim edin',
+                                onClick:function(node) {
                                 $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                                 $.ajax({
                                     url: `@Url.Action("GetPositionTree","Account")`,
                                     type: "Get",
                                     data: {
-                                        departmentId: $('#DepartmentId').val(),
+                                        departmentId:  node.id,
                                     },
                                     dataType: "json",
                                     cache: false,
                                     success: function (data) {
+                                      
                                         if(data.length > 0){
-                                          var tree = $('#PositionId').combotree({
+                                         var tree =  $('#PositionId').combotree({
                                              data:data,
-                                             prompt:'Seçim edin',
-                                             onClick:function() {
-                                                 $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none");
-                                             }
-
+                                             prompt:'Seçim edin'
                                          });
+                                         tree.combotree('enable')
+                                         $('#PositionId').combotree('setValue', '')
                                         }
                                         else{
-                                           var tree = $('#PositionId').combotree({
-                                              prompt:'Yoxdur !'
-                                              });
-                                           tree.combotree('disable');
+                                           var tre = $('#PositionId').combotree({
+                                               prompt:'Yoxdur !',
+                                           });
+                                           tre.combotree('disable')
+                                           tre.combotree('setValue', '')
                                         }
                                     },
                                     error: function (data) {
                                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                     }
                                 })
-                             }
-                            })
+                                 }
+                                })
+                                tre.combotree('enable')
                             }
                             else{
                              var tree = $('#DepartmentId').combotree({
                                  prompt:'Yoxdur !',
                              });
                              tree.combotree('disable')
+                             tree.combotree('setValue', '') 
                              var tre = $('#PositionId').combotree({
                                  prompt:'Yoxdur !',
                              });
                              tre.combotree('disable')
+                             tre.combotree('setValue', '')
                             }
                         },
                         error: function (data) {
@@ -795,11 +876,192 @@
                     })
                  }
               })
+
+              $('#DepartmentId').combotree({
+                                data:data,
+                                prompt:'Seçim edin',
+                                onClick:function(node) {
+                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                $.ajax({
+                                    url: `@Url.Action("GetPositionTree","Account")`,
+                                    type: "Get",
+                                    data: {
+                                        departmentId:  node.id,
+                                    },
+                                    dataType: "json",
+                                    cache: false,
+                                    success: function (data) {
+                                      
+                                        if(data.length > 0){
+                                         var tree =  $('#PositionId').combotree({
+                                             data:data,
+                                             prompt:'Seçim edin'
+                                         });
+                                         tree.combotree('enable')
+                                         $('#PositionId').combotree('setValue', '')
+                                        }
+                                        else{
+                                           var tre = $('#PositionId').combotree({
+                                               prompt:'Yoxdur !',
+                                           });
+                                           tre.combotree('disable')
+                                           tre.combotree('setValue', '')
+                                        }
+                                    },
+                                    error: function (data) {
+                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                    }
+                                })
+                                 }
+                                })
             },
             error: function (data) {
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
+        $.ajax({
+                    url: `@Url.Action("GetCompanyTree","Position")`,
+                    type: "Get",
+                    data: "",
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                      $.ajax({
+                        url: `@Url.Action("GetDepartmentTree","Account")`,
+                        type: "Get",
+                        data: {
+                            companyId: $('#CompanyId').val(),
+                        },
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            if(data.length > 0){
+                               var treeD =  $('#DepartmentId').combotree({
+                                  data:data
+                                });
+                                //treeD.combotree('disable')
+                                $.ajax({
+                                          url: `@Url.Action("GetPositionTree","Account")`,
+                                          type: "Get",
+                                          data: {
+                                              departmentId: $('#DepartmentId').val(),
+                                          },
+                                          dataType: "json",
+                                          cache: false,
+                                          success: function (data) {
+                                              if(data.length > 0){
+                                              var tree = $('#PositionId').combotree({
+                                                   data:data
+                                              });
+                                             // tree.combotree('disable')
+                                              }
+                                              else{
+                                              var tree = $('#PositionId').combotree({
+                                                   prompt:'Yoxdur !',
+                                              });
+                                              tree.combotree('disable')
+                                              }
+                                          },
+                                          error: function (data) {
+                                                  toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                          }
+                                })
+                            }
+                            else{
+                                 var tree = $('#DepartmentId').combotree({
+                                    prompt:'Yoxdur !',
+                                 });
+                                 tree.combotree('disable')
+                            }
+                        },
+                        error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        }
+                      })
+
+                      $('#CompanyId').combotree({
+                            data:data,
+                            onClick:function(node){
+                             $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none");
+                             $.ajax({
+                             url: `@Url.Action("GetDepartmentTree","Account")`,
+                             type: "Get",
+                             data: {
+                                companyId:  node.id,
+                             },
+                             dataType: "json",
+                             cache: false,
+                             success: function (data) {
+                                if(data.length > 0) {
+                                    $('#DepartmentId').combotree({
+                                        data:data,
+                                        prompt:'Seçim edin'
+                                    })
+                                       $('#PositionId').combotree('setValue', '')
+                                       $('#DepartmentId').combotree({
+                                            onClick:function(node){
+                                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                                $.ajax({
+                                                    url: `@Url.Action("GetPositionTree","Account")`,
+                                                    type: "Get",
+                                                    data: {
+                                                       departmentId:  node.id,
+                                                    },
+                                                    dataType: "json",
+                                                    cache: false,
+                                                    success: function (data){
+                                                        if(data.length>0){
+                                                       var treeP = $('#PositionId').combotree({
+                                                           data:data,
+
+                                                           onClick:function(node){
+                                                               $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
+                                                           }
+                                                       });
+                                                       treeP.combotree('enable')
+                                                       $('#PositionId').combotree('setValue', '')
+                                                        }
+                                                        else{
+                                                        var treeP = $('#PositionId').combotree({
+                                                                 prompt:'Yoxdur !',
+                                                            });
+                                                            treeP.combotree('disable')
+                                                        }
+
+                                                    }
+                                                })
+                                            }
+                                       })
+                                }
+                                else{
+                                     var treeD = $('#DepartmentId').combotree({
+                                          prompt:'Yoxdur !',
+                                     });
+                                     treeD.combotree('disable')
+                                     tre.combotree('setValue', '')
+                                     var treeP = $('#PositionId').combotree({
+                                          prompt:'Yoxdur !',
+                                     });
+                                     treeP.combotree('disable')
+                                     tre.combotree('setValue', '')
+                                    }
+                             },
+                            error: function (data) {
+                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                              }
+                          })
+                         }
+                      })
+                    },
+                    error: function (data) {
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                    }
+        });
+              event.preventDefault();
+             
+            })
+
+       
 
     });
 

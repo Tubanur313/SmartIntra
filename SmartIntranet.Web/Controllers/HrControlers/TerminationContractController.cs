@@ -88,7 +88,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                model.CreatedDate = DateTime.UtcNow;
                 var current = GetSignInUserId();
                 var result_model = _contractService.AddReturnEntityAsync(_map.Map<TerminationContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
@@ -98,7 +98,7 @@ namespace SmartIntranet.Web.Controllers
                 DateTime work_start_date = usr.StartWorkDate;
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
                 // Alqoritm for il ay gun
-                TimeSpanToDateParts(DateTime.Now, work_start_date, out int years, out int months, out int days,out int hours, out int minutes);
+                TimeSpanToDateParts(DateTime.UtcNow, work_start_date, out int years, out int months, out int days,out int hours, out int minutes);
                 var work_range = (years!=0 ? years + " il " : "") + (months != 0 ? months + " ay " : "") + (days != 0 ? days + " gün" : "");
                 formatKeys.Add("workRange", work_range);
                 var outOfWork = "";
@@ -198,13 +198,13 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List", "Contract");
             }
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _contractService.UpdateAsync(_map.Map<TerminationContract>(model));
 
@@ -215,7 +215,7 @@ namespace SmartIntranet.Web.Controllers
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
                 // Alqoritm for il ay gun
-                TimeSpanToDateParts(DateTime.Now, work_start_date, out int years, out int months, out int days, out int hours, out int minutes);
+                TimeSpanToDateParts(DateTime.UtcNow, work_start_date, out int years, out int months, out int days, out int hours, out int minutes);
                 var work_range = (years != 0 ? years + " il " : "") + (months != 0 ? months + " ay " : "") + (days != 0 ? days + " gün" : "");
                 formatKeys.Add("workRange", work_range);
                 var outOfWork = "";
@@ -284,7 +284,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<TerminationContractListDto>(await _contractService.FindByIdAsync(id));
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<TerminationContract>(transactionModel));
@@ -352,15 +352,15 @@ namespace SmartIntranet.Web.Controllers
             {
                 DateTime start_interval;
                 DateTime end_interval;
-                if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                 {
-                    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                 }
                 else
                 {
-                    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                 }
 
                 var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
@@ -372,7 +372,7 @@ namespace SmartIntranet.Web.Controllers
                     ur.FromDate = start_interval;
                     ur.ToDate = end_interval;
                     ur.IsDeleted = false;
-                    ur.CreatedDate = DateTime.Now;
+                    ur.CreatedDate = DateTime.UtcNow;
                     ur.AppUserId = user_id;
                     ur.UsedCount = 0;
                     ur.VacationCount = usr.VacationMainDay;
@@ -404,23 +404,23 @@ namespace SmartIntranet.Web.Controllers
                     var main_day = 0;
                     foreach (var el in personal_contract_chgs)
                     {
-                        if (el.CommandDate <= DateTime.Now)
+                        if (el.CommandDate <= DateTime.UtcNow)
                         {
-                            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * el.VacationDay) / 365;
+                            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
                             result_remain_day += (int)before_day_count;
                             fromDateTmp = el.CommandDate;
-                            main_day = (int)el.LastMainVacationDay;
+                            main_day = (int)el.VacationDay;
                         }
 
                     }
 
-                    double after_day_count = Math.Round((double)((DateTime.Now - fromDateTmp).TotalDays) * main_day) / 365;
+                    double after_day_count = Math.Round((double)((DateTime.UtcNow - fromDateTmp).TotalDays) * main_day) / 365;
                     result_remain_day += (int)after_day_count;
                     //result_remain_day += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                 }
                 else
                 {
-                    double after_day_count = Math.Round((double)((DateTime.Now - start_interval).TotalDays) * usr.VacationMainDay) / 365;
+                    double after_day_count = Math.Round((double)((DateTime.UtcNow - start_interval).TotalDays) * usr.VacationMainDay) / 365;
                     result_remain_day += (int)after_day_count;
                     //result_remain_day += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                 }

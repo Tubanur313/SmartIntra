@@ -151,16 +151,16 @@
                             <div class="form-group">
                                 <label>  Məzuniyyət növü: </label>
                                 <div class="form-radio">
-                                    <div class="radio radio-inline radio-disable">
+                                    <div class="radio radio-inline ">
                                         <label for="IsMainVacationTrue">
-                                            <input disabled type="radio" id="IsMainVacationTrue" value="True" asp-for="IsMainVacation"
+                                            <input  type="radio" id="IsMainVacationTrue" value="True" asp-for="IsMainVacation"
                                                   >
                                             <i class="helper"></i>Əsas
                                         </label>
                                     </div>
-                                    <div class="radio radio-inline radio-disable">
+                                    <div class="radio radio-inline ">
                                         <label for="IsMainVacationFalse">
-                                            <input disabled type="radio" id="IsMainVacationFalse" value="False" asp-for="IsMainVacation">
+                                            <input  type="radio" id="IsMainVacationFalse" value="False" asp-for="IsMainVacation">
                                             <i class="helper"></i>Əlavə
                                         </label>
                                     </div>
@@ -170,7 +170,7 @@
                         <div class="col-sm-6" id="vacation_div">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət gün sayı: </label>
-                                <input readonly type="number" class="form-control disabled_custom" asp-for="VacationDay" autocomplete="off">
+                                <input  type="number" class="form-control " asp-for="VacationDay" autocomplete="off">
                                 <span asp-validation-for="VacationDay" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -308,7 +308,7 @@
             $("#clause_div").css('display', "none");
             $("#vacation_div").css('display', "block");
             $("#vacation_type_div").css('display', "block");
-            $("#inputDate").addClass('disabled_custom').prop('readonly', true);
+
         }
 
         $('.input-daterange input').each(function () {
@@ -426,7 +426,6 @@
             $("#clause_div").css('display', "none");
             $("#vacation_div").css('display', "block");
             $("#vacation_type_div").css('display', "block");
-            $("#inputDate").addClass('disabled_custom').prop('readonly', true);
         }
 
         $.ajax({

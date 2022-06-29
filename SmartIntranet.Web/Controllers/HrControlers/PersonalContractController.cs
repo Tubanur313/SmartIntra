@@ -82,7 +82,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var usr2 = await _userManager.FindByIdAsync(model.UserId.ToString());
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                model.CreatedDate = DateTime.UtcNow;
                
                 if (model.Type == PersonalContractConst.VACATION)
                 {
@@ -155,6 +155,7 @@ namespace SmartIntranet.Web.Controllers
                     file_extra.ClauseId = clause_result_extra.Id;
                     StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                     file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                    file_extra.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_extra);
 
                     var file_command = new PersonalContractFile();
@@ -165,6 +166,7 @@ namespace SmartIntranet.Web.Controllers
                     file_command.ClauseId = clause_result_command.Id;
                     StringBuilder content_command = await GetDocxContent(clause_result_command.FilePath, formatKeys);
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
+                    file_command.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_command);
                 }
                 else if (model.Type== PersonalContractConst.POSITION)
@@ -186,6 +188,7 @@ namespace SmartIntranet.Web.Controllers
                     file_extra.ClauseId = clause_result_extra.Id;
                     StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                     file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                    file_extra.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_extra);
 
                     var file_command = new PersonalContractFile();
@@ -196,6 +199,7 @@ namespace SmartIntranet.Web.Controllers
                     file_command.ClauseId = clause_result_command.Id;
                     StringBuilder content_command = await GetDocxContent(clause_result_command.FilePath, formatKeys);
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
+                    file_command.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_command);
                 }
                 else if (model.Type == PersonalContractConst.SALARY_POSITION)
@@ -218,6 +222,7 @@ namespace SmartIntranet.Web.Controllers
                     file_extra.ClauseId = clause_result_extra.Id;
                     StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                     file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                    file_extra.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_extra);
 
                     var file_command = new PersonalContractFile();
@@ -228,6 +233,7 @@ namespace SmartIntranet.Web.Controllers
                     file_command.ClauseId = clause_result_command.Id;
                     StringBuilder content_command = await GetDocxContent(clause_result_command.FilePath, formatKeys);
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
+                    file_command.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_command);
                 }
                 else if (model.Type == PersonalContractConst.WORK_PLACE)
@@ -243,6 +249,7 @@ namespace SmartIntranet.Web.Controllers
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
                     file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
+                    file.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file);
                 }
                 else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
@@ -260,6 +267,7 @@ namespace SmartIntranet.Web.Controllers
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
                     file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
+                    file.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file);
                 }
                 else if (model.Type == PersonalContractConst.VACATION)
@@ -298,28 +306,28 @@ namespace SmartIntranet.Web.Controllers
                         decimal new_count = 0;
                         DateTime start_interval;
                         DateTime end_interval;
-                        if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                        if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                         {
-                            start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                         }
                         else
                         {
-                            start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                         }
 
                         if (model.CommandDate>= start_interval && model.CommandDate <= end_interval)
                         {
-                            var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && x.FromDate == start_interval);
-                            var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && x.FromDate == start_interval);
+                            var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
+                            var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
                             if (!remains)
                             {
                                 UserVacationRemain ur = new UserVacationRemain();
                                 ur.FromDate = start_interval;
                                 ur.ToDate = end_interval;
                                 ur.IsDeleted = false;
-                                ur.CreatedDate = DateTime.Now;
+                                ur.CreatedDate = DateTime.UtcNow;
                                 ur.AppUserId = usr2.Id;
                                 ur.UsedCount = 0;
                                 ur.VacationCount = usr.VacationMainDay + usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
@@ -340,10 +348,10 @@ namespace SmartIntranet.Web.Controllers
                                 {
                                     if (el.CommandDate <= end_interval)
                                     {
-                                        double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * el.VacationDay) / 365;
+                                        double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
                                         new_count += (int)before_day_count;
                                         fromDateTmp = el.CommandDate;
-                                        main_day = (int)el.LastMainVacationDay;
+                                        main_day = (int)el.VacationDay;
                                     }
 
                                 }
@@ -373,7 +381,8 @@ namespace SmartIntranet.Web.Controllers
                     var clause_result = (await _clauseService.GetAllIncCompAsync(x => x.Key == clause && !x.IsDeleted))[0];
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
-                    file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
+                    file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));                   
+                    file.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file);
                 }
                 return RedirectToAction("List", "Contract");
@@ -407,13 +416,13 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List", "Contract");
             }
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 var usr2 = await _userManager.FindByIdAsync(model.UserId.ToString());
 
@@ -532,6 +541,79 @@ namespace SmartIntranet.Web.Controllers
 
                     await _userManager.UpdateAsync(usr2);
 
+                    DateTime work_start_date = usr2.StartWorkDate;
+
+                    if (work_start_date != null)
+                    {
+                        decimal new_count = 0;
+                        DateTime start_interval;
+                        DateTime end_interval;
+                        if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                        {
+                            start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                        }
+                        else
+                        {
+                            start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                        }
+
+                        if (model.CommandDate >= start_interval && model.CommandDate <= end_interval)
+                        {
+                            var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
+                            var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
+                            if (!remains)
+                            {
+                                UserVacationRemain ur = new UserVacationRemain();
+                                ur.FromDate = start_interval;
+                                ur.ToDate = end_interval;
+                                ur.IsDeleted = false;
+                                ur.CreatedDate = DateTime.Now;
+                                ur.AppUserId = usr2.Id;
+                                ur.UsedCount = 0;
+                                ur.VacationCount = usr.VacationMainDay + usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
+                                ur.RemainCount = ur.VacationCount;
+
+                                result_remain_model = await _userVacationRemains.AddReturnEntityAsync(ur);
+
+                            }
+
+
+                            var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
+                            if (personal_contract_chgs.Count() > 0)
+                            {
+                                DateTime fromDateTmp = start_interval;
+
+                                var main_day = 0;
+                                foreach (var el in personal_contract_chgs)
+                                {
+                                    if (el.CommandDate <= end_interval)
+                                    {
+                                        double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
+                                        new_count += (int)before_day_count;
+                                        fromDateTmp = el.CommandDate;
+                                        main_day = (int)el.VacationDay;
+                                    }
+
+                                }
+
+                                double after_day_count = Math.Round((double)((end_interval - fromDateTmp).TotalDays) * main_day) / 365;
+                                new_count += (int)after_day_count;
+                                new_count += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
+                            }
+                            else
+                            {
+                                double after_day_count = Math.Round((double)((end_interval - start_interval).TotalDays) * usr.VacationMainDay) / 365;
+                                new_count += (int)after_day_count;
+                                new_count += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
+                            }
+                            result_remain_model.VacationCount = new_count;
+                            result_remain_model.RemainCount = result_remain_model.VacationCount - result_remain_model.UsedCount;
+                            await _userVacationRemains.UpdateAsync(result_remain_model);
+                        }
+
+                    }
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
 
@@ -560,29 +642,114 @@ namespace SmartIntranet.Web.Controllers
                 var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
 
                 usr2.VacationMainDay = (int)transactionModel.LastMainVacationDay;
-                var diff = (int)transactionModel.NewFullVacationDay - (int)transactionModel.LastFullVacationDay;
-                if (transactionModel.VacationExtraType == 0)
+                if (!transactionModel.IsMainVacation)
                 {
-                    usr2.VacationExtraExperience = (int)transactionModel.VacationDay - diff;
-                }
-                else if (transactionModel.VacationExtraType == 1)
-                {
-                    usr2.VacationExtraNature = (int)transactionModel.VacationDay - diff;
-                }
-                else if (transactionModel.VacationExtraType == 2)
-                {
-                    usr2.VacationExtraChild = (int)transactionModel.VacationDay - diff;
+                    var diff = (int)transactionModel.NewFullVacationDay - (int)transactionModel.LastFullVacationDay;
+                    if (transactionModel.VacationExtraType == 0)
+                    {
+                        usr2.VacationExtraExperience = (int)transactionModel.VacationDay - diff;
+                    }
+                    else if (transactionModel.VacationExtraType == 1)
+                    {
+                        usr2.VacationExtraNature = (int)transactionModel.VacationDay - diff;
+                    }
+                    else if (transactionModel.VacationExtraType == 2)
+                    {
+                        usr2.VacationExtraChild = (int)transactionModel.VacationDay - diff;
+                    }
+
                 }
 
                 await _userManager.UpdateAsync(usr2);
 
+                transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+                transactionModel.DeleteByUserId = current;
+                transactionModel.IsDeleted = true;
+                await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
+
+
+                DateTime work_start_date = usr2.StartWorkDate;
+
+                if (work_start_date != null)
+                {
+                    decimal new_count = 0;
+                    DateTime start_interval;
+                    DateTime end_interval;
+                    if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
+                    {
+                        start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
+                    }
+                    else
+                    {
+                        start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                    }
+
+                    if (transactionModel.CommandDate >= start_interval && transactionModel.CommandDate <= end_interval)
+                    {
+                        var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
+                        var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
+                        if (!remains)
+                        {
+                            UserVacationRemain ur = new UserVacationRemain();
+                            ur.FromDate = start_interval;
+                            ur.ToDate = end_interval;
+                            ur.IsDeleted = false;
+                            ur.CreatedDate = DateTime.Now;
+                            ur.AppUserId = usr2.Id;
+                            ur.UsedCount = 0;
+                            ur.VacationCount = usr2.VacationMainDay + usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature;
+                            ur.RemainCount = ur.VacationCount;
+
+                            result_remain_model = await _userVacationRemains.AddReturnEntityAsync(ur);
+
+                        }
+
+
+                        var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
+                        if (personal_contract_chgs.Count() > 0)
+                        {
+                            DateTime fromDateTmp = start_interval;
+
+                            var main_day = 0;
+                            foreach (var el in personal_contract_chgs)
+                            {
+                                if (el.CommandDate <= end_interval)
+                                {
+                                    double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
+                                    new_count += (int)before_day_count;
+                                    fromDateTmp = el.CommandDate;
+                                    main_day = (int)el.VacationDay;
+                                }
+
+                            }
+
+                            double after_day_count = Math.Round((double)((end_interval - fromDateTmp).TotalDays) * main_day) / 365;
+                            new_count += (int)after_day_count;
+                            new_count += usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
+                        }
+                        else
+                        {
+                            double after_day_count = Math.Round((double)((end_interval - start_interval).TotalDays) * usr2.VacationMainDay) / 365;
+                            new_count += (int)after_day_count;
+                            new_count += usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
+                        }
+                        result_remain_model.VacationCount = new_count;
+                        result_remain_model.RemainCount = result_remain_model.VacationCount - result_remain_model.UsedCount;
+                        await _userVacationRemains.UpdateAsync(result_remain_model);
+                    }
+                }
             }
+            else
+            {
+                transactionModel.DeleteDate = DateTime.UtcNow;
+                transactionModel.DeleteByUserId = current;
+                transactionModel.IsDeleted = true;
+                await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
 
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
-            transactionModel.DeleteByUserId = current;
-            transactionModel.IsDeleted = true;
-            await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
-
+            }
+        
             return Ok();
         }
 
@@ -597,6 +764,8 @@ namespace SmartIntranet.Web.Controllers
                 if (personal_contract_chgs.Count() > 0)
                 {
                     usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
+                if (!personal_contract_chgs[0].IsMainVacation)
+                {
                     var diff = (int)personal_contract_chgs[0].NewFullVacationDay - (int)personal_contract_chgs[0].LastFullVacationDay;
                     if (personal_contract_chgs[0].VacationExtraType == 0)
                     {
@@ -605,11 +774,13 @@ namespace SmartIntranet.Web.Controllers
                     else if (personal_contract_chgs[0].VacationExtraType == 1)
                     {
                         usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay - diff;
-                }
+                    }
                     else if (personal_contract_chgs[0].VacationExtraType == 2)
                     {
                         usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay - diff;
+                    }
                 }
+                   
 
                     await _userManager.UpdateAsync(usr2);
                 }

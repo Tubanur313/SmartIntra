@@ -77,7 +77,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             .GetAllAsync(x => !x.IsDeleted));
             return View();
         }
-        
+
         [HttpPost]
         [Authorize(Policy = "stock.add")]
         [ValidateAntiForgeryToken]
@@ -87,6 +87,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             {
                 var add = _map.Map<Stock>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _stockService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -108,6 +109,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                         };
                         var photo = _map.Map<StockImage>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
+                        photo.CreatedDate = DateTime.UtcNow;
                         await _stockImageService.AddAsync(photo);
                     }
                     else
@@ -163,7 +165,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 if (await _stockService.UpdateReturnEntityAsync(update) is null)
@@ -206,6 +208,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var add = _map.Map<StockDiscuss>(model);
             add.CreatedByUserId = GetSignInUserId();
             add.IntranetUserId = GetSignInUserId();
+            add.CreatedDate = DateTime.UtcNow;
             var result = await _stockDiscussService.AddReturnEntityAsync(add);
             var count = await _stockDiscussService.GetAllAsync(x => x.StockId == result.StockId);
 
@@ -242,7 +245,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 if (MimeTypeCheckExtension.İsImage(upload))
                 {
                     string folder = "/stock/";
-                    string name =_upload.UploadResizedImg(upload, "wwwroot" + folder);
+                    string name = _upload.UploadResizedImg(upload, "wwwroot" + folder);
                     StockImageAddDto dto = new StockImageAddDto
                     {
                         Name = name,
@@ -251,6 +254,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                     };
                     var photo = _map.Map<StockImage>(dto);
                     photo.CreatedByUserId = GetSignInUserId();
+                    photo.CreatedDate = DateTime.UtcNow;
                     await _stockImageService.AddAsync(photo);
                 }
                 else
@@ -258,7 +262,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                     return Ok($"{upload.ContentType.GetType()} formatı uyğun format deyil");
                 }
             }
-                return Ok();
+            return Ok();
         }
         [Authorize(Policy = "stock.delete")]
         public async Task Delete(int id)
@@ -266,7 +270,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var delete = await _stockService.FindByIdAsync(id);
             delete.IsDeleted = true;
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             await _stockService.UpdateAsync(delete);
         }
     }

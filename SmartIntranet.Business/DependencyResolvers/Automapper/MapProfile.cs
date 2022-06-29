@@ -251,11 +251,13 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
 
             #region Ticket <-> TicketDto
             CreateMap<TicketAddDto, Ticket>()
+                .ForMember(t => t.CategoryTicketId, opt => opt.MapFrom(src => src.TicketCategoryId))
                 .ForMember(u => u.DeadLineStart, opt => opt.MapFrom(src =>
                 DateTime.ParseExact(src.DeadLine.Split('-', StringSplitOptions.None).FirstOrDefault(), "dd/MM/yyyy", null)))
                 .ForMember(u => u.DeadLineEnd, opt => opt.MapFrom(src =>
                 DateTime.ParseExact(src.DeadLine.Split('-', StringSplitOptions.None).LastOrDefault(), "dd/MM/yyyy", null)));
-            CreateMap<Ticket, TicketAddDto>();
+            CreateMap<Ticket, TicketAddDto>()
+                .ForMember(t => t.TicketCategoryId, opt => opt.MapFrom(src =>src.CategoryTicketId));
             CreateMap<TicketUpdateDto, Ticket>();
             CreateMap<Ticket, TicketUpdateDto>()
                 .ForMember(d => d.DeadLine, opt => opt
@@ -270,9 +272,10 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<Ticket, TicketCheklistDto>();
             CreateMap<TicketCheklistDto, Ticket>();
             CreateMap<Ticket, TicketListDto>();
-            CreateMap<Ticket, TicketCategoryDto>();
+            CreateMap<Ticket, TicketCategoryDto>()
+                .ForMember(t => t.TicketCategoryId, opt => opt.MapFrom(src => src.CategoryTicketId));
             #endregion
-            
+
             #region Watcher <-> WatcherDto
             CreateMap<WatcherAddDto, Watcher>();
             CreateMap<Watcher, WatcherAddDto>();
@@ -349,15 +352,33 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #endregion
 
             #region  Stock <-> StockDto
-            CreateMap<StockAddDto, Stock>();
-            CreateMap<Stock, StockAddDto>();
+            CreateMap<StockAddDto, Stock>()
+            .ForMember(dest => dest.DepreciationPercent,
+              opt => opt.MapFrom(src => Convert.ToString(src.DepreciationPercent
+              .Split(" ", StringSplitOptions.None).FirstOrDefault()).Replace(".", ",")))
+            .ForMember(dest => dest.Price,
+              opt => opt.MapFrom(src => Convert.ToString(src.Price.Replace(",", "").Replace(".", ","))));
+            CreateMap<Stock, StockAddDto>()
+                .ForMember(dest => dest.DepreciationPercent,
+                  opt => opt.MapFrom(src => Convert.ToDecimal(src.DepreciationPercent)))
+            .ForMember(dest => dest.Price,
+                  opt => opt.MapFrom(src => Convert.ToDecimal(src.Price)));
             CreateMap<StockListDto, Stock>();
             CreateMap<Stock, StockListDto>();
-            CreateMap<StockUpdateDto, Stock>();
-            CreateMap<Stock, StockUpdateDto>();
+            CreateMap<StockUpdateDto, Stock>()
+            .ForMember(dest => dest.DepreciationPercent,
+              opt => opt.MapFrom(src => Convert.ToString(src.DepreciationPercent
+              .Split(" ", StringSplitOptions.None).FirstOrDefault()).Replace(".", ",")))
+            .ForMember(dest => dest.Price,
+              opt => opt.MapFrom(src => Convert.ToString(src.Price.Replace(",", "").Replace(".", ","))));
+            CreateMap<Stock, StockUpdateDto>()
+                .ForMember(dest => dest.DepreciationPercent,
+                  opt => opt.MapFrom(src => Convert.ToDecimal(src.DepreciationPercent)))
+                .ForMember(dest => dest.Price,
+                  opt => opt.MapFrom(src => src.Price.ToString()));
 
             #endregion 
-            #region  Stock <-> StockDto
+            #region  StockCategory <-> StockCategoryDto
             CreateMap<StockCategoryAddDto, StockCategory>();
             CreateMap<StockCategory, StockCategoryAddDto>();
             CreateMap<StockCategoryListDto, StockCategory>();

@@ -56,16 +56,23 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="floatLabel">MacAddress: </label>
-                        <input type="text" class="form-control" asp-for="MacAddress" autocomplete="off">
-                        <span class="messages"></span>
+                        <label class="floatLabel">Dəyər: </label>
+                        <input type="text" asp-for="Price" placeholder="0.00" class="form-control autonumber" data-a-sep="," data-a-dec=".">
+                        <span asp-validation-for="Price"  class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="floatLabel">Dəyər: </label>
-                        @*@Html.EditorFor(model => model.Price)*@
-                        <input type="text" asp-for="Price" class="form-control autonumber">
+                        <label class="floatLabel">Amortizasiya Faizi: </label>
+                    <input type="text" asp-for="DepreciationPercent" class="form-control autonumber" data-v-min="0.00" data-v-max="100.00" data-p-sign="s" data-a-sign=" %">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Avadanlığın Alınma Tarixi: </label>
+                        <input type="date" class="form-control" asp-for="BuyDate" autocomplete="off">
+                        <span asp-validation-for="BuyDate" class="text-danger"></span>
+
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -109,11 +116,13 @@
 <script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
 <script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
 <script src="~/files/assets/pages/form-masking/form-mask.js"></script>
+<script src="~/files/assets/pages/form-masking/jquery.maskMoney.min.js"></script>
 <!-- ticket img upload js -->
 <script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
 <script class="removable">
-    $( document ).ready(function() {
-    });
+    //$( document ).ready(function() {
+    //    $("#Price").maskMoney();
+    //});
 </script>

@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="~/files/lib/ticket-img-uploader/ticket-img-uploader.css" />
     <!-- Date-range picker css  -->
     <link rel="stylesheet" type="text/css" href="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.css" />
+    <!-- combotree -->
     <link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 </head>
 <style>
@@ -77,7 +78,8 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Kateqoriya: </label>
                                 <div style="margin-bottom:20px">
-                                    <input type="text" class="form-control" asp-for="CategoryTicketId" style="width:100%">
+                                    <input type="text" class="form-control" asp-for="TicketCategoryId" style="width:100%">
+                                    <span asp-validation-for="TicketCategoryId" class="text-danger"></span>
                                 </div>
                                 @*  <select asp-for="CategoryTicketId" name="CategoryTicketId" class="form-control">
                                     <option value="" hidden disabled selected>Seçim edin</option>
@@ -85,9 +87,7 @@
                                     {
                                     <option data-type="@item.TicketType" value="@item.Id">@item.Name</option>
                                     }
-
                                     </select>*@
-                                <span asp-validation-for="CategoryTicketId" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                                     }
 
                                 </select>
-                                <span asp-validation-for="ConfirmTicketUserId" class="text-danger"></span>
+                                @*<span asp-validation-for="ConfirmTicketUserId" class="text-danger"></span>*@
                                 <span class="text-danger"></span>
                             </div>
                         </div>
@@ -200,26 +200,23 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="panel panel-primary">
-
                                     <div class="panel-heading">
                                         <h3 class="">Fayl Yüklə</h3>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
-                                                <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                                                    <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-10">
-                                            <div class="form-group">
-                                                <div id="image_preview" class="row" @*style="width:100%;"*@>
+                                            <div class="col-sm-10">
+                                                <div class="form-group">
+                                                    <div id="image_preview" class="row" @*style="width:100%;"*@>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -276,7 +273,6 @@
 
 <!-- Select 2 js -->
 <script type="text/javascript" src="~/files/bower_components2/select2/dist/js/select2.full.min.js">
-
 </script>
 <!-- Multiselect js -->
 <script type="text/javascript" src="~/files/bower_components2/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
@@ -319,11 +315,9 @@
                    <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
                  </td>
                </tr>`;
-
                $('.table-add').on('click', 'i', () => {
                      $('#generated').append(newTr);
                });
-
                $tableID.on('click', '.table-remove', function () {
                    var id = $(this).parent().parent().attr('value-id');
                       $(this).parents('tr').detach();
@@ -374,16 +368,13 @@
                 return data;
             }
         })(jQuery);
-
         //delete all orders if not send to ticket
-
         $(window).on('click', function(e){
                 if($(e.target).attr('id') == 'form-modal'
                 || $(e.target).attr('id') =='closeBtn'
                 || $(e.target).attr('id') =='closeBtnX'){
                     var Ids = new Array();
                     $(".editTable").each(function(){
-
                        var id= $(this).attr('value-id');
                         Ids.push(id);
                     });
@@ -409,7 +400,6 @@
         //add all orders to send
         $(document).on("change",".editTable",function(e){
           var  $this  = $(this);
-
           if($this.attr('value-id') === ""){
                let data =  $this.getFormData();
                let count = 0;
@@ -448,7 +438,6 @@
                let data =  $this.getFormData({
                     Id: id
                });
-
                let count = 0;
                for (let i = 0; i < Object.values(data).length; i++) {
                    if(Object.values(data)[i]===''){
@@ -479,7 +468,6 @@
                     $('.table-add').css("pointer-events", "none");
                }
           }
-
         });
         //orders to send to ticket
         $(document).on("click","#confirm-id",function(e){
@@ -489,7 +477,6 @@
                 Ids.push(id);
             });
              $("#OrderIds").val(JSON.stringify(Ids));
-
         });
         //daterangepicker
         $('input[name="DeadLine"]').daterangepicker({
@@ -501,31 +488,31 @@
         $('input[name="DeadLine"]').on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
         });
-
         $('input[name="DeadLine"]').on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
         });
-
          //ticket confirm
-
         $("#True").on("change",function(){
               $("#ConfirmedId").removeClass( 'd-none');
               $("#ConfirmTicketUserId").prop( "disabled" , false);
+
+        $("form").submit(function(e){
+        if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+          toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
+          e.preventDefault();
+        }
+        })
+
         });
         $("#False").on("change",function(){
               $("#ConfirmedId").addClass( 'd-none');
               $("#ConfirmTicketUserId").prop( "disabled" , true);
         });
 
-
         // Total price
-
         $(document).on("mouseover","#generated",function(){
         var r = 0;
-
         $("textarea[name='Total']").each(function( index ) {
-
-
              if(parseFloat($(this).val()) === NaN){
              r+= 0;
              }
@@ -535,21 +522,20 @@
           });
             $("#GrandTotal").val(parseFloat(r).toFixed(2));
         });
-
         function validateValue(event){
                 const elem = event.target;
                 const value = elem.value;
                 const numVal = value.replace(/\D/,"");
                 elem.value = numVal;
         }
-                $.ajax({
+        $.ajax({
                 url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
                 type: "Get",
                 data: "",
                 dataType: "json",
                 cache: false,
                 success: function(data) {
-                    $('#CategoryTicketId').combotree({
+                    $('#TicketCategoryId').combotree({
                         data: data,
                         prompt: 'Seçim edin',
                         onBeforeSelect: function(node) {
@@ -557,17 +543,24 @@
                                 return false
                             }
                             else{
-
                             var type = node.ticketType;
                             var $this = $("form")
                             if(type == @((int) TicketType.Purchasing)) {
                                 $("#PurcId").removeClass('d-none');
-                            $("#True").prop('checked', true);
-                            $("#ConfirmedId").removeClass( 'd-none');
-                            $("#ConfirmTicketUserId").prop( "disabled" , false);
+                                $("#True").prop('checked', true);
+                                $("#False" ).prop( "checked", false );
+                                $("#ConfirmedId").removeClass( 'd-none');
+                                $("#ConfirmTicketUserId").prop( "disabled" , false);
+                                $this.on("submit", function(e) {
+                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+                                      toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
+                                      e.preventDefault();
+                                    }
+                                });
                             }
                             else {
-                                $("#False").prop('checked', true);
+                                $("#True" ).prop( "checked", false );
+                                $("#False" ).prop( "checked", true );
                                 $("#ConfirmedId").addClass( 'd-none');
                                 $("#ConfirmTicketUserId").prop( "disabled" , true);
                                 $this.on("submit", function(e) {

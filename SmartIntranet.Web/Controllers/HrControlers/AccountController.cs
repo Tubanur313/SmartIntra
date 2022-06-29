@@ -172,7 +172,7 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
 
@@ -214,7 +214,7 @@ namespace SmartIntranet.Web.Controllers
 
                 if (!MimeTypeCheckExtension.İsImage(profile))
                 {
-                    TempData["msg"] = " Daxil edilən fayllar image, png və ya gif formatında olmalıdır !";
+                    TempData["error"] = " Daxil edilən fayllar image, png və ya gif formatında olmalıdır !";
                     return RedirectToAction("List");
                 }
             }
@@ -226,7 +226,7 @@ namespace SmartIntranet.Web.Controllers
 
                 if (sendUserEmailExist)
                 {
-                    TempData["msg"] = " Daxil edilən email istifadə olunur !";
+                    TempData["error"] = " Daxil edilən email istifadə olunur !";
                     return RedirectToAction("List");
                 }
 
@@ -243,7 +243,7 @@ namespace SmartIntranet.Web.Controllers
                         el.IsDeleted = false;
                         el.IsEditable = true;
                         el.CreatedByUserId = current;
-                        el.CreatedDate = DateTime.Now;
+                        el.CreatedDate = DateTime.UtcNow;
                         el.VacationCount = el.RemainCount;
                         UserVacationRemainsNew.Add(el);
                     }
@@ -288,6 +288,7 @@ namespace SmartIntranet.Web.Controllers
                     Address = user.Address,
                     Picture = user.Picture,
                     CreatedByUserId = current,
+                    CreatedDate = DateTime.UtcNow,
                     UserExperiences = user.UserExperiences,
                     UserVacationRemains = UserVacationRemainsNew
                 };
@@ -337,7 +338,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetUserVacationDay(int userId)
         {
             var usr = await _appUserService.FindByUserAllInc(userId);
-            double experienceYears = (usr.UserExperiences.Sum(x => (x.ExperienceEnd - x.ExperienceStart).TotalDays) + (DateTime.Now - usr.StartWorkDate).TotalDays) / 365;
+            double experienceYears = (usr.UserExperiences.Sum(x => (x.ExperienceEnd - x.ExperienceStart).TotalDays) + (DateTime.UtcNow - usr.StartWorkDate).TotalDays) / 365;
             int vacationDay = 0;
             if (experienceYears >= 5 && experienceYears <= 10)
                 vacationDay = 2;
@@ -364,7 +365,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.update")]
         public async Task<IActionResult> Update(int id)
         {
-            var model = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            var model = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
             var listModel = _map.Map<AppUserUpdateDto>(await _appUserService.FindByUserAllInc(id));
             if (listModel == null)
             {
@@ -377,18 +378,18 @@ namespace SmartIntranet.Web.Controllers
             {
                 DateTime start_interval;
                 DateTime end_interval;
-                if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                 {
-                    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                 }
                 else
                 {
-                    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                    start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                    end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                 }
 
-                var remains = _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval);
+                var remains = _db.UserVacationRemains.Any(x => x.AppUserId == id && x.FromDate == start_interval && !x.IsDeleted);
 
                 if (!remains)
                 {
@@ -396,7 +397,7 @@ namespace SmartIntranet.Web.Controllers
                     ur.FromDate = start_interval;
                     ur.ToDate = end_interval;
                     ur.IsDeleted = false;
-                    ur.CreatedDate = DateTime.Now;
+                    ur.CreatedDate = DateTime.UtcNow;
                     ur.AppUserId = id;
                     ur.UsedCount = 0;
                     ur.VacationCount = listModel.VacationMainDay + listModel.VacationExtraNature + listModel.VacationExtraExperience
@@ -427,9 +428,10 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.docs = _map.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(id));
 
-            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && x.IsEditable).ToListAsync();
-            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsEditable).ToListAsync();
+            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted  && x.IsEditable).ToListAsync();
+            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted && !x.IsEditable).ToListAsync();
             ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted != true));
+            ViewBag.department = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             return View(listModel);
         }
@@ -439,14 +441,14 @@ namespace SmartIntranet.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(AppUserUpdateDto model, IFormFile profile, IFormFile pdf)
         {
-            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsEditable).ToListAsync();
+            ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsDeleted && !x.IsEditable).ToListAsync();
             if (ModelState.IsValid)
             {
                 if (profile != null && profile.FileName != "default.png")
                 {
                     if (!MimeTypeCheckExtension.İsImage(profile))
                     {
-                        TempData["msg"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
+                        TempData["error"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
                         return RedirectToAction("List");
                     }
 
@@ -462,7 +464,7 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        TempData["msg"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
+                        TempData["error"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
                         return RedirectToAction("List");
                     }
                 }
@@ -493,10 +495,10 @@ namespace SmartIntranet.Web.Controllers
                         List<UserExperience> userExperiences = await _db.UserExperiences.Where(x => x.UserId == model.Id).ToListAsync();
                         _db.UserExperiences.RemoveRange(userExperiences);
 
-                        List<UserVacationRemain> userVacRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && x.IsEditable).ToListAsync();
+                        List<UserVacationRemain> userVacRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && x.IsEditable).ToListAsync();
                         _db.UserVacationRemains.RemoveRange(userVacRemains);
 
-                        List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsEditable).ToListAsync();
+                        List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsEditable).ToListAsync();
 
                         List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
                         if (model.UserVacationRemains != null && model.UserVacationRemains.Count() > 0)
@@ -506,9 +508,9 @@ namespace SmartIntranet.Web.Controllers
                                 el.IsEditable = true;
                                 el.IsDeleted = false;
                                 el.CreatedByUserId = current;
-                                el.CreatedDate = DateTime.Now;
+                                el.CreatedDate = DateTime.UtcNow;
                                 el.UpdateByUserId = current;
-                                el.UpdateDate = DateTime.Now;
+                                el.UpdateDate = DateTime.UtcNow;
                                 el.VacationCount = el.RemainCount;
                                 UserVacationRemainsNew.Add(el);
                             }
@@ -568,7 +570,7 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.PhoneNumber = model.PhoneNumber;
                         updateUser.Address = model.Address;
                         updateUser.Picture = model.Picture;
-                        updateUser.UpdateDate = DateTime.UtcNow.AddHours(4);
+                        updateUser.UpdateDate = DateTime.UtcNow;
                         updateUser.UpdateByUserId = current;
                         updateUser.UserExperiences = model.UserExperiences;
                         updateUser.UserVacationRemains = UserVacationRemainsNew;
@@ -576,7 +578,7 @@ namespace SmartIntranet.Web.Controllers
                         IdentityResult result = await _userManager.UpdateAsync(updateUser);
                         if (result.Succeeded && oldFileImage != "default.png")
                         {
-                            TempData["msg"] = DeleteFile("wwwroot/profile/", oldFileImage);
+                            TempData["error"] = DeleteFile("wwwroot/profile/", oldFileImage);
                         }
 
                         if (pdf != null && MimeTypeCheckExtension.İsDocument(pdf))
@@ -587,7 +589,7 @@ namespace SmartIntranet.Web.Controllers
                                 FilePath = await AddFile("wwwroot/userContractDocs/", pdf),
                                 AppUserId = model.Id,
                                 CreatedByUserId = current,
-                                CreatedDate = DateTime.UtcNow.AddHours(4)
+                                CreatedDate = DateTime.UtcNow
                             };
                             await _userContractService.AddAsync(_map.Map<UserContractFile>(appContract));
                         }
@@ -601,11 +603,11 @@ namespace SmartIntranet.Web.Controllers
                             {
                                 if (MimeTypeCheckExtension.İsDocument(pdf))
                                 {
-                                    TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                                    TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                                 }
                                 else
                                 {
-                                    TempData["msg"] = " Daxil edilən fayl pdf, docx və ya xlsx formatında olmalıdır !";
+                                    TempData["error"] = " Daxil edilən fayl pdf, docx və ya xlsx formatında olmalıdır !";
                                 }
                                 return RedirectToAction("List");
                             }
@@ -613,12 +615,12 @@ namespace SmartIntranet.Web.Controllers
                     }
                 }
                 else
-                    TempData["msg"] = " İstifadəçi tapılmadı !";
+                    TempData["error"] = " İstifadəçi tapılmadı !";
                 return RedirectToAction("List");
 
             }
 
-            TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+            TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
             return RedirectToAction("List");
         }
 
@@ -629,7 +631,7 @@ namespace SmartIntranet.Web.Controllers
             var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == id);
             updateUser.IsDeleted = true;
             updateUser.DeleteByUserId = current;
-            updateUser.DeleteDate = DateTime.UtcNow.AddHours(4);
+            updateUser.DeleteDate = DateTime.UtcNow;
             await _userManager.UpdateAsync(updateUser);
             return Ok();
 
@@ -641,7 +643,7 @@ namespace SmartIntranet.Web.Controllers
             var updateUser = await _userContractService.FindByIdAsync(id);
             updateUser.IsDeleted = true;
             updateUser.DeleteByUserId = GetSignInUserId();
-            updateUser.DeleteDate = DateTime.UtcNow.AddHours(4);
+            updateUser.DeleteDate = DateTime.UtcNow;
             await _userContractService.UpdateAsync(updateUser);
             return Ok("Uğurla silindi!");
 

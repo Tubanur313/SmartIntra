@@ -58,10 +58,11 @@ namespace SmartIntranet.Web.Controllers
         private readonly ICompanyService _companyService;
         private readonly IDiscussionService _discussionService;
         private readonly IDepartmentService _departmentService;
-
+        private readonly IEmailService _emailSender;
 
         public TicketController(
             IMapper map,
+            IEmailService emailSender,
             ITicketService ticketService,
             ICheckListService checkListService,
             ICategoryTicketService CategoryTicketService,
@@ -84,6 +85,7 @@ namespace SmartIntranet.Web.Controllers
 
             ) : base(userManager, httpContextAccessor, signInManager, map)
         {
+            _emailSender = emailSender;
             _emailService = emailService;
             _ticketService = ticketService;
             _checkListService = checkListService;
@@ -110,7 +112,7 @@ namespace SmartIntranet.Web.Controllers
             var ticketOrderList = await _ticketOrderService.GetAllIncludeAsync(ticketId);
 
             int pdfRowIndex = 1;
-            string filename = "OrderDetails-" + DateTime.Now.ToString("dd-MM-yyyy hh_mm_s_tt");
+            string filename = "OrderDetails-" + DateTime.UtcNow.ToString("dd-MM-yyyy hh_mm_s_tt");
             string filepath = Path.Combine(Directory.GetCurrentDirectory()) + "/wwwroot/order/" + filename + ".pdf";
 
             string orderPath = "/order/" + filename + ".pdf";
@@ -181,148 +183,148 @@ namespace SmartIntranet.Web.Controllers
 
         }
 
-        [NonAction]
-        private async void SendEmailAsync(string messageType, int ticketId)
-        {
-            List<string> toEmail2 = new List<string>();
-            string watchers = string.Empty;
-            //string orderList = string.Empty;
-            StringBuilder confirmers = new StringBuilder();
-            StringBuilder checklists = new StringBuilder();
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
-            var ticket = await _ticketService.GetIncludeMailAsync(ticketId);
-            //var watchersEmail= await _watcherService.GetAllAsync(y => y.TicketId==model.Id);
-            //var confirmersEmail = await _confirmTicketUserService.GetAllAsync(y => y.TicketId == model.Id);
+        //[NonAction]
+        //private async void SendEmailAsync(string messageType, int ticketId)
+        //{
+        //    List<string> toEmail2 = new List<string>();
+        //    string watchers = string.Empty;
+        //    //string orderList = string.Empty;
+        //    //StringBuilder confirmers = new StringBuilder();
+        //    //StringBuilder checklists = new StringBuilder();
+        //    //var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+        //    var ticket = _ticketService.GetIncludeMail(ticketId);
+        //    //var watchersEmail= await _watcherService.GetAllAsync(y => y.TicketId==model.Id);
+        //    //var confirmersEmail = await _confirmTicketUserService.GetAllAsync(y => y.TicketId == model.Id);
 
 
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(smtpSettings.FromEmail));
+        //    var email = new MimeMessage();
+        //    //email.From.Add(MailboxAddress.Parse(smtpSettings.FromEmail));
 
-            if (ticket.Watchers.Count != 0)
-            {
-                foreach (var item in ticket.Watchers)
-                {
-                    watchers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(item.IntranetUser.Id)).ToString() + "</br>";
-                    toEmail2.Add(item.IntranetUser.Email);
+        //    //if (ticket.Watchers.Count != 0)
+        //    //{
+        //    //    foreach (var item in ticket.Watchers)
+        //    //    {
+        //    //        watchers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(item.IntranetUser.Id)).ToString() + "</br>";
+        //    //        toEmail2.Add(item.IntranetUser.Email);
 
-                }
-            }
+        //    //    }
+        //    //}
 
-            if (ticket.ConfirmTicketUsers.Count != 0)
-            {
-                foreach (var item in ticket.ConfirmTicketUsers)
-                {
-                    confirmers.Append(_map.Map<AppUserDetailsDto>(item.IntranetUser) + "  adlı nəzarətçi sifarişi");
-                    confirmers.Append(item.ConfirmTicket ? "  təsdiq etdi ! </br>" : " təsdiq etməyib ! </br>");
-                    toEmail2.Add(item.IntranetUser.Email);
-                }
-            }
-            if (ticket.TicketCheckLists.Count != 0)
-            {
-                foreach (var item in ticket.TicketCheckLists)
-                {
-                    checklists.Append(item.CheckList.Name + "  adlı çeklist");
-                    checklists.Append(item.Confirm ? "  həll olundu ! </br>" : " həll olunmayıb ! </br>");
-                }
-            }
-            if (ticket.Supporter != null)
-            {
-                toEmail2.Add(ticket.Supporter.Email);
-            }
-            else
-            {
-                toEmail2.Add(smtpSettings.UserName);
-            }
+        //    //if (ticket.ConfirmTicketUsers.Count != 0)
+        //    //{
+        //    //    foreach (var item in ticket.ConfirmTicketUsers)
+        //    //    {
+        //    //        confirmers.Append(_map.Map<AppUserDetailsDto>(item.IntranetUser) + "  adlı nəzarətçi sifarişi");
+        //    //        confirmers.Append(item.ConfirmTicket ? "  təsdiq etdi ! </br>" : " təsdiq etməyib ! </br>");
+        //    //        toEmail2.Add(item.IntranetUser.Email);
+        //    //    }
+        //    //}
+        //    //if (ticket.TicketCheckLists.Count != 0)
+        //    //{
+        //    //    foreach (var item in ticket.TicketCheckLists)
+        //    //    {
+        //    //        checklists.Append(item.CheckList.Name + "  adlı çeklist");
+        //    //        checklists.Append(item.Confirm ? "  həll olundu ! </br>" : " həll olunmayıb ! </br>");
+        //    //    }
+        //    //}
+        //    if (ticket.Supporter != null)
+        //    {
+        //        toEmail2.Add(ticket.Supporter.Email);
+        //    }
+        //    else
+        //    {
+        //        toEmail2.Add(smtpSettings.UserName);
+        //    }
 
-            foreach (var item in toEmail2)
-            {
-                email.To.Add(MailboxAddress.Parse(item));
-            }
+        //    foreach (var item in toEmail2)
+        //    {
+        //        email.To.Add(MailboxAddress.Parse(item));
+        //    }
 
-            email.Subject = ticket.Title;
-            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticket.Id;
-            if (ticket.Supporter != null && ticket.CategoryTicket.TicketType == TicketType.Task)
-            {
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-                    "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-                    "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-                    "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
-                    //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                    "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
-                    "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
-                    "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-                    "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-                    "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
-            }
-            else if (ticket.Supporter != null && ticket.CategoryTicket.TicketType != TicketType.Task)
-            {
-                //string filepath = await ExportToPdf(ticketId);
+        //    email.Subject = ticket.Title;
+        //    string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticket.Id;
+        //    if (ticket.Supporter != null && ticket.CategoryTicket.TicketType == TicketType.Task)
+        //    {
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //            "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //            "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //            "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
+        //            //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //            "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
+        //            "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
+        //            "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //            "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //            "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
+        //    }
+        //    else if (ticket.Supporter != null && ticket.CategoryTicket.TicketType != TicketType.Task)
+        //    {
+        //        //string filepath = await ExportToPdf(ticketId);
 
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-           "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-           "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-            "<a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a>" +
-           "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
-           //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-           "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
-           "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
-           "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-           "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-           "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
-
-
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //   "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //   "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //    "<a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a>" +
+        //   "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
+        //   //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //   "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
+        //   "<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.Name + ticket.Supporter.Surname + "</p>" +
+        //   "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //   "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //   "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
 
 
-            }
-            else if (ticket.Supporter == null && ticket.CategoryTicket.TicketType == TicketType.Task)
-            {
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-                   "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-                   "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-                   "<p><strong>" + "Status : </strong>" + ticket.StatusType.GetDisplayName() + "</p>" +
-                   //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                   "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
-                   //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
-                   "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-                   "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-                   "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
-            }
-            else
-            {
-                //string filepath = await ExportToPdf(ticketId);
-                email.Body = new TextPart(TextFormat.Html)
-                {
-                    Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
-                "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
-                "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
-                "<h3><a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a></h3>" +
-                "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
-                //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
-                "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + "</p>" +
-                //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
-                "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
-                "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
-                "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
-                };
 
-            }
-            // send email
 
-            SmtpClient smtp = new SmtpClient();
-            smtp.Connect(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(smtpSettings.FromEmail, smtpSettings.Password);
-            await smtp.SendAsync(email);
-            smtp.Disconnect(true);
-        }
+        //    }
+        //    else if (ticket.Supporter == null && ticket.CategoryTicket.TicketType == TicketType.Task)
+        //    {
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //           "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //           "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //           "<p><strong>" + "Status : </strong>" + ticket.StatusType.GetDisplayName() + "</p>" +
+        //           //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //           "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + ticket.Employee.Surname + "</p>" +
+        //           //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
+        //           "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //           "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //           "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
+        //    }
+        //    else
+        //    {
+        //        //string filepath = await ExportToPdf(ticketId);
+        //        email.Body = new TextPart(TextFormat.Html)
+        //        {
+        //            Text = "<h1><a href ='" + callBackUrl + "'>" + "#" + ticket.Id + messageType + "</a></h1>" +
+        //        "<p><strong>" + "Məzmun : </strong>" + ticket.Description + "</p>" +
+        //        "<p><strong>" + "Kateqoriya : </strong>" + ticket.CategoryTicket.Name + "</p>" +
+        //        "<h3><a href ='" + smtpSettings.BaseUrl + ticket.OrderPath + "'>" + "Order Fayli" + "</a></h3>" +
+        //        "<p><strong>" + "Status : </strong>" + ticket.StatusType + "</p>" +
+        //        //"<p><strong>" + "Deadline : </strong>" + model.DeadLineEnd.Value.ToString("dd-MM-yyyy") + "</p>" +
+        //        "<p><strong>" + "Task Açan : </strong>" + ticket.Employee.Name + "</p>" +
+        //        //"<p><strong>" + "Yönləndirilib : </strong>" + ticket.Supporter.FullName + "</p>" +
+        //        "<p><strong>" + "Təsdiq edənlər : </strong></br>" + confirmers + "</p>" +
+        //        "<p><strong>" + "Nəzarətçilər : </strong></br>" + watchers + "</p>" +
+        //        "<p><strong>" + "Çeklistlər : </strong></br> " + checklists + "</p>"
+        //        };
+
+        //    }
+        //    // send email
+
+        //    SmtpClient smtp = new SmtpClient();
+        //    smtp.Connect(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
+        //    smtp.Authenticate(smtpSettings.FromEmail, smtpSettings.Password);
+        //    await smtp.SendAsync(email);
+        //    smtp.Disconnect(true);
+        //}
 
         #endregion
         #region Ticket Listing 
@@ -346,7 +348,7 @@ namespace SmartIntranet.Web.Controllers
             return View(model);
         }
         [HttpPost]
-        [Authorize(Policy = "ticket.nonRedirect")]
+        [Authorize(Policy = "ticket.admin")]
         public async Task<IActionResult> Admin(int CategoryTicketId, StatusType statusType, int companyId)
         {
             var model = _map.Map<List<TicketListDto>>(await _ticketService.GetForAdminAsync(CategoryTicketId, statusType, companyId));
@@ -559,8 +561,7 @@ namespace SmartIntranet.Web.Controllers
                 return View(new List<TicketListDto>());
             }
             List<TicketListDto> model = _map.Map<List<TicketListDto>>(await _ticketService
-               .GetByUserDepartmentAllIncAsync((int)user.DepartmentId)
-            );
+               .GetByUserDepartmentAllIncAsync((int)user.DepartmentId));
             if (model is null)
             {
                 ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
@@ -610,12 +611,14 @@ namespace SmartIntranet.Web.Controllers
             if (ModelState.IsValid)
             {
 
-                var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.CategoryTicketId));
+                var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var add = _map.Map<Ticket>(model);
-                add.CreatedByUserId = GetSignInUserId();
-                add.EmployeeId = GetSignInUserId();
+                int GetUserId = GetSignInUserId();
+                add.CreatedByUserId = GetUserId;
+                add.EmployeeId = GetUserId;
                 add.SupporterId = CategoryTicketSupporter.SupporterId;
-
+                add.CreatedDate = DateTime.UtcNow;
+                add.OpenDate= DateTime.UtcNow;
                 var result = await _ticketService.AddReturnEntityAsync(add);
 
                 if (result is null)
@@ -637,6 +640,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapWatcher = _map.Map<Watcher>(watcher);
                         mapWatcher.CreatedByUserId = GetSignInUserId();
+                        mapWatcher.CreatedDate = DateTime.UtcNow;
                         var watchResult = await _watcherService
                             .AddReturnEntityAsync(mapWatcher);
                         //wathcers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(intranetUserId)).ToString() + "</br>";
@@ -655,6 +659,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapConfirm = _map.Map<ConfirmTicketUser>(confirm);
                         mapConfirm.CreatedByUserId = GetSignInUserId();
+                        mapConfirm.CreatedDate = DateTime.UtcNow;
                         var confirmResult = await _confirmTicketUserService
                         .AddReturnEntityAsync(mapConfirm);
                         //confirmers += _map.Map<AppUserDetailsDto>(await _userService.FindByUserAllInc(intranetUserId)).ToString() + "</br>";
@@ -673,6 +678,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapCheck = _map.Map<TicketCheckList>(check);
                         mapCheck.CreatedByUserId = GetSignInUserId();
+                        mapCheck.CreatedDate = DateTime.UtcNow;
                         var checklistResult = await _ticketCheckListService
                              .AddReturnEntityAsync(mapCheck);
                         //checklists += _map.Map<CheckListListDto>(await _checkListService.FindByIdAsync(checkId)).Name + "</br>";
@@ -691,6 +697,7 @@ namespace SmartIntranet.Web.Controllers
 
                         var mappedTO = _map.Map<TicketOrder>(ticketOrder);
                         mappedTO.CreatedByUserId = GetSignInUserId();
+                        mappedTO.CreatedDate = DateTime.UtcNow;
                         await _ticketOrderService.AddReturnEntityAsync(mappedTO);
 
                     }
@@ -712,6 +719,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var photo = _map.Map<Photo>(dto);
                             photo.CreatedByUserId = GetSignInUserId();
+                            photo.CreatedDate = DateTime.UtcNow;
                             await _photo.AddAsync(photo);
 
                         }
@@ -728,14 +736,15 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var photo = _map.Map<Photo>(dto);
                             photo.CreatedByUserId = GetSignInUserId();
+                            photo.CreatedDate = DateTime.UtcNow;
                             await _photo.AddAsync(photo);
                         }
                         else
                         {
-                            if (CategoryTicketSupporter.Supporter != null)
-                            {
-                                SendEmailAsync(" Nomreli Task Yaradildi", result.Id);
-                            }
+                            //if (CategoryTicketSupporter.Supporter != null)
+                            //{
+                            //    //SendEmailAsync(" Nomreli Task Yaradildi", result.Id);
+                            //}
                             return RedirectToAction("List", new
                             {
                                 success = Messages.Add.Added + $"{upload.ContentType.GetType()} formatı uyğun format deyil"
@@ -743,15 +752,13 @@ namespace SmartIntranet.Web.Controllers
                         }
                     }
                 }
-                if(ticketResult.CategoryTicket.TicketType != TicketType.Task)
+                if(ticketResult.CategoryTicket.TicketType == TicketType.Purchasing)
                 {
                    await ExportToPdf(result.Id);
                 }
-                var message = " Nomreli Task Yaradildi";
-                if (CategoryTicketSupporter.Supporter != null)
-                {
-                    SendEmailAsync(message, result.Id);
-                }
+               
+                _emailSender.TicketSendEmail(result.Id,TicketChangeType.TicketAdd, GetSignInFullName());
+
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added
@@ -784,7 +791,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _ticketService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _ticketService.UpdateAsync(delete);
         }
@@ -824,7 +831,7 @@ namespace SmartIntranet.Web.Controllers
         {
            await ExportToPdf(ticketId);
             string message = " Taskın Order faylında dəyişiklik olundu";
-            SendEmailAsync(message, ticketId);
+            //SendEmailAsync(message, ticketId);
             return Ok();
         }
 
@@ -859,13 +866,16 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var data = await _ticketService.FindByIdAsync(model.Id);
                 data.UpdateByUserId = GetSignInUserId();
-                data.UpdateDate = DateTime.Now;
-                data.CategoryTicketId = model.CategoryTicketId;
+                data.UpdateDate = DateTime.UtcNow;
+                data.CategoryTicketId = model.TicketCategoryId;
+                data.SupporterId = CategoryTicketSupporter.SupporterId;
                 await _ticketService.UpdateModifiedAsync(data);
 
-                SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
+                //SendEmailAsync(" Nomreli Task Kateqoriya Yeniləndi", model.Id);
+                _emailSender.TicketSendEmail(model.TicketCategoryId, TicketChangeType.TicketCategory, GetSignInFullName());
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -898,6 +908,7 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                int GetSignUserId = GetSignInUserId();
                 if (model.CheckListId != null)
                 {
                     foreach (var checkListId in model.CheckListId)
@@ -911,12 +922,14 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var mapTcl = _map.Map<TicketCheckList>(tcl);
                             mapTcl.CreatedByUserId = GetSignInUserId();
+                            mapTcl.CreatedDate = DateTime.UtcNow;
                             await _ticketCheckListService
                             .AddReturnEntityAsync(mapTcl);
                         }
                     }
                 }
-                SendEmailAsync(" Nomreli Task Checklistler Yeniləndi", model.Id);
+                //SendEmailAsync(" Nomreli Task Checklistler Yeniləndi", model.Id);
+                _emailSender.TicketSendEmail(model.Id, TicketChangeType.TicketChecklist, GetSignInFullName());
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -931,6 +944,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.confirm")]
         public async Task<IActionResult> Confirm(int id)
         {
+
             TicketConfirmDto ticket = _map.Map<TicketConfirmDto>(await _ticketService
                 .FindForConfirmAsync(id));
             if (ticket is null)
@@ -947,12 +961,14 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                int GetSignUserId = GetSignInUserId();
                 if (!model.Confirmed && model.ConfirmTicketUserId != null)
                 {
                     var ticket = await _ticketService.FindByIdAsync(model.Id);
                     ticket.Confirmed = model.Confirmed;
                     await _ticketService.UpdateModifiedAsync(ticket);
                     //SendEmailAsync(" Nomreli Taska Tesdiq Sorgusu Elave olundu", model.Id);
+                    _emailSender.TicketSendEmail(model.Id, TicketChangeType.ConfirmTicket, GetSignInFullName());
                     return RedirectToAction("List", new
                     {
                         success = Messages.Update.confirmed
@@ -972,6 +988,7 @@ namespace SmartIntranet.Web.Controllers
                             };
                             var mapConfirm = _map.Map<ConfirmTicketUser>(confirm);
                             mapConfirm.CreatedByUserId = GetSignInUserId();
+                            mapConfirm.CreatedDate = DateTime.UtcNow;
                             var confirmers = await _confirmTicketUserService
                             .AddReturnEntityAsync(mapConfirm);
                         }
@@ -980,10 +997,12 @@ namespace SmartIntranet.Web.Controllers
                     ticket.Confirmed = model.Confirmed;
                     await _ticketService.UpdateModifiedAsync(ticket);
                     //SendEmailAsync(" Nomreli Task Tesdiqlendi", model.Id);
+                    _emailSender.TicketSendEmail(model.Id, TicketChangeType.ConfirmUserAdd, GetSignInFullName());
                     TempData["success"] = "Təsdiqləyənlər siyahısı yeniləndi";
                     return RedirectToAction("Confirmed");
                 }
-                SendEmailAsync(" Nomreli Task Tesdiqlendi", model.Id);
+                _emailSender.TicketSendEmail(model.Id, TicketChangeType.ConfirmUser, GetSignInFullName());
+                //SendEmailAsync(" Nomreli Task Tesdiqlendi", model.Id);
                 return RedirectToAction("Confirmed");
             }
             TempData["error"] = Messages.Error.notComplete;
@@ -1008,6 +1027,7 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                int GetSignUserId = GetSignInUserId();
                 foreach (var intranetUserId in model.AppUserWatcherId)
                 {
                     if (!await _watcherService
@@ -1020,11 +1040,13 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var mapConfirm = _map.Map<Watcher>(watchers);
                         mapConfirm.CreatedByUserId = GetSignInUserId();
+                        mapConfirm.CreatedDate = DateTime.UtcNow;
                         var confirmers = await _watcherService
                         .AddReturnEntityAsync(mapConfirm);
                     }
                 }
                 //SendEmailAsync(" Nomreli Task Nəzarətçilər yeniləndi", model.Id);
+                _emailSender.TicketSendEmail(model.Id, TicketChangeType.TicketWatcher, GetSignInFullName());
                 TempData["success"] = "Nəzarətçilər siyahısı yeniləndi";
                 return RedirectToAction("Watched");
 
@@ -1051,15 +1073,17 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                int GetSignUserId = GetSignInUserId();
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.SupporterId = model.SupporterId;
 
                 await _ticketService.UpdateAsync(update);
-                SendEmailAsync("Nomreli Task Yönləndirildi", model.Id);
+                //SendEmailAsync("Nomreli Task Yönləndirildi", model.Id);
+                _emailSender.TicketSendEmail(model.Id, TicketChangeType.TicketSupportRedirect, GetSignInFullName());
                 TempData["success"] = "Ticket Yönləndirildi";
-                return RedirectToAction("NonRedirect");
+                return RedirectToAction("List");
             }
             TempData["error"] = Messages.Error.notComplete;
             return RedirectToAction("NonRedirect");
@@ -1081,13 +1105,15 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                int GetSignUserId = GetSignInUserId();
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.StatusType = model.StatusType;
 
                 await _ticketService.UpdateAsync(update);
-                SendEmailAsync(" Nomreli Taskın Statusu Dəyişdirildi", model.Id);
+                //SendEmailAsync(" Nomreli Taskın Statusu Dəyişdirildi", model.Id);
+                _emailSender.TicketSendEmail(model.Id, TicketChangeType.TicketStatus, GetSignInFullName());
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -1115,13 +1141,15 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                int GetSignUserId = GetSignInUserId();
                 var update = await _ticketService.FindByIdAsync(model.Id);
                 update.UpdateByUserId = GetSignInUserId();
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.PriorityType = model.PriorityType;
 
                 await _ticketService.UpdateAsync(update);
                 //SendEmailAsync(" Nomreli Taskın Prioriteti Dəyişdirildi", model.Id);
+                _emailSender.TicketSendEmail(model.Id, TicketChangeType.TicketPriority, GetSignInFullName());
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -1155,13 +1183,17 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.discuss")]
         public async Task<IActionResult> Discuss(DiscussionAddDto model)
         {
+            int GetSignUserId = GetSignInUserId();
+            
             var add = _map.Map<Discussion>(model);
             add.CreatedByUserId = GetSignInUserId();
             add.IntranetUserId = GetSignInUserId();
+            add.CreatedDate = DateTime.UtcNow;
             var result = await _discuss.AddReturnEntityAsync(add);
             var count = await _discuss.GetAllAsync(x => x.TicketId == result.TicketId);
 
             var discuss = _map.Map<DiscussionListDto>(await _discuss.GetAllIncludeAsync(result.Id));
+            _emailSender.TicketSendEmail(Convert.ToInt32(model.TicketId), TicketChangeType.TicketDiscuss, GetSignInFullName());
             return Ok(new
             {
                 fulname = _map.Map<AppUserDetailsDto>(discuss.IntranetUser).ToString(),
@@ -1175,10 +1207,13 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.load")]
         public async Task<IActionResult> Load(int Id, IFormFile[] files)
         {
+            int GetSignUserId = GetSignInUserId();
             foreach (var upload in files)
             {
                 if (!(upload is null))
                 {
+                    
+                   
                     if (MimeTypeCheckExtension.İsImage(upload))
                     {
                         string folder = "/ticketPhoto/";
@@ -1191,6 +1226,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var photo = _map.Map<Photo>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
+                        photo.CreatedDate = DateTime.UtcNow;
                         await _photo.AddAsync(photo);
 
                     }
@@ -1206,6 +1242,7 @@ namespace SmartIntranet.Web.Controllers
                         };
                         var photo = _map.Map<Photo>(dto);
                         photo.CreatedByUserId = GetSignInUserId();
+                        photo.CreatedDate = DateTime.UtcNow;
                         await _photo.AddAsync(photo);
                     }
                     else
@@ -1214,6 +1251,7 @@ namespace SmartIntranet.Web.Controllers
                     }
                 }
             }
+            _emailSender.TicketSendEmail(Id, TicketChangeType.TicketImage, GetSignInFullName());
             return Ok("Tiket Əlavə olundu");
         }
         #endregion

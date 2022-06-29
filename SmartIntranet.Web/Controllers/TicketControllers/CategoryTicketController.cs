@@ -66,13 +66,13 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<CategoryTicket>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                if (await _categoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _categoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 if (await _categoryTicketService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -120,15 +120,15 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
-                if (await _categoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _categoryTicketService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 await _categoryTicketService.UpdateAsync(update);
                 return RedirectToAction("List", new
                 {
@@ -145,7 +145,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _categoryTicketService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _categoryTicketService.UpdateAsync(delete);
         }

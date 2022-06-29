@@ -214,7 +214,8 @@ namespace SmartIntranet.Web.Controllers
                     if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                     {
                         contractFile.ClauseId = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_labor_contract && !x.IsDeleted).Result[0].Id;
-                        contractFile.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc);   
+                        contractFile.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc); 
+                        contractFile.CreatedDate = DateTime.UtcNow;
                     }
                 }
                 await _contractFileService.AddAsync(contractFile);
@@ -229,7 +230,7 @@ namespace SmartIntranet.Web.Controllers
 
                 StringBuilder content1 = await GetDocxContent(command_clause.FilePath, formatKeys);
                 commandFile.FilePath = await AddContractFile(command_clause.FilePath, PdfFormatKeys(formatKeys, content1));
-
+                contractFile.CreatedDate = DateTime.UtcNow;
                 await _contractFileService.AddAsync(commandFile);
                 // Mexfilik senedi
                 var privacyFile = new ContractFile();
@@ -241,7 +242,7 @@ namespace SmartIntranet.Web.Controllers
 
                 StringBuilder content2 = await GetDocxContent(privacy_clause.FilePath, formatKeys);
                 privacyFile.FilePath = await AddContractFile(privacy_clause.FilePath, PdfFormatKeys(formatKeys, content2));
-
+                privacyFile.CreatedDate = DateTime.UtcNow;
                 await _contractFileService.AddAsync(privacyFile);
                 // Maddi mesuliyyet senedi
                 var financialResponsibilityFile = new ContractFile();
@@ -253,7 +254,7 @@ namespace SmartIntranet.Web.Controllers
 
                 StringBuilder content3 = await GetDocxContent(financial_clause.FilePath, formatKeys);
                 financialResponsibilityFile.FilePath = await AddContractFile(financial_clause.FilePath, PdfFormatKeys(formatKeys, content3));
-
+                financialResponsibilityFile.CreatedDate = DateTime.UtcNow;
                 await _contractFileService.AddAsync(financialResponsibilityFile);
                 return RedirectToAction("List", new
                 {
@@ -303,7 +304,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _contractService.UpdateAsync(_map.Map<Contract>(model));
 
@@ -383,7 +384,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = await _contractService.FindByIdAsync(id);
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<Contract>(transactionModel));
