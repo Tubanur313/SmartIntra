@@ -143,11 +143,7 @@
                   
 
                   
-                    <div class="row">
-                        <div class="col-12 text-right">
-                            İş stajı: <button type="button" id="addRow" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
-                        </div>
-                    </div>
+                 
                 </div>
 
                   <div class="tab-pane" id="home2" role="tabpanel">
@@ -402,9 +398,11 @@
 
                 
                  <div class="tab-pane" id="home4" role="tabpanel">
+                      
                        <div id="row-box">
                         <input id="rowCount" type="hidden" value="0" />
                     </div>
+
                      <div id="row-box">
                         <input id="rowCount" type="hidden" value="@Model.UserExperiences.Count" />
                         @for (var i = 0; i < Model.UserExperiences.Count; i++)
@@ -432,6 +430,12 @@
                                 </div>
                             </div>
                         }
+                    </div>
+
+                      <div class="row">
+                        <div class="col-12 text-right">
+                            İş stajı: <button type="button" id="addRow" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="profile1" role="tabpanel">
