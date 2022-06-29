@@ -19,12 +19,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I=>I.CandidateDesc).HasColumnType("ntext").IsRequired();
             builder.Property(I=>I.Salary).HasMaxLength(100).IsRequired();
             builder.Property(I=>I.Occupations).HasMaxLength(100).IsRequired();
-            builder.Property(I=>I.StartDate).HasDefaultValue(DateTime.Now); ;
+            builder.Property(I=>I.StartDate).HasDefaultValue(DateTime.UtcNow); ;
             builder.Property(I=>I.EndDate).HasDefaultValue(null);
             builder.Property(I=>I.City).HasMaxLength(100);
             builder.Property(I=>I.Address).HasMaxLength(200);
             builder.Property(I=>I.Email).HasMaxLength(100);
-            builder.Property(I => I.CreatedDate).HasDefaultValue(DateTime.Now);
+            builder.Property(I => I.CreatedDate).HasDefaultValue(null);
             builder.Property(I => I.DeleteDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateDate).HasDefaultValue(null);
             builder.Property(I => I.UpdateByUserId).HasDefaultValue(null);

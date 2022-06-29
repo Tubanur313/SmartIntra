@@ -82,7 +82,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var usr2 = await _userManager.FindByIdAsync(model.UserId.ToString());
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                model.CreatedDate = DateTime.UtcNow;
                
                 if (model.Type == PersonalContractConst.VACATION)
                 {
@@ -155,6 +155,7 @@ namespace SmartIntranet.Web.Controllers
                     file_extra.ClauseId = clause_result_extra.Id;
                     StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                     file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                    file_extra.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_extra);
 
                     var file_command = new PersonalContractFile();
@@ -165,6 +166,7 @@ namespace SmartIntranet.Web.Controllers
                     file_command.ClauseId = clause_result_command.Id;
                     StringBuilder content_command = await GetDocxContent(clause_result_command.FilePath, formatKeys);
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
+                    file_command.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_command);
                 }
                 else if (model.Type== PersonalContractConst.POSITION)
@@ -186,6 +188,7 @@ namespace SmartIntranet.Web.Controllers
                     file_extra.ClauseId = clause_result_extra.Id;
                     StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                     file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                    file_extra.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_extra);
 
                     var file_command = new PersonalContractFile();
@@ -196,6 +199,7 @@ namespace SmartIntranet.Web.Controllers
                     file_command.ClauseId = clause_result_command.Id;
                     StringBuilder content_command = await GetDocxContent(clause_result_command.FilePath, formatKeys);
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
+                    file_command.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_command);
                 }
                 else if (model.Type == PersonalContractConst.SALARY_POSITION)
@@ -218,6 +222,7 @@ namespace SmartIntranet.Web.Controllers
                     file_extra.ClauseId = clause_result_extra.Id;
                     StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
                     file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                    file_extra.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_extra);
 
                     var file_command = new PersonalContractFile();
@@ -228,6 +233,7 @@ namespace SmartIntranet.Web.Controllers
                     file_command.ClauseId = clause_result_command.Id;
                     StringBuilder content_command = await GetDocxContent(clause_result_command.FilePath, formatKeys);
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
+                    file_command.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file_command);
                 }
                 else if (model.Type == PersonalContractConst.WORK_PLACE)
@@ -243,6 +249,7 @@ namespace SmartIntranet.Web.Controllers
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
                     file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
+                    file.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file);
                 }
                 else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
@@ -260,6 +267,7 @@ namespace SmartIntranet.Web.Controllers
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
                     file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
+                    file.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file);
                 }
                 else if (model.Type == PersonalContractConst.VACATION)
@@ -298,15 +306,15 @@ namespace SmartIntranet.Web.Controllers
                         decimal new_count = 0;
                         DateTime start_interval;
                         DateTime end_interval;
-                        if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                        if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                         {
-                            start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                         }
                         else
                         {
-                            start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                         }
 
                         if (model.CommandDate>= start_interval && model.CommandDate <= end_interval)
@@ -319,7 +327,7 @@ namespace SmartIntranet.Web.Controllers
                                 ur.FromDate = start_interval;
                                 ur.ToDate = end_interval;
                                 ur.IsDeleted = false;
-                                ur.CreatedDate = DateTime.Now;
+                                ur.CreatedDate = DateTime.UtcNow;
                                 ur.AppUserId = usr2.Id;
                                 ur.UsedCount = 0;
                                 ur.VacationCount = usr.VacationMainDay + usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
@@ -373,7 +381,8 @@ namespace SmartIntranet.Web.Controllers
                     var clause_result = (await _clauseService.GetAllIncCompAsync(x => x.Key == clause && !x.IsDeleted))[0];
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
-                    file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
+                    file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));                   
+                    file.CreatedDate = DateTime.UtcNow;
                     await _contractFileService.AddAsync(file);
                 }
                 return RedirectToAction("List", "Contract");
@@ -407,13 +416,13 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List", "Contract");
             }
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 var usr2 = await _userManager.FindByIdAsync(model.UserId.ToString());
 
@@ -666,15 +675,15 @@ namespace SmartIntranet.Web.Controllers
                     decimal new_count = 0;
                     DateTime start_interval;
                     DateTime end_interval;
-                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                    if (DateTime.UtcNow.Month > work_start_date.Month || (DateTime.UtcNow.Month == work_start_date.Month && DateTime.UtcNow.Day >= work_start_date.Day))
                     {
-                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year + 1, work_start_date.Month, work_start_date.Day);
                     }
                     else
                     {
-                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(DateTime.UtcNow.Year - 1, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(DateTime.UtcNow.Year, work_start_date.Month, work_start_date.Day);
                     }
 
                     if (transactionModel.CommandDate >= start_interval && transactionModel.CommandDate <= end_interval)
@@ -734,7 +743,7 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-                transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+                transactionModel.DeleteDate = DateTime.UtcNow;
                 transactionModel.DeleteByUserId = current;
                 transactionModel.IsDeleted = true;
                 await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));

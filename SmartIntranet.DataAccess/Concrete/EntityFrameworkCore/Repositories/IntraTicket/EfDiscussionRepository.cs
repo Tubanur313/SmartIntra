@@ -20,6 +20,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Company)
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
         }
         public async Task<Discussion> GetAllIncludeAsync(int id)
@@ -31,6 +32,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Company)
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
+                .OrderByDescending(z => z.Id)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
     }

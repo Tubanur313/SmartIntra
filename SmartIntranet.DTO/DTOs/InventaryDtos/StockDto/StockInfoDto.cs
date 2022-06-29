@@ -12,6 +12,8 @@ namespace SmartIntranet.DTO.DTOs.InventaryDtos.StockDto
         public int Id { get; set; }
         public string Name { get; set; }
         public string Price { get; set; }
+        public decimal DepreciationPercent { get; set; }
+        public DateTime BuyDate { get; set; }
         public string MacAddress { get; set; }
         public string SKU { get; set; }
         public DateTime? CreatedDate { get; set; }

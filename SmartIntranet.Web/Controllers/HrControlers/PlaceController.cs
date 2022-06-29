@@ -10,8 +10,6 @@ using SmartIntranet.DTO.DTOs.NonWorkingDayDto;
 using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
-
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -70,7 +68,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow.AddHours(4);
+                model.CreatedDate = DateTime.UtcNow;
                 model.IsDeleted = false;
                 if (model.Currency == null)
                     model.Currency = "";
@@ -99,14 +97,14 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
             else
             {
                 var current = GetSignInUserId();
 
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 if (model.Currency == null)
                     model.Currency = "";
@@ -121,7 +119,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<PlaceListDto>(await _placeService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _placeService.UpdateAsync(_map.Map<Place>(transactionModel));

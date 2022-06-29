@@ -11,7 +11,6 @@ namespace SmartIntranet.Entities.Concrete.IntraTicket
         public bool IsSSL { get; set; } 
         public string FromEmail { get; set; }
         public string BaseUrl { get; set; }
-
         public bool IsDefault { get; set; } 
     }
 }

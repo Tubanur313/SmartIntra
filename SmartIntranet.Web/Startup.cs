@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +55,11 @@ namespace SmartTicket.Web
             services.AddCustomIdentity();
             services.AddCustomValidator();
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
             services.AddAutoMapper(typeof(MapProfile));
 
             //services.Configure<CookiePolicyOptions>(options =>
@@ -76,7 +82,7 @@ namespace SmartTicket.Web
                 app.UseExceptionHandler("/Home/Error");
                 //app.UseHsts();
             }
-            
+
             //app.UseHttpsRedirection();
             app.SeedTicketSystem();
             IntranetDBSeed.SeedClause(app);

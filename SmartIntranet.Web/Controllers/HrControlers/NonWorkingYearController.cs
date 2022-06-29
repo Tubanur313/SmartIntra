@@ -55,7 +55,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow.AddHours(4);
+                model.CreatedDate = DateTime.UtcNow;
                 model.IsDeleted = false;
                 if ((await _nonWorkingYearService.GetAllAsync()).Any(x => x.Year == model.Year && !x.IsDeleted))
                 {
@@ -99,13 +99,13 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = " Daxil edilən məlumatlar tam deyil !";
+                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
                 return RedirectToAction("List");
             }
             else
             {
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.UtcNow.AddHours(4);
+                model.UpdateDate = DateTime.UtcNow;
                 model.UpdateByUserId = current;
                 await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(model));
                 return RedirectToAction("List");
@@ -117,7 +117,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<NonWorkingYearListDto>(await _nonWorkingYearService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow.AddHours(4);
+            transactionModel.DeleteDate = DateTime.UtcNow;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(transactionModel));

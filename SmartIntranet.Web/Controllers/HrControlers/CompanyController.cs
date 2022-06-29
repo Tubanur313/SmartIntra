@@ -85,17 +85,17 @@ namespace SmartIntranet.Web.Controllers
                         model.LogoPath = _upload.UploadResizedImg(logo, "wwwroot/logo/");
                     }
                 }
-                if (await _companyService.AnyAsync(x => x.Name.ToUpper()
-                .Contains(model.Name.ToUpper()) && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _companyService.AnyAsync(x => x.Name.ToUpper()
+                //.Contains(model.Name.ToUpper()) && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 var add = _map.Map<Company>(model);
                 add.CreatedByUserId = GetSignInUserId();
-
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _companyService.AddReturnEntityAsync(add) is null)
                 {
                     return RedirectToAction("List", new
@@ -126,6 +126,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var add = _map.Map<Company>(model);
                 add.CreatedByUserId = GetSignInUserId();
+                add.CreatedDate = DateTime.UtcNow;
                 if (await _companyService.AddReturnEntityAsync(add) is null)
                 {
                     return BadRequest(Messages.Add.notAdded);
@@ -187,15 +188,15 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
-                if (await _companyService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
-                {
-                    return RedirectToAction("List", new
-                    {
-                        error = Messages.Error.sameName
-                    });
-                }
+                //if (await _companyService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
+                //{
+                //    return RedirectToAction("List", new
+                //    {
+                //        error = Messages.Error.sameName
+                //    });
+                //}
                 await _companyService.UpdateReturnEntityAsync(update);
                 return RedirectToAction("List", new
                 {
@@ -214,7 +215,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var delete = await _companyService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.Now;
+            delete.DeleteDate = DateTime.UtcNow;
             delete.IsDeleted = true;
             await _companyService.UpdateAsync(delete);
         }

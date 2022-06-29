@@ -20,8 +20,7 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public List<int> ConfirmTicketUserId { get; set; }
         public string OrderIds { get; set; }
         public string GrandTotal { get; set; }
-        public int CategoryTicketId { get; set; }
-        public CategoryTicket CategoryTicket { get; set; }
+        public int TicketCategoryId { get; set; }
         public PriorityType PriorityType { get; set; }
         public StatusType StatusType { get; set; }
     }

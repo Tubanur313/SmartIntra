@@ -51,7 +51,7 @@
                             <option value="">Yoxdur</option>
                             @foreach (AppUserDetailsDto item in ViewBag.users)
                             {
-                               <option value="@item.Id">@item.FullName | @item.Company | @item.Department | @item.Position</option>
+                                <option value="@item.Id">@item.FullName | @item.Company | @item.Department | @item.Position</option>
                             }
                         </select>
                     </div>
@@ -60,14 +60,30 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">MacAddress: </label>
-                        <input type="text" class="form-control" asp-for="MacAddress" autocomplete="off" placeholder="____:____:____:____">
+                        <input type="text" class="form-control" asp-for="MacAddress" data-mask="9999:9999:9999:9999">
                         <span class="messages"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">Dəyər: </label>
-                        <input type="text" asp-for="Price" class="form-control autonumber">
+                        <input type="text" asp-for="Price" placeholder="0.00" class="form-control autonumber" data-a-sep="," data-a-dec=".">
+                      <span asp-validation-for="Price" class="text-danger"></span> 
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">Amortizasiya Faizi: </label>
+                        <input type="text" asp-for="DepreciationPercent" placeholder="0.00 %" class="form-control autonumber" data-v-min="0.00" data-v-max="100.00" data-p-sign="s" data-a-sign=" %">
+
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Avadanlığın Alınma Tarixi: </label>
+                        <input type="date" class="form-control" asp-for="BuyDate" autocomplete="off">
+                                             <span asp-validation-for="BuyDate" class="text-danger"></span> 
+                        <span class="messages"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -80,7 +96,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-sm-12 d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                    <button type="submit" class="sub-btn btn btn-primary m-b-0 btn-block">
                         Təsdiqlə
                     </button>
                 </div>
@@ -89,14 +105,18 @@
     </div>
 </div>
 
-@section Crudjs{
-    <!-- Masking js -->
+<!-- Masking js -->
 <script src="~/files/assets/pages/form-masking/inputmask.js"></script>
 <script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
 <script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
 <script src="~/files/assets/pages/form-masking/form-mask.js"></script>
-}
+<script src="~/files/assets/pages/form-masking/jquery.maskMoney.min.js"></script>
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
+<script class="removable">
+    $( document ).ready(function() {
+        $("#MacAddress").inputmask({ mask: "9999:9999:9999:9999"});
+    });
+</script>

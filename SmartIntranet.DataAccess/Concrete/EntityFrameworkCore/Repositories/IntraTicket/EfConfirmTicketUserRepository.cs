@@ -26,6 +26,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
         }
         public async Task<List<ConfirmTicketUser>> MyConfirmNeedTicketsAsync(int userId, int categoryId, StatusType statusType)
@@ -34,8 +35,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             if (categoryId > 0 && statusType != 0)
             {
                 return await context.ConfirmTicketUsers
-               .Where(x => x.IntranetUserId == userId 
-               && x.Ticket.CategoryTicketId == categoryId 
+               .Where(x => x.IntranetUserId == userId
+               && x.Ticket.CategoryTicketId == categoryId
                && x.Ticket.StatusType == statusType
                && x.Ticket.IsDeleted == false
                )
@@ -48,12 +49,13 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Supporter)
                .Include(x => x.Ticket)
                .ThenInclude(x => x.CategoryTicket)
+               .OrderByDescending(z => z.Id)
                .ToListAsync();
             }
             else if (categoryId != 0 && statusType == 0)
             {
                 return await context.ConfirmTicketUsers
-                .Where(x => x.IntranetUserId == userId 
+                .Where(x => x.IntranetUserId == userId
                 && x.Ticket.CategoryTicketId == categoryId
                 && x.Ticket.IsDeleted == false)
                 .Include(x => x.Ticket)
@@ -65,12 +67,13 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
             else if (categoryId == 0 && statusType != 0)
             {
                 return await context.ConfirmTicketUsers
-                .Where(x => x.IntranetUserId == userId 
+                .Where(x => x.IntranetUserId == userId
                 && x.Ticket.StatusType == statusType
                 && x.Ticket.IsDeleted == false)
                 .Include(x => x.Ticket)
@@ -82,6 +85,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
             else
@@ -98,6 +102,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
         }

@@ -14,8 +14,10 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         async Task<List<NewsFile>> INewsFileDal.GetAllByUserIdAsync(int newsId)
         {
             using var context = new IntranetContext();
-            return await context.NewsFiles.Where(u => u.NewsId == newsId && u.IsDeleted == false)
-                .OrderByDescending(c => c.Name).ToListAsync();
+            return await context.NewsFiles
+                .Where(u => u.NewsId == newsId && !u.IsDeleted)
+                .OrderByDescending(c => c.Name)
+                .ToListAsync();
         }
     }
 

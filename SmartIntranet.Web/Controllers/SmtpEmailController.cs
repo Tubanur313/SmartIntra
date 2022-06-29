@@ -30,7 +30,7 @@ namespace SmartIntranet.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await _emailService.GetAsync();
+            var model =_emailService.Get();
             if (model != null )
             {
                 return View(_map.Map<EmailListDto>(model));
@@ -48,7 +48,7 @@ namespace SmartIntranet.Web.Controllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
+                update.UpdateDate = DateTime.UtcNow;
                 update.DeleteDate = data.DeleteDate;
 
                 await _emailService.UpdateAsync(update);

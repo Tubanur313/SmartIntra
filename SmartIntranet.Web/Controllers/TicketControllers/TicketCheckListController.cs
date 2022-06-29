@@ -36,7 +36,7 @@ namespace SmartIntranet.Web.Controllers
             if (conf != null)
             {
                 conf.UpdateByUserId = GetSignInUserId();
-                conf.UpdateDate = DateTime.Now;
+                conf.UpdateDate = DateTime.UtcNow;
                 conf.Confirm = active;
                 await _ticketCheckListService.UpdateModifiedAsync(conf);
                 return Ok(new
