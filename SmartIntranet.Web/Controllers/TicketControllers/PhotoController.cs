@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers
 {
-    public class NewsController : BaseIdentityController
+    public class PhotoController : BaseIdentityController
     {
         private readonly IPhotoService _photoService;
-        public NewsController
+        public PhotoController
             (
             IMapper map,
             UserManager<IntranetUser> userManager,
