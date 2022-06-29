@@ -34,6 +34,8 @@ using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using System.IO.Compression;
 using static SmartIntranet.Core.Extensions.IdentityExtension;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 
 namespace SmartIntranet.Business.Extension
 {
@@ -50,6 +52,21 @@ namespace SmartIntranet.Business.Extension
                 opt.Password.RequireNonAlphanumeric = false;
             })
              .AddEntityFrameworkStores<IntranetContext>();
+
+            services.ConfigureApplicationCookie(_ =>
+            {
+                _.LoginPath = new PathString("/signin.html");
+                _.AccessDeniedPath = new PathString("/accessdenied.html");
+                _.Cookie = new CookieBuilder
+                {
+                    Name = "SmartIntranetCookie",
+                    HttpOnly = false,
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.Always
+                };
+                _.SlidingExpiration = true;
+                _.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+            });
 
             services.AddAuthentication();
             services.AddAuthorization(cfg =>
@@ -70,58 +87,8 @@ namespace SmartIntranet.Business.Extension
                 }
 
             });
-
-            services.ConfigureApplicationCookie(_ =>
-            {
-                _.LoginPath = new PathString("/signin.html");
-                _.AccessDeniedPath = new PathString("/accessdenied.html");
-                _.Cookie = new CookieBuilder
-                {
-                    Name = "SmartIntranetCookie",
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.Lax,
-                    SecurePolicy = CookieSecurePolicy.Always
-                };
-                _.SlidingExpiration = true;
-                _.ExpireTimeSpan = TimeSpan.FromMinutes(300);
-            });
-
-            //services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
-            //{
-            //    opt.Cookie.Name = "SmartIntranetCookie";
-            //    //opt.Cookie.SameSite = SameSiteMode.Strict;
-            //    opt.Cookie.HttpOnly = false;
-            //    //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-            //    opt.ExpireTimeSpan = new System.TimeSpan(5, 0, 0);
-            //    opt.SlidingExpiration = true;
-            //    opt.Cookie.SameSite = SameSiteMode.Lax;
-            //    opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-            //    opt.LoginPath = "/signin.html";
-            //    opt.AccessDeniedPath = "/accessdenied.html";
-            //});
-
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie();
-
-            //services.AddAuthorization(cfg =>
-            //{
-            //    foreach (var claimName in AppClaimProvider.policies)
-            //    {
-            //        cfg.AddPolicy(claimName, p =>
-            //        {
-            //            p.RequireAssertion(a =>
-            //            {
-
-            //                return a.User.HasClaim(claimName, "1")
-            //                || a.User.IsInRole("SuperAdmin");
-
-            //            });
-            //            //p.RequireClaim(claimName, "1");
-            //        });
-            //    }
-            //});
-
-            
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IClaimsTransformation, AppClaimProvider>();
 
         }
         public static void AddCustomCompression(this IServiceCollection services)
