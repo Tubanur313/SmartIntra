@@ -224,7 +224,7 @@
                 <div class="tab-pane" id="order" role="tabpanel">
                     <div id="table" class="overflow-hidden" style="width: 104.6%;position: relative;right: 31px;">
 
-                        <table id="purchasing" class="table table-bordered table-responsive-md table-striped text-center">
+                        <table id="purchasingAdd" class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
                                     <th class="text-center">Məhsul </th>
@@ -236,9 +236,9 @@
                                     <th class="text-center">Yekun<br /> (V/D)</th>
                                     <th class="text-center">Satıcı </th>
                                     <th class="text-center">Qeydlər</th>
-                                    <th class="text-center">
+                                    <th class="text-center"style="position: relative;">
                                         <span class="table-add float-right mb-3 mr-2">
-                                            <a href="#!" class="text-success"><i style="position: absolute;right: 78px;top: 23px;" class="fas fa-plus fa-2x" aria-hidden="true"></i></a>
+                                            <a href="#!" class="text-success"><i style="position: absolute;right: 44%;top: 33%;" class="fas fa-plus fa-2x" aria-hidden="true"></i></a>
                                         </span>
                                     </th>
                                 </tr>
@@ -302,21 +302,30 @@
                         const $BTN = $('#export-btn');
                         const $EXPORT = $('#export');
             const newTr = `<tr class="editTable" value-id="" >
-            <td><textarea style="width: 110px;" name="Product" id="Product"></textarea> </td>
-            <td><textarea style="width: 110px;" name="Currency" id="Currency"></textarea> </td>
-            <td><textarea style="width: 110px;" name="Quantity" id="Quantity"></textarea> </td>
-            <td><textarea style="width: 110px;" name="WithoutVat" id="WithoutVat"></textarea> </td>
-            <td><textarea style="width: 110px;" name="TotalWithoutTax" id="TotalWithoutTax"></textarea> </td>
-            <td><textarea style="width: 110px;" name="TaxType" id="TaxType"></textarea> </td>
-            <td><textarea style="width: 110px;" name="Total" id="Total" (oninput)="validateValue(event)">0</textarea> </td>
-            <td><textarea style="width: 110px;" name="Seller" id="Seller"></textarea> </td>
-            <td><textarea style="width: 110px;" name="Description" id="Description"></textarea> </td>
+            <td><textarea style="width: 100px;" name="Product" id="Product"></textarea> </td>
+            <td><textarea style="width: 100px;" name="Currency" id="Currency"></textarea> </td>
+            <td><textarea style="width: 100px;" name="Quantity" id="Quantity"></textarea> </td>
+            <td><textarea style="width: 100px;" name="WithoutVat" id="WithoutVat"></textarea> </td>
+            <td><textarea style="width: 100px;" name="TotalWithoutTax" id="TotalWithoutTax"></textarea> </td>
+            <td><textarea style="width: 100px;" name="TaxType" id="TaxType"></textarea> </td>
+            <td><textarea style="width: 100px;" name="Total" id="Total" (oninput)="validateValue(event)">0</textarea> </td>
+            <td><textarea style="width: 100px;" name="Seller" id="Seller"></textarea> </td>
+            <td><textarea style="width: 100px;" name="Description" id="Description"></textarea> </td>
                  <td>
                    <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
                  </td>
                </tr>`;
                $('.table-add').on('click', 'i', () => {
                      $('#generated').append(newTr);
+                         $('#purchasingAdd').DataTable({
+                             retrieve: true,
+                             "ordering": false,
+                             paging: false,      
+                             dom: 'Bfrtip',
+                             buttons: [
+                                'excel'
+                             ]
+                         });
                });
                $tableID.on('click', '.table-remove', function () {
                    var id = $(this).parent().parent().attr('value-id');
@@ -333,7 +342,32 @@
                         toastr.error(response.message, "Xəta baş verdi!");
                         return;
                     }
-                      toastr.success(response.message, "Uğurla Silindi!");
+                var r = 0;
+                $("textarea[name='Total']:visible").each(function(index) {
+
+
+                    if (parseFloat($(this).val()) === NaN) {
+                        r += 0;
+                    } else {
+                        r += parseFloat($(this).val());
+                    }
+                });
+                $("#GrandTotal").val(parseFloat(r).toFixed(2));
+                var gTotal = $("#GrandTotal").val();
+                var ticketId = $("#table").attr('ticket-Id');
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.ActionLink("GrandTotal","ticket")',
+                    datatype: 'json',
+                    data: ({
+                        gTotal: gTotal,
+                        ticketId: ticketId
+                    }),
+                    success: function(response) {},
+                    error: function(response) {}
+                });
+
+                toastr.success(response.message, "Uğurla Silindi!");
                     },
                     error: function (response) {
                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
@@ -368,16 +402,17 @@
                 return data;
             }
         })(jQuery);
+
         //delete all orders if not send to ticket
         $(window).on('click', function(e){
-                if($(e.target).attr('id') == 'form-modal'
-                || $(e.target).attr('id') =='closeBtn'
+                if($(e.target).attr('id') =='closeBtn'
                 || $(e.target).attr('id') =='closeBtnX'){
                     var Ids = new Array();
                     $(".editTable").each(function(){
                        var id= $(this).attr('value-id');
                         Ids.push(id);
                     });
+                    if(Ids.length>0){
                     $.ajax({
                        type: 'get',
                        url: '@Url.ActionLink("AllDelete","Order")',
@@ -395,6 +430,8 @@
                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                        }
                    });
+                    }
+
           }
         });
         //add all orders to send
