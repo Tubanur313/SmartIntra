@@ -57,7 +57,7 @@ namespace SmartIntranet.Business.Extension
                 //opt.Cookie.SameSite = SameSiteMode.Strict;
                 opt.Cookie.HttpOnly = false;
                 //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
                 opt.SlidingExpiration = true;
                 opt.Cookie.SameSite = SameSiteMode.Lax;
                 opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
