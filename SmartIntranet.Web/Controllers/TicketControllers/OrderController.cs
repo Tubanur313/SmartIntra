@@ -53,7 +53,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var map = _map.Map<Order>(data);
             map.CreatedByUserId = GetSignInUserId();
-            map.CreatedDate = DateTime.UtcNow;
+            map.CreatedDate = DateTime.Now;
             var result = await _orderService.AddReturnEntityAsync(map);
             if (data.TicketId !=0)
             {
@@ -65,7 +65,7 @@ namespace SmartIntranet.Web.Controllers
 
                 var mappedTO = _map.Map<TicketOrder>(ticketOrder);
                 mappedTO.CreatedByUserId = GetSignInUserId();
-                mappedTO.CreatedDate = DateTime.UtcNow;
+                mappedTO.CreatedDate = DateTime.Now;
                 await _ticketOrderService.AddReturnEntityAsync(mappedTO);
             }
 
@@ -85,7 +85,7 @@ namespace SmartIntranet.Web.Controllers
             update.UpdateByUserId = GetSignInUserId();
             update.CreatedByUserId = model.CreatedByUserId;
             update.CreatedDate = model.CreatedDate;
-            update.UpdateDate = DateTime.UtcNow;
+            update.UpdateDate = DateTime.Now;
             var result = await _orderService.UpdateReturnEntityAsync(update);
             if (result is null)
             {

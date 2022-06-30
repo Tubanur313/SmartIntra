@@ -65,7 +65,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             else
             {
                 model.CreatedByUserId = GetSignInUserId();
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
                 await _roleManager.CreateAsync(_map.Map<IntranetRole>(model));
                 //await _roleService.AddAsync(_map.Map<IntranetRole>(model));
@@ -102,7 +102,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var current = GetSignInUserId();
                 updateRole.Name = model.Name;
                 updateRole.IsDeleted = model.IsDeleted;
-                updateRole.UpdateDate = DateTime.UtcNow;
+                updateRole.UpdateDate = DateTime.Now;
                 updateRole.UpdateByUserId = current;
 
                 IdentityResult result = await _roleManager.UpdateAsync(updateRole);
@@ -140,7 +140,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var transactionModel = _roleManager.Roles.FirstOrDefault(I => I.Id == id);
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             IdentityResult result = await _roleManager.UpdateAsync(transactionModel);

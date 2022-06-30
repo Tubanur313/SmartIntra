@@ -71,7 +71,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
                 model.IsDeleted = false;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 await _workGraphicService.AddAsync(_map.Map<WorkGraphic>(model));
                 return RedirectToAction("List");
 
@@ -106,7 +106,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
              
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
                 await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(model));
                 return RedirectToAction("List");
@@ -118,7 +118,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<WorkGraphicListDto>(await _workGraphicService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(transactionModel));

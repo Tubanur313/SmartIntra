@@ -62,7 +62,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 var add = _map.Map<Position>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                add.CreatedDate = DateTime.UtcNow;
+                add.CreatedDate = DateTime.Now;
                 //if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
                 //{
                 //    return RedirectToAction("List", new
@@ -109,7 +109,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
                 //if (await _positionService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
                 //{
@@ -130,7 +130,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var delete = await _positionService.FindByIdAsync(id);
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.UtcNow;
+            delete.DeleteDate = DateTime.Now;
             delete.IsDeleted = true;
             await _positionService.UpdateAsync(delete);
         }

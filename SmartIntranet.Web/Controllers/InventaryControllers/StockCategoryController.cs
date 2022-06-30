@@ -57,7 +57,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             {
                 var add = _map.Map<StockCategory>(model);
                 add.CreatedByUserId = GetSignInUserId();
-                add.CreatedDate = DateTime.UtcNow;
+                add.CreatedDate = DateTime.Now;
                 //if (await _stockCategoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && !x.IsDeleted))
                 //{
                 //    return RedirectToAction("List", new
@@ -113,7 +113,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.UtcNow;
+                update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
                 //if (await _stockCategoryService.AnyAsync(x => x.Name.ToUpper().Contains(model.Name.ToUpper()) && x.Id != model.Id && !x.IsDeleted))
                 //{
@@ -149,7 +149,7 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             var delete = await _stockCategoryService.FindByIdAsync(id);
             delete.IsDeleted = true;
             delete.DeleteByUserId = GetSignInUserId();
-            delete.DeleteDate = DateTime.UtcNow;
+            delete.DeleteDate = DateTime.Now;
             await _stockCategoryService.UpdateAsync(delete);
         }
     }

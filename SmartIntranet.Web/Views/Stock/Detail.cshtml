@@ -464,7 +464,7 @@
         });
         var percent = @Model.DepreciationPercent ;
         var amount =parseFloat('@Model.Price.ToString().Replace(",",".")').toFixed(2);
-        var year = @((DateTime.UtcNow - Model.BuyDate).Days/365) ;
+        var year = @((DateTime.Now - Model.BuyDate).Days/365) ;
         function depreciation(percent , amount ,year){
             var result = amount - (year*((amount * percent) / 100));
             $(".depreciation").text(result.toFixed(2) + "  ₼")

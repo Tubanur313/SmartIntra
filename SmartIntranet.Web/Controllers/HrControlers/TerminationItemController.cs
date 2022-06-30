@@ -60,7 +60,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.UtcNow;
+                model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
                 await _terminationService.AddAsync(_map.Map<TerminationItem>(model));
                 return RedirectToAction("List");
@@ -94,7 +94,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 var current = GetSignInUserId();
                 
-                model.UpdateDate = DateTime.UtcNow;
+                model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
 
                 await _terminationService.UpdateAsync(_map.Map<TerminationItem>(model));
@@ -107,7 +107,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _map.Map<TerminationItemListDto>(await _terminationService.FindByIdAsync(id));
             var current = GetSignInUserId();
-            transactionModel.DeleteDate = DateTime.UtcNow;
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _terminationService.UpdateAsync(_map.Map<TerminationItem>(transactionModel));

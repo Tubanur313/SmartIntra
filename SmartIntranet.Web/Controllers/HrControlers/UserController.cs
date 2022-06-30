@@ -111,7 +111,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     if (user.IsDeleted != true && !user.IsDeleted && isValid)
                     {
                             //await _signInManager.SignOutAsync();
-                            var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, false, true);
+                            var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
                             if (identityResult.Succeeded)
                             {
                                 var roller = await _userManager.GetRolesAsync(user);

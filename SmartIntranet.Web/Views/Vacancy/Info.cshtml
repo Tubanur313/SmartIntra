@@ -39,7 +39,7 @@
                                         @vac.StartDate.ToString("dd-MM-yyyy")
                                     </span>
                                 </div>
-                                @if ((DateTime.UtcNow - vac.StartDate).Days < 7)
+                                @if ((DateTime.Now - vac.StartDate).Days < 7)
                                 {
                                     <div class="job-badge">
                                         <label class="label bg-primary">Yeni</label>
