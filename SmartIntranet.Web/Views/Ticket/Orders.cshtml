@@ -55,11 +55,13 @@
                 </tfoot>
             </table>
             <button type="submit" ticket-id="@Model" id="change-file" class="btn btn-danger btn-round">Faylı Yenilə</button>
+            <a id="Order-file" class="btn btn-success btn-round">
+            Faylı Yüklə</a>
         </div>
     </div>
 </div>
 
-<script class ="removable">
+<script class="removable">
     $(document).ready(function() {
     const $tableID = $('#table');
     const $BTN = $('#export-btn');
@@ -252,11 +254,45 @@
             data: ({
                 ticketId: ticketId
             }),
-            success: function(response) {},
+            success: function(response) {
+                    $.ajax({
+            type: 'get',
+            url: '@Url.ActionLink("getorderticketfile","order")',
+            datatype: 'json',
+            data: ({
+                ticketId: $("#table").attr('ticket-Id')
+            }),
+            success: function(response) {
+                $("#Order-file").attr("href",response);
+                $("#Order-file").attr("download", response.split("/").pop().toString());
+            },
             error: function(response) {}
         });
+            },
+            error: function(response) {}
+        });
+
     });
 
+        $.ajax({
+            type: 'get',
+            url: '@Url.ActionLink("getorderticketfile","order")',
+            datatype: 'json',
+            data: ({
+                ticketId: $("#table").attr('ticket-Id')
+            }),
+            success: function(response) {
+                $("#Order-file").attr("href",response);
+                $("#Order-file").attr("download", response.split("/").pop().toString());
+            },
+            error: function(response) {}
+        });
+
+    //$(document).on("click", "#Order-file", function(e) {
+    //    var this$ = $(this)
+    //   var ticketId = ;
+
+    //});
     // Total price
     $("#generated").on("change", function() {
         var r = 0;
@@ -284,8 +320,8 @@
             error: function(response) {}
         });
     });
-    
-    }); 
+
+    });
 </script>
 
 

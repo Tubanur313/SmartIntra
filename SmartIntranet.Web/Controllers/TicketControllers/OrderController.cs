@@ -110,6 +110,14 @@ namespace SmartIntranet.Web.Controllers
             return Ok(id);
         }
         [HttpGet]
+        [Authorize(Policy = "order.getorderticketfile")]
+        public async Task<IActionResult> GetOrderTicketFile(int ticketId)
+        {
+            var ticketOrderPath = _ticketService.FindByIdAsync(ticketId).Result.OrderPath;
+            return Ok(ticketOrderPath);
+
+        }        
+        [HttpGet]
         [Authorize(Policy = "order.alldelete")]
         public async Task<IActionResult> AllDelete(List<int> Ids)
         {

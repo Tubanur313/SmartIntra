@@ -81,10 +81,120 @@ namespace SmartIntranet.Business.Concrete
             {
                 emailMessage = await TicketRedirectEmailMessage(ticketId, UserFullName);
             }
+            if (type == TicketChangeType.TicketOrderUpdate)
+            {
+                emailMessage = await TicketOrderUpdateMessage(ticketId, UserFullName);
+            }
+            if (type == TicketChangeType.TicketOrderFileUpdate)
+            {
+                emailMessage = await TicketOrderFileUpdateMessage(ticketId, UserFullName);
+            }
             Send(emailMessage);
         }
 
+        private async Task<MimeMessage> TicketOrderFileUpdateMessage(int ticketId, string UserFullName)
+        {
+            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var ticket = await _ticketService.GetIncludeMail(ticketId);
+            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
+            //string watchers = string.Empty;
+            //string confirmers = string.Empty;
+            List<string> toEmail = new List<string>();
+            //if (ticket.Watchers != null)
+            //{
+            //    foreach (var item in ticket.Watchers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+
+            //    }
+            //}
+            //if (ticket.ConfirmTicketUsers != null)
+            //{
+            //    foreach (var item in ticket.ConfirmTicketUsers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+            //    }
+            //}
+            if (ticket.Supporter != null)
+            {
+                toEmail.Add(ticket.Supporter.Email);
+
+            }
+            else
+            {
+                toEmail.Add(smtpSettings.UserName);
+            }
+
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            foreach (var item in toEmail)
+            {
+                emailMessage.To.Add(MailboxAddress.Parse(item));
+            }
+
+            emailMessage.Subject = "No-Reply";
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketOrderFileUpdate.GetDisplayName() + "</a></h1> " +
+                        "<p><strong>" + "Sifariş Faylında Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
+            emailMessage.Body = bodyBuilder.ToMessageBody();
+            return emailMessage;
+        }
+
+        private async Task<MimeMessage> TicketOrderUpdateMessage(int ticketId, string UserFullName)
+        {
+            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var ticket = await _ticketService.GetIncludeMail(ticketId);
+            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
+
+            //string watchers = string.Empty;
+            //string confirmers = string.Empty;
+            List<string> toEmail = new List<string>();
+            //if (ticket.Watchers != null)
+            //{
+            //    foreach (var item in ticket.Watchers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+
+            //    }
+            //}
+            //if (ticket.ConfirmTicketUsers != null)
+            //{
+            //    foreach (var item in ticket.ConfirmTicketUsers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+            //    }
+            //}
+            if (ticket.Supporter != null)
+            {
+                toEmail.Add(ticket.Supporter.Email);
+
+            }
+            else
+            {
+                toEmail.Add(smtpSettings.UserName);
+            }
+
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            foreach (var item in toEmail)
+            {
+                emailMessage.To.Add(MailboxAddress.Parse(item));
+            }
+
+            emailMessage.Subject = "No-Reply";
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketOrderUpdate.GetDisplayName() + "</a></h1> " +
+                        "<p><strong>" + "Sifarişdə Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
+            emailMessage.Body = bodyBuilder.ToMessageBody();
+            return emailMessage;
+        }
         private async Task<MimeMessage> TicketAddEmailMessage(int ticketId,string UserFullName)
         {
             var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);

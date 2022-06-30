@@ -33,5 +33,9 @@ namespace SmartIntranet.Core.Entities.Enum
         ConfirmTicket,
         [Display(Name = "Nömrəli Task Yonlendirildi")]
         TicketSupportRedirect,
+        [Display(Name = "Nömrəli Taskın Sifariş Faylı Yeniləndi")]
+        TicketOrderFileUpdate,
+        [Display(Name = "Nömrəli Taskın Sifarişi Yeniləndi")]
+        TicketOrderUpdate,
     }
 }

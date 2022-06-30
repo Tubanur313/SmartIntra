@@ -828,6 +828,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> OrderUpdate(int ticketId)
         {
            await _exportPdfService.GeneratePdf(ticketId);
+            _emailSender.TicketSendEmail(ticketId, TicketChangeType.TicketOrderFileUpdate, GetSignInFullName());
             //string message = " Taskın Order faylında dəyişiklik olundu";
             //SendEmailAsync(message, ticketId);
             return Ok();
