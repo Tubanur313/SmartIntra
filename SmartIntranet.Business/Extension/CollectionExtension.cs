@@ -50,20 +50,21 @@ namespace SmartIntranet.Business.Extension
                 opt.Password.RequireNonAlphanumeric = false;
             })
              .AddEntityFrameworkStores<IntranetContext>();
-
-            services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
+            services.ConfigureApplicationCookie(options =>
             {
-                opt.Cookie.Name = "SmartIntranetCookie";
-                //opt.Cookie.SameSite = SameSiteMode.Strict;
-                opt.Cookie.HttpOnly = false;
-                //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
-                opt.SlidingExpiration = true;
-                opt.Cookie.SameSite = SameSiteMode.Lax;
-                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                opt.LoginPath = "/signin.html";
-                opt.AccessDeniedPath = "/accessdenied.html";
+                options.LoginPath = new PathString("/signin.html");
+                options.AccessDeniedPath = new PathString("/accessdenied.html");
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
+                options.Cookie = new CookieBuilder
+                {
+                    HttpOnly = true,
+                    Name = "SmartIntranetCookie",
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.Always
+                };
             });
+            services.AddAuthentication();
             services.AddAuthorization(cfg =>
             {
                 foreach (var item in AppClaimProvider.policies)
