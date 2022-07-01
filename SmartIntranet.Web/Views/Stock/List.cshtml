@@ -44,5 +44,17 @@
 @section CrudJs{
     <!-- delete_ajax-->
     <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
-
+    <script>
+    $(document).ready(function(){
+      $('#inventar').DataTable({
+          retrieve: true,
+          "ordering": false,
+          paging: false,      
+          dom: 'Bfrtip',
+          buttons: [
+             'excel'
+          ]
+      });
+    })
+    </script>
 }
