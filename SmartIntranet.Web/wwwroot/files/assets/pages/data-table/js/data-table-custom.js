@@ -511,8 +511,11 @@ $(document).ready(function() {
         paging: true,
         "fnDrawCallback": function () {
             $('[data-toggle="tooltip"]').tooltip();
-
-        }
+        }//,       
+        //dom: 'Bfrtip',
+        //buttons: [
+        //    'copy', 'csv', 'excel', 'pdf', 'print'
+        //]
     });
 
     $('#simpletable_second').DataTable({

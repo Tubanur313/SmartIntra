@@ -324,7 +324,7 @@
                                 <div class="card-block contact-details">
                                     <div class="data_table_main table-responsive dt-responsive">
 
-                                        <table id="simpletable" class="table table-striped table-bordered nowrap">
+                                        <table id="simpletable1" class="table table-striped table-bordered nowrap">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">S/N </th>
@@ -507,7 +507,6 @@
                 $("#discussing").prepend(html);
                 $("#countId").text(`Müzakirələr (${[response.count]})`);
                 CKEDITOR.instances['comments'].setData('');
-                //console.log(response);
             },
             error: function (response) {
             }
@@ -539,7 +538,6 @@
             }
             data.append("__RequestVerificationToken",token);
             data.append("Id",id);
-            console.log(data);
             $.ajax({
                 url: `@Url.Action("load","ticket")`,
                 type: 'post',
@@ -566,13 +564,22 @@
                 }
             });
         });
-        $(window).on('click', function(e){
-         if($(e.target).attr('id') == 'form-modal-info'
-         || $(e.target).attr('id') =='closeBtn'
-         || $(e.target).attr('id') =='closeBtnX'){
-             window.location.reload();
-         }
-        });
+            $('#simpletable1').DataTable({
+                retrieve: true,
+                "ordering": false,
+                paging: false,      
+                dom: 'Bfrtip',
+                buttons: [
+                   'excel'
+                ]
+            });
+        //$(window).on('click', function(e){
+        // if($(e.target).attr('id') == 'form-modal-info'
+        // || $(e.target).attr('id') =='closeBtn'
+        // || $(e.target).attr('id') =='closeBtnX'){
+        //     window.location.reload();
+        // }
+        //});
     });
 </script>
 

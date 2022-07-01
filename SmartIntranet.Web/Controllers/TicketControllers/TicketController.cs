@@ -103,7 +103,7 @@ namespace SmartIntranet.Web.Controllers
             _departmentService = departmentService;
 
         }
-        
+
         #region Ticket Listing 
         [HttpGet]
         [Authorize(Policy = "ticket.admin")]
@@ -211,10 +211,10 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "ticket.nonRedirect")]
-        public async Task<IActionResult> NonRedirect(int CategoryTicketId, StatusType statusType,int companyId)
+        public async Task<IActionResult> NonRedirect(int CategoryTicketId, StatusType statusType, int companyId)
         {
             var model = _map.Map<List<TicketListDto>>(await _ticketService.GetNonRedirectedAsync(CategoryTicketId, statusType, companyId));
-                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
             if (model.Count > 0)
             {
                 ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
@@ -394,7 +394,7 @@ namespace SmartIntranet.Web.Controllers
                 add.EmployeeId = GetUserId;
                 add.SupporterId = CategoryTicketSupporter.SupporterId;
                 add.CreatedDate = DateTime.Now;
-                add.OpenDate= DateTime.Now;
+                add.OpenDate = DateTime.Now;
                 var result = await _ticketService.AddReturnEntityAsync(add);
 
                 if (result is null)
@@ -501,7 +501,7 @@ namespace SmartIntranet.Web.Controllers
                         }
                         else if (MimeTypeCheckExtension.İsDocument(upload))
                         {
-                            
+
                             string folder = "/ticketFile/";
                             string name = await _upload.Upload(upload, "wwwroot" + folder);
                             PhotoAddDto dto = new PhotoAddDto
@@ -528,12 +528,12 @@ namespace SmartIntranet.Web.Controllers
                         }
                     }
                 }
-                if(ticketResult.CategoryTicket.TicketType == TicketType.Purchasing)
+                if (ticketResult.CategoryTicket.TicketType == TicketType.Purchasing)
                 {
-                   await _exportPdfService.GeneratePdf(result.Id);
+                    await _exportPdfService.GeneratePdf(result.Id);
                 }
-               
-                _emailSender.TicketSendEmail(result.Id,TicketChangeType.TicketAdd, GetSignInFullName());
+
+                _emailSender.TicketSendEmail(result.Id, TicketChangeType.TicketAdd, GetSignInFullName());
 
                 return RedirectToAction("List", new
                 {
@@ -558,7 +558,7 @@ namespace SmartIntranet.Web.Controllers
                 TempData["error"] = Messages.Error.notFound;
             }
             ViewBag.GrandTotal = _ticketService.GetAsync(x => x.Id == id).Result.GrandTotal;
-            ViewBag.DiscCount = _discussionService.GetAllAsync(x=>x.TicketId==id).Result.Count;
+            ViewBag.DiscCount = _discussionService.GetAllAsync(x => x.TicketId == id).Result.Count;
             return View(data);
         }
 
@@ -605,7 +605,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.orderUpdate")]
         public async Task<IActionResult> OrderUpdate(int ticketId)
         {
-           await _exportPdfService.GeneratePdf(ticketId);
+            await _exportPdfService.GeneratePdf(ticketId);
             _emailSender.TicketSendEmail(ticketId, TicketChangeType.TicketOrderFileUpdate, GetSignInFullName());
             //string message = " Taskın Order faylında dəyişiklik olundu";
             //SendEmailAsync(message, ticketId);
@@ -613,15 +613,17 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GrandTotal(decimal gTotal, int ticketId)
+        public async Task GrandTotal(decimal gTotal, int ticketId)
         {
-            var ticket = await _ticketService.GetAsync(x => x.Id == ticketId);
-            if (ticket != null)
+            if (ticketId > 0)
             {
-                ticket.GrandTotal = gTotal.ToString();
+                var ticket = await _ticketService.GetAsync(x => x.Id == ticketId);
+                if (ticket != null)
+                {
+                    ticket.GrandTotal = gTotal.ToString();
+                }
+                await _ticketService.UpdateAsync(ticket);
             }
-            await _ticketService.UpdateAsync(ticket);
-            return Ok();
         }
         [HttpGet]
         [Authorize(Policy = "ticket.categoryticket")]
@@ -961,7 +963,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Discuss(DiscussionAddDto model)
         {
             int GetSignUserId = GetSignInUserId();
-            
+
             var add = _map.Map<Discussion>(model);
             add.CreatedByUserId = GetSignInUserId();
             add.IntranetUserId = GetSignInUserId();
@@ -989,8 +991,8 @@ namespace SmartIntranet.Web.Controllers
             {
                 if (!(upload is null))
                 {
-                    
-                   
+
+
                     if (MimeTypeCheckExtension.İsImage(upload))
                     {
                         string folder = "/ticketPhoto/";

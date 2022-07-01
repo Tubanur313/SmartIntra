@@ -60,7 +60,6 @@
           var input =  document.querySelector("#search").value.trim();
 
     if (input != null && input!=''){
-    console.log(input)
                 $.ajax({
                 type: 'post',
                 url: `@Url.Action("Search","Ticket")`,
