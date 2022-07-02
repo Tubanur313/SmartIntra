@@ -240,7 +240,7 @@
                           <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control" id="inputDate">
+                                <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control custom-date">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -269,7 +269,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  Doğum Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="Birthday" type="date" class="form-control" id="inputDate">
+                                <input asp-for="Birthday" type="text" class="form-control custom-date">
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
                         </div>
@@ -503,9 +503,17 @@
 
             let dateArray = [];
 
-            $('#inputDate').datepicker({
-                format: "dd.mm.yyyy"
-            });
+            $('.custom-date').each(function()
+            {
+                $(this).datepicker({
+                    format: "dd.mm.yyyy"
+                }).on('changeDate', function (ev) {
+                    $(this).change();
+                });
+                $(this).change(function () {
+                    getUserVacationDay();
+                });
+            })
 
             $("form").submit( function(e) {
                 let isEmpty = false;
@@ -592,7 +600,7 @@
         function getUserVacationDay() {
             let elemets = document.getElementsByClassName('experience-history');
             let totalDays = 0;
-            let startWorkDate = $('#inputDate').val();
+            let startWorkDate = $('#StartWorkDate').val();
             startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1] - 1, startWorkDate.split('.')[0]);
             startWorkDate.setHours(0, 0, 0, 0);
             let nowDate = new Date();
@@ -603,6 +611,7 @@
                 let dateStart = new Date(startEl.split('.')[2], startEl.split('.')[1] - 1, startEl.split('.')[0]);
                 let dateEnd = new Date(endEl.split('.')[2], endEl.split('.')[1] - 1, endEl.split('.')[0]);
                 totalDays += Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24));
+                console.log(Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24)));
             }
             totalDays += Math.ceil((new Date().getTime() - startWorkDate.getTime()) / (1000 * 3600 * 24));
             let experienceYears = totalDays / 365;
@@ -621,7 +630,7 @@
             let startYear;
             let valid = true;
             $(".vacation-remain").each(function (i, el) {
-                let startWorkDate = $('#inputDate').val();
+                let startWorkDate = $('#StartWorkDate').val();
                startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
                 startWorkDate.setHours(0, 0, 0, 0);
                 let startWorkMonth = startWorkDate.getMonth() + 1;
@@ -682,8 +691,12 @@
 
                 $('.input-daterange').datepicker({
                     format: "dd.mm.yyyy"
+                }).on('changeDate', function (ev) {
+                    $('.input-daterange').change();
                 });
-                getUserVacationDay();
+                $('.input-daterange').change(function () {
+                    getUserVacationDay();
+                });
             });
 
             $("#addVacDay").click(function (e) {
