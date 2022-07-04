@@ -7,6 +7,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Inventary;
 using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
@@ -62,10 +63,27 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
             {
                 TempData["success"] = success;
                 TempData["error"] = error;
+                ViewBag.StockCategories = _map.Map<List<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
+                ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
                 return View(_map.Map<List<StockListDto>>(model));
             }
             return View(new List<StockListDto>());
+        }
+        [HttpPost]
+        [Authorize(Policy = "ticket.list")]
+        public async Task<IActionResult> List(int stockCategoryId, int companyId, StockStatus StockStatus)
+        {
+            List<Stock> model = await _stockService.FilterByStatusCategCompAsync(stockCategoryId, companyId, StockStatus);
 
+            if (model.Count > 0)
+            {
+                ViewBag.StockCategories = _map.Map<List<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
+                ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+                return View(_map.Map<List<StockListDto>>(model));
+            }
+            ViewBag.StockCategories = _map.Map<List<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            return View(new List<StockListDto>());
         }
         [HttpGet]
         [Authorize(Policy = "stock.add")]
