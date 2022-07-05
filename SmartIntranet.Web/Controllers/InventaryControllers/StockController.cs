@@ -67,10 +67,12 @@ namespace SmartIntranet.Web.Controllers.InventaryControllers
                 ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
                 return View(_map.Map<List<StockListDto>>(model));
             }
+            ViewBag.StockCategories = _map.Map<List<StockCategoryListDto>>(await _stockCategoryService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.companies = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
             return View(new List<StockListDto>());
         }
         [HttpPost]
-        [Authorize(Policy = "ticket.list")]
+        [Authorize(Policy = "stock.list")]
         public async Task<IActionResult> List(int stockCategoryId, int companyId, StockStatus StockStatus)
         {
             List<Stock> model = await _stockService.FilterByStatusCategCompAsync(stockCategoryId, companyId, StockStatus);
