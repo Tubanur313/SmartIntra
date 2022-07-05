@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.Business.Interfaces.Inventary;
+using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.DataAccess.Interfaces.Inventary;
 using SmartIntranet.Entities.Concrete.Inventary;
@@ -16,6 +17,10 @@ namespace SmartIntranet.Business.Concrete.Inventary
         {
             _stockDal = stockDal;
             _genericDal = genericDal;
+        }
+        public Task<List<Stock>> FilterByStatusCategCompAsync(int stockCategoryId, int companyId, StockStatus StockStatus)
+        {
+            return _stockDal.FilterByStatusCategCompAsync(stockCategoryId, companyId, StockStatus);
         }
 
         public Task<Stock> FindByIdIncludeAsync(int id)
