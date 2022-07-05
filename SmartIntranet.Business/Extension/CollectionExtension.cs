@@ -50,39 +50,7 @@ namespace SmartIntranet.Business.Extension
                 opt.Password.RequireNonAlphanumeric = false;
             })
              .AddEntityFrameworkStores<IntranetContext>();
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = new PathString("/signin.html");
-                options.AccessDeniedPath = new PathString("/accessdenied.html");
-                options.SlidingExpiration = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
-                options.Cookie = new CookieBuilder
-                {
-                    HttpOnly = true,
-                    Name = "SmartIntranetCookie",
-                    SameSite = SameSiteMode.Lax,
-                    SecurePolicy = CookieSecurePolicy.Always
-                };
-            });
-            services.AddAuthentication();
-            services.AddAuthorization(cfg =>
-            {
-                foreach (var item in AppClaimProvider.policies)
-                {
-                    cfg.AddPolicy(item, p =>
-                    {
-                        p.RequireAssertion(assertion =>
-                        {
-                            return
-                            assertion.User.IsInRole("SuperAdmin") ||
-                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
-
-                        });
-                    });
-
-                }
-
-            });
+            
 
         }
         public static void AddCustomCompression(this IServiceCollection services)

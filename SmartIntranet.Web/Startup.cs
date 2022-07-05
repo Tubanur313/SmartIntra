@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using SmartIntranet.Business.Containers.MicrosoftIoC;
 using SmartIntranet.Business.DependencyResolvers.Automapper;
 using SmartIntranet.Business.Extension;
+using SmartIntranet.Business.Provider;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.Web.GoogleRecaptcha;
@@ -42,6 +44,40 @@ namespace SmartTicket.Web
             services.AddDbContext<IntranetContext>();
            
             services.AddCustomIdentity();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/signin.html");
+                options.LogoutPath = new PathString("/user/signout");
+                options.AccessDeniedPath = new PathString("/accessdenied.html");
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
+                options.Cookie = new CookieBuilder
+                {
+                    HttpOnly = true,
+                    Name = "SmartIntranetCookie",
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+            });
+            services.AddAuthentication();
+            services.AddAuthorization(cfg =>
+            {
+                foreach (var item in AppClaimProvider.policies)
+                {
+                    cfg.AddPolicy(item, p =>
+                    {
+                        p.RequireAssertion(assertion =>
+                        {
+                            return
+                            assertion.User.IsInRole("SuperAdmin") ||
+                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
+
+                        });
+                    });
+
+                }
+
+            });
             services.AddCustomValidator();
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
             services.AddAutoMapper(typeof(MapProfile));
@@ -78,6 +114,11 @@ namespace SmartTicket.Web
 
             app.UseEndpoints(endpoints =>
             {
+                
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=news}/{action=info}/{id?}");
+
                 endpoints.MapControllerRoute(
                    name: "default-signin",
                     pattern: "signin.html",
@@ -95,10 +136,6 @@ namespace SmartTicket.Web
                         controller = "user",
                         action = "accessdenied"
                     });
-
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=news}/{action=info}/{id?}");
             });
         }
     }
