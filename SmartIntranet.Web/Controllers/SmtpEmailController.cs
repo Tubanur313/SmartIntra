@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace SmartIntranet.Web.Controllers
         {
             _emailService = emailService;
         }
-
+        [Authorize(Policy = "smtp.index")]
         public async Task<IActionResult> Index()
         {
             var model =_emailService.Get();
@@ -38,6 +39,7 @@ namespace SmartIntranet.Web.Controllers
             return View(new EmailListDto());
         }
         [HttpPost]
+        [Authorize(Policy = "smtp.index")]
         public async Task<IActionResult> Index(EmailListDto model)
         {
             if (ModelState.IsValid)
