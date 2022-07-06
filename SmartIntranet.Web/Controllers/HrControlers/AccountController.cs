@@ -32,7 +32,8 @@ using System.Net;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers
-{   [Authorize]
+{   
+    
     public class AccountController : BaseIdentityController
     {
         private readonly IConfiguration _configuration;
@@ -76,14 +77,14 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [AllowAnonymous]
-        //[Route("login.html")]
+        [Route("login.html")]
         public IActionResult Login()
         {
             return View();
         }
         [AllowAnonymous]
         [HttpPost]
-        //[Route("login.html")]
+        [Route("login.html")]
         public async Task<IActionResult> Login(AppUserSignInDto model)
         {
             var isValid = IsReCaptchValidV3(model.captcha);

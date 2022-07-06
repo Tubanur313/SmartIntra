@@ -1,8 +1,10 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +36,13 @@ namespace SmartTicket.Web
             services.AddControllersWithViews(opt =>
             {
                 opt.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+
             }).AddFluentValidation();
+
             services.AddCustomCompression(); 
             services.AddRouting(cfg => cfg.LowercaseUrls = true);
             services.AddDbContext<IntranetContext>();
@@ -42,19 +50,6 @@ namespace SmartTicket.Web
             services.AddCustomValidator();
             services.Configure<GoogleConfigModel>(Configuration.GetSection("GoogleConfig"));
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSession(option =>
-            {
-                option.IdleTimeout = TimeSpan.FromMinutes(1200);
-                option.Cookie.HttpOnly = true;
-                option.Cookie.IsEssential = true;
-                option.Cookie.SecurePolicy = _Env.IsDevelopment() ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
-                option.Cookie.SameSite = _Env.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict;
-            });
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
             services.AddAutoMapper(typeof(MapProfile));
 
         }
@@ -85,7 +80,6 @@ namespace SmartTicket.Web
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
-            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -94,23 +88,23 @@ namespace SmartTicket.Web
                     name: "default",
                     pattern: "{controller=news}/{action=info}/{id?}");
 
-                //endpoints.MapControllerRoute(
-                //   name: "default-login",
-                //    pattern: "login.html",
-                //    defaults: new
-                //    {
-                //        controller = "account",
-                //        action = "login"
-                //    });
+                endpoints.MapControllerRoute(
+                   name: "default-login",
+                    pattern: "login.html",
+                    defaults: new
+                    {
+                        controller = "account",
+                        action = "login"
+                    });
 
-                //endpoints.MapControllerRoute(
-                //   name: "default-accessdenied",
-                //    pattern: "accessdenied.html",
-                //    defaults: new
-                //    {
-                //        controller = "account",
-                //        action = "accessdenied"
-                //    });
+                endpoints.MapControllerRoute(
+                   name: "default-accessdenied",
+                    pattern: "accessdenied.html",
+                    defaults: new
+                    {
+                        controller = "account",
+                        action = "accessdenied"
+                    });
             });
         }
     }

@@ -38,7 +38,7 @@ namespace SmartIntranet.Core.Extensions
 
         static public bool HasAccess(this ClaimsPrincipal principal, string claimName)
         {
-            return principal.HasClaim(c => c.Type.Equals(claimName) && c.Value.Equals("1"))
+            return principal.HasClaim(c => c.Type.Equals(claimName))
                 || principal.IsInRole("SuperAdmin")
                 ;
         }

@@ -57,38 +57,22 @@ namespace SmartIntranet.Business.Extension
                 opt.Password.RequireNonAlphanumeric = false;
             })
              .AddEntityFrameworkStores<IntranetContext>();
-            //services.ConfigureApplicationCookie(options =>
-            //{
-            //    options.LoginPath = new PathString("/signin.html");
-            //    options.LogoutPath = new PathString("/user/signout");
-            //    options.AccessDeniedPath = new PathString("/accessdenied.html");
-            //    options.SlidingExpiration = true;
-            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
-            //    options.Cookie = new CookieBuilder
-            //    {
-            //        HttpOnly = true,
-            //        Name = "SmartIntranetCookie",
-            //        SameSite = SameSiteMode.Lax,
-            //        SecurePolicy = CookieSecurePolicy.SameAsRequest
-            //    };
-            //});
-            //services.AddAuthentication();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/login.html");
+                options.LogoutPath = new PathString("/account/signout");
+                options.AccessDeniedPath = new PathString("/accessdenied.html");
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
+                options.Cookie = new CookieBuilder
                 {
-                    options.LoginPath = "/account/login";
-                    options.LogoutPath = "/account/signout";
-                    options.AccessDeniedPath = "/account/accessdenied";
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
-                    options.SlidingExpiration = true;
-                    options.Cookie = new CookieBuilder
-                    {
-                        HttpOnly = true,
-                        Name = "SmartIntranetCookie",
-                        SameSite = SameSiteMode.Lax,
-                        SecurePolicy = CookieSecurePolicy.SameAsRequest
-                    };
-                });
+                    HttpOnly = true,
+                    Name = "SmartIntranetCookie",
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+            });
+            services.AddAuthentication();
             services.AddAuthorization(cfg =>
             {
                 foreach (var item in AppClaimProvider.policies)
