@@ -1,7 +1,20 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
+using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.Business.Provider;
+using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
+using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
@@ -10,29 +23,20 @@ using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using SmartIntranet.Web.GoogleRecaptcha;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
-using SmartIntranet.Business.Interfaces.Membership;
-using SmartIntranet.Business.Interfaces.Intranet;
-using SmartIntranet.Core.Extensions;
-using SmartIntranet.Business.Provider;
-using SmartIntranet.Business.Extension;
-using SmartIntranet.DTO.DTOs;
 
 namespace SmartIntranet.Web.Controllers
-{
+{   [Authorize]
     public class AccountController : BaseIdentityController
     {
         private readonly IConfiguration _configuration;
+        private readonly GoogleConfigModel _googleConfig;
         private readonly IntranetContext _db;
         private readonly IAppUserService _appUserService;
         private readonly IWorkGraphicService _workGraphicService;
@@ -51,9 +55,10 @@ namespace SmartIntranet.Web.Controllers
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
-            IPositionService positionService) : base(userManager, httpContextAccessor, signInManager, mapper)
+            IPositionService positionService, IOptions<GoogleConfigModel> googleConfig) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _appRoleService = appRoleService;
+            _googleConfig = googleConfig.Value;
             _workGraphicService = workGraphicService;
             _contractService = contractService;
             _personalContractService = personalContractService;
@@ -69,6 +74,84 @@ namespace SmartIntranet.Web.Controllers
             _departmentService = departmentService;
             _positionService = positionService;
         }
+
+        [AllowAnonymous]
+        //[Route("login.html")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        //[Route("login.html")]
+        public async Task<IActionResult> Login(AppUserSignInDto model)
+        {
+            var isValid = IsReCaptchValidV3(model.captcha);
+            if (ModelState.IsValid)
+            {
+                if (model.Email.IsEmail())
+                {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user == null)
+                    {
+                        ViewBag.error = "Email ve ya şifre sehvdir";
+                        return View("Login", model);
+                    }
+
+                    if (user.IsDeleted != true && !user.IsDeleted && isValid)
+                    {
+                        //await _signInManager.SignOutAsync();
+                        var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
+                        if (identityResult.Succeeded)
+                        {
+                            var roller = await _userManager.GetRolesAsync(user);
+                            return RedirectToAction("Info", "News");
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.error = "Sizin Akkount Deaktiv edilib";
+                        return View("Login", model);
+                    }
+                }
+            }
+            return View("SignIn", model);
+        }
+
+        [HttpGet]
+        [Route("accessdenied.html")]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        [Route("signout")]
+        public async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login");
+        }
+        private bool IsReCaptchValidV3(string captchaResponse)
+        {
+            var result = false;
+            var secretKey = _googleConfig.Secret;
+            var apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
+            var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
+            var request = (HttpWebRequest)WebRequest.Create(requestUri);
+
+            using (WebResponse response = request.GetResponse())
+            {
+                using (StreamReader stream = new StreamReader(response.GetResponseStream()))
+                {
+                    JObject jResponse = JObject.Parse(stream.ReadToEnd());
+                    var isSuccess = jResponse.Value<bool>("success");
+                    result = isSuccess ? true : false;
+                }
+            }
+            return result;
+        }
+
+
 
         [HttpGet]
         [Authorize(Policy = "account.list")]

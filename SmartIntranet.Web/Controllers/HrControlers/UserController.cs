@@ -26,21 +26,20 @@ namespace SmartIntranet.Web.Controllers.HrControlers
     public class UserController : BaseIdentityController
     {
         private readonly IConfiguration _configuration;
-        private readonly GoogleConfigModel _googleConfig;
         private readonly IAppUserService _appUserService;
         private readonly ICompanyService _companyService;
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private readonly IFileService _uploadService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public UserController(IOptions<GoogleConfigModel> googleConfig, UserManager<IntranetUser> userManager,
+        public UserController(/*IOptions<GoogleConfigModel> googleConfig,*/ UserManager<IntranetUser> userManager,
              IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper map, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService, IFileService uploadService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
             IPositionService positionService) : base(userManager, httpContextAccessor, signInManager, map)
         {
 
-            _googleConfig = googleConfig.Value;
+            //_googleConfig = googleConfig.Value;
             _passwordHasher = passwordHasher;
             _configuration = configuration;
             _appUserService = appUserService;
@@ -85,86 +84,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
 
 
-        [AllowAnonymous]
-        [Route("signin.html")]
-        public IActionResult SignIn()
-        {
-            return View();
-        }
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("signin.html")]
-        public async Task<IActionResult> SignIn(AppUserSignInDto model)
-        {
-            var isValid = IsReCaptchValidV3(model.captcha);
-            if (ModelState.IsValid)
-            {
-                if (model.Email.IsEmail())
-                {
-                    var user = await _userManager.FindByEmailAsync(model.Email);
-                    if(user== null)
-                    {
-                        ViewBag.error = "Email ve ya şifre sehvdir";
-                        return View("SignIn", model);
-                    }
-
-                    if (user.IsDeleted != true && !user.IsDeleted && isValid)
-                    {
-                            //await _signInManager.SignOutAsync();
-                            var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
-                            if (identityResult.Succeeded)
-                            {
-                                var roller = await _userManager.GetRolesAsync(user);
-                                return RedirectToAction("Info", "News");
-                            }
-                    }
-                    else
-                    {
-                        ViewBag.error = "Sizin Akkount Deaktiv edilib";
-                        return View("SignIn", model);
-                    }
-                }
-            }
-            return View("SignIn", model);
-        }
-        private bool IsReCaptchValidV3(string captchaResponse)
-        {
-            var result = false;
-            var secretKey = _googleConfig.Secret;
-            var apiUrl = "https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}";
-            var requestUri = string.Format(apiUrl, secretKey, captchaResponse);
-            var request = (HttpWebRequest)WebRequest.Create(requestUri);
-
-            using (WebResponse response = request.GetResponse())
-            {
-                using (StreamReader stream = new StreamReader(response.GetResponseStream()))
-                {
-                    JObject jResponse = JObject.Parse(stream.ReadToEnd());
-                    var isSuccess = jResponse.Value<bool>("success");
-                    result = isSuccess ? true : false;
-                }
-            }
-            return result;
-        }
+        
         //[AllowAnonymous]
         //[Route("User/RecaptchaVerify")]
         //public JsonResult RecaptchaVerify(string token)
         //{
         //    return new JsonResult(_recaptchaValidator.IsRecaptchaValid(token));
         //}
-        [HttpGet]
-        [Route("accessdenied.html")]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
-
-        [Route("signout")]
-        public async Task<IActionResult> SignOut()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("SignIn");
-        }
+       
 
         [HttpGet]
         [Authorize(Policy = "user.newPassword")]
