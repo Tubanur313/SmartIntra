@@ -53,7 +53,33 @@
     <partial name="_FootScripts" />
     @RenderSection("ProfileJs", required: false)
     @RenderSection("CrudJs", required: false)
-  
+  <script>
+      $.ajaxSetup({
+          statusCode:{
+              200:function(response){
+                  if(response.error == false &&response.message.length>0){
+                      toastr.success(response.message,'Ugurludur!');
+                  }
+              },
+              400:function(response){
+                  console.log('Xetali Sorgu','Xeta!');
+                  
+              },
+              401:function(response){
+                  console.log('Evvelce Sisteme daxil olmalisiniz','Diqqet!');
+              },
+              403:function(response){
+                  console.log('Bu Emeliyyat ucun Selahiyyetiniz yoxdur','Diqqet!');
+              },
+              404:function(response){
+                  console.log('Melumat Tapilmadi','Diqqet!');
+              },
+              500:function(response){
+                  console.log('Server Xetasi','Xeta!');
+              }
+          }
+      });
+  </script>
 <script class="removable">
     $(".removable").remove();
     $("#searchId").on("click",function(e){

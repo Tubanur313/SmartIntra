@@ -2,7 +2,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -14,7 +13,6 @@ using SmartIntranet.Business.Extension;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.Web.GoogleRecaptcha;
-using System;
 
 namespace SmartTicket.Web
 {

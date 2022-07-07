@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace SmartIntranet.Web.Controllers
             _companyService = companyService;
             _departmentService = departmentService;
         }
-
+        [Authorize(Policy = "dashboard.menu")]
         public async Task<IActionResult> Menu()
         {
             decimal totalCountTicket = _ticketservice.GetAllAsync(x => x.IsDeleted == false).Result.Count;
