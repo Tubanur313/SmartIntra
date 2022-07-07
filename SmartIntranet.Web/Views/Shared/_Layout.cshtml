@@ -53,7 +53,7 @@
     <partial name="_FootScripts" />
     @RenderSection("ProfileJs", required: false)
     @RenderSection("CrudJs", required: false)
-  <script>
+@*  <script>
       $.ajaxSetup({
           statusCode:{
               200:function(response){
@@ -79,7 +79,7 @@
               }
           }
       });
-  </script>
+  </script>*@
 <script class="removable">
     $(".removable").remove();
     $("#searchId").on("click",function(e){
