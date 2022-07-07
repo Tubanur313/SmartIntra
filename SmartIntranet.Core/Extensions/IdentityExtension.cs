@@ -22,18 +22,18 @@ namespace SmartIntranet.Core.Extensions
 
 
         }
-        static public int? GetPrincipalId(this IActionContextAccessor ctx)
-        {
-            var idData = ctx.ActionContext.HttpContext.User
-                .Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value;
+        //static public int? GetPrincipalId(this IActionContextAccessor ctx)
+        //{
+        //    var idData = ctx.ActionContext.HttpContext.User
+        //        .Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier))?.Value;
 
-            if (idData == null)
-                return null;
+        //    if (idData == null)
+        //        return null;
 
-            return Convert.ToInt32(idData);
+        //    return Convert.ToInt32(idData);
 
 
-        }
+        //}
 
 
         static public bool HasAccess(this ClaimsPrincipal principal, string claimName)

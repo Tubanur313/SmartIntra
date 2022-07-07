@@ -101,11 +101,11 @@ namespace SmartIntranet.Web.Controllers
 
                     if (user.IsDeleted != true && !user.IsDeleted && isValid)
                     {
-                        //await _signInManager.SignOutAsync();
-                        var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, true);
+                        await _signInManager.SignOutAsync();
+                        var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
                         if (identityResult.Succeeded)
                         {
-                            var roller = await _userManager.GetRolesAsync(user);
+                            
                             return RedirectToAction("Info", "News");
                         }
                     }
@@ -114,9 +114,11 @@ namespace SmartIntranet.Web.Controllers
                         ViewBag.error = "Sizin Akkount Deaktiv edilib";
                         return View("Login", model);
                     }
+                    ViewBag.error = "Email ve ya şifre sehvdir";
+                    return View("Login", model);
                 }
             }
-            return View("SignIn", model);
+            return View("Login", model);
         }
 
         [HttpGet]
