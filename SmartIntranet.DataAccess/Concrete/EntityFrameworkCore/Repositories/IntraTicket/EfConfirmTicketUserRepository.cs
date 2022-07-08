@@ -26,6 +26,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
         }
@@ -49,6 +55,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Supporter)
                .Include(x => x.Ticket)
                .ThenInclude(x => x.CategoryTicket)
+               .Include(x => x.Ticket)
+               .ThenInclude(x => x.BusinessTravel)
+               .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                .OrderByDescending(z => z.Id)
                .ToListAsync();
             }
@@ -67,6 +79,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
@@ -85,6 +103,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
@@ -102,6 +126,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
