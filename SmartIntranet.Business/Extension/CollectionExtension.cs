@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartIntranet.Business.Provider;
 using SmartIntranet.Business.ValidationRules.FluentValidation;
 using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
+using SmartIntranet.Business.ValidationRules.FluentValidation.TicketTripValidate;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
@@ -31,6 +32,9 @@ using SmartIntranet.DTO.DTOs.PersonalContractDto;
 using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.DTO.DTOs.TicketDto;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete.Membership;
@@ -186,6 +190,15 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<BusinessTripAddDto>, BusinessTripAddValidator>();
             services.AddTransient<IValidator<BusinessTripUpdateDto>, BusinessTripUpdateValidator>();
+
+            services.AddTransient<IValidator<BusinessTravelAddDto>, BusinessTravelAddValidator>();
+            services.AddTransient<IValidator<BusinessTravelUpdateDto>, BusinessTravelUpdateValidator>();
+
+            services.AddTransient<IValidator<VacationLeaveAddDto>, VacationLeaveAddValidator>();
+            services.AddTransient<IValidator<VacationLeaveUpdateDto>, VacationLeaveUpdateValidator>();
+
+            services.AddTransient<IValidator<PermissionAddDto>, PermissionAddValidator>();
+            services.AddTransient<IValidator<PermissionUpdateDto>, PermissionUpdateValidator>();
         }
     }
 }
