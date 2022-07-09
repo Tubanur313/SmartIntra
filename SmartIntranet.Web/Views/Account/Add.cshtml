@@ -493,7 +493,7 @@
 <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script>
-    $.validator.setDefaults({ ignore:''});
+    //$.validator.setDefaults({ ignore:''});
     $(document).ready(function () {
 
             let dateArray = [];
@@ -1059,12 +1059,12 @@
                                           prompt:'Yoxdur !',
                                      });
                                      treeD.combotree('disable')
-                                     tre.combotree('setValue', '')
+                                     treeD.combotree('setValue', '')
                                      var treeP = $('#PositionId').combotree({
                                           prompt:'Yoxdur !',
                                      });
                                      treeP.combotree('disable')
-                                     tre.combotree('setValue', '')
+                                     treeP.combotree('setValue', '')
                                     }
                              },
                             error: function (data) {
@@ -1078,7 +1078,7 @@
                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                     }
         });
-              event.preventDefault();
+              //event.preventDefault();
 
     @* }) *@
 
