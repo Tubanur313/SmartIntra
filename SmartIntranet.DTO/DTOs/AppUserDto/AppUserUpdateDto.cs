@@ -54,6 +54,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public int? PositionId { get; set; }
         public Position Position { get; set; }
         public bool IsDeleted { get; set; }
+        public decimal VacationTotal { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }
         public virtual List<UserVacationRemain> UserVacationRemains { get; set; }
     }

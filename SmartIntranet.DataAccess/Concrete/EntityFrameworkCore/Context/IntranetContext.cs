@@ -97,6 +97,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<TerminationContractFile> TerminationContractFiles { get; set; }
         public DbSet<VacationType> VacationTypes { get; set; }
         public DbSet<VacationContract> VacationContracts { get; set; }
+        public DbSet<VacationContractDate> VacationContractDates { get; set; }
         public DbSet<VacationContractFile> VacationContractFiles { get; set; }
         public DbSet<BusinessTrip> BusinessTrips { get; set; }
         public DbSet<BusinessTripUser> BusinessTripUsers { get; set; }

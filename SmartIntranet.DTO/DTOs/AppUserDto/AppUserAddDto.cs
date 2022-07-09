@@ -54,6 +54,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public DateTime UpdateDate { get; set; }
         public int? DeleteByUserId { get; set; }
         public DateTime? DeleteDate { get; set; }
+        public decimal VacationTotal { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }
         public virtual List<UserVacationRemain> UserVacationRemains { get; set; }

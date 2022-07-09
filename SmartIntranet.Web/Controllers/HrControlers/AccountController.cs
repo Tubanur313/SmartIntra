@@ -495,7 +495,19 @@ namespace SmartIntranet.Web.Controllers
 
             }
 
-            var levels = new List<LevelType>();
+            var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == listModel.Id);
+            updateUser.VacationTotal = 0;
+            var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted);
+            foreach(var el in all_remains)
+            {
+                updateUser.VacationTotal += el.RemainCount;
+            }
+
+            await _userManager.UpdateAsync(updateUser);
+            listModel.VacationTotal = updateUser.VacationTotal;
+
+
+              var levels = new List<LevelType>();
             levels.Add(new LevelType() { Id = EducationLevelConstant.PRIMARY_VOCATIONAL, Name = "İlkin peşə təhsili" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta təhsil" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
@@ -662,6 +674,12 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.UpdateByUserId = current;
                         updateUser.UserExperiences = model.UserExperiences;
                         updateUser.UserVacationRemains = UserVacationRemainsNew;
+
+                        updateUser.VacationTotal = 0;
+                        foreach (var el in UserVacationRemainsNew)
+                        {
+                            updateUser.VacationTotal += el.RemainCount;
+                        }
 
                         IdentityResult result = await _userManager.UpdateAsync(updateUser);
                         if (result.Succeeded && oldFileImage != "default.png")

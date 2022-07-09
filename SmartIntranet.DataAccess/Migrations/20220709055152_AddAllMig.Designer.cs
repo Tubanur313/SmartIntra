@@ -10,8 +10,8 @@ using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    [Migration("20220629100205_CreateDb")]
-    partial class CreateDb
+    [Migration("20220709055152_AddAllMig")]
+    partial class AddAllMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1313,6 +1313,240 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.ToTable("TicketOrders");
                 });
 
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.BusinessTravel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Accommodation")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CauseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime>("EndDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int>("Staylength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Transport")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CauseId");
+
+                    b.HasIndex("PlaceId");
+
+                    b.HasIndex("TicketId")
+                        .IsUnique();
+
+                    b.ToTable("BusinessTravels");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<TimeSpan>("EndTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("time")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("PermissionCreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("ntext");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("time")
+                        .HasDefaultValue(null);
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId")
+                        .IsUnique();
+
+                    b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.VacationLeave", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int?>("DeleteByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime>("EndDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime>("StartDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<DateTime>("VacationCreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(null);
+
+                    b.Property<byte>("VacationKind")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("Vacationlength")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId")
+                        .IsUnique();
+
+                    b.ToTable("VacationLeaves");
+                });
+
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.Watcher", b =>
                 {
                     b.Property<int>("Id")
@@ -1828,7 +2062,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 6, 29, 10, 2, 5, 492, DateTimeKind.Utc).AddTicks(3033));
+                        .HasDefaultValue(new DateTime(2022, 7, 9, 9, 51, 52, 568, DateTimeKind.Local).AddTicks(8760));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -2461,6 +2695,9 @@ namespace SmartIntranet.DataAccess.Migrations
 
                     b.Property<int>("VacationMainDay")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("VacationTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("WorkGraphicId")
                         .HasColumnType("int");
@@ -3805,6 +4042,45 @@ namespace SmartIntranet.DataAccess.Migrations
                         .WithMany("TicketOrders")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.BusinessTravel", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.Cause", "Cause")
+                        .WithMany()
+                        .HasForeignKey("CauseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.Place", "Place")
+                        .WithMany()
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartIntranet.Entities.Concrete.IntraTicket.Ticket", "Ticket")
+                        .WithOne("BusinessTravel")
+                        .HasForeignKey("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.BusinessTravel", "TicketId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.Permission", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.IntraTicket.Ticket", "Ticket")
+                        .WithOne("Permission")
+                        .HasForeignKey("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.Permission", "TicketId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.VacationLeave", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.IntraTicket.Ticket", "Ticket")
+                        .WithOne("VacationLeave")
+                        .HasForeignKey("SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts.VacationLeave", "TicketId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.IntraTicket.Watcher", b =>

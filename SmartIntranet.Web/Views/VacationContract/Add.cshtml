@@ -106,29 +106,24 @@
                       <input asp-for="CalendarDay" type="number" readonly class="form-control disabled_custom" value="0">
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div id="labor_vacation" class="form-group">
-                        <label class="floatLabel">  Qalıq başlama tarixi: </label>
-                        <div class="form-group">
-                           
-                            <input readonly asp-for="FromWorkYearDate" type="date" class="form-control disabled_custom" >
-                           
+
+                </div>
+                 <div  id="labor_vacation" class="row">
+                     <h6 class="ml-3 mb-3"> İl aralığı: </h6>
+                 </div>
+                 <div  id="labor_vacation_2" class="">
+                      
+                      <div class="form-group">
+                            <div id="vac-box">
+                                <input id="vacCount" type="hidden" value="0" />
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-right">
+                                    Əlavə et: <button type="button" id="addDateRange" class="btn btn-outline-success rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-plus m-0"></i></button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div id="labor_vacation_2" class="form-group">
-                        <label class="floatLabel">  Qalıq bitmə tarixi: </label>
-                        <div class="form-group">
-                          
-                            <input asp-for="ToWorkYearDate" type="date" readonly class="form-control disabled_custom">
-                           
-                        </div>
-                    </div>
-                </div>
-                </div>
+                  </div>
 
 
                 <div class="form-group row mt-3">
@@ -161,6 +156,20 @@
         $("form").submit( function(e) {
 
         });
+
+           $("#addDateRange").click(function (e) {
+                 
+                let rowCount = parseInt($("#vacCount").val());
+                rowCount++;
+                $("#vacCount").val(rowCount);
+                let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="VacationContractDates[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="VacationContractDates[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="VacationContractDates[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="VacationContractDates[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="VacationContractDates[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="VacationContractDates[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Gün: </label> <input type="number" class="form-control remain-count" name="VacationContractDates[${rowCount - 1}].CalendarDay" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
+                $('#vac-box').append(html);
+
+                $('.input-daterange').datepicker({
+                    //format: "dd.mm.yyyy"
+                });
+            });
+
 
         $('#FromDate').change(function () {
             var date = $(this).val();
@@ -225,7 +234,6 @@
                             var days = diff / 1000 / 60 / 60 / 24;
                             days += 1;
                             $("#CalendarDay").val(days.toString());
-                            getRemainDates(Date.parse(date), Date.parse(to_date))
                         }
                     } else {
                         $("#labor_vacation").css('display', "none");
@@ -240,39 +248,7 @@
             });
     }
 
-    function getRemainDates(fromDate, toDate) {
-        var usr_id = $("#UserId").val()
-        if (usr_id==null) {
-            toastr.error("Əməkdaş boş ola bilməz", "Xəta!");
-            return;
-        }
-          $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetUserVacationRemainDates", "VacationContract")',
-                data: {
-                    user_id: parseInt(usr_id),
-                    fromDate: fromDate / 1000,
-                    toDate: toDate / 1000
-                },
-                success: function (response)
-                {
-                    if (response.message!= null)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        $("#CalendarDay").val("0");
-                        return;
-                    }
-                    $("#FromWorkYearDate").val(response.fromDate.toString().split('T')[0]);
-                    $("#ToWorkYearDate").val(response.toDate.toString().split('T')[0]);
-
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-           });
-    }
-
+   
     function getPos(_id) {
           $.ajax({
                 type: 'Get',
