@@ -72,6 +72,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.vacationTypes = await _vacationTypeService.GetAllAsync(x => !x.IsDeleted);
+
             return View();
         }
 
@@ -90,6 +91,7 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedDate = DateTime.Now;
                 var doc_key = "";
 
+                
                 var vac_type = _vacationTypeService.FindByIdAsync(model.VacationTypeId).Result.Key;
                 if (vac_type == VacationTypeConst.LABOR)
                 {
@@ -116,7 +118,7 @@ namespace SmartIntranet.Web.Controllers
                 var current = GetSignInUserId();
                 var result_model = _contractService.AddReturnEntityAsync(_map.Map<VacationContract>(model)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
-                var usr2 = await _userManager.FindByIdAsync(result_model.UserId.ToString());
+                SetDefaultVacRemain(usr);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
                 DateTime work_start_date = usr.StartWorkDate;
@@ -368,6 +370,7 @@ namespace SmartIntranet.Web.Controllers
                 }
 
                 var usr = await _userService.FindByUserAllInc(model.UserId);
+                SetDefaultVacRemain(usr);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
                 DateTime work_start_date = usr.StartWorkDate;
@@ -587,6 +590,42 @@ namespace SmartIntranet.Web.Controllers
         }
 
 
-    
+        public void SetDefaultVacRemain(IntranetUser usr)
+        {
+            DateTime start_interval;
+            DateTime end_interval;
+            if (DateTime.Now.Month > usr.StartWorkDate.Month || (DateTime.Now.Month == usr.StartWorkDate.Month && DateTime.Now.Day >= usr.StartWorkDate.Day))
+            {
+                start_interval = new DateTime(DateTime.Now.Year, usr.StartWorkDate.Month, usr.StartWorkDate.Day);
+                end_interval = new DateTime(DateTime.Now.Year + 1, usr.StartWorkDate.Month, usr.StartWorkDate.Day);
+            }
+            else
+            {
+                start_interval = new DateTime(DateTime.Now.Year - 1, usr.StartWorkDate.Month, usr.StartWorkDate.Day);
+                end_interval = new DateTime(DateTime.Now.Year, usr.StartWorkDate.Month, usr.StartWorkDate.Day);
+            }
+
+            var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr.Id && x.FromDate == start_interval && !x.IsDeleted);
+
+            if (!remains)
+            {
+                UserVacationRemain ur = new UserVacationRemain();
+                ur.FromDate = start_interval;
+                ur.ToDate = end_interval;
+                ur.IsDeleted = false;
+                ur.CreatedDate = DateTime.Now;
+                ur.AppUserId = usr.Id;
+                ur.UsedCount = 0;
+                ur.VacationCount = usr.VacationMainDay + usr.VacationExtraNature + usr.VacationExtraExperience
+                     + usr.VacationExtraChild;
+                ur.RemainCount = ur.VacationCount;
+
+                 _userVacationRemainService.AddAsync(ur);
+            }
+
+        }
+
+
+
     }
 }

@@ -120,9 +120,9 @@ namespace SmartIntranet.Web.Controllers
                 }
                 formatKeys.Add("outOfWork", outOfWork);
                 formatKeys.Add("notificationWork", notificationWork);
-
+                var tr_el = _terminationItemService.FindByIdAsync(model.TerminationItemId).Result;
                 formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId).ToString());
-                formatKeys.Add("trItem", _terminationItemService.FindByIdAsync(model.TerminationItemId).Result.Name);
+                formatKeys.Add("trItem", tr_el.Name + " (" + tr_el.Description + ")");
                 formatKeys.Add("isAgree", model.IsAgree ? "bildirmişdir" : "bildirməmişdir");
                 formatKeys.Add("contractBase", model.Description);
                 formatKeys.Add("terminationDate", result_model.TerminationDate.ToString("dd.MM.yyyy"));
@@ -238,8 +238,9 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("outOfWork", outOfWork);
                 formatKeys.Add("notificationWork", notificationWork);
 
+                var tr_el = _terminationItemService.FindByIdAsync(model.TerminationItemId).Result;
                 formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId).ToString());
-                formatKeys.Add("trItem", _terminationItemService.FindByIdAsync(model.TerminationItemId).Result.Name);
+                formatKeys.Add("trItem", tr_el.Name + " (" + tr_el.Description + ")");
                 formatKeys.Add("isAgree", model.IsAgree ? "bildirmişdir" : "bildirməmişdir");
                 formatKeys.Add("contractBase", model.Description);
                 formatKeys.Add("terminationDate", model.TerminationDate.ToString("dd.MM.yyyy"));
