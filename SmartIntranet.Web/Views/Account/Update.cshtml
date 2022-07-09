@@ -160,7 +160,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Verilmə Tarixi: </label>
-                                <input type="date" class="form-control" asp-for="IdCardGiveDate" autocomplete="off">
+                                <input type="text" maxlength=10 class="form-control custom-date" asp-for="IdCardGiveDate" autocomplete="off">
                                 <span asp-validation-for="IdCardGiveDate" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -197,7 +197,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Qüvvədə Olma Tarixi: </label>
-                                <input type="date" class="form-control" asp-for="IdCardExpireDate" autocomplete="off">
+                                <input type="text" maxlength=10 class="form-control custom-date" asp-for="IdCardExpireDate" autocomplete="off">
                                 <span asp-validation-for="IdCardExpireDate" class="text-danger"></span>
                             </div>
                         </div>
@@ -232,7 +232,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control custom-date">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -261,7 +261,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  Doğum Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="Birthday" type="date" class="form-control" id="inputDate">
+                                <input asp-for="Birthday" type="text" maxlength=10 class="form-control custom-date">
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
                         </div>
@@ -419,10 +419,10 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="floatLabel"> Tarix: </label>
-                                        <div class="input-group input-daterange mb-0">
-                                            <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control experience-history" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control experience-history" autocomplete="off">
+                                        <div class="input-group input-daterange input-daterange-experience-history mb-0">
+                                            <input type="text" maxlength=10 asp-for="UserExperiences[i].ExperienceStart" class="form-control experience-history experienceStart-@i" autocomplete="off">
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" maxlength=10 asp-for="UserExperiences[i].ExperienceEnd" class="form-control experience-history experienceEnd-@i" autocomplete="off">
                                         </div>
                                         <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span>
                                         <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span>
@@ -528,9 +528,9 @@
                                             <input type="hidden" asp-for="UserVacationRemains[i].IsDeleted" />
 
                                             <div class="input-group input-daterange mb-0">
-                                                <input type="text" asp-for="UserVacationRemains[i].FromDate" value="@Model.UserVacationRemains[i].FromDate.ToString("dd.MM.yyyy")" class="form-control vacation-remain start old" autocomplete="off">
-                                                <div class="input-group-addon">to</div>
-                                                <input type="text" asp-for="UserVacationRemains[i].ToDate" value="@Model.UserVacationRemains[i].ToDate.ToString("dd.MM.yyyy")" class="form-control vacation-remain end old" autocomplete="off">
+                                                <input type="text" maxlength=10 asp-for="UserVacationRemains[i].FromDate" class="form-control vacation-remain start old" autocomplete="off">
+                                                <span class="input-group-addon">to</span>
+                                                <input type="text" maxlength=10 asp-for="UserVacationRemains[i].ToDate" class="form-control vacation-remain end old" autocomplete="off">
                                             </div>
 
                                             <span asp-validation-for="UserVacationRemains[i].ToDate" class="text-danger"></span>
@@ -564,9 +564,9 @@
                                     <div class="form-group">
                                         <label class="floatLabel"> Tarix: </label>
                                         <div class="input-group input-daterange mb-0">
-                                            <input type="text" value="@item.FromDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input type="text" value="@item.ToDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
+                                            <input type="text" value="@item.FromDate.ToString("MM/dd/yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" value="@item.ToDate.ToString("MM/dd/yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
                                         </div>
                                         <span class="messages"></span>
                                     </div>
@@ -612,6 +612,25 @@
 
         let dateArray = [];
 
+        $('.custom-date').each(function()
+        {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            })
+        })
+
+        $('#StartWorkDate').each(function()
+        {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            }).on('changeDate', function (ev) {
+                $(this).change();
+            });
+            $(this).change(function () {
+                getUserVacationDay();
+            });
+        })
+
          $("form").submit( function(e) {
                 let isEmpty = false;
                 $(".experience-history").each(function(i, el){
@@ -650,6 +669,38 @@
                e.preventDefault();
              }
          });
+
+          function getUserVacationDay() {
+            let elemets = document.getElementsByClassName('experience-history');
+            let totalDays = 0;
+            let startWorkDate = $('#StartWorkDate').val();
+            //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1] - 1, startWorkDate.split('.')[0]);
+            startWorkDate = new Date(startWorkDate);
+            startWorkDate.setHours(0, 0, 0, 0);
+            let nowDate = new Date();
+            nowDate.setHours(0, 0, 0, 0);
+            for (let index = 0; index < elemets.length / 2; index++) {
+                let startEl = $(`.experienceStart-${index}`).val();
+                let endEl = $(`.experienceEnd-${index}`).val();
+                if(!(startEl && endEl))
+                    break;
+                //let dateStart = new Date(startEl.split('.')[2], startEl.split('.')[1] - 1, startEl.split('.')[0]);
+                let dateStart = new Date(startEl);
+                //let dateEnd = new Date(endEl.split('.')[2], endEl.split('.')[1] - 1, endEl.split('.')[0]);
+                let dateEnd = new Date(endEl);
+                totalDays += Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24));
+            }
+            totalDays += Math.ceil((new Date().getTime() - startWorkDate.getTime()) / (1000 * 3600 * 24));
+            let experienceYears = totalDays / 365;
+            let vacationDay = 0;
+            if (experienceYears >= 5 && experienceYears <= 10)
+                vacationDay = 2;
+            else if (experienceYears > 10 && experienceYears <= 15)
+                vacationDay = 4;
+            else if (experienceYears > 15)
+                vacationDay = 6;
+            $('#VacationExtraExperience').val(vacationDay);
+        }
 
          function setDisableAndOld() {
             dateArray = [];
@@ -701,12 +752,14 @@
             let startYear;
             let valid = true;
             $(".vacation-remain").each(function (i, el) {
-                let startWorkDate = $('#inputDate').val();
+                let startWorkDate = $('#StartWorkDate').val();
+                //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
                 startWorkDate = new Date(startWorkDate);
                 startWorkDate.setHours(0, 0, 0, 0);
                 let startWorkMonth = startWorkDate.getMonth() + 1;
                 let startWorkDay = startWorkDate.getDate();
                 let val = $(el).val();
+                //val = new Date(val.split('.')[2], val.split('.')[1]-1, val.split('.')[0]);
                 val = new Date(val);
                 val.setHours(0, 0, 0, 0);
                 let startMonth = val.getMonth() + 1;
@@ -734,6 +787,8 @@
                         startYear = year;
                     }
                     if (startMonth != startWorkMonth || startDay != startWorkDay) {
+                        console.log(startMonth + " - " + startWorkMonth);
+                        console.log(startDay + " - " + startWorkDay);
                         toastr.error(" Ay və gün işə başlama tarixindəki ilə eyni olmalıdı !", "Xəta!");
                          valid = false;
                          return valid;
@@ -753,22 +808,36 @@
              return valid;
          }
 
-          $('.input-daterange input').each(function () {
+          $('.input-daterange').datepicker({
+              //format: "dd.mm.yyyy"
+          });
+          
+           $('.input-daterange-experience-history').each(function()
+            {
                 $(this).datepicker({
                     //format: "dd.mm.yyyy"
+                }).on('changeDate', function (ev) {
+                    $(this).change();
                 });
-          });
+                $(this).change(function () {
+                    getUserVacationDay();
+                });
+            })
+
           $("#addRow").click(function () {
                 let rowCount = parseInt($("#rowCount").val());
                 rowCount++;
                 $("#rowCount").val(rowCount);
-                let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
+                let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history experienceStart-${rowCount - 1}" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history experienceEnd-${rowCount - 1}" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
                 $('#row-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        //format: "dd.mm.yyyy"
-                    });
+               $('.input-daterange').datepicker({
+                    //format: "dd.mm.yyyy"
+                }).on('changeDate', function (ev) {
+                    $('.input-daterange').change();
+                });
+                $('.input-daterange').change(function () {
+                    getUserVacationDay();
                 });
           });
 
@@ -780,17 +849,13 @@
             let rowCount = parseInt($("#vacCount").val());
             rowCount++;
             $("#vacCount").val(rowCount);
-            let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
+            let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
             $('#vac-box').append(html);
 
-            $('.input-daterange input').each(function () {
-                $(this).datepicker({
-                    //format: "dd.mm.yyyy"
-                });
+            $('.input-daterange').datepicker({
+                //format: "dd.mm.yyyy"
             });
         });
-
-
 
         $("#Profile").change(function (e) {
                 $("#lview").show();
@@ -1101,7 +1166,7 @@
                                                             var treeP = $('#PositionId').combotree({
                                                                 prompt: 'Yoxdur !',
                                                             });
-                                                            tree.combotree('disable')
+                                                            //tree.combotree('disable')
                                                         }
 
                                                     }
