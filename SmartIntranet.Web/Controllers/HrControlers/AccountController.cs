@@ -643,6 +643,8 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.VacationExtraNature = model.VacationExtraNature;
                         updateUser.IdCardType = model.IdCardType;
                         updateUser.Citizenship = model.Citizenship;
+                        updateUser.Salary = model.Salary;
+                        updateUser.WorkGraphicId = model.WorkGraphicId;
                         updateUser.CompanyId = model.CompanyId;
                         updateUser.DepartmentId = model.DepartmentId;
                         updateUser.PositionId = model.PositionId;
