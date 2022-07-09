@@ -22,7 +22,7 @@
                         <th class="text-center">Qeydlər</th>
                         <th class="text-center">
                             <span class="table-add float-right mb-3 mr-2">
-                                <a href="#!" class="text-success"><i class="fas fa-plus fa-2x" style="position: absolute;right: 63px;top: 23px;" aria-hidden="true"></i></a>
+                                <a href="#!" class="text-success"><i class="fas fa-plus fa-2x" style="position: absolute;right: 105px;top: 60px;" aria-hidden="true"></i></a>
                             </span>
                         </th>
                     </tr>
@@ -31,15 +31,15 @@
                     @foreach (OrderListDto order in Model)
                     {
                         <tr class="editTable" value-id="@order.Id">
-                            <td><textarea style="width: 110px;" name="Product" id="Product">@order.Product</textarea> </td>
-                            <td><textarea style="width: 110px;" name="Currency" id="Product">@order.Currency</textarea> </td>
-                            <td><textarea style="width: 110px;" name="Quantity" id="Quantity">@order.Quantity</textarea> </td>
-                            <td><textarea style="width: 110px;" name="WithoutVat" id="WithoutVat">@order.WithoutVat</textarea> </td>
-                            <td><textarea style="width: 110px;" name="TotalWithoutTax" id="TotalWithoutTax">@order.TotalWithoutTax</textarea> </td>
-                            <td><textarea style="width: 110px;" name="TaxType" id="TaxType">@order.TaxType</textarea> </td>
-                            <td><textarea style="width: 110px;" name="Total" id="Total">@order.Total</textarea> </td>
-                            <td><textarea style="width: 110px;" name="Seller" id="Seller">@order.Seller</textarea> </td>
-                            <td><textarea style="width: 110px;" name="Description" id="Description">@order.Description</textarea> </td>
+                            <td><textarea style="width: 100px;" name="Product" id="Product">@order.Product</textarea> </td>
+                            <td><textarea style="width: 100px;" name="Currency" id="Product">@order.Currency</textarea> </td>
+                            <td><textarea style="width: 100px;" name="Quantity" id="Quantity">@order.Quantity</textarea> </td>
+                            <td><textarea style="width: 100px;" name="WithoutVat" id="WithoutVat">@order.WithoutVat</textarea> </td>
+                            <td><textarea style="width: 100px;" name="TotalWithoutTax" id="TotalWithoutTax">@order.TotalWithoutTax</textarea> </td>
+                            <td><textarea style="width: 100px;" name="TaxType" id="TaxType">@order.TaxType</textarea> </td>
+                            <td><textarea style="width: 100px;" name="Total" id="Total">@order.Total</textarea> </td>
+                            <td><textarea style="width: 100px;" name="Seller" id="Seller">@order.Seller</textarea> </td>
+                            <td><textarea style="width: 100px;" name="Description" id="Description">@order.Description</textarea> </td>
                             <td>
                                 <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
                             </td>
@@ -54,26 +54,28 @@
                     </tr>
                 </tfoot>
             </table>
-            <button type="submit" ticket-id="@Model" id="change-file" class="btn btn-danger btn-round">Faylı Yenilə</button>
+@*            <button type="submit" ticket-id="@Model" id="change-file" class="btn btn-danger btn-round">Faylı Yenilə</button>
+            <a id="Order-file" class="btn btn-success btn-round">
+            Faylı Yüklə</a>*@
         </div>
     </div>
 </div>
 
-<script class ="removable">
+<script class="removable">
     $(document).ready(function() {
     const $tableID = $('#table');
     const $BTN = $('#export-btn');
     const $EXPORT = $('#export');
     const newTr = `<tr class="editTable" value-id="" >
-                <td><textarea style="width: 110px;" name="Product" id="Product"></textarea> </td>
-                <td><textarea style="width: 110px;" name="Currency" id="Currency"></textarea> </td>
-                <td><textarea style="width: 110px;" name="Quantity" id="Quantity"></textarea> </td>
-                <td><textarea style="width: 110px;" name="WithoutVat" id="WithoutVat"></textarea> </td>
-                <td><textarea style="width: 110px;" name="TotalWithoutTax" id="TotalWithoutTax"></textarea> </td>
-                <td><textarea style="width: 110px;" name="TaxType" id="TaxType"></textarea> </td>
-                <td><textarea style="width: 110px;" name="Total" id="Total" (oninput)="validateValue(event)">0</textarea> </td>
-                <td><textarea style="width: 110px;" name="Seller" id="Seller"></textarea> </td>
-                <td><textarea style="width: 110px;" name="Description" id="Description"></textarea> </td>
+                <td><textarea style="width: 100px;" name="Product" id="Product"></textarea> </td>
+                <td><textarea style="width: 100px;" name="Currency" id="Currency"></textarea> </td>
+                <td><textarea style="width: 100px;" name="Quantity" id="Quantity"></textarea> </td>
+                <td><textarea style="width: 100px;" name="WithoutVat" id="WithoutVat"></textarea> </td>
+                <td><textarea style="width: 100px;" name="TotalWithoutTax" id="TotalWithoutTax"></textarea> </td>
+                <td><textarea style="width: 100px;" name="TaxType" id="TaxType"></textarea> </td>
+                <td><textarea style="width: 100px;" name="Total" id="Total" (oninput)="validateValue(event)">0</textarea> </td>
+                <td><textarea style="width: 100px;" name="Seller" id="Seller"></textarea> </td>
+                <td><textarea style="width: 100px;" name="Description" id="Description"></textarea> </td>
                      <td>
                        <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
                      </td>
@@ -98,12 +100,39 @@
                     toastr.error(response.message, "Xəta baş verdi!");
                     return;
                 }
+
+                var r = 0;
+                $("textarea[name='Total']:visible").each(function(index) {
+
+
+                    if (parseFloat($(this).val()) === NaN) {
+                        r += 0;
+                    } else {
+                        r += parseFloat($(this).val());
+                    }
+                });
+                $("#GrandTotal").val(parseFloat(r).toFixed(2));
+                var gTotal = $("#GrandTotal").val();
+                var ticketId = $("#table").attr('ticket-Id');
+                $.ajax({
+                    type: 'get',
+                    url: '@Url.ActionLink("GrandTotal","ticket")',
+                    datatype: 'json',
+                    data: ({
+                        gTotal: gTotal,
+                        ticketId: ticketId
+                    }),
+                    success: function(response) {},
+                    error: function(response) {}
+                });
+
                 toastr.success(response.message, "Uğurla Silindi!");
             },
             error: function(response) {
                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
+
     });
     $tableID.on('click', '.table-up', function() {
         const $row = $(this).parents('tr');
@@ -226,6 +255,14 @@
         }
 
     });
+    $('#purchasing').DataTable({
+        "ordering": false,
+        paging: false,      
+        dom: 'Bfrtip',
+        buttons: [
+           'excel'
+        ]
+    });
 
     function validateValue(event) {
         const elem = event.target;
@@ -243,19 +280,48 @@
         $("#OrderIds").val(JSON.stringify(Ids));
     });
     //orders to send to ticket
-    $(document).on("click", "#change-file", function(e) {
-        var ticketId = $("#table").attr('ticket-Id');
-        $.ajax({
-            type: 'get',
-            url: '@Url.ActionLink("OrderUpdate","ticket")',
-            datatype: 'json',
-            data: ({
-                ticketId: ticketId
-            }),
-            success: function(response) {},
-            error: function(response) {}
-        });
-    });
+    //$(document).on("click", "#change-file", function(e) {
+    //    var ticketId = $("#table").attr('ticket-Id');
+    //    $.ajax({
+    //        type: 'get',
+    //        url: '@Url.ActionLink("OrderUpdate","ticket")',
+    //        datatype: 'json',
+    //        data: ({
+    //            ticketId: ticketId
+    //        }),
+    //        success: function(response) {
+    //    $.ajax({
+    //        type: 'get',
+    //        url: '@Url.ActionLink("getorderticketfile","order")',
+    //        datatype: 'json',
+    //        data: ({
+    //            ticketId: $("#table").attr('ticket-Id')
+    //        }),
+    //        success: function(response) {
+    //            $("#Order-file").attr("href",response);
+    //            $("#Order-file").attr("download", response.split("/").pop().toString());
+    //        },
+    //        error: function(response) {}
+    //    });
+    //        },
+    //        error: function(response) {}
+    //    });
+
+    //});
+
+        //$.ajax({
+        //    type: 'get',
+        //    url: '@Url.ActionLink("getorderticketfile","order")',
+        //    datatype: 'json',
+        //    data: ({
+        //        ticketId: $("#table").attr('ticket-Id')
+        //    }),
+        //    success: function(response) {
+        //        $("#Order-file").attr("href",response);
+        //        $("#Order-file").attr("download", response.split("/").pop().toString());
+        //    },
+        //    error: function(response) {}
+        //});
 
     // Total price
     $("#generated").on("change", function() {
@@ -284,8 +350,10 @@
             error: function(response) {}
         });
     });
-    
-    }); 
+
+
+
+    });
 </script>
 
 

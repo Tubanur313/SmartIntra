@@ -26,7 +26,7 @@ namespace SmartIntranet.Business.Concrete
             _ticketService = ticketService;
         }
 
-        public async void TicketSendEmail(int ticketId, TicketChangeType type,string UserFullName)
+        public async void TicketSendEmail(int ticketId, TicketChangeType type, string UserFullName)
         {
             MimeMessage emailMessage = new MimeMessage();
             if (type == TicketChangeType.TicketAdd)
@@ -81,11 +81,144 @@ namespace SmartIntranet.Business.Concrete
             {
                 emailMessage = await TicketRedirectEmailMessage(ticketId, UserFullName);
             }
+            if (type == TicketChangeType.TicketOrderUpdate)
+            {
+                emailMessage = await TicketOrderUpdateMessage(ticketId, UserFullName);
+            }
+            if (type == TicketChangeType.TicketOrderFileUpdate)
+            {
+                emailMessage = await TicketOrderFileUpdateMessage(ticketId, UserFullName);
+            }
             Send(emailMessage);
         }
 
+        private async Task<MimeMessage> TicketOrderFileUpdateMessage(int ticketId, string UserFullName)
+        {
+            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var ticket = await _ticketService.GetIncludeMail(ticketId);
+            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
-        private async Task<MimeMessage> TicketAddEmailMessage(int ticketId,string UserFullName)
+            //string watchers = string.Empty;
+            //string confirmers = string.Empty;
+            List<string> toEmail = new List<string>();
+
+            //if (ticket.Watchers != null)
+            //{
+            //    foreach (var item in ticket.Watchers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+
+            //    }
+            //}
+            //if (ticket.ConfirmTicketUsers != null)
+            //{
+            //    foreach (var item in ticket.ConfirmTicketUsers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+            //    }
+            //}
+            if(ticket.Employee !=null)
+            {
+                if(ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
+            if (ticket.Supporter != null)
+            {
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
+
+            }
+            else
+            {
+                toEmail.Add(smtpSettings.UserName);
+            }
+
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            foreach (var item in toEmail)
+            {
+                emailMessage.To.Add(MailboxAddress.Parse(item));
+            }
+
+            emailMessage.Subject = "No-Reply";
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketOrderFileUpdate.GetDisplayName() + "</a></h1> " +
+                        "<p><strong>" + "Sifariş Faylında Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
+            emailMessage.Body = bodyBuilder.ToMessageBody();
+            return emailMessage;
+        }
+
+        private async Task<MimeMessage> TicketOrderUpdateMessage(int ticketId, string UserFullName)
+        {
+            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var ticket = await _ticketService.GetIncludeMail(ticketId);
+            string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
+
+            //string watchers = string.Empty;
+            //string confirmers = string.Empty;
+            List<string> toEmail = new List<string>();
+            //if (ticket.Watchers != null)
+            //{
+            //    foreach (var item in ticket.Watchers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+
+            //    }
+            //}
+            //if (ticket.ConfirmTicketUsers != null)
+            //{
+            //    foreach (var item in ticket.ConfirmTicketUsers)
+            //    {
+            //        toEmail.Add(item.IntranetUser.Email);
+            //    }
+            //}
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
+            if (ticket.Supporter != null)
+            {
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
+
+            }
+            else
+            {
+                toEmail.Add(smtpSettings.UserName);
+            }
+
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            foreach (var item in toEmail)
+            {
+                emailMessage.To.Add(MailboxAddress.Parse(item));
+            }
+
+            emailMessage.Subject = "No-Reply";
+
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketOrderUpdate.GetDisplayName() + "</a></h1> " +
+                        "<p><strong>" + "Sifarişdə Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
+            emailMessage.Body = bodyBuilder.ToMessageBody();
+            return emailMessage;
+        }
+        private async Task<MimeMessage> TicketAddEmailMessage(int ticketId, string UserFullName)
         {
             var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
@@ -109,9 +242,14 @@ namespace SmartIntranet.Business.Concrete
                     toEmail.Add(item.IntranetUser.Email);
                 }
             }
+           
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -128,8 +266,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketAdd.GetDisplayName() + "</a></h1> " +
-                        "<p><strong>" + "Taskı Açan : </strong>" + UserFullName + "</p>" ) };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketAdd.GetDisplayName() + "</a></h1> " +
+                        "<p><strong>" + "Taskı Açan : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -143,10 +284,21 @@ namespace SmartIntranet.Business.Concrete
             string watchers = string.Empty;
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
-            
+
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -163,8 +315,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketUpdate.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketUpdate.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -193,9 +348,20 @@ namespace SmartIntranet.Business.Concrete
                     toEmail.Add(item.IntranetUser.Email);
                 }
             }
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -212,8 +378,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketStatus.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketStatus.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -228,9 +397,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -247,8 +427,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketCategory.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketCategory.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -263,9 +446,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -282,8 +476,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketChecklist.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketChecklist.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -298,9 +495,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -317,8 +525,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketPriority.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketPriority.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -333,9 +544,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -352,8 +574,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketDiscuss.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketDiscuss.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -368,9 +593,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -387,8 +623,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketImage.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketImage.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -403,9 +642,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -422,8 +672,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketWatcher.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketWatcher.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -438,9 +691,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -457,8 +721,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.ConfirmUser.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.ConfirmUser.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -473,9 +740,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -492,8 +770,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.ConfirmUserAdd.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.ConfirmUserAdd.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -508,9 +789,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -527,8 +819,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.ConfirmTicket.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.ConfirmTicket.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -543,9 +838,20 @@ namespace SmartIntranet.Business.Concrete
             string confirmers = string.Empty;
             List<string> toEmail = new List<string>();
 
+            if (ticket.Employee != null)
+            {
+                if (ticket.Employee.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Employee.Email);
+                }
+            }
             if (ticket.Supporter != null)
             {
-                toEmail.Add(ticket.Supporter.Email);
+                if (ticket.Supporter.Fullname != UserFullName)
+                {
+                    toEmail.Add(ticket.Supporter.Email);
+                }
+
 
             }
             else
@@ -562,8 +868,11 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Subject = "No-Reply";
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketSupportRedirect.GetDisplayName() + "</a></h1>" +
-                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>") };
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<h1><a href ='" + callBackUrl + "'>" + "#" + ticketId + TicketChangeType.TicketSupportRedirect.GetDisplayName() + "</a></h1>" +
+                        "<p><strong>" + "Dəyişiklik Edən : </strong>" + UserFullName + "</p>")
+            };
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
@@ -576,11 +885,11 @@ namespace SmartIntranet.Business.Concrete
             {
                 try
                 {
-                   await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
+                    await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                   await client.AuthenticateAsync(smtpSettings.FromEmail, smtpSettings.Password);
+                    await client.AuthenticateAsync(smtpSettings.FromEmail, smtpSettings.Password);
 
-                   await client.SendAsync(mailMessage);
+                    await client.SendAsync(mailMessage);
                 }
                 catch
                 {
@@ -589,12 +898,12 @@ namespace SmartIntranet.Business.Concrete
                 }
                 finally
                 {
-                   await client.DisconnectAsync(true);
+                    await client.DisconnectAsync(true);
                     client.Dispose();
                 }
             }
         }
 
-       
+
     }
 }

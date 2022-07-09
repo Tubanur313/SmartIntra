@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
@@ -33,7 +34,16 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.HasOne(d => d.Supporter)
                    .WithMany(p => p.TicketSupporters)
                    .HasForeignKey(d => d.SupporterId).OnDelete(DeleteBehavior.Restrict);
-
+            // one to one
+            builder.HasOne(a => a.BusinessTravel)
+                   .WithOne(b => b.Ticket)
+                   .HasForeignKey<BusinessTravel>(b => b.TicketId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(a => a.VacationLeave)
+                   .WithOne(b => b.Ticket)
+                   .HasForeignKey<VacationLeave>(b => b.TicketId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(a => a.Permission)
+                   .WithOne(b => b.Ticket)
+                   .HasForeignKey<Permission>(b => b.TicketId).OnDelete(DeleteBehavior.Restrict);
 
 
             builder.Property(I => I.IsDeleted);

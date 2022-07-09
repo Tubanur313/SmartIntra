@@ -39,7 +39,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "TerminationItem.add")]
+        [Authorize(Policy = "terminationItem.add")]
         public IActionResult Add()
         {
             return View();

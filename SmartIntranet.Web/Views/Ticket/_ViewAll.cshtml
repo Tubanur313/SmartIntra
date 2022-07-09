@@ -262,6 +262,36 @@
                                                         </button>
                                                     </li>
                                                 }
+                                                @if (User.HasAccess("ticket.busnesstravelupdate") && ticket.StatusType == StatusType.Open && ticket.BusinessTravel != null)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupLg('@Url.Action("BusnessTravelUpdate","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Ezamiyyət')"
+                                                        class="btn  btn-default waves-effect md-trigger text-danger ">
+                                                            <i class="icofont icofont-travelling text-danger   p-r-15"></i>
+                                                            Ezamiyyət
+                                                        </button>
+                                                    </li>
+                                                }                                                
+                                                @if (User.HasAccess("ticket.vacationleaveupdate") && ticket.StatusType == StatusType.Open && ticket.VacationLeave != null)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupMd('@Url.Action("vacationleaveupdate","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Məzuniyyət')"
+                                                        class="btn  btn-default waves-effect md-trigger text-danger ">
+                                                            <i class="icofont icofont-beach-bed text-danger   p-r-15"></i>
+                                                            Məzuniyyət
+                                                        </button>
+                                                    </li>
+                                                }                                                
+                                                @if (User.HasAccess("ticket.permissionupdate") && ticket.StatusType == StatusType.Open && ticket.Permission != null)
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopupLg('@Url.Action("permissionupdate","Ticket",new {id=ticket.Id},Context.Request.Scheme)','İcazə')"
+                                                        class="btn  btn-default waves-effect md-trigger text-danger ">
+                                                            <i class="icofont icofont-tasks-alt text-danger   p-r-15"></i>
+                                                            İcazə
+                                                        </button>
+                                                    </li>
+                                                }
                                                 @if (User.HasAccess("ticket.delete") && ticket.StatusType == StatusType.Open)
                                                 {
                                                     <li>
@@ -271,7 +301,7 @@
                                                             Sil
                                                         </button>
                                                     </li>
-                                                }
+                                                }                                                
                                             </ul>
                                         </td>
                                     </tr>

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using SmartIntranet.Core.Entities.Enum;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
@@ -23,5 +26,8 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public int TicketCategoryId { get; set; }
         public PriorityType PriorityType { get; set; }
         public StatusType StatusType { get; set; }
+        public BusinessTravelAddDto BusinessTravelAddDto { get; set; }
+        public VacationLeaveAddDto VacationLeaveAddDto { get; set; }
+        public PermissionAddDto PermissionAddDto { get; set; }
     }
 }

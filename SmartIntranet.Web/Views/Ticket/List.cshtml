@@ -5,21 +5,6 @@
 
 }
 
-<!-- Page-header start -->
-<div class="page-header">
-    <div class="row justify-content-between">
-        <div class="col-lg-8">
-            <div class="page-header-title">
-                <div class="d-inline">
-                    <h4>Ticket Siyahısı</h4>
-
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
 <div class="row">
     <div class="col-sm-12">
         @if (User.HasAccess("ticket.search"))
@@ -39,7 +24,7 @@
                         </div>
 
                         <div class=" col-sm-3 mt-4 ml-sm-5">
-                            <button type="submit" class="btn btn-success btn-round btn-block">
+                            <button type="submit" class="btn btn-outline-success btn-round btn-block">
                                 Təsdiqlə
                             </button>
                         </div>
@@ -83,7 +68,7 @@
                     </div>
 
                     <div class=" col-sm-3 mt-4 ml-sm-5">
-                        <button type="submit" id="send-filter" class="btn btn-success btn-round btn-block">
+                        <button type="submit" id="send-filter" class="btn btn-outline-success btn-round btn-block">
                             Təsdiqlə
                         </button>
                     </div>
@@ -105,7 +90,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
-                <button id="closeBtn" type="button" data-dismiss="modal" onclick="location.reload()" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
+                <button id="closeBtn" type="button" data-dismiss="modal"  aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
                     <strong id="closeBtnX">x</strong>
                 </button>
             </div>
@@ -119,7 +104,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
-                <button id="closeBtn" type="button" data-dismiss="modal" onclick="location.reload()" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
+                <button id="closeBtn" type="button" data-dismiss="modal"  aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
                     <strong id="closeBtnX">x</strong>
                 </button>
             </div>
@@ -142,6 +127,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="modal zoomIn animated" tabindex="-1" role="dialog" id="form-sm-modal">
     <div class="modal-dialog modal-sm ui-draggable" role="document">
@@ -175,17 +162,5 @@
 @section CrudJs{
     <!-- delete_ajax-->
     <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
-    <script>
-    $(document).ready(function(){
-        $(document).on("click","#form-modal",function(e){
-                if(
-                 $(e.target).attr('id') == 'form-modal' || 
-                 $(e.target).attr('id') =='closeBtn'|| 
-                 $(e.target).attr('id') =='closeBtnX'){
-                    location.reload();
-                }
-        })
-    });
-    </script>
 }
 

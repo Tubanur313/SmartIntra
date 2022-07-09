@@ -215,24 +215,27 @@
                                     <span class="pcoded-mtext">Təsdiq Ticket siyahısı</span>
                                 </a>
                             </li>
-                        }
-                        <li class="">
-                            <a asp-controller="CategoryTicket" asp-action="list">
+                        }@if (User.HasAccess("ticket.categoryticket"))
+                        {
+                            <li class="">
+                                <a asp-controller="CategoryTicket" asp-action="list">
                                 <span class="pcoded-mtext">Kateqoriya</span>
                             </a>
-                        </li>
-
-                        <li class="">
-                            <a asp-controller="checklist" asp-action="list">
+                        </li>}
+                        @if (User.HasAccess("ticket.checklist"))
+                        {
+                            <li class="">
+                                <a asp-controller="checklist" asp-action="list">
                                 <span class="pcoded-mtext">Checklist</span>
                             </a>
-                        </li>
-
-                        <li class="">
-                            <a asp-controller="SmtpEmail" asp-action="index">
+                        </li>}
+                        @if (User.HasAccess("smtp.index"))
+                        {
+                            <li class="">
+                                <a asp-controller="SmtpEmail" asp-action="index">
                                 <span class="pcoded-mtext">SMTP Mail Server</span>
                             </a>
-                        </li>
+                        </li>}
                         @* @if (User.HasAccess("order.list"))
                             {
                             <li class="">

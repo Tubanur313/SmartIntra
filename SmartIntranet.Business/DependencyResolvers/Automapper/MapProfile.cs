@@ -33,6 +33,9 @@ using SmartIntranet.DTO.DTOs.TerminationItemDto;
 using SmartIntranet.DTO.DTOs.TicketCheckListDto;
 using SmartIntranet.DTO.DTOs.TicketDto;
 using SmartIntranet.DTO.DTOs.TicketOrderDto;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
@@ -40,6 +43,7 @@ using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
@@ -500,6 +504,20 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<LongContractListDto, LongContract>().ReverseMap();
             CreateMap<LongContractUpdateDto, LongContract>().ReverseMap();
             CreateMap<ContractListDto, LongContract>().ReverseMap();
+            #endregion
+            #region BusinessTravel-BusinessTravelDto
+            CreateMap<BusinessTravelAddDto, BusinessTravel>().ReverseMap();
+            CreateMap<BusinessTravelUpdateDto, BusinessTravel>().ReverseMap();
+            #endregion
+
+            #region VacationLeave-VacationLeaveDto
+            CreateMap<VacationLeaveAddDto, VacationLeave>().ReverseMap();
+            CreateMap<VacationLeaveUpdateDto, VacationLeave>().ReverseMap();
+            #endregion
+
+            #region Permission-PermissionDto
+            CreateMap<PermissionAddDto, Permission>().ReverseMap();
+            CreateMap<PermissionUpdateDto, Permission>().ReverseMap();
             #endregion
         }
     }

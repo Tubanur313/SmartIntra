@@ -15,29 +15,35 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         {
             using var context = new IntranetContext();
 
-                return await context.Watchers
-               .Where(x => x.IntranetUserId == userId
-                && !x.Ticket.IsDeleted)
-               .Include(x => x.Ticket)
-               .ThenInclude(z => z.Employee)
-               .ThenInclude(z => z.Company)
-               .ThenInclude(z => z.Departments)
-               .ThenInclude(z => z.Positions)
-               .Include(x => x.Ticket)
-               .ThenInclude(z => z.Supporter)
-               .Include(x => x.Ticket)
-               .ThenInclude(x => x.CategoryTicket)
-               .OrderByDescending(z => z.Id)
-               .ToListAsync();
+            return await context.Watchers
+           .Where(x => x.IntranetUserId == userId
+            && !x.Ticket.IsDeleted)
+           .Include(x => x.Ticket)
+           .ThenInclude(z => z.Employee)
+           .ThenInclude(z => z.Company)
+           .ThenInclude(z => z.Departments)
+           .ThenInclude(z => z.Positions)
+           .Include(x => x.Ticket)
+           .ThenInclude(z => z.Supporter)
+           .Include(x => x.Ticket)
+           .ThenInclude(x => x.CategoryTicket)
+           .Include(x => x.Ticket)
+           .ThenInclude(x => x.BusinessTravel)
+           .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
+           .OrderByDescending(z => z.Id)
+           .ToListAsync();
         }
         public async Task<List<Watcher>> MyWatchedTicketsAsync(int userId, int CategoryTicketId, StatusType statusType)
         {
             using var context = new IntranetContext();
-            if(CategoryTicketId > 0 && statusType!=0)
+            if (CategoryTicketId > 0 && statusType != 0)
             {
                 return await context.Watchers
-               .Where(x => x.IntranetUserId == userId 
-               && x.Ticket.CategoryTicketId == CategoryTicketId 
+               .Where(x => x.IntranetUserId == userId
+               && x.Ticket.CategoryTicketId == CategoryTicketId
                && x.Ticket.StatusType == statusType
                && !x.Ticket.IsDeleted
               )
@@ -50,14 +56,20 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Supporter)
                .Include(x => x.Ticket)
                .ThenInclude(x => x.CategoryTicket)
+               .Include(x => x.Ticket)
+               .ThenInclude(x => x.BusinessTravel)
+               .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                .OrderByDescending(z => z.Id)
                .ToListAsync();
             }
-            else if(CategoryTicketId!=0 && statusType == 0)
+            else if (CategoryTicketId != 0 && statusType == 0)
             {
                 return await context.Watchers
-                .Where(x => x.IntranetUserId == userId 
-                && x.Ticket.CategoryTicketId==CategoryTicketId
+                .Where(x => x.IntranetUserId == userId
+                && x.Ticket.CategoryTicketId == CategoryTicketId
                 && !x.Ticket.IsDeleted
                 )
                 .Include(x => x.Ticket)
@@ -69,14 +81,20 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
             else if (CategoryTicketId == 0 && statusType != 0)
             {
                 return await context.Watchers
-                .Where(x => x.IntranetUserId == userId 
-                && x.Ticket.StatusType==statusType
+                .Where(x => x.IntranetUserId == userId
+                && x.Ticket.StatusType == statusType
                 && !x.Ticket.IsDeleted
                 )
                 .Include(x => x.Ticket)
@@ -88,6 +106,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
@@ -105,10 +129,16 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Supporter)
                 .Include(x => x.Ticket)
                 .ThenInclude(x => x.CategoryTicket)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.BusinessTravel)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.Permission)
+                .Include(x => x.Ticket)
+                .ThenInclude(x => x.VacationLeave)
                 .OrderByDescending(z => z.Id)
                 .ToListAsync();
             }
-            
+
         }
 
     }

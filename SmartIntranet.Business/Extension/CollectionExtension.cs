@@ -1,46 +1,57 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using SmartIntranet.Entities.Concrete.Membership;
-using SmartIntranet.Business.Provider;
-using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.Business.ValidationRules.FluentValidation;
-using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.DTO.DTOs.CategoryDto;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
-using SmartIntranet.DTO.DTOs.PositionDto;
-using SmartIntranet.DTO.DTOs.CheckListDto;
-using SmartIntranet.DTO.DTOs.TicketDto;
-using SmartIntranet.DTO.DTOs.AppUserDto;
-using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using SmartIntranet.DTO.DTOs.NewsDto;
-using SmartIntranet.DTO.DTOs.CategoryNewsDto;
-using SmartIntranet.DTO.DTOs.VacancyDto;
-using SmartIntranet.DTO.DTOs.GradeDto;
-using SmartIntranet.DTO.DTOs.CategoryTicketDto;
-using SmartIntranet.DTO.DTOs.BusinessTripDto;
-using SmartIntranet.DTO.DTOs.PlaceDto;
-using SmartIntranet.DTO.DTOs.CauseDto;
-using SmartIntranet.DTO.DTOs.ClauseDto;
-using SmartIntranet.DTO.DTOs.PersonalContractDto;
-using SmartIntranet.DTO.DTOs.ContractDto;
-using SmartIntranet.DTO.DTOs.WorkGraphicDto;
-using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.DependencyInjection;
+using SmartIntranet.Business.Provider;
+using SmartIntranet.Business.ValidationRules.FluentValidation;
 using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
+using SmartIntranet.Business.ValidationRules.FluentValidation.TicketTripValidate;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
+using SmartIntranet.DTO.DTOs.AppRoleDto;
+using SmartIntranet.DTO.DTOs.AppUserDto;
+using SmartIntranet.DTO.DTOs.BusinessTripDto;
+using SmartIntranet.DTO.DTOs.CategoryDto;
+using SmartIntranet.DTO.DTOs.CategoryNewsDto;
+using SmartIntranet.DTO.DTOs.CategoryTicketDto;
+using SmartIntranet.DTO.DTOs.CauseDto;
+using SmartIntranet.DTO.DTOs.CheckListDto;
+using SmartIntranet.DTO.DTOs.ClauseDto;
+using SmartIntranet.DTO.DTOs.CompanyDto;
+using SmartIntranet.DTO.DTOs.ContractDto;
+using SmartIntranet.DTO.DTOs.DepartmentDto;
+using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
+using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
+using SmartIntranet.DTO.DTOs.NewsDto;
+using SmartIntranet.DTO.DTOs.PersonalContractDto;
+using SmartIntranet.DTO.DTOs.PlaceDto;
+using SmartIntranet.DTO.DTOs.PositionDto;
+using SmartIntranet.DTO.DTOs.TicketDto;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
+using SmartIntranet.DTO.DTOs.VacancyDto;
+using SmartIntranet.DTO.DTOs.WorkGraphicDto;
+using SmartIntranet.Entities.Concrete.Membership;
+using System;
 using System.IO.Compression;
-using static SmartIntranet.Core.Extensions.IdentityExtension;
 
 namespace SmartIntranet.Business.Extension
 {
     public static class CollectionExtension
     {
+       
         public static void AddCustomIdentity(this IServiceCollection services)
         {
+            services.AddScoped<UserManager<IntranetUser>>();
+            services.AddScoped<SignInManager<IntranetUser>>();
+            services.AddScoped<RoleManager<IntranetRole>>();
+            services.AddScoped<IClaimsTransformation, AppClaimProvider>();
             services.AddIdentity<IntranetUser, IntranetRole>(opt =>
             {
                 opt.Password.RequireDigit = false;
@@ -50,20 +61,22 @@ namespace SmartIntranet.Business.Extension
                 opt.Password.RequireNonAlphanumeric = false;
             })
              .AddEntityFrameworkStores<IntranetContext>();
-
-            services.AddAuthenticationCore().ConfigureApplicationCookie(opt =>
+            services.ConfigureApplicationCookie(options =>
             {
-                opt.Cookie.Name = "SmartIntranetCookie";
-                //opt.Cookie.SameSite = SameSiteMode.Strict;
-                opt.Cookie.HttpOnly = false;
-                //opt.Cookie.Expiration = TimeSpan.FromMinutes(300);
-                opt.ExpireTimeSpan = TimeSpan.FromMinutes(300);
-                opt.SlidingExpiration = true;
-                opt.Cookie.SameSite = SameSiteMode.Lax;
-                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                opt.LoginPath = "/signin.html";
-                opt.AccessDeniedPath = "/accessdenied.html";
+                options.LoginPath = new PathString("/login.html");
+                options.LogoutPath = new PathString("/account/signout");
+                options.AccessDeniedPath = new PathString("/accessdenied.html");
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1200);
+                options.Cookie = new CookieBuilder
+                {
+                    HttpOnly = true,
+                    Name = "SmartIntranetCookie",
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
             });
+            services.AddAuthentication();
             services.AddAuthorization(cfg =>
             {
                 foreach (var item in AppClaimProvider.policies)
@@ -74,7 +87,7 @@ namespace SmartIntranet.Business.Extension
                         {
                             return
                             assertion.User.IsInRole("SuperAdmin") ||
-                            assertion.User.HasClaim(c => c.Type.Equals(item) && c.Value.Equals("1"));
+                            assertion.User.HasClaim(c => c.Type.Equals(item));
 
                         });
                     });
@@ -82,6 +95,7 @@ namespace SmartIntranet.Business.Extension
                 }
 
             });
+            
 
         }
         public static void AddCustomCompression(this IServiceCollection services)
@@ -176,6 +190,15 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<BusinessTripAddDto>, BusinessTripAddValidator>();
             services.AddTransient<IValidator<BusinessTripUpdateDto>, BusinessTripUpdateValidator>();
+
+            services.AddTransient<IValidator<BusinessTravelAddDto>, BusinessTravelAddValidator>();
+            services.AddTransient<IValidator<BusinessTravelUpdateDto>, BusinessTravelUpdateValidator>();
+
+            services.AddTransient<IValidator<VacationLeaveAddDto>, VacationLeaveAddValidator>();
+            services.AddTransient<IValidator<VacationLeaveUpdateDto>, VacationLeaveUpdateValidator>();
+
+            services.AddTransient<IValidator<PermissionAddDto>, PermissionAddValidator>();
+            services.AddTransient<IValidator<PermissionUpdateDto>, PermissionUpdateValidator>();
         }
     }
 }
