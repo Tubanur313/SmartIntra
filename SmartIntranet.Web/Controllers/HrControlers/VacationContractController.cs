@@ -254,8 +254,20 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.VacationTotal -= model.CalendarDay;
                         await _userManager.UpdateAsync(updateUser);
 
-                        formatKeys.Add("remainFromDate", vcd[0].FromDate.ToString("dd.MM.yyyy"));
-                        formatKeys.Add("remainToDate", vcd[vcd.Count-1].ToDate.ToString("dd.MM.yyyy"));
+                        var res_v = "";
+                        int i = 0;
+                        foreach(var v in vcd)
+                        {
+                            res_v += v.FromDate.ToString("dd.MM.yyyy") + "-" + v.ToDate.ToString("dd.MM.yyyy");
+                            if (i != vcd.Count - 1)
+                            {
+                                res_v += ", ";
+                            }
+                            i++;
+
+                        }
+                        formatKeys.Add("remainDate", res_v);
+
                        
                     }
                    
@@ -518,8 +530,19 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.VacationTotal -= model.CalendarDay;
                         await _userManager.UpdateAsync(updateUser);
 
-                        formatKeys.Add("remainFromDate", vcd[0].FromDate.ToString("dd.MM.yyyy"));
-                        formatKeys.Add("remainToDate", vcd[vcd.Count - 1].ToDate.ToString("dd.MM.yyyy"));
+                        var res_v = "";
+                        int i = 0;
+                        foreach (var v in vcd)
+                        {
+                            res_v += v.FromDate.ToString("dd.MM.yyyy") + "-" + v.ToDate.ToString("dd.MM.yyyy");
+                            if (i != vcd.Count - 1)
+                            {
+                                res_v += ", ";
+                            }
+                            i++;
+
+                        }
+                        formatKeys.Add("remainDate", res_v);
                     }
 
                   
