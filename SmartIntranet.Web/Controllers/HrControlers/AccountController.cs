@@ -437,6 +437,14 @@ namespace SmartIntranet.Web.Controllers
 
         [HttpGet]
         [Authorize]
+        public async Task<IActionResult> GetStartWorkDate(int userId)
+        {
+            var usr = await _appUserService.FindByUserAllInc(userId);
+            return Ok(usr.StartWorkDate.ToString("MM/dd/yyyy"));
+        }
+
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetPositionWithUser(int userId)
         {
             var usr = await _userManager.FindByIdAsync(userId.ToString());
