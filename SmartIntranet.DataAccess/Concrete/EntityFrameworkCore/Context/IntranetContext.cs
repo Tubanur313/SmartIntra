@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Membership;
 using System.Reflection;
@@ -116,6 +117,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<StockCategory> StockCategories { get; set; }
         public DbSet<StockImage> StockImages { get; set; }
         public DbSet<StockDiscuss> StockDiscusses { get; set; }
+        public DbSet<BusinessTravel> BusinessTravels { get; set; }
+        public DbSet<VacationLeave> VacationLeaves { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
         #endregion
 
 

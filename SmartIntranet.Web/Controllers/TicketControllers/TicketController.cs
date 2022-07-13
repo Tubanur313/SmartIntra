@@ -9,22 +9,29 @@ using Newtonsoft.Json;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
+using SmartIntranet.Business.Interfaces.IntraTicket.TicketTripServices;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CategoryTicketDto;
+using SmartIntranet.DTO.DTOs.CauseDto;
 using SmartIntranet.DTO.DTOs.CheckListDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.ConfirmTicketUserDto;
 using SmartIntranet.DTO.DTOs.DiscussionDto;
 using SmartIntranet.DTO.DTOs.OrderDto;
 using SmartIntranet.DTO.DTOs.PhotoDto;
+using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.DTO.DTOs.TicketCheckListDto;
 using SmartIntranet.DTO.DTOs.TicketDto;
 using SmartIntranet.DTO.DTOs.TicketOrderDto;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.DTO.DTOs.WatcherDto;
 using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
@@ -56,6 +63,11 @@ namespace SmartIntranet.Web.Controllers
         private readonly IDiscussionService _discussionService;
         private readonly IDepartmentService _departmentService;
         private readonly IEmailService _emailSender;
+        private readonly IBusinessTravelService _businessTravelService;
+        private readonly IVacationLeaveService _vacationLeaveService;
+        private readonly IPermissionService _permissionService;
+        private readonly IPlaceService _placeService;
+        private readonly ICauseService _causeService;
 
         public TicketController(
             IMapper map,
@@ -79,7 +91,12 @@ namespace SmartIntranet.Web.Controllers
             ICompanyService companyService,
             IFileService upload,
             IDiscussionService discussionService,
-            IDepartmentService departmentService
+            IDepartmentService departmentService,
+            IBusinessTravelService businessTravelService,
+            IVacationLeaveService vacationLeaveService,
+            IPermissionService permissionService,
+            IPlaceService placeService,
+            ICauseService causeService
 
             ) : base(userManager, httpContextAccessor, signInManager, map)
         {
@@ -101,6 +118,11 @@ namespace SmartIntranet.Web.Controllers
             _upload = upload;
             _discussionService = discussionService;
             _departmentService = departmentService;
+            _businessTravelService = businessTravelService;
+            _vacationLeaveService = vacationLeaveService;
+            _permissionService = permissionService;
+            _placeService = placeService;
+            _causeService = causeService;
 
         }
 
@@ -374,6 +396,8 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Add()
         {
             ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
+            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
             ViewBag.cheklist = _map.Map<List<CheckListListDto>>(await _checkListService.GetAllAsync());
             ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View();
@@ -387,15 +411,42 @@ namespace SmartIntranet.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                int GetUserId = GetSignInUserId();
                 var CategoryTicketSupporter = _map.Map<CategoryTicketListDto>(await _categoryTicketService.GetIncludeAsync(model.TicketCategoryId));
                 var add = _map.Map<Ticket>(model);
-                int GetUserId = GetSignInUserId();
                 add.CreatedByUserId = GetUserId;
                 add.EmployeeId = GetUserId;
                 add.SupporterId = CategoryTicketSupporter.SupporterId;
                 add.CreatedDate = DateTime.Now;
                 add.OpenDate = DateTime.Now;
                 var result = await _ticketService.AddReturnEntityAsync(add);
+
+                if (model.BusinessTravelAddDto != null && model.BusinessTravelAddDto.ConfirmSend)
+                {
+                    var addBusnessTravel = _map.Map<BusinessTravel>(model.BusinessTravelAddDto);
+                    addBusnessTravel.CreatedByUserId = GetUserId;
+                    addBusnessTravel.CreatedDate = DateTime.Now;
+                    addBusnessTravel.TicketId = result.Id;
+                    await _businessTravelService.AddAsync(addBusnessTravel);
+                }
+                if (model.VacationLeaveAddDto != null && model.VacationLeaveAddDto.ConfirmSend)
+                {
+                    var addVacationLeave = _map.Map<VacationLeave>(model.VacationLeaveAddDto);
+                    addVacationLeave.CreatedByUserId = GetUserId;
+                    addVacationLeave.CreatedDate = DateTime.Now;
+                    addVacationLeave.VacationCreateDate = DateTime.Now;
+                    addVacationLeave.TicketId = result.Id;
+                    await _vacationLeaveService.AddAsync(addVacationLeave);
+                }
+                if (model.PermissionAddDto != null && model.PermissionAddDto.ConfirmSend)
+                {
+                    var addPermission = _map.Map<Permission>(model.PermissionAddDto);
+                    addPermission.CreatedByUserId = GetUserId;
+                    addPermission.CreatedDate = DateTime.Now;
+                    addPermission.PermissionCreateDate = DateTime.Now;
+                    addPermission.TicketId = result.Id;
+                    await _permissionService.AddAsync(addPermission);
+                }
 
                 if (result is null)
                 {
@@ -929,6 +980,131 @@ namespace SmartIntranet.Web.Controllers
                 await _ticketService.UpdateAsync(update);
                 //SendEmailAsync(" Nomreli Taskın Prioriteti Dəyişdirildi", model.Id);
                 _emailSender.TicketSendEmail(model.Id, TicketChangeType.TicketPriority, GetSignInFullName());
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
+            }
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
+        }
+        [Authorize(Policy = "ticket.busnesstravelupdate")]
+        public async Task<IActionResult> BusnessTravelUpdate(int id)
+        {
+            BusinessTravelUpdateDto data = _map
+                .Map<BusinessTravelUpdateDto>(await _businessTravelService
+                .GetAsync(x => x.TicketId == id));
+            if (data is null)
+            {
+                TempData["error"] = Messages.Error.notFound;
+                ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
+                ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
+            }
+            ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
+            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
+            return View(data);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ticket.busnesstravelupdate")]
+        public async Task<IActionResult> BusnessTravelUpdate(BusinessTravelUpdateDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _businessTravelService.GetAsync(x => x.TicketId == model.TicketId);
+                var update = _map.Map<BusinessTravel>(model);
+                update.Id = data.Id;
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+
+                await _businessTravelService.UpdateAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
+            }
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
+        }
+
+        [Authorize(Policy = "ticket.vacationleaveupdate")]
+        public async Task<IActionResult> VacationLeaveUpdate(int id)
+        {
+            VacationLeaveUpdateDto data = _map
+                .Map<VacationLeaveUpdateDto>(await _vacationLeaveService
+                .GetAsync(x => x.TicketId == id));
+            if (data is null)
+            {
+                TempData["error"] = Messages.Error.notFound;
+            }
+            return View(data);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ticket.vacationleaveupdate")]
+        public async Task<IActionResult> VacationLeaveUpdate(VacationLeaveUpdateDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _vacationLeaveService.GetAsync(x => x.TicketId == model.TicketId);
+                var update = _map.Map<VacationLeave>(model);
+                update.Id = data.Id;
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+
+                await _vacationLeaveService.UpdateAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
+            }
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
+        }
+        [Authorize(Policy = "ticket.permissionupdate")]
+        public async Task<IActionResult> PermissionUpdate(int id)
+        {
+            PermissionUpdateDto data = _map
+                .Map<PermissionUpdateDto>(await _permissionService
+                .GetAsync(x => x.TicketId == id));
+            if (data is null)
+            {
+                TempData["error"] = Messages.Error.notFound;
+            }
+            return View(data);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ticket.permissionupdate")]
+        public async Task<IActionResult> PermissionUpdate(PermissionUpdateDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                var data = await _permissionService.GetAsync(x => x.TicketId == model.TicketId);
+                var update = _map.Map<Permission>(model);
+                update.Id = data.Id;
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+
+                await _permissionService.UpdateAsync(update);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated

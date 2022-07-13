@@ -58,7 +58,24 @@
                 </a>
                 <div class="slide"></div>
             </li>
-
+            <li id="BusinessTravelsId" class="nav-item d-none">
+                <a class="nav-link" data-toggle="tab" href="#TravelBusiness" role="tab">
+                    <i class="icofont icofont-travelling"></i>&nbsp; Ezamiyyət
+                </a>
+                <div class="slide"></div>
+            </li>
+            <li id="VacationLeavesId" class="nav-item  d-none">
+                <a class="nav-link" data-toggle="tab" href="#LeaveVacation" role="tab">
+                    <i class="icofont icofont-beach-bed"></i>&nbsp; Məzuniyyət
+                </a>
+                <div class="slide"></div>
+            </li>
+            <li id="PermissionTabId" class="nav-item  d-none">
+                <a class="nav-link" data-toggle="tab" href="#Permissions" role="tab">
+                    <i class="icofont icofont-tasks-alt"></i>&nbsp; İcazə
+                </a>
+                <div class="slide"></div>
+            </li>
         </ul>
         <!-- Tab panes -->
         <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
@@ -200,23 +217,23 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                    <div class="panel-heading">
-                                        <h3 class="">Fayl Yüklə</h3>
+                                <div class="panel-heading">
+                                    <h3 class="">Fayl Yüklə</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                                            <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
+                                        </div>
                                     </div>
-                                        <div class="row">
-                                            <div class="col-sm-2">
-                                                <div class="form-group">
-                                                    <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
-                                                    <input hidden="hidden" type="file" name="uploads" id="files" multiple class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <div class="form-group">
-                                                    <div id="image_preview" class="row" @*style="width:100%;"*@>
-                                                    </div>
-                                                </div>
+                                    <div class="col-sm-10">
+                                        <div class="form-group">
+                                            <div id="image_preview" class="row" @*style="width:100%;"*@>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,7 +253,7 @@
                                     <th class="text-center">Yekun<br /> (V/D)</th>
                                     <th class="text-center">Satıcı </th>
                                     <th class="text-center">Qeydlər</th>
-                                    <th class="text-center"style="position: relative;">
+                                    <th class="text-center" style="position: relative;">
                                         <span class="table-add float-right mb-3 mr-2">
                                             <a href="#!" class="text-success"><i style="position: absolute;right: 44%;top: 33%;" class="fas fa-plus fa-2x" aria-hidden="true"></i></a>
                                         </span>
@@ -255,6 +272,159 @@
                         </table>
                     </div>
                 </div>
+                <div class="tab-pane" id="TravelBusiness" role="tabpanel">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="row">
+                                    <input type="hidden" asp-for="BusinessTravelAddDto.ConfirmSend" />
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">Ezamiyyət Yeri: </label>
+                                            <select disabled asp-for="BusinessTravelAddDto.PlaceId" class="form-control">
+                                                <option value="" selected disabled hidden>Seçim edin</option>
+                                                @foreach (var item in ViewBag.places)
+                                                {
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="BusinessTravelAddDto.PlaceId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">Ezamiyyət Əsası: </label>
+                                            <select disabled asp-for="BusinessTravelAddDto.CauseId" class="form-control">
+                                                <option value="" selected disabled hidden>Seçim edin</option>
+                                                @foreach (var item in ViewBag.cause)
+                                                {
+                                                    <option value="@item.Id">@item.Name</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="BusinessTravelAddDto.CauseId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">  Başlama Tarixi: </label>
+                                            <input disabled type="date" class="form-control" asp-for="BusinessTravelAddDto.StartDate" autocomplete="off">
+                                            <span asp-validation-for="BusinessTravelAddDto.StartDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">  Bitmə Tarixi: </label>
+                                            <input disabled type="date" class="form-control" asp-for="BusinessTravelAddDto.EndDate" autocomplete="off">
+                                            <span asp-validation-for="BusinessTravelAddDto.EndDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-3 ">
+                                        <label>  Yerləşmə: </label>
+                                        <div class="checkbox">
+                                            <input disabled asp-for="BusinessTravelAddDto.Accommodation" type="checkbox" class="check_switch" data-size="small">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>  Nəqliyyat: </label>
+                                        <div class="checkbox">
+                                            <input disabled asp-for="BusinessTravelAddDto.Transport" type="checkbox" class="check_switch" data-size="small">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 offset-3  mt-2">
+                                        <div class="form-group d-none">
+                                            <label class="floatLabel">Qalacağ müddət: </label>
+                                            <input disabled type="number" class="form-control " asp-for="BusinessTravelAddDto.Staylength" autocomplete="off">
+                                            <span class="messages"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="LeaveVacation" role="tabpanel">
+                    <div class="row">
+                        <input type="hidden" asp-for="VacationLeaveAddDto.ConfirmSend" />
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Məzuniyyət Növü: </label>
+                                <select disabled asp-for="VacationLeaveAddDto.VacationKind" class="form-control">
+                                    <option value="" hidden disabled selected>Seçim edin</option>
+                                    @foreach (VacationKind type in @Enum.GetValues(typeof(VacationKind)))
+                                    {
+                                        <option value="@type">@type.GetDisplayName()</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="VacationLeaveAddDto.VacationKind" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">Məzuniyyət müddəti: </label>
+                                <input disabled type="number" class="form-control " asp-for="VacationLeaveAddDto.Vacationlength" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Başlama Tarixi: </label>
+                                <input disabled type="date" class="form-control" asp-for="VacationLeaveAddDto.StartDate" autocomplete="off">
+                                <span asp-validation-for="VacationLeaveAddDto.StartDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Bitmə Tarixi: </label>
+                                <input disabled type="date" class="form-control" asp-for="VacationLeaveAddDto.EndDate" autocomplete="off">
+                                <span asp-validation-for="VacationLeaveAddDto.EndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="Permissions" role="tabpanel">
+                    <div class="row">
+                        <input type="hidden" asp-for="PermissionAddDto.ConfirmSend" />
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">İcazə Səbəbi: </label>
+                                <textarea disabled type="text" class="form-control " asp-for="PermissionAddDto.Reason" autocomplete="off"></textarea>
+                                <span asp-validation-for="PermissionAddDto.Reason" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel">  Başlama Saatı: </label>
+                                        <input disabled type="time" class="form-control" asp-for="PermissionAddDto.StartTime" autocomplete="off">
+                                        <span asp-validation-for="PermissionAddDto.StartTime" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel">  Bitmə Saatı: </label>
+                                        <input disabled type="time" class="form-control" asp-for="PermissionAddDto.EndTime" autocomplete="off">
+                                        <span asp-validation-for="PermissionAddDto.EndTime" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-sm-12 d-flex justify-content-between">
                         <button type="submit" id="confirm-id" class="btn btn-primary m-b-0 btn-block">
@@ -264,6 +434,12 @@
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
         </form>
     </div>
 
@@ -286,6 +462,11 @@
 <script src="~/files/lib/cust_ajax/cust-validation.js"></script>
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+<!-- Masking js -->
+<script src="~/files/assets/pages/form-masking/inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
+<script src="~/files/assets/pages/form-masking/form-mask.js"></script>
 <!-- ticket img upload js -->
 <script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
 <!-- Date-range picker js -->
@@ -298,6 +479,8 @@
     $(document).ready(function() {
                        // ckeditor
                         CKEDITOR.replace('Description');
+                        //CKEDITOR.replace('PermissionAddDto.Reason');
+
                         const $tableID = $('#table');
                         const $BTN = $('#export-btn');
                         const $EXPORT = $('#export');
@@ -320,7 +503,7 @@
                          $('#purchasingAdd').DataTable({
                              retrieve: true,
                              "ordering": false,
-                             paging: false,      
+                             paging: false,
                              dom: 'Bfrtip',
                              buttons: [
                                 'excel'
@@ -565,6 +748,20 @@
                 const numVal = value.replace(/\D/,"");
                 elem.value = numVal;
         }
+
+        //BusnessTravel
+
+        $(document).on('change','#BusinessTravelAddDto_Accommodation',function(){
+            if($(this).is(':checked')){
+                $('#BusinessTravelAddDto_Staylength').parent().removeClass('d-none');
+                $('#BusinessTravelAddDto_Staylength').prop('disabled', false);
+            } else{
+                $('#BusinessTravelAddDto_Staylength').parent().addClass('d-none')
+                $('#BusinessTravelAddDto_Staylength').prop('disabled', true);
+            }
+        })
+
+
         $.ajax({
                 url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
                 type: "Get",
@@ -581,33 +778,157 @@
                             }
                             else{
                             var type = node.ticketType;
-                            var $this = $("form")
-                            if(type == @((int) TicketType.Purchasing)) {
+                            var $this = $("form");
+                            var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
+                            if(type === @((int) TicketType.Purchasing)) {
                                 $("#PurcId").removeClass('d-none');
+                                $("#BusinessTravelsId").addClass('d-none');
+                                $("#VacationLeavesId").addClass('d-none');
+                                $("#PermissionTabId").addClass('d-none');
+                                $('#TravelBusiness input').prop('disabled', true);
+                                $('#TravelBusiness select').prop('disabled', true);
+                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                                $('#LeaveVacation input').prop('disabled', true);
+                                $('#LeaveVacation select').prop('disabled', true);
+                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                                $('#Permissions input').prop('disabled', true);
+                                $('#Permissions select').prop('disabled', true);
+                                $('#PermissionAddDto_ConfirmSend').val(false);
                                 $("#True").prop('checked', true);
                                 $("#False" ).prop( "checked", false );
                                 $("#ConfirmedId").removeClass( 'd-none');
                                 $("#ConfirmTicketUserId").prop( "disabled" , false);
                                 $this.on("submit", function(e) {
                                     if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
-                                      toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
+                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
                                       e.preventDefault();
                                     }
                                 });
                             }
-                            else {
+                            else if(type === @((int) TicketType.BusinessTrip)){
+                                $("#PurcId").addClass('d-none');
+                                $("#BusinessTravelsId").removeClass('d-none');
+                                $("#PermissionTabId").addClass('d-none');
+                                $("#VacationLeavesId").addClass('d-none');
+                                $('#TravelBusiness input').prop('disabled', false);
+                                $('#TravelBusiness select').prop('disabled', false);
+                                $('#BusinessTravelAddDto_ConfirmSend').val(true);
+                                $('#LeaveVacation input').prop('disabled', true);
+                                $('#LeaveVacation select').prop('disabled', true);
+                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                                $('#Permissions input').prop('disabled', true);
+                                $('#Permissions select').prop('disabled', true);
+                                $('#PermissionAddDto_ConfirmSend').val(false);
+                                $("#True").prop('checked', true);
+                                $("#False" ).prop( "checked", false );
+                                $("#ConfirmedId").removeClass( 'd-none');
+                                $("#ConfirmTicketUserId").prop( "disabled" , false);
+                                $this.on("submit", function(e) {
+                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                      e.preventDefault();
+                                    }
+                                });
+                            }
+                            else if(type === @((int) TicketType.Vacation)){
+                                $("#PurcId").addClass('d-none');
+                                $("#BusinessTravelsId").addClass('d-none');
+                                $("#PermissionTabId").addClass('d-none');
+                                $("#VacationLeavesId").removeClass('d-none');
+                                $('#TravelBusiness input').prop('disabled', true);
+                                $('#TravelBusiness select').prop('disabled', true);
+                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                                $('#LeaveVacation input').prop('disabled', false);
+                                $('#LeaveVacation select').prop('disabled', false);
+                                $('#VacationLeaveAddDto_ConfirmSend').val(true);
+                                $('#Permissions input').prop('disabled', true);
+                                $('#Permissions select').prop('disabled', true);
+                                $('#PermissionAddDto_ConfirmSend').val(false);
+                                $("#True").prop('checked', true);
+                                $("#False" ).prop( "checked", false );
+                                $("#ConfirmedId").removeClass( 'd-none');
+                                $("#ConfirmTicketUserId").prop( "disabled" , false);
+                                $this.on("submit", function(e) {
+                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                      e.preventDefault();
+                                    }
+                                });
+                            }
+                            else if(type === @((int) TicketType.Permit)){
+                                $("#PurcId").addClass('d-none');
+                                $("#BusinessTravelsId").addClass('d-none');
+                                $("#VacationLeavesId").addClass('d-none');
+                                $("#PermissionTabId").removeClass('d-none');
+                                $('#TravelBusiness input').prop('disabled', true);
+                                $('#TravelBusiness select').prop('disabled', true);
+                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                                $('#LeaveVacation input').prop('disabled', true);
+                                $('#LeaveVacation select').prop('disabled', true);
+                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                                $('#Permissions input').prop('disabled', false);
+                                $('#Permissions select').prop('disabled', false);
+                                $('#Permissions textarea').prop('disabled', false);
+                                $('#PermissionAddDto_ConfirmSend').val(true);
+                                $("#True").prop('checked', true);
+                                $("#False" ).prop( "checked", false );
+                                $("#ConfirmedId").removeClass( 'd-none');
+                                $("#ConfirmTicketUserId").prop( "disabled" , false);
+                                $(document).on("change","#PermissionAddDto_EndTime",function(){
+                                    var oneH = 1000 * 60;
+                                    p = "1/1/0000";
+                                    var startDT = ($("#PermissionAddDto_StartTime").val());
+                                    console.log(startDT)
+                                    var endDT = ($("#PermissionAddDto_EndTime").val());
+                                    console.log(endDT)
+                                    var sMS = new Date(p + startDT);
+                                    console.log(sMS)
+                                    var eMS = new Date(p + endDT);
+                                    console.log(eMS)
+                                    var result = Math.round((eMS.getTime() - sMS.getTime()) / oneH);
+                                    let num = 480;
+
+                                    if(result > num){
+                                    $("#PermissionAddDto_EndTime").val("")
+                                    toastr.warning(`Icazə müddəti 8 saatı aşmamalıdır !`)
+                                    }
+                                    if(eMS.getTime() < sMS.getTime()){
+                                    $("#PermissionAddDto_EndTime").val("")
+                                    toastr.warning(`Başlama Saatı Bitmə Saatından kiçik olmamalıdır !`)
+                                    }
+
+                                })
+                                $this.on("submit", function(e) {
+                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
+                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                      e.preventDefault();
+                                    }
+                                });
+                            }
+                            else if(type === @((int) TicketType.Task)){
                                 $("#True" ).prop( "checked", false );
                                 $("#False" ).prop( "checked", true );
                                 $("#ConfirmedId").addClass( 'd-none');
                                 $("#ConfirmTicketUserId").prop( "disabled" , true);
+                                $("#PurcId").addClass('d-none');
+                                $("#BusinessTravelsId").addClass('d-none');
+                                $("#VacationLeavesId").addClass('d-none');
+                                $("#PermissionTabId").addClass('d-none');
+                                $('#TravelBusiness input').prop('disabled', true);
+                                $('#TravelBusiness select').prop('disabled', true);
+                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                                $('#LeaveVacation input').prop('disabled', true);
+                                $('#LeaveVacation select').prop('disabled', true);
+                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                                $('#Permissions input').prop('disabled', true);
+                                $('#Permissions select').prop('disabled', true);
+                                $('#PermissionAddDto_ConfirmSend').val(false);
                                 $this.on("submit", function(e) {
-                                    var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
                                     if(!(Description)) {
                                         toastr.error("  Zəhmət olmasa Ətraflı tabına keçid edin", "Təsvir boş ola bilməz !");
                                         e.preventDefault();
                                     }
                                 });
-                                $("#PurcId").addClass('d-none');
                                 $("#generated").empty();
                                 var Ids = new Array();
                                 $(".editTable").each(function() {
@@ -640,5 +961,7 @@
                 },
                 error: function(data) {}
                 });
+
+
     });
 </script>

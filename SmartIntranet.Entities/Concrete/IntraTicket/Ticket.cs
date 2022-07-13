@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Core.Entities.Concrete;
 using SmartIntranet.Core.Entities.Enum;
+using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 
 namespace SmartIntranet.Entities.Concrete.IntraTicket
 {
@@ -35,5 +36,8 @@ namespace SmartIntranet.Entities.Concrete.IntraTicket
         public virtual ICollection<TicketOrder> TicketOrders { get; set; }
         public virtual ICollection<TicketCheckList> TicketCheckLists { get; set; }
         public virtual ICollection<ConfirmTicketUser> ConfirmTicketUsers { get; set; }
+        public BusinessTravel BusinessTravel { get; set; }
+        public VacationLeave VacationLeave { get; set; }
+        public Permission Permission { get; set; }
     }
 }

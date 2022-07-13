@@ -1189,7 +1189,7 @@
     background-position: center center;
     cursor: pointer;
     opacity: 0.6;
-/*    filter: alpha(opacity=60);*/
+    /*    filter: alpha(opacity=60);*/
     text-decoration: none;
     outline-style: none;
     filter: invert(1%) sepia(1%) saturate(1%) hue-rotate(1deg) brightness(0%) contrast(85%);
@@ -4185,7 +4185,7 @@
 
 .checkbox {
     position: relative;
-    border: 2px solid #0070a9;
+    /*    border: 2px solid #0070a9;*/
     -moz-border-radius: 5px 5px 5px 5px;
     -webkit-border-radius: 5px 5px 5px 5px;
     border-radius: 5px 5px 5px 5px;
