@@ -22957,9 +22957,9 @@ span.value {
             position: relative
         }
 
-    .nav-tabs .slide {
+/*    .nav-tabs .slide {
         width: calc(100% / 1) !important
-    }
+    }*/
 
     .toolbar-page [class*="col-"] .sub-title {
         text-align: center
