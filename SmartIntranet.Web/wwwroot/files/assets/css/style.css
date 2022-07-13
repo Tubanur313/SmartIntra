@@ -608,6 +608,13 @@ button.close {
     z-index: 999
 }
 
+@media (max-width: 445px) {
+    .tooltip.fade.show.bs-tooltip-left {
+        display: none !important;
+    }
+}
+
+
     .mytooltip .tooltip-item {
         background: rgba(0,0,0,0.1);
         cursor: pointer;
