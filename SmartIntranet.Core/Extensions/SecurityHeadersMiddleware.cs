@@ -36,7 +36,7 @@ namespace SmartIntranet.Core.Extensions
 
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT
             // You can use https://report-uri.com/ to get notified when a misissued certificate is detected
-            context.Response.Headers.Add("Expect-CT", new StringValues("max-age=0, enforce, report-uri=\"https://example.report-uri.com/r/d/ct/enforce\""));
+            //context.Response.Headers.Add("Expect-CT", new StringValues("max-age=0, enforce, report-uri=\"https://example.report-uri.com/r/d/ct/enforce\""));
 
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
             // https://github.com/w3c/webappsec-feature-policy/blob/master/features.md
