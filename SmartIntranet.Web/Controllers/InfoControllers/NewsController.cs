@@ -7,6 +7,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.Core.Utilities.Pagination;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
 using SmartIntranet.DTO.DTOs.NewsDto;
@@ -48,14 +49,11 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             _categoryService = categoryService;
         }
         [Authorize(Policy = "news.info")]
-        public async Task<IActionResult> Info()
+        public async Task<IActionResult> Info(int pageIndex = 1, int pageSize = 3)
         {
-            var model = await _newsService.GetAllWithIncludeNonDeleteAsync();
-            if (model.Count > 0)
-            {
-                return View(_map.Map<List<NewsListDto>>(model));
-            }
-            return View(new List<NewsListDto>());
+            var query = _map.Map<List<NewsListDto>>(await _newsService.GetAllWithIncludeNonDeleteAsync());
+            var pageModel = new Pagination<NewsListDto>(query, pageIndex, pageSize);
+            return View(pageModel);
         }
         [HttpGet]
         [Authorize(Policy = "news.list")]
