@@ -318,6 +318,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.VacationContractId == id && !x.IsDeleted);
             ViewBag.vacationTypes = await _vacationTypeService.GetAllAsync(x => !x.IsDeleted);
+            ViewBag.StartWorkDate = usr.StartWorkDate.ToString("MM/dd/yyyy");
             return View(listModel);
         }
 
