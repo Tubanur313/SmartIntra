@@ -2200,7 +2200,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 7, 15, 17, 33, 55, 844, DateTimeKind.Local).AddTicks(649));
+                        .HasDefaultValue(new DateTime(2022, 7, 15, 17, 38, 19, 259, DateTimeKind.Local).AddTicks(2278));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -4626,7 +4626,7 @@ namespace SmartIntranet.DataAccess.Migrations
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContractDate", b =>
                 {
                     b.HasOne("SmartIntranet.Entities.Concrete.VacationContract", "Vacation")
-                        .WithMany()
+                        .WithMany("VacationContractDates")
                         .HasForeignKey("VacationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
