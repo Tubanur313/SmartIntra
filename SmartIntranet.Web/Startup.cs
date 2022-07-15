@@ -58,11 +58,11 @@ namespace SmartTicket.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                //app.UseHsts();
-            }
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    //app.UseHsts();
+            //}
 
             app.UseHttpsRedirection();
             app.SeedTicketSystem();

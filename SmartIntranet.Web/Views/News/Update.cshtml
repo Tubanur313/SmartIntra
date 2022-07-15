@@ -165,8 +165,8 @@
 <script type="text/javascript" src="~/files/lib/ticket-img-uploader/ticket-img-uploader.js"></script>
 <script type="text/javascript" src="~/files/bower_components2/lightbox2/dist/js/lightbox.min.js"></script>
 <script class="removable">
+    $.validator.setDefaults({ ignore:''});
     $(document).ready(function () {
-        $.validator.setDefaults({ ignore:''});
         CKEDITOR.replace('Description');
         $("form").on("submit",function(e){
                 var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;

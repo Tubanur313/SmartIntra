@@ -473,18 +473,19 @@
 <script type="text/javascript" src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
 <!-- combotree -->
 <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+<script class = "removable" >
+$.validator.setDefaults({
+    ignore: ''
+});
+$(document).ready(function() {
+    // ckeditor
+    CKEDITOR.replace('Description');
+    //CKEDITOR.replace('PermissionAddDto.Reason');
 
-<script class="removable">
-    $.validator.setDefaults({ ignore:''});
-    $(document).ready(function() {
-                       // ckeditor
-                        CKEDITOR.replace('Description');
-                        //CKEDITOR.replace('PermissionAddDto.Reason');
-
-                        const $tableID = $('#table');
-                        const $BTN = $('#export-btn');
-                        const $EXPORT = $('#export');
-            const newTr = `<tr class="editTable" value-id="" >
+    const $tableID = $('#table');
+    const $BTN = $('#export-btn');
+    const $EXPORT = $('#export');
+    const newTr = `<tr class="editTable" value-id="" >
             <td><textarea style="width: 100px;" name="Product" id="Product"></textarea> </td>
             <td><textarea style="width: 100px;" name="Currency" id="Currency"></textarea> </td>
             <td><textarea style="width: 100px;" name="Quantity" id="Quantity"></textarea> </td>
@@ -498,33 +499,33 @@
                    <span style="width: 30px; height: 30px; line-height: inherit;" class="table-remove btn btn-inverse btn-outline-danger btn-icon"><i class="fa fa-times" style="margin-right:1px;" aria-hidden="true"></i></span>
                  </td>
                </tr>`;
-               $('.table-add').on('click', 'i', () => {
-                     $('#generated').append(newTr);
-                         $('#purchasingAdd').DataTable({
-                             retrieve: true,
-                             "ordering": false,
-                             paging: false,
-                             dom: 'Bfrtip',
-                             buttons: [
-                                'excel'
-                             ]
-                         });
-               });
-               $tableID.on('click', '.table-remove', function () {
-                   var id = $(this).parent().parent().attr('value-id');
-                      $(this).parents('tr').detach();
-                  $.ajax({
-                    type: 'get',
-                    url: '@Url.ActionLink("Delete","Order")',
-                    datatype: 'json',
-                    data: {
-                      id: id
-                    },
-                    success: function (response) {
-                    if (response.error == true) {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
+    $('.table-add').on('click', 'i', () => {
+        $('#generated').append(newTr);
+        $('#purchasingAdd').DataTable({
+            retrieve: true,
+            "ordering": false,
+            paging: false,
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ]
+        });
+    });
+    $tableID.on('click', '.table-remove', function() {
+        var id = $(this).parent().parent().attr('value-id');
+        $(this).parents('tr').detach();
+        $.ajax({
+            type: 'get',
+            url: '@Url.ActionLink("Delete","Order")',
+            datatype: 'json',
+            data: {
+                id: id
+            },
+            success: function(response) {
+                if (response.error == true) {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
+                }
                 var r = 0;
                 $("textarea[name='Total']:visible").each(function(index) {
 
@@ -551,417 +552,430 @@
                 });
 
                 toastr.success(response.message, "Uğurla Silindi!");
-                    },
-                    error: function (response) {
-                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                    }
-                });
-               });
-               $tableID.on('click', '.table-up', function () { const $row = $(this).parents('tr'); if
-               ($row.index() === 0) { return; } $row.prev().before($row.get(0)); }); $tableID.on('click',
-               '.table-down', function () { const $row = $(this).parents('tr');
-               $row.next().after($row.get(0)); });
-               jQuery.fn.pop= [].pop;
-               jQuery.fn.shift = [].shift;
-               $BTN.on('click', () =>
-               {
-                   const $rows = $tableID.find('tr:not(:hidden)');
-                   const headers = [];
-                   const data = [];
-               $($rows.shift()).find('th:not(:empty)').each(function () {
-               headers.push($(this).text().toLowerCase()); });
-               $rows.each(function () { const $td = $(this).find('td'); const h = {};
-               headers.forEach((header, i) => { h[header] = $td.eq(i).text(); }); data.push(h); });
-              $EXPORT.text(JSON.stringify(data));
-               });
-               (function ($) {
-            $.fn.getFormData = function (addProperties) {
-                let tempt = this;
-                var data = {};
-                $(tempt).find('textarea[name]').each(function (index, item) {
-                    data[item.name] = item.value;
-                })
-                data = $.extend(data, addProperties);
-                return data;
+            },
+            error: function(response) {
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
-        })(jQuery);
-
-        //delete all orders if not send to ticket
-        $(window).on('click', function(e){
-                if($(e.target).attr('id') =='closeBtn'
-                || $(e.target).attr('id') =='closeBtnX'){
-                    var Ids = new Array();
-                    $(".editTable").each(function(){
-                       var id= $(this).attr('value-id');
-                        Ids.push(id);
-                    });
-                    if(Ids.length>0){
-                    $.ajax({
-                       type: 'get',
-                       url: '@Url.ActionLink("AllDelete","Order")',
-                       datatype: 'json',
-                       traditional: true,
-                       data:({Ids:Ids}),
-                       success: function (response) {
-                       if (response.error == true) {
-                           toastr.error(response.message, "Xəta baş verdi!");
-                           location.reload();
-                           return;
-                       }
-                       },
-                       error: function (response) {
-                           toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                       }
-                   });
-                    }
-
-          }
         });
-        //add all orders to send
-        $(document).on("change",".editTable",function(e){
-          var  $this  = $(this);
-          if($this.attr('value-id') === ""){
-               let data =  $this.getFormData();
-               let count = 0;
-               for (let i = 0; i < Object.values(data).length; i++) {
-                   if(Object.values(data)[i]===''){
-                            count++
-                   }
-               }
-               if(count < 9){
-                   $('.table-add').css("pointer-events", "auto");
-                  $.ajax({
+    });
+    $tableID.on('click', '.table-up', function() {
+        const $row = $(this).parents('tr');
+        if ($row.index() === 0) {
+            return;
+        }
+        $row.prev().before($row.get(0));
+    });
+    $tableID.on('click',
+        '.table-down',
+        function() {
+            const $row = $(this).parents('tr');
+            $row.next().after($row.get(0));
+        });
+    jQuery.fn.pop = [].pop;
+    jQuery.fn.shift = [].shift;
+    $BTN.on('click', () => {
+        const $rows = $tableID.find('tr:not(:hidden)');
+        const headers = [];
+        const data = [];
+        $($rows.shift()).find('th:not(:empty)').each(function() {
+            headers.push($(this).text().toLowerCase());
+        });
+        $rows.each(function() {
+            const $td = $(this).find('td');
+            const h = {};
+            headers.forEach((header, i) => {
+                h[header] = $td.eq(i).text();
+            });
+            data.push(h);
+        });
+        $EXPORT.text(JSON.stringify(data));
+    });
+    (function($) {
+        $.fn.getFormData = function(addProperties) {
+            let tempt = this;
+            var data = {};
+            $(tempt).find('textarea[name]').each(function(index, item) {
+                data[item.name] = item.value;
+            })
+            data = $.extend(data, addProperties);
+            return data;
+        }
+    })(jQuery);
+
+
+
+    //add all orders to send
+    $(document).on("change", ".editTable", function(e) {
+        var $this = $(this);
+        if ($this.attr('value-id') === "") {
+            let data = $this.getFormData();
+            let count = 0;
+            for (let i = 0; i < Object.values(data).length; i++) {
+                if (Object.values(data)[i] === '') {
+                    count++
+                }
+            }
+            if (count < 9) {
+                $('.table-add').css("pointer-events", "auto");
+                $.ajax({
                     type: 'get',
                     url: '@Url.ActionLink("Add","Order")',
                     datatype: 'json',
                     data: data,
-                    success: function (response) {
-                    if (response.error == true) {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                      toastr.success(response.message, "Uğurla Yükləndi!");
-                      $this.attr('value-id',response);
+                    success: function(response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta baş verdi!");
+                            return;
+                        }
+                        toastr.success(response.message, "Uğurla Yükləndi!");
+                        $this.attr('value-id', response);
                     },
-                    error: function (response) {
+                    error: function(response) {
                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                     }
                 });
-               }else{
-                    toastr.error("Xanalar boş ola bilməz", "Xəta!");
-                     $('.table-add').css("pointer-events", "none");
-               }
-          }
-          else
-          {
-               let id = $this.attr('value-id')
-               let data =  $this.getFormData({
-                    Id: id
-               });
-               let count = 0;
-               for (let i = 0; i < Object.values(data).length; i++) {
-                   if(Object.values(data)[i]===''){
-                            count++
-                   }
-               }
-               if(count < 9){
-                   $('.table-add').css("pointer-events", "auto");
-                  $.ajax({
+            } else {
+                toastr.error("Xanalar boş ola bilməz", "Xəta!");
+                $('.table-add').css("pointer-events", "none");
+            }
+        } else {
+            let id = $this.attr('value-id')
+            let data = $this.getFormData({
+                Id: id
+            });
+            let count = 0;
+            for (let i = 0; i < Object.values(data).length; i++) {
+                if (Object.values(data)[i] === '') {
+                    count++
+                }
+            }
+            if (count < 9) {
+                $('.table-add').css("pointer-events", "auto");
+                $.ajax({
                     type: 'get',
                     url: '@Url.ActionLink("Update","Order")',
                     datatype: 'json',
                     data: data,
-                    success: function (response) {
-                    if (response.error == true) {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                      //toastr.success(response.message, "Uğurla Yükləndi!");
-                      //$this.attr('value-id',response);
+                    success: function(response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta baş verdi!");
+                            return;
+                        }
+                        //toastr.success(response.message, "Uğurla Yükləndi!");
+                        //$this.attr('value-id',response);
                     },
-                    error: function (response) {
+                    error: function(response) {
                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                     }
                 });
-               }else{
-                    toastr.error("Xanalar boş ola bilməz", "Xəta!");
-                    $('.table-add').css("pointer-events", "none");
-               }
-          }
-        });
-        //orders to send to ticket
-        $(document).on("click","#confirm-id",function(e){
-            var Ids = new Array();
-            $(".editTable").each(function(){
-               var id= $(this).attr('value-id');
-                Ids.push(id);
-            });
-             $("#OrderIds").val(JSON.stringify(Ids));
-        });
-        //daterangepicker
-        $('input[name="DeadLine"]').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear'
+            } else {
+                toastr.error("Xanalar boş ola bilməz", "Xəta!");
+                $('.table-add').css("pointer-events", "none");
             }
-        });
-        $('input[name="DeadLine"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
-        });
-        $('input[name="DeadLine"]').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        });
-         //ticket confirm
-        $("#True").on("change",function(){
-              $("#ConfirmedId").removeClass( 'd-none');
-              $("#ConfirmTicketUserId").prop( "disabled" , false);
-
-        $("form").submit(function(e){
-        if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
-          toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
-          e.preventDefault();
         }
-        })
-
+    });
+    //orders to send to ticket
+    $(document).on("click", "#confirm-id", function(e) {
+        var Ids = new Array();
+        $(".editTable").each(function() {
+            var id = $(this).attr('value-id');
+            Ids.push(id);
         });
-        $("#False").on("change",function(){
-              $("#ConfirmedId").addClass( 'd-none');
-              $("#ConfirmTicketUserId").prop( "disabled" , true);
-        });
-
-        // Total price
-        $(document).on("change","#generated",function(){
-        var r = 0;
-        $("textarea[name='Total']").each(function( index ) {
-             if(parseFloat($(this).val()) === NaN){
-             r+= 0;
-             }
-             else{
-             r+= parseFloat($(this).val());
-             }
-          });
-            $("#GrandTotal").val(parseFloat(r).toFixed(2));
-        });
-        function validateValue(event){
-                const elem = event.target;
-                const value = elem.value;
-                const numVal = value.replace(/\D/,"");
-                elem.value = numVal;
+        $("#OrderIds").val(JSON.stringify(Ids));
+    });
+    //daterangepicker
+    $('input[name="DeadLine"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
         }
+    });
+    $('input[name="DeadLine"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + '-' + picker.endDate.format('DD/MM/YYYY'));
+    });
+    $('input[name="DeadLine"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+    //ticket confirm
+    $("#True").on("change", function() {
+        $("#ConfirmedId").removeClass('d-none');
+        $("#ConfirmTicketUserId").prop("disabled", false);
 
-        //BusnessTravel
-
-        $(document).on('change','#BusinessTravelAddDto_Accommodation',function(){
-            if($(this).is(':checked')){
-                $('#BusinessTravelAddDto_Staylength').parent().removeClass('d-none');
-                $('#BusinessTravelAddDto_Staylength').prop('disabled', false);
-            } else{
-                $('#BusinessTravelAddDto_Staylength').parent().addClass('d-none')
-                $('#BusinessTravelAddDto_Staylength').prop('disabled', true);
+        $("form").submit(function(e) {
+            if ($("#ConfirmTicketUserId").is(':disabled') === false && $("#ConfirmTicketUserId").val().length === 0) {
+                toastr.error("Diqqət", "Təsdiq edənlər boş ola bilməz !");
+                e.preventDefault();
             }
         })
-
-
-        $.ajax({
-                url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
-                type: "Get",
-                data: "",
-                dataType: "json",
-                cache: false,
-                success: function(data) {
-                    $('#TicketCategoryId').combotree({
-                        data: data,
-                        prompt: 'Seçim edin',
-                        onBeforeSelect: function(node) {
-                            if( node.children.length > 0) {
-                                return false
-                            }
-                            else{
-                            var type = node.ticketType;
-                            var $this = $("form");
-                            var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
-                            if(type === @((int) TicketType.Purchasing)) {
-                                $("#PurcId").removeClass('d-none');
-                                $("#BusinessTravelsId").addClass('d-none');
-                                $("#VacationLeavesId").addClass('d-none');
-                                $("#PermissionTabId").addClass('d-none');
-                                $('#TravelBusiness input').prop('disabled', true);
-                                $('#TravelBusiness select').prop('disabled', true);
-                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
-                                $('#LeaveVacation input').prop('disabled', true);
-                                $('#LeaveVacation select').prop('disabled', true);
-                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
-                                $('#Permissions input').prop('disabled', true);
-                                $('#Permissions select').prop('disabled', true);
-                                $('#PermissionAddDto_ConfirmSend').val(false);
-                                $("#True").prop('checked', true);
-                                $("#False" ).prop( "checked", false );
-                                $("#ConfirmedId").removeClass( 'd-none');
-                                $("#ConfirmTicketUserId").prop( "disabled" , false);
-                                $this.on("submit", function(e) {
-                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
-                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
-                                      e.preventDefault();
-                                    }
-                                });
-                            }
-                            else if(type === @((int) TicketType.BusinessTrip)){
-                                $("#PurcId").addClass('d-none');
-                                $("#BusinessTravelsId").removeClass('d-none');
-                                $("#PermissionTabId").addClass('d-none');
-                                $("#VacationLeavesId").addClass('d-none');
-                                $('#TravelBusiness input').prop('disabled', false);
-                                $('#TravelBusiness select').prop('disabled', false);
-                                $('#BusinessTravelAddDto_ConfirmSend').val(true);
-                                $('#LeaveVacation input').prop('disabled', true);
-                                $('#LeaveVacation select').prop('disabled', true);
-                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
-                                $('#Permissions input').prop('disabled', true);
-                                $('#Permissions select').prop('disabled', true);
-                                $('#PermissionAddDto_ConfirmSend').val(false);
-                                $("#True").prop('checked', true);
-                                $("#False" ).prop( "checked", false );
-                                $("#ConfirmedId").removeClass( 'd-none');
-                                $("#ConfirmTicketUserId").prop( "disabled" , false);
-                                $this.on("submit", function(e) {
-                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
-                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
-                                      e.preventDefault();
-                                    }
-                                });
-                            }
-                            else if(type === @((int) TicketType.Vacation)){
-                                $("#PurcId").addClass('d-none');
-                                $("#BusinessTravelsId").addClass('d-none');
-                                $("#PermissionTabId").addClass('d-none');
-                                $("#VacationLeavesId").removeClass('d-none');
-                                $('#TravelBusiness input').prop('disabled', true);
-                                $('#TravelBusiness select').prop('disabled', true);
-                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
-                                $('#LeaveVacation input').prop('disabled', false);
-                                $('#LeaveVacation select').prop('disabled', false);
-                                $('#VacationLeaveAddDto_ConfirmSend').val(true);
-                                $('#Permissions input').prop('disabled', true);
-                                $('#Permissions select').prop('disabled', true);
-                                $('#PermissionAddDto_ConfirmSend').val(false);
-                                $("#True").prop('checked', true);
-                                $("#False" ).prop( "checked", false );
-                                $("#ConfirmedId").removeClass( 'd-none');
-                                $("#ConfirmTicketUserId").prop( "disabled" , false);
-                                $this.on("submit", function(e) {
-                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
-                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
-                                      e.preventDefault();
-                                    }
-                                });
-                            }
-                            else if(type === @((int) TicketType.Permit)){
-                                $("#PurcId").addClass('d-none');
-                                $("#BusinessTravelsId").addClass('d-none');
-                                $("#VacationLeavesId").addClass('d-none');
-                                $("#PermissionTabId").removeClass('d-none');
-                                $('#TravelBusiness input').prop('disabled', true);
-                                $('#TravelBusiness select').prop('disabled', true);
-                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
-                                $('#LeaveVacation input').prop('disabled', true);
-                                $('#LeaveVacation select').prop('disabled', true);
-                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
-                                $('#Permissions input').prop('disabled', false);
-                                $('#Permissions select').prop('disabled', false);
-                                $('#Permissions textarea').prop('disabled', false);
-                                $('#PermissionAddDto_ConfirmSend').val(true);
-                                $("#True").prop('checked', true);
-                                $("#False" ).prop( "checked", false );
-                                $("#ConfirmedId").removeClass( 'd-none');
-                                $("#ConfirmTicketUserId").prop( "disabled" , false);
-                                $(document).on("change","#PermissionAddDto_EndTime",function(){
-                                    var oneH = 1000 * 60;
-                                    p = "1/1/0000";
-                                    var startDT = ($("#PermissionAddDto_StartTime").val());
-                                    console.log(startDT)
-                                    var endDT = ($("#PermissionAddDto_EndTime").val());
-                                    console.log(endDT)
-                                    var sMS = new Date(p + startDT);
-                                    console.log(sMS)
-                                    var eMS = new Date(p + endDT);
-                                    console.log(eMS)
-                                    var result = Math.round((eMS.getTime() - sMS.getTime()) / oneH);
-                                    let num = 480;
-
-                                    if(result > num){
-                                    $("#PermissionAddDto_EndTime").val("")
-                                    toastr.warning(`Icazə müddəti 8 saatı aşmamalıdır !`)
-                                    }
-                                    if(eMS.getTime() < sMS.getTime()){
-                                    $("#PermissionAddDto_EndTime").val("")
-                                    toastr.warning(`Başlama Saatı Bitmə Saatından kiçik olmamalıdır !`)
-                                    }
-
-                                })
-                                $this.on("submit", function(e) {
-                                    if($("#ConfirmTicketUserId").is(':disabled')===false && $("#ConfirmTicketUserId").val().length === 0){
-                                      toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
-                                      e.preventDefault();
-                                    }
-                                });
-                            }
-                            else if(type === @((int) TicketType.Task)){
-                                $("#True" ).prop( "checked", false );
-                                $("#False" ).prop( "checked", true );
-                                $("#ConfirmedId").addClass( 'd-none');
-                                $("#ConfirmTicketUserId").prop( "disabled" , true);
-                                $("#PurcId").addClass('d-none');
-                                $("#BusinessTravelsId").addClass('d-none');
-                                $("#VacationLeavesId").addClass('d-none');
-                                $("#PermissionTabId").addClass('d-none');
-                                $('#TravelBusiness input').prop('disabled', true);
-                                $('#TravelBusiness select').prop('disabled', true);
-                                $('#BusinessTravelAddDto_ConfirmSend').val(false);
-                                $('#LeaveVacation input').prop('disabled', true);
-                                $('#LeaveVacation select').prop('disabled', true);
-                                $('#VacationLeaveAddDto_ConfirmSend').val(false);
-                                $('#Permissions input').prop('disabled', true);
-                                $('#Permissions select').prop('disabled', true);
-                                $('#PermissionAddDto_ConfirmSend').val(false);
-                                $this.on("submit", function(e) {
-                                    if(!(Description)) {
-                                        toastr.error("  Zəhmət olmasa Ətraflı tabına keçid edin", "Təsvir boş ola bilməz !");
-                                        e.preventDefault();
-                                    }
-                                });
-                                $("#generated").empty();
-                                var Ids = new Array();
-                                $(".editTable").each(function() {
-                                    var id = $(this).attr('value-id');
-                                    Ids.push(id);
-                                });
-                                $.ajax({
-                                    type: 'get',
-                                    url: '@Url.ActionLink("AllDelete","Order")',
-                                    datatype: 'json',
-                                    traditional: true,
-                                    data: ({
-                                        Ids: Ids
-                                    }),
-                                    success: function(response) {
-                                        if(response.error == true) {
-                                            toastr.error(response.message, "Xəta baş verdi!");
-                                            location.reload();
-                                            return;
-                                        }
-                                    },
-                                    error: function(response) {
-                                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                                    }
-                                });
-                            }
-                            }
-                        },
-                    });
-                },
-                error: function(data) {}
-                });
-
 
     });
+    $("#False").on("change", function() {
+        $("#ConfirmedId").addClass('d-none');
+        $("#ConfirmTicketUserId").prop("disabled", true);
+    });
+
+    // Total price
+    $(document).on("change", "#generated", function() {
+        var r = 0;
+        $("textarea[name='Total']").each(function(index) {
+            if (parseFloat($(this).val()) === NaN) {
+                r += 0;
+            } else {
+                r += parseFloat($(this).val());
+            }
+        });
+        $("#GrandTotal").val(parseFloat(r).toFixed(2));
+    });
+
+    function validateValue(event) {
+        const elem = event.target;
+        const value = elem.value;
+        const numVal = value.replace(/\D/, "");
+        elem.value = numVal;
+    }
+
+    //BusnessTravel
+
+    $(document).on('change', '#BusinessTravelAddDto_Accommodation', function() {
+        if ($(this).is(':checked')) {
+            $('#BusinessTravelAddDto_Staylength').parent().removeClass('d-none');
+            $('#BusinessTravelAddDto_Staylength').prop('disabled', false);
+        } else {
+            $('#BusinessTravelAddDto_Staylength').parent().addClass('d-none')
+            $('#BusinessTravelAddDto_Staylength').prop('disabled', true);
+        }
+    })
+
+
+    $.ajax({
+        url: `@Url.Action("GetCategoryTicketTree","CategoryTicket")`,
+        type: "Get",
+        data: "",
+        dataType: "json",
+        cache: false,
+        success: function(data) {
+            $('#TicketCategoryId').combotree({
+                data: data,
+                prompt: 'Seçim edin',
+                onBeforeSelect: function(node) {
+                    if (node.children.length > 0) {
+                        return false
+                    } else {
+                        var type = node.ticketType;
+                        var $this = $("form");
+
+                        if (type === @((int) TicketType.Purchasing)) {
+                            $("#PurcId").removeClass('d-none');
+                            $("#BusinessTravelsId").addClass('d-none');
+                            $("#VacationLeavesId").addClass('d-none');
+                            $("#PermissionTabId").addClass('d-none');
+                            $('#TravelBusiness input').prop('disabled', true);
+                            $('#TravelBusiness select').prop('disabled', true);
+                            $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                            $('#LeaveVacation input').prop('disabled', true);
+                            $('#LeaveVacation select').prop('disabled', true);
+                            $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                            $('#Permissions input').prop('disabled', true);
+                            $('#Permissions select').prop('disabled', true);
+                            $('#PermissionAddDto_ConfirmSend').val(false);
+                            $("#True").prop('checked', true);
+                            $("#False").prop("checked", false);
+                            $("#ConfirmedId").removeClass('d-none');
+                            $("#ConfirmTicketUserId").prop("disabled", false);
+                            //delete all orders if not send to ticket
+                            $(window).on('click', function(e) {
+                                if ($(e.target).attr('id') == 'closeBtn' ||
+                                    $(e.target).attr('id') == 'closeBtnX') {
+                                    var Ids = new Array();
+                                    $(".editTable").each(function() {
+                                        var id = $(this).attr('value-id');
+                                        Ids.push(id);
+                                    });
+                                    if (Ids.length > 0) {
+                                        $.ajax({
+                                            type: 'get',
+                                            url: '@Url.ActionLink("AllDelete","Order")',
+                                            datatype: 'json',
+                                            traditional: true,
+                                            data: ({
+                                                Ids: Ids
+                                            }),
+                                            success: function(response) {
+                                                if (response.error == true) {
+                                                    toastr.error(response.message, "Xəta baş verdi!");
+                                                    location.reload();
+                                                    return;
+                                                }
+                                            },
+                                            error: function(response) {
+                                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                            }
+                                        });
+                                    }
+
+                                }
+                            });
+                            $this.on("submit", function(e) {
+                                if ($("#ConfirmTicketUserId").is(':disabled') === false && $("#ConfirmTicketUserId").val().length === 0) {
+                                    toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                    e.preventDefault();
+                                }
+                            });
+                        } else if (type === @((int) TicketType.BusinessTrip)) {
+                            $("#PurcId").addClass('d-none');
+                            $("#BusinessTravelsId").removeClass('d-none');
+                            $("#PermissionTabId").addClass('d-none');
+                            $("#VacationLeavesId").addClass('d-none');
+                            $('#TravelBusiness input').prop('disabled', false);
+                            $('#TravelBusiness select').prop('disabled', false);
+                            $('#BusinessTravelAddDto_ConfirmSend').val(true);
+                            $('#LeaveVacation input').prop('disabled', true);
+                            $('#LeaveVacation select').prop('disabled', true);
+                            $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                            $('#Permissions input').prop('disabled', true);
+                            $('#Permissions select').prop('disabled', true);
+                            $('#PermissionAddDto_ConfirmSend').val(false);
+                            $("#True").prop('checked', true);
+                            $("#False").prop("checked", false);
+                            $("#ConfirmedId").removeClass('d-none');
+                            $("#ConfirmTicketUserId").prop("disabled", false);
+                            $this.on("submit", function(e) {
+                                if ($("#ConfirmTicketUserId").is(':disabled') === false && $("#ConfirmTicketUserId").val().length === 0) {
+                                    toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                    e.preventDefault();
+                                }
+                            });
+                        } else if (type === @((int) TicketType.Vacation)) {
+                            $("#PurcId").addClass('d-none');
+                            $("#BusinessTravelsId").addClass('d-none');
+                            $("#PermissionTabId").addClass('d-none');
+                            $("#VacationLeavesId").removeClass('d-none');
+                            $('#TravelBusiness input').prop('disabled', true);
+                            $('#TravelBusiness select').prop('disabled', true);
+                            $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                            $('#LeaveVacation input').prop('disabled', false);
+                            $('#LeaveVacation select').prop('disabled', false);
+                            $('#VacationLeaveAddDto_ConfirmSend').val(true);
+                            $('#Permissions input').prop('disabled', true);
+                            $('#Permissions select').prop('disabled', true);
+                            $('#PermissionAddDto_ConfirmSend').val(false);
+                            $("#True").prop('checked', true);
+                            $("#False").prop("checked", false);
+                            $("#ConfirmedId").removeClass('d-none');
+                            $("#ConfirmTicketUserId").prop("disabled", false);
+                            $this.on("submit", function(e) {
+                                if ($("#ConfirmTicketUserId").is(':disabled') === false && $("#ConfirmTicketUserId").val().length === 0) {
+                                    toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                    e.preventDefault();
+                                }
+                            });
+                        } else if (type === @((int) TicketType.Permit)) {
+                            $("#PurcId").addClass('d-none');
+                            $("#BusinessTravelsId").addClass('d-none');
+                            $("#VacationLeavesId").addClass('d-none');
+                            $("#PermissionTabId").removeClass('d-none');
+                            $('#TravelBusiness input').prop('disabled', true);
+                            $('#TravelBusiness select').prop('disabled', true);
+                            $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                            $('#LeaveVacation input').prop('disabled', true);
+                            $('#LeaveVacation select').prop('disabled', true);
+                            $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                            $('#Permissions input').prop('disabled', false);
+                            $('#Permissions select').prop('disabled', false);
+                            $('#Permissions textarea').prop('disabled', false);
+                            $('#PermissionAddDto_ConfirmSend').val(true);
+                            $("#True").prop('checked', true);
+                            $("#False").prop("checked", false);
+                            $("#ConfirmedId").removeClass('d-none');
+                            $("#ConfirmTicketUserId").prop("disabled", false);
+                            $(document).on("change", "#PermissionAddDto_EndTime", function() {
+                                var oneH = 1000 * 60;
+                                p = "1/1/0000";
+                                var startDT = ($("#PermissionAddDto_StartTime").val());
+                                console.log(startDT)
+                                var endDT = ($("#PermissionAddDto_EndTime").val());
+                                console.log(endDT)
+                                var sMS = new Date(p + startDT);
+                                console.log(sMS)
+                                var eMS = new Date(p + endDT);
+                                console.log(eMS)
+                                var result = Math.round((eMS.getTime() - sMS.getTime()) / oneH);
+                                let num = 480;
+
+                                if (result > num) {
+                                    $("#PermissionAddDto_EndTime").val("")
+                                    toastr.warning(`Icazə müddəti 8 saatı aşmamalıdır !`)
+                                }
+                                if (eMS.getTime() < sMS.getTime()) {
+                                    $("#PermissionAddDto_EndTime").val("")
+                                    toastr.warning(`Başlama Saatı Bitmə Saatından kiçik olmamalıdır !`)
+                                }
+
+                            })
+                            $this.on("submit", function(e) {
+                                if ($("#ConfirmTicketUserId").is(':disabled') === false && $("#ConfirmTicketUserId").val().length === 0) {
+                                    toastr.error("Təsdiq edənlər boş ola bilməz", "Diqqət !");
+                                    e.preventDefault();
+                                }
+                            });
+                        } else if (type === @((int) TicketType.Task)) {
+                            $("#True").prop("checked", false);
+                            $("#False").prop("checked", true);
+                            $("#ConfirmedId").addClass('d-none');
+                            $("#ConfirmTicketUserId").prop("disabled", true);
+                            $("#PurcId").addClass('d-none');
+                            $("#BusinessTravelsId").addClass('d-none');
+                            $("#VacationLeavesId").addClass('d-none');
+                            $("#PermissionTabId").addClass('d-none');
+                            $('#TravelBusiness input').prop('disabled', true);
+                            $('#TravelBusiness select').prop('disabled', true);
+                            $('#BusinessTravelAddDto_ConfirmSend').val(false);
+                            $('#LeaveVacation input').prop('disabled', true);
+                            $('#LeaveVacation select').prop('disabled', true);
+                            $('#VacationLeaveAddDto_ConfirmSend').val(false);
+                            $('#Permissions input').prop('disabled', true);
+                            $('#Permissions select').prop('disabled', true);
+                            $('#PermissionAddDto_ConfirmSend').val(false);
+                            $this.on("submit", function(e) {
+                                var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
+                                if (!(Description)) {
+                                    toastr.error("  Zəhmət olmasa Ətraflı tabına keçid edin", "Təsvir boş ola bilməz !");
+                                    e.preventDefault();
+                                }
+                            });
+                            $("#generated").empty();
+                            var Ids = new Array();
+                            $(".editTable").each(function() {
+                                var id = $(this).attr('value-id');
+                                Ids.push(id);
+                            });
+                            $.ajax({
+                                type: 'get',
+                                url: '@Url.ActionLink("AllDelete","Order")',
+                                datatype: 'json',
+                                traditional: true,
+                                data: ({
+                                    Ids: Ids
+                                }),
+                                success: function(response) {
+                                    if (response.error == true) {
+                                        toastr.error(response.message, "Xəta baş verdi!");
+                                        location.reload();
+                                        return;
+                                    }
+                                },
+                                error: function(response) {
+                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                }
+                            });
+                        }
+                    }
+                },
+            });
+        },
+        error: function(data) {}
+    });
+
+
+}); 
 </script>

@@ -608,6 +608,13 @@ button.close {
     z-index: 999
 }
 
+@media (max-width: 445px) {
+    .tooltip.fade.show.bs-tooltip-left {
+        display: none !important;
+    }
+}
+
+
     .mytooltip .tooltip-item {
         background: rgba(0,0,0,0.1);
         cursor: pointer;
@@ -19817,7 +19824,7 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 
 
 .user-box .social-designation, .post-timelines .social-time {
-    font-size: 13px
+    font-size: 11.5px !important
 }
 
 .user-box .f-right {
@@ -22950,9 +22957,9 @@ span.value {
             position: relative
         }
 
-    .nav-tabs .slide {
+/*    .nav-tabs .slide {
         width: calc(100% / 1) !important
-    }
+    }*/
 
     .toolbar-page [class*="col-"] .sub-title {
         text-align: center
