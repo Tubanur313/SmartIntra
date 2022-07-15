@@ -6,6 +6,7 @@ using System.Text;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Inventary;
+using SmartIntranet.Entities.Concrete.Intranet.Archives;
 
 namespace SmartIntranet.Entities.Concrete.Membership
 {
@@ -70,6 +71,7 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public virtual ICollection<Discussion> Discussions { get; set; }
         public virtual ICollection<Stock> Stocks { get; set; }
         public virtual ICollection<StockDiscuss> StockDiscusses { get; set; }
+        public virtual ICollection<Archive> Archives { get; set; }
 
     }
 }

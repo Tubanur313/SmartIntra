@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.Core.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.Intranet.Archives;
 using SmartIntranet.Entities.Concrete.Membership;
 using System.Collections.Generic;
 
@@ -30,5 +31,7 @@ namespace SmartIntranet.Entities.Concrete.Intranet
         public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<IntranetUser> IntranetUsers { get; set; }
         public virtual ICollection<Vacancy> Vacancies { get; set; }
+        public virtual ICollection<Archive> Archives { get; set; }
+
     }
 }

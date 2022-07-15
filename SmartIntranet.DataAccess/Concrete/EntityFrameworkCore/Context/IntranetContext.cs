@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.Intranet.Archives;
+using SmartIntranet.Entities.Concrete.Intranet.FAQ;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Inventary;
@@ -17,10 +19,10 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
             //Xadica's local connection string
             //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranetSmart2;Trusted_Connection=False;MultipleActiveResultSets=true"); 
 
-            optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet4;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet4;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
 
             //Ilkin's local connection string
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmartTest;Trusted_Connection=False;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmartTest;Trusted_Connection=False;MultipleActiveResultSets=true");
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -120,6 +122,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<BusinessTravel> BusinessTravels { get; set; }
         public DbSet<VacationLeave> VacationLeaves { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Faq> Faqs { get; set; }
+        public DbSet<Archive> Archives { get; set; }
         #endregion
 
 

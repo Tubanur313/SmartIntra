@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
+using SmartIntranet.DTO.DTOs.ArchiveDto;
 using SmartIntranet.DTO.DTOs.BusinessTripDto;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
@@ -15,6 +16,7 @@ using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.DiscussionDto;
 using SmartIntranet.DTO.DTOs.EmailDto;
 using SmartIntranet.DTO.DTOs.EntranceDto;
+using SmartIntranet.DTO.DTOs.FaqDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockDiscussDto;
@@ -42,6 +44,8 @@ using SmartIntranet.DTO.DTOs.WatcherDto;
 using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Entities.Concrete.Intranet.Archives;
+using SmartIntranet.Entities.Concrete.Intranet.FAQ;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Inventary;
@@ -518,6 +522,18 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #region Permission-PermissionDto
             CreateMap<PermissionAddDto, Permission>().ReverseMap();
             CreateMap<PermissionUpdateDto, Permission>().ReverseMap();
+            #endregion
+
+            #region Faq-FaqDto
+            CreateMap<FaqAddDto, Faq>().ReverseMap();
+            CreateMap<FaqUpdateDto, Faq>().ReverseMap();
+            CreateMap<FaqListDto, Faq>().ReverseMap();
+            #endregion            
+
+            #region Archive-ArchiveDto
+            CreateMap<ArchiveAddDto, Archive>().ReverseMap();
+            CreateMap<ArchiveUpdateDto, Archive>().ReverseMap();
+            CreateMap<ArchiveListDto, Archive>().ReverseMap();
             #endregion
         }
     }
