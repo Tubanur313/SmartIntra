@@ -277,7 +277,7 @@ namespace SmartIntranet.Web.Controllers
                     formatKeys.Add("vacDayCount", model.CalendarDay.ToString());
                     formatKeys.Add("contractBase", model.Description);
                     formatKeys.Add("nextWorkDate", next_date.ToString("dd.MM.yyyy"));
-                    model.NextWorkDate = next_date;
+                    result_model.NextWorkDate = next_date;
                     await _contractService.UpdateAsync(_map.Map<VacationContract>(result_model));
 
                 }
