@@ -121,7 +121,7 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("outOfWork", outOfWork);
                 formatKeys.Add("notificationWork", notificationWork);
                 var tr_el = _terminationItemService.FindByIdAsync(model.TerminationItemId).Result;
-                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId).ToString());
+                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId, model.TerminationDate).ToString());
                 formatKeys.Add("trItem", tr_el.Name + " (" + tr_el.Description + ")");
                 formatKeys.Add("isAgree", model.IsAgree ? "bildirmişdir" : "bildirməmişdir");
                 formatKeys.Add("contractBase", model.Description);
@@ -239,7 +239,7 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("notificationWork", notificationWork);
 
                 var tr_el = _terminationItemService.FindByIdAsync(model.TerminationItemId).Result;
-                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId).ToString());
+                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId, model.TerminationDate).ToString());
                 formatKeys.Add("trItem", tr_el.Name + " (" + tr_el.Description + ")");
                 formatKeys.Add("isAgree", model.IsAgree ? "bildirmişdir" : "bildirməmişdir");
                 formatKeys.Add("contractBase", model.Description);
@@ -341,7 +341,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         // vacation remain day
-        public decimal GetRemainVacDay(int user_id)
+        public decimal GetRemainVacDay(int user_id, DateTime ter_date)
         {
             decimal result_remain_day = 0;
             var vc =  _userVacationRemainService.GetAllAsync(x => !x.IsDeleted && x.RemainCount != 0 && x.AppUserId == user_id).Result;
@@ -351,61 +351,106 @@ namespace SmartIntranet.Web.Controllers
 
             if (work_start_date != null)
             {
-                DateTime start_interval;
-                DateTime end_interval;
-                if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
-                {
-                    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
-                }
-                else
-                {
-                    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                }
+                //DateTime start_interval;
+                //DateTime end_interval;
+                //if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                //{
+                //    start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                //    end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                //}
+                //else
+                //{
+                //    start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
+                //    end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                //}
 
-                var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
+                //var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
 
 
-                if (!remain_list.Any(el => el.FromDate == start_interval && el.ToDate == end_interval))
-                {
-                    UserVacationRemain ur = new UserVacationRemain();
-                    ur.FromDate = start_interval;
-                    ur.ToDate = end_interval;
-                    ur.IsDeleted = false;
-                    ur.CreatedDate = DateTime.Now;
-                    ur.AppUserId = user_id;
-                    ur.UsedCount = 0;
-                    ur.VacationCount = usr.VacationMainDay;
-                        //+ usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
-                    ur.RemainCount = ur.VacationCount;
-                    remain_list.Add(ur);
-                     _userVacationRemainService.AddAsync(ur);
-                }
+                //if (!remain_list.Any(el => el.FromDate == start_interval && el.ToDate == end_interval))
+                //{
+                //    UserVacationRemain ur = new UserVacationRemain();
+                //    ur.FromDate = start_interval;
+                //    ur.ToDate = end_interval;
+                //    ur.IsDeleted = false;
+                //    ur.CreatedDate = DateTime.Now;
+                //    ur.AppUserId = user_id;
+                //    ur.UsedCount = 0;
+                //    ur.VacationCount = usr.VacationMainDay;
+                //        //+ usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
+                //    ur.RemainCount = ur.VacationCount;
+                //    remain_list.Add(ur);
+                //     _userVacationRemainService.AddAsync(ur);
+                //}
 
+                //decimal this_year_remain = 0;
+                //foreach (var el in remain_list)
+                //{
+
+                //    if (el.FromDate == start_interval && el.ToDate == end_interval)
+                //    {
+                //        this_year_remain += el.UsedCount;
+                //    }
+                //    else
+                //    {
+                //        result_remain_day += el.RemainCount;
+                //    }
+                //}
+
+
+                //if (personal_contract_chgs.Count() > 0)
+                //{
+                //    DateTime fromDateTmp = start_interval;
+
+                //    var main_day = 0;
+                //    foreach (var el in personal_contract_chgs)
+                //    {
+                //        if (el.CommandDate <= DateTime.Now)
+                //        {
+                //            double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
+                //            result_remain_day += (int)before_day_count;
+                //            fromDateTmp = el.CommandDate;
+                //            main_day = (int)el.VacationDay;
+                //        }
+
+                //    }
+
+                //    double after_day_count = Math.Round((double)((DateTime.Now - fromDateTmp).TotalDays) * main_day) / 365;
+                //    result_remain_day += (int)after_day_count;
+                //    //result_remain_day += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
+                //}
+                //else
+                //{
+                //    double after_day_count = Math.Round((double)((DateTime.Now - start_interval).TotalDays) * usr.VacationMainDay) / 365;
+                //    result_remain_day += (int)after_day_count;
+                //    //result_remain_day += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
+                //}
+
+                //result_remain_day -= this_year_remain;
+
+
+                ////
+                ///
+
+                
                 decimal this_year_remain = 0;
                 foreach (var el in remain_list)
                 {
 
-                    if (el.FromDate == start_interval && el.ToDate == end_interval)
-                    {
-                        this_year_remain += el.UsedCount;
-                    }
-                    else
-                    {
-                        result_remain_day += el.RemainCount;
-                    }
+                   this_year_remain += el.UsedCount;
+                    
                 }
 
+                var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate <= ter_date  && x.IsMainVacation).Result.OrderBy(x=>x.CommandDate);
 
                 if (personal_contract_chgs.Count() > 0)
                 {
-                    DateTime fromDateTmp = start_interval;
+                    DateTime fromDateTmp = work_start_date;
 
                     var main_day = 0;
                     foreach (var el in personal_contract_chgs)
                     {
-                        if (el.CommandDate <= DateTime.Now)
+                        if (el.CommandDate <= ter_date)
                         {
                             double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
                             result_remain_day += (int)before_day_count;
@@ -415,19 +460,18 @@ namespace SmartIntranet.Web.Controllers
 
                     }
 
-                    double after_day_count = Math.Round((double)((DateTime.Now - fromDateTmp).TotalDays) * main_day) / 365;
+                    double after_day_count = Math.Round((double)((ter_date - fromDateTmp).TotalDays) * main_day) / 365;
                     result_remain_day += (int)after_day_count;
-                    //result_remain_day += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
+                    
                 }
                 else
                 {
-                    double after_day_count = Math.Round((double)((DateTime.Now - start_interval).TotalDays) * usr.VacationMainDay) / 365;
+                    double after_day_count = Math.Round((double)((ter_date - work_start_date).TotalDays) * usr.VacationMainDay) / 365;
                     result_remain_day += (int)after_day_count;
-                    //result_remain_day += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
+                  
                 }
 
                 result_remain_day -= this_year_remain;
-               
 
             }
 

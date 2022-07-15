@@ -43,6 +43,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IWorkGraphicService _workGraphicService;
         private readonly IPersonalContractService _personalContractService;
         private readonly IVacationContractService _vacationContractService;
+        private readonly ITerminationContractService _terminationContractService;
         private readonly IContractService _contractService;
         private readonly IAppRoleService _appRoleService;
         private readonly IUserVacationRemainService _userVacationRemains;
@@ -52,7 +53,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public AccountController(IPersonalContractService personalContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
+        public AccountController(IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
@@ -65,6 +66,7 @@ namespace SmartIntranet.Web.Controllers
             _personalContractService = personalContractService;
             _vacationContractService = vacationContractService;
             _userVacationRemains = userVacationRemains;
+            _terminationContractService = terminationContractService;
             _db = db;
             _passwordHasher = passwordHasher;
             _configuration = configuration;
@@ -992,6 +994,16 @@ namespace SmartIntranet.Web.Controllers
                     el.DeleteByUserId = current;
                     el.IsDeleted = true;
                     await _userVacationRemains.UpdateAsync(_map.Map<UserVacationRemain>(el));
+                }
+
+                var termination_list = _terminationContractService.GetAllIncCompAsync(x => x.UserId == usr2.Id && !x.IsDeleted).Result;
+
+                foreach (var el in termination_list)
+                {
+                    el.DeleteDate = DateTime.Now;
+                    el.DeleteByUserId = current;
+                    el.IsDeleted = true;
+                    await _terminationContractService.UpdateAsync(_map.Map<TerminationContract>(el));
                 }
 
 
