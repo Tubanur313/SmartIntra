@@ -2834,6 +2834,9 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<int>("VacationMainDay")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("VacationTotal")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("WorkGraphicId")
                         .HasColumnType("int");
 
@@ -3724,9 +3727,6 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FromWorkYearDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -3734,9 +3734,6 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ToWorkYearDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("UpdateByUserId")
@@ -3758,6 +3755,53 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.HasIndex("VacationTypeId");
 
                     b.ToTable("VacationContracts");
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContractDate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CalendarDay")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CreatedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("UpdateByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VacationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VacationId");
+
+                    b.ToTable("VacationContractDates");
                 });
 
             modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContractFile", b =>
@@ -4575,6 +4619,15 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.HasOne("SmartIntranet.Entities.Concrete.VacationType", "VacationType")
                         .WithMany()
                         .HasForeignKey("VacationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SmartIntranet.Entities.Concrete.VacationContractDate", b =>
+                {
+                    b.HasOne("SmartIntranet.Entities.Concrete.VacationContract", "Vacation")
+                        .WithMany()
+                        .HasForeignKey("VacationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

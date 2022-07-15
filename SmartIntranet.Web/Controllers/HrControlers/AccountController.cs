@@ -43,6 +43,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IWorkGraphicService _workGraphicService;
         private readonly IPersonalContractService _personalContractService;
         private readonly IVacationContractService _vacationContractService;
+        private readonly ITerminationContractService _terminationContractService;
         private readonly IContractService _contractService;
         private readonly IAppRoleService _appRoleService;
         private readonly IUserVacationRemainService _userVacationRemains;
@@ -52,7 +53,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public AccountController(IPersonalContractService personalContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
+        public AccountController(IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
@@ -65,6 +66,7 @@ namespace SmartIntranet.Web.Controllers
             _personalContractService = personalContractService;
             _vacationContractService = vacationContractService;
             _userVacationRemains = userVacationRemains;
+            _terminationContractService = terminationContractService;
             _db = db;
             _passwordHasher = passwordHasher;
             _configuration = configuration;
@@ -437,6 +439,14 @@ namespace SmartIntranet.Web.Controllers
 
         [HttpGet]
         [Authorize]
+        public async Task<IActionResult> GetStartWorkDate(int userId)
+        {
+            var usr = await _appUserService.FindByUserAllInc(userId);
+            return Ok(usr.StartWorkDate.ToString("MM/dd/yyyy"));
+        }
+
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetPositionWithUser(int userId)
         {
             var usr = await _userManager.FindByIdAsync(userId.ToString());
@@ -445,6 +455,28 @@ namespace SmartIntranet.Web.Controllers
                  .Select(x => new { x.Id, x.Name });
 
             return Ok(position);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetPositionWithDepartment(int departmentId)
+        {
+            var position = _map.Map<ICollection<PositionListDto>>(
+                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == departmentId))
+                 .Select(x => new { x.Id, x.Name });
+
+            return Ok(position);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetDepartmentWithCompany(int companyId)
+        {
+            var department = _map.Map<ICollection<DepartmentListDto>>(
+                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
+                 .Select(x => new { x.Id, x.Name });
+
+            return Ok(department);
         }
 
         [HttpGet]
@@ -495,7 +527,19 @@ namespace SmartIntranet.Web.Controllers
 
             }
 
-            var levels = new List<LevelType>();
+            var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == listModel.Id);
+            updateUser.VacationTotal = 0;
+            var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted);
+            foreach(var el in all_remains)
+            {
+                updateUser.VacationTotal += el.RemainCount;
+            }
+
+            await _userManager.UpdateAsync(updateUser);
+            listModel.VacationTotal = updateUser.VacationTotal;
+
+
+              var levels = new List<LevelType>();
             levels.Add(new LevelType() { Id = EducationLevelConstant.PRIMARY_VOCATIONAL, Name = "İlkin peşə təhsili" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta təhsil" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
@@ -643,6 +687,8 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.VacationExtraNature = model.VacationExtraNature;
                         updateUser.IdCardType = model.IdCardType;
                         updateUser.Citizenship = model.Citizenship;
+                        updateUser.Salary = model.Salary;
+                        updateUser.WorkGraphicId = model.WorkGraphicId;
                         updateUser.CompanyId = model.CompanyId;
                         updateUser.DepartmentId = model.DepartmentId;
                         updateUser.PositionId = model.PositionId;
@@ -660,6 +706,12 @@ namespace SmartIntranet.Web.Controllers
                         updateUser.UpdateByUserId = current;
                         updateUser.UserExperiences = model.UserExperiences;
                         updateUser.UserVacationRemains = UserVacationRemainsNew;
+
+                        updateUser.VacationTotal = 0;
+                        foreach (var el in UserVacationRemainsNew)
+                        {
+                            updateUser.VacationTotal += el.RemainCount;
+                        }
 
                         IdentityResult result = await _userManager.UpdateAsync(updateUser);
                         if (result.Succeeded && oldFileImage != "default.png")
@@ -964,6 +1016,16 @@ namespace SmartIntranet.Web.Controllers
                     el.DeleteByUserId = current;
                     el.IsDeleted = true;
                     await _userVacationRemains.UpdateAsync(_map.Map<UserVacationRemain>(el));
+                }
+
+                var termination_list = _terminationContractService.GetAllIncCompAsync(x => x.UserId == usr2.Id && !x.IsDeleted).Result;
+
+                foreach (var el in termination_list)
+                {
+                    el.DeleteDate = DateTime.Now;
+                    el.DeleteByUserId = current;
+                    el.IsDeleted = true;
+                    await _terminationContractService.UpdateAsync(_map.Map<TerminationContract>(el));
                 }
 
 

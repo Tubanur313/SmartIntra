@@ -69,7 +69,18 @@ namespace SmartIntranet.Web.Controllers
 
         protected Dictionary<string, string> PdfStaticKeys(Dictionary<string, string> formatKeys, IntranetUser usr, Company company, IntranetUser company_director)
         {
-            formatKeys.Add("companyDirector", company_director.Name + " " + company_director.Surname + " " + company_director.Fathername);
+            var education = string.Empty;
+            var level = levels.FirstOrDefault(x => x.Id == usr.EducationLevel).Name;
+            var profession = usr.Profession;
+            var graduatedPlace = usr.GraduatedPlace;
+            if (!string.IsNullOrEmpty(level))
+                education += level;
+            if (!string.IsNullOrEmpty(profession))
+                education += (string.IsNullOrEmpty(level) ? "" : ", ") + profession;
+            if (!string.IsNullOrEmpty(graduatedPlace))
+                education += (string.IsNullOrEmpty(level) && string.IsNullOrEmpty(profession) ? "" : ", ") + graduatedPlace;
+
+            formatKeys.Add("companyDirector", company_director.Surname + " " + company_director.Name + " " + company_director.Fathername);
             formatKeys.Add("employeeFull", $"{usr.Surname} {usr.Name} {usr.Fathername} {(usr.Gender == "MALE" ? "oğlu" : usr.Gender == "FEMALE" ? "qızı" : "")}");
             formatKeys.Add("employeeStartWork", usr.StartWorkDate.ToString("dd.MM.yyyy"));
             formatKeys.Add("position", usr.Position.Name);
@@ -78,9 +89,7 @@ namespace SmartIntranet.Web.Controllers
             formatKeys.Add("idCardNumber", usr.IdCardNumber);
             formatKeys.Add("idCardGivenDate", usr.IdCardGiveDate.ToString("dd.MM.yyyy"));
             formatKeys.Add("idCardGivenPlace", usr.IdCardGivePlace);
-            formatKeys.Add("educationLevel", levels.FirstOrDefault(x => x.Id == usr.EducationLevel).Name);
-            formatKeys.Add("profession", usr.Profession);
-            formatKeys.Add("graduatedPlace", usr.GraduatedPlace);
+            formatKeys.Add("education", education);
             formatKeys.Add("salaryFull", usr.Salary + " (" + ConvertAmount(usr.Salary) + ")");
             formatKeys.Add("salaryShort", usr.Salary.ToString());
             formatKeys.Add("vacation", usr.VacationMainDay.ToString());

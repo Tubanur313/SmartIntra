@@ -160,7 +160,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Seriyası və Nömrəsi: </label>
-                                <input type="text" class="form-control" asp-for="IdCardNumber" autocomplete="off">
+                                <input type="text" maxlength=10 class="form-control custom-date" asp-for="IdCardNumber" autocomplete="off">
                                 <span asp-validation-for="IdCardNumber" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -168,7 +168,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Verilmə Tarixi: </label>
-                                <input type="date" class="form-control" asp-for="IdCardGiveDate" autocomplete="off">
+                                <input type="text" maxlength=10 class="form-control custom-date" asp-for="IdCardGiveDate" autocomplete="off">
                                 <span asp-validation-for="IdCardGiveDate" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -205,7 +205,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Qüvvədə Olma Tarixi: </label>
-                                <input type="date" class="form-control" asp-for="IdCardExpireDate" autocomplete="off">
+                                <input type="text" maxlength=10 class="form-control custom-date" asp-for="IdCardExpireDate" autocomplete="off">
                                 <span asp-validation-for="IdCardExpireDate" class="text-danger"></span>
                             </div>
                         </div>
@@ -240,7 +240,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  İşə Başlama Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="StartWorkDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="StartWorkDate" type="text" maxlength=10 class="form-control custom-date">
                                 <span asp-validation-for="StartWorkDate" class="text-danger"></span>
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
@@ -269,7 +269,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel">  Doğum Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="Birthday" type="date" class="form-control" id="inputDate">
+                                <input asp-for="Birthday" type="text" maxlength=10 class="form-control custom-date">
                                 @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
                             </div>
                         </div>
@@ -493,12 +493,31 @@
 <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script>
-    $.validator.setDefaults({ ignore:''});
+    //$.validator.setDefaults({ ignore:''});
     $(document).ready(function () {
 
             let dateArray = [];
 
-            $(document).on("submit","form", function(e) {
+           $('.custom-date').each(function()
+            {
+                $(this).datepicker({
+                    //format: "dd.mm.yyyy"
+                })
+            })
+
+            $('#StartWorkDate').each(function()
+            {
+                $(this).datepicker({
+                    //format: "dd.mm.yyyy"
+                }).on('changeDate', function (ev) {
+                    $(this).change();
+                });
+                $(this).change(function () {
+                    getUserVacationDay();
+                });
+            })
+
+            $("form").submit( function(e) {
                 let isEmpty = false;
                 $(".experience-history").each(function(i, el){
                      if(!$(el).val())
@@ -580,17 +599,50 @@
             })
         }
 
+        function getUserVacationDay() {
+            let elemets = document.getElementsByClassName('experience-history');
+            let totalDays = 0;
+            let startWorkDate = $('#StartWorkDate').val();
+            //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1] - 1, startWorkDate.split('.')[0]);
+            startWorkDate = new Date(startWorkDate);
+            startWorkDate.setHours(0, 0, 0, 0);
+            let nowDate = new Date();
+            nowDate.setHours(0, 0, 0, 0);
+            for (let index = 0; index < elemets.length / 2; index++) {
+                let startEl = $(`.experienceStart-${index}`).val();
+                let endEl = $(`.experienceEnd-${index}`).val();
+                //let dateStart = new Date(startEl.split('.')[2], startEl.split('.')[1] - 1, startEl.split('.')[0]);
+                let dateStart = new Date(startEl);
+                //let dateEnd = new Date(endEl.split('.')[2], endEl.split('.')[1] - 1, endEl.split('.')[0]);
+                let dateEnd = new Date(endEl);
+                totalDays += Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24));
+                console.log(Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24)));
+            }
+            totalDays += Math.ceil((new Date().getTime() - startWorkDate.getTime()) / (1000 * 3600 * 24));
+            let experienceYears = totalDays / 365;
+            let vacationDay = 0;
+            if (experienceYears >= 5 && experienceYears <= 10)
+                vacationDay = 2;
+            else if (experienceYears > 10 && experienceYears <= 15)
+                vacationDay = 4;
+            else if (experienceYears > 15)
+                vacationDay = 6;
+            $('#VacationExtraExperience').val(vacationDay);
+        }
+
          function checkDate() {
             setDisableAndOld();
             let startYear;
             let valid = true;
             $(".vacation-remain").each(function (i, el) {
-                let startWorkDate = $('#inputDate').val();
-                startWorkDate = new Date(startWorkDate);
+                let startWorkDate = $('#StartWorkDate').val();
+               //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
+               startWorkDate = new Date(startWorkDate);
                 startWorkDate.setHours(0, 0, 0, 0);
                 let startWorkMonth = startWorkDate.getMonth() + 1;
                 let startWorkDay = startWorkDate.getDate();
                 let val = $(el).val();
+                //val = new Date(val.split('.')[2], val.split('.')[1]-1, val.split('.')[0]);
                 val = new Date(val);
                 val.setHours(0, 0, 0, 0);
                 let startMonth = val.getMonth() + 1;
@@ -641,13 +693,16 @@
                 let rowCount = parseInt($("#rowCount").val());
                 rowCount++;
                 $("#rowCount").val(rowCount);
-                let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
+                let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experienceStart-${rowCount - 1} experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experienceEnd-${rowCount - 1} experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
                 $('#row-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        //format: "dd.mm.yyyy"
-                    });
+                $('.input-daterange').datepicker({
+                    //format: "dd.mm.yyyy"
+                }).on('changeDate', function (ev) {
+                    $('.input-daterange').change();
+                });
+                $('.input-daterange').change(function () {
+                    getUserVacationDay();
                 });
             });
 
@@ -659,13 +714,11 @@
                 let rowCount = parseInt($("#vacCount").val());
                 rowCount++;
                 $("#vacCount").val(rowCount);
-                let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
+                let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
                 $('#vac-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        //format: "dd.mm.yyyy"
-                    });
+                $('.input-daterange').datepicker({
+                    //format: "dd.mm.yyyy"
                 });
             });
 
@@ -1006,12 +1059,12 @@
                                           prompt:'Yoxdur !',
                                      });
                                      treeD.combotree('disable')
-                                     tre.combotree('setValue', '')
+                                     treeD.combotree('setValue', '')
                                      var treeP = $('#PositionId').combotree({
                                           prompt:'Yoxdur !',
                                      });
                                      treeP.combotree('disable')
-                                     tre.combotree('setValue', '')
+                                     treeP.combotree('setValue', '')
                                     }
                              },
                             error: function (data) {
@@ -1025,7 +1078,7 @@
                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                     }
         });
-              event.preventDefault();
+              //event.preventDefault();
 
     @* }) *@
 

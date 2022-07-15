@@ -41,8 +41,9 @@ namespace SmartIntranet.Web.Controllers
         private readonly IWorkGraphicService _workGraphicService;
         private readonly IPositionService _positionService;
         private readonly ICompanyService _companyService;
+        private readonly IDepartmentService _departmentService;
 
-        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _db = db;
             _contractService = contractService;
@@ -55,6 +56,7 @@ namespace SmartIntranet.Web.Controllers
             _workGraphicService = workGraphicService;
             _positionService = positionService;
             _companyService = companyService;
+            _departmentService = departmentService;
         }
 
 
@@ -86,7 +88,7 @@ namespace SmartIntranet.Web.Controllers
                
                 if (model.Type == PersonalContractConst.VACATION)
                 {
-                    await DelVacPersonalAfterDate(model.UserId, (DateTime) model.CommandDate);
+                  
                     model.LastFullVacationDay = usr2.VacationMainDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
                         + usr2.VacationExtraChild;
                     model.LastMainVacationDay = usr2.VacationMainDay;
@@ -136,6 +138,7 @@ namespace SmartIntranet.Web.Controllers
 
                 formatKeys.Add("commandDate", result_model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", result_model.CommandNumber);
+                formatKeys.Add("contractDate", result_model.CommandDate.ToString("dd.MM.yyyy"));
 
                 if (model.Type == PersonalContractConst.SALARY)
                 {
@@ -146,6 +149,7 @@ namespace SmartIntranet.Web.Controllers
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_salary;
                     var clauseCommand = ContractFileReadyConst.personal_change_command_salary;
+                    var clauseResponsibility = ContractFileReadyConst.recruitment_financial_responsibility;
 
                     var file_extra = new PersonalContractFile();
                     file_extra.PersonalContractId = result_model.Id;
@@ -168,6 +172,17 @@ namespace SmartIntranet.Web.Controllers
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
                     file_command.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_command);
+
+                    var file_responsibility = new PersonalContractFile();
+                    file_responsibility.PersonalContractId = result_model.Id;
+                    file_responsibility.IsDeleted = false;
+
+                    var clause_result_responsibility = (await _clauseService.GetAllIncCompAsync(x => x.Key == clauseResponsibility && !x.IsDeleted))[0];
+                    file_responsibility.ClauseId = clause_result_responsibility.Id;
+                    StringBuilder content_responsibility = await GetDocxContent(clause_result_responsibility.FilePath, formatKeys);
+                    file_responsibility.FilePath = await AddContractFile(clause_result_responsibility.FilePath, PdfFormatKeys(formatKeys, content_responsibility));
+                    file_responsibility.CreatedDate = DateTime.Now;
+                    await _contractFileService.AddAsync(file_responsibility);
                 }
                 else if (model.Type== PersonalContractConst.POSITION)
                 {
@@ -179,6 +194,7 @@ namespace SmartIntranet.Web.Controllers
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_position;
                     var clauseCommand = ContractFileReadyConst.personal_change_command_position;
+                    var clauseResponsibility = ContractFileReadyConst.recruitment_financial_responsibility;
 
                     var file_extra = new PersonalContractFile();
                     file_extra.PersonalContractId = result_model.Id;
@@ -201,6 +217,17 @@ namespace SmartIntranet.Web.Controllers
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
                     file_command.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_command);
+
+                    var file_responsibility = new PersonalContractFile();
+                    file_responsibility.PersonalContractId = result_model.Id;
+                    file_responsibility.IsDeleted = false;
+
+                    var clause_result_responsibility = (await _clauseService.GetAllIncCompAsync(x => x.Key == clauseResponsibility && !x.IsDeleted))[0];
+                    file_responsibility.ClauseId = clause_result_responsibility.Id;
+                    StringBuilder content_responsibility = await GetDocxContent(clause_result_responsibility.FilePath, formatKeys);
+                    file_responsibility.FilePath = await AddContractFile(clause_result_responsibility.FilePath, PdfFormatKeys(formatKeys, content_responsibility));
+                    file_responsibility.CreatedDate = DateTime.Now;
+                    await _contractFileService.AddAsync(file_responsibility);
                 }
                 else if (model.Type == PersonalContractConst.SALARY_POSITION)
                 {
@@ -213,6 +240,7 @@ namespace SmartIntranet.Web.Controllers
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_salary_position;
                     var clauseCommand = ContractFileReadyConst.personal_change_command_salary_position;
+                    var clauseResponsibility = ContractFileReadyConst.recruitment_financial_responsibility;
 
                     var file_extra = new PersonalContractFile();
                     file_extra.PersonalContractId = result_model.Id;
@@ -235,6 +263,17 @@ namespace SmartIntranet.Web.Controllers
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
                     file_command.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_command);
+
+                    var file_responsibility = new PersonalContractFile();
+                    file_responsibility.PersonalContractId = result_model.Id;
+                    file_responsibility.IsDeleted = false;
+
+                    var clause_result_responsibility = (await _clauseService.GetAllIncCompAsync(x => x.Key == clauseResponsibility && !x.IsDeleted))[0];
+                    file_responsibility.ClauseId = clause_result_responsibility.Id;
+                    StringBuilder content_responsibility = await GetDocxContent(clause_result_responsibility.FilePath, formatKeys);
+                    file_responsibility.FilePath = await AddContractFile(clause_result_responsibility.FilePath, PdfFormatKeys(formatKeys, content_responsibility));
+                    file_responsibility.CreatedDate = DateTime.Now;
+                    await _contractFileService.AddAsync(file_responsibility);
                 }
                 else if (model.Type == PersonalContractConst.WORK_PLACE)
                 {
@@ -306,15 +345,15 @@ namespace SmartIntranet.Web.Controllers
                         decimal new_count = 0;
                         DateTime start_interval;
                         DateTime end_interval;
-                        if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                        if (((DateTime)model.CommandDate).Month > work_start_date.Month || (((DateTime)model.CommandDate).Month == work_start_date.Month && ((DateTime)model.CommandDate).Day >= work_start_date.Day))
                         {
-                            start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(((DateTime)model.CommandDate).Year, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(((DateTime)model.CommandDate).Year + 1, work_start_date.Month, work_start_date.Day);
                         }
                         else
                         {
-                            start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(((DateTime)model.CommandDate).Year - 1, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(((DateTime)model.CommandDate).Year, work_start_date.Month, work_start_date.Day);
                         }
 
                         if (model.CommandDate>= start_interval && model.CommandDate <= end_interval)
@@ -369,6 +408,14 @@ namespace SmartIntranet.Web.Controllers
                             result_remain_model.VacationCount = new_count;
                             result_remain_model.RemainCount = result_remain_model.VacationCount - result_remain_model.UsedCount;
                             await _userVacationRemains.UpdateAsync(result_remain_model);
+
+                            usr2.VacationTotal = 0;
+                            var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == usr2.Id && !x.IsDeleted);
+                            foreach (var itm in all_remains)
+                            {
+                                usr2.VacationTotal += itm.RemainCount;
+                            }
+                            await _userManager.UpdateAsync(usr2);
                         }
 
                     }
@@ -406,6 +453,8 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == id && !x.IsDeleted);
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
+            ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(
+                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == usr.CompanyId));
             return View(listModel);
         }
 
@@ -428,7 +477,6 @@ namespace SmartIntranet.Web.Controllers
 
                 if (model.Type == PersonalContractConst.VACATION)
                 {
-                    await DelVacPersonalAfterDate(model.UserId, (DateTime)model.CommandDate);
                     if (model.IsMainVacation)
                     {
                         model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
@@ -473,6 +521,7 @@ namespace SmartIntranet.Web.Controllers
 
                 formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", model.CommandNumber);
+                formatKeys.Add("contractDate", model.CommandDate.ToString("dd.MM.yyyy"));
 
                 if (model.Type == PersonalContractConst.SALARY)
                 {
@@ -548,15 +597,15 @@ namespace SmartIntranet.Web.Controllers
                         decimal new_count = 0;
                         DateTime start_interval;
                         DateTime end_interval;
-                        if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                        if (model.CommandDate.Month > work_start_date.Month || (model.CommandDate.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
                         {
-                            start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(model.CommandDate.Year, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(model.CommandDate.Year + 1, work_start_date.Month, work_start_date.Day);
                         }
                         else
                         {
-                            start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(model.CommandDate.Year - 1, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(model.CommandDate.Year, work_start_date.Month, work_start_date.Day);
                         }
 
                         if (model.CommandDate >= start_interval && model.CommandDate <= end_interval)
@@ -611,6 +660,13 @@ namespace SmartIntranet.Web.Controllers
                             result_remain_model.VacationCount = new_count;
                             result_remain_model.RemainCount = result_remain_model.VacationCount - result_remain_model.UsedCount;
                             await _userVacationRemains.UpdateAsync(result_remain_model);
+
+                            usr2.VacationTotal = 0;
+                            var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == usr2.Id && !x.IsDeleted);
+                            foreach (var itm in all_remains) {
+                                usr2.VacationTotal += itm.RemainCount;
+                            }
+                            await _userManager.UpdateAsync(usr2);
                         }
 
                     }
@@ -638,7 +694,6 @@ namespace SmartIntranet.Web.Controllers
         
             if (transactionModel.Type == "VACATION")
             {
-                await DelVacPersonalAfterDate(transactionModel.UserId, transactionModel.CommandDate);
                 var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
 
                 usr2.VacationMainDay = (int)transactionModel.LastMainVacationDay;
@@ -675,15 +730,15 @@ namespace SmartIntranet.Web.Controllers
                     decimal new_count = 0;
                     DateTime start_interval;
                     DateTime end_interval;
-                    if (DateTime.Now.Month > work_start_date.Month || (DateTime.Now.Month == work_start_date.Month && DateTime.Now.Day >= work_start_date.Day))
+                    if (((DateTime)transactionModel.CommandDate).Month > work_start_date.Month || (((DateTime)transactionModel.CommandDate).Month == work_start_date.Month && ((DateTime)transactionModel.CommandDate).Day >= work_start_date.Day))
                     {
-                        start_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year + 1, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(((DateTime)transactionModel.CommandDate).Year, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(((DateTime)transactionModel.CommandDate).Year + 1, work_start_date.Month, work_start_date.Day);
                     }
                     else
                     {
-                        start_interval = new DateTime(DateTime.Now.Year - 1, work_start_date.Month, work_start_date.Day);
-                        end_interval = new DateTime(DateTime.Now.Year, work_start_date.Month, work_start_date.Day);
+                        start_interval = new DateTime(((DateTime)transactionModel.CommandDate).Year - 1, work_start_date.Month, work_start_date.Day);
+                        end_interval = new DateTime(((DateTime)transactionModel.CommandDate).Year, work_start_date.Month, work_start_date.Day);
                     }
 
                     if (transactionModel.CommandDate >= start_interval && transactionModel.CommandDate <= end_interval)
@@ -738,6 +793,14 @@ namespace SmartIntranet.Web.Controllers
                         result_remain_model.VacationCount = new_count;
                         result_remain_model.RemainCount = result_remain_model.VacationCount - result_remain_model.UsedCount;
                         await _userVacationRemains.UpdateAsync(result_remain_model);
+
+                        usr2.VacationTotal = 0;
+                        var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == usr2.Id && !x.IsDeleted);
+                        foreach (var itm in all_remains)
+                        {
+                            usr2.VacationTotal += itm.RemainCount;
+                        }
+                        await _userManager.UpdateAsync(usr2);
                     }
                 }
             }
@@ -753,98 +816,6 @@ namespace SmartIntranet.Web.Controllers
             return Ok();
         }
 
-        public async Task DelVacPersonalAfterDate(int userId, DateTime commandDate)
-        {
-            var current = GetSignInUserId();
-
-            var usr2 = await _userManager.FindByIdAsync(userId.ToString());
-
-                var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate > commandDate).Result.OrderBy(x => x.CommandDate).ToList();
-
-                if (personal_contract_chgs.Count() > 0)
-                {
-                    usr2.VacationMainDay = (int)personal_contract_chgs[0].LastMainVacationDay;
-                if (!personal_contract_chgs[0].IsMainVacation)
-                {
-                    var diff = (int)personal_contract_chgs[0].NewFullVacationDay - (int)personal_contract_chgs[0].LastFullVacationDay;
-                    if (personal_contract_chgs[0].VacationExtraType == 0)
-                    {
-                        usr2.VacationExtraExperience = (int)personal_contract_chgs[0].VacationDay - diff;
-                    }
-                    else if (personal_contract_chgs[0].VacationExtraType == 1)
-                    {
-                        usr2.VacationExtraNature = (int)personal_contract_chgs[0].VacationDay - diff;
-                    }
-                    else if (personal_contract_chgs[0].VacationExtraType == 2)
-                    {
-                        usr2.VacationExtraChild = (int)personal_contract_chgs[0].VacationDay - diff;
-                    }
-                }
-                   
-
-                    await _userManager.UpdateAsync(usr2);
-                }
-
-                foreach (var el in personal_contract_chgs)
-                {
-                    var el_del = _contractService.FindByIdAsync(el.Id).Result;
-                    el_del.DeleteDate = DateTime.Now.AddHours(4);
-                    el_del.DeleteByUserId = current;
-                    el_del.IsDeleted = true;
-                    await _contractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
-                }
-
-                var del_list = _vacationContractService.GetAllIncCompAsync(x => x.CommandDate > commandDate).Result;
-                decimal day_count = 0;
-                foreach (var el in del_list)
-                {
-                    if (el.VacationType.Key == VacationTypeConst.LABOR)
-                    {
-                        day_count += el.CalendarDay;
-                    }
-                    el.DeleteDate = DateTime.Now.AddHours(4);
-                    el.DeleteByUserId = current;
-                    el.IsDeleted = true;
-                    await _vacationContractService.UpdateAsync(_map.Map<VacationContract>(el));
-                }
-
-                var remain_list = _userVacationRemains.GetAllIncCompAsync(x => x.AppUserId == usr2.Id && !x.IsDeleted).Result.OrderBy(x => x.FromDate);
-
-                int i = 0;
-                foreach (var el in remain_list)
-                {
-                    if (i == 0)
-                    {
-                        el.VacationCount = usr2.VacationExtraChild + usr2.VacationExtraExperience + usr2.VacationExtraNature + usr2.VacationMainDay;
-                        el.RemainCount = el.VacationCount - el.UsedCount;
-                    }
-
-                    if (day_count >= el.UsedCount)
-                    {
-                        day_count -= el.UsedCount;
-                        el.RemainCount += el.UsedCount;
-                        el.UsedCount = 0;
-                        await _userVacationRemains.UpdateAsync(el);
-                    }
-                    else
-                    {
-
-                        el.UsedCount -= day_count;
-                        el.RemainCount += day_count;
-                        await _userVacationRemains.UpdateAsync(el);
-                        day_count = 0;
-                    }
-
-                    if (day_count == 0)
-                    {
-                        break;
-                    }
-                    i++;
-                }
-
-            
-
-        }
-
+       
     }
 }

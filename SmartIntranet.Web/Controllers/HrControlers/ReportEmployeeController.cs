@@ -397,7 +397,7 @@ namespace SmartIntranet.Web.Controllers
                                 default_count = 0;
                             }
 
-                            var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.ToDate >= day).Result.Count();
+                            var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result.Count();
                             if (vacDay > 0)
                             {
                                 di.Type = ReportDayType.VACATION;

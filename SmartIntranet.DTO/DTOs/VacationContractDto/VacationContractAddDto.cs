@@ -14,8 +14,6 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public DateTime ToDate { get; set; }
         public int CalendarDay { get; set; }
         public DateTime NextWorkDate { get; set; }
-        public DateTime? FromWorkYearDate { get; set; }
-        public DateTime? ToWorkYearDate { get; set; }
         public string CommandNumber { get; set; }
         public DateTime CommandDate { get; set; }
         public int UserId { get; set; }
@@ -29,5 +27,6 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public DateTime UpdateDate { get; set; }
         public int? DeleteByUserId { get; set; }
         public DateTime? DeleteDate { get; set; }
+        public virtual List<VacationContractDate> VacationContractDates { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
-    public partial class CreateDb : Migration
+    public partial class AddAllMig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -617,6 +617,81 @@ namespace SmartIntranet.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BusinessTravels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreatedByUserId = table.Column<int>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    UpdateByUserId = table.Column<int>(nullable: true),
+                    UpdateDate = table.Column<DateTime>(nullable: true),
+                    DeleteByUserId = table.Column<int>(nullable: true),
+                    DeleteDate = table.Column<DateTime>(nullable: true),
+                    Transport = table.Column<bool>(nullable: false),
+                    Accommodation = table.Column<bool>(nullable: false),
+                    Staylength = table.Column<int>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    TicketId = table.Column<int>(nullable: false),
+                    PlaceId = table.Column<int>(nullable: false),
+                    CauseId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessTravels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BusinessTravels_Causes_CauseId",
+                        column: x => x.CauseId,
+                        principalTable: "Causes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BusinessTravels_Places_PlaceId",
+                        column: x => x.PlaceId,
+                        principalTable: "Places",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BusinessTravels_Tickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "Tickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreatedByUserId = table.Column<int>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    UpdateByUserId = table.Column<int>(nullable: true),
+                    UpdateDate = table.Column<DateTime>(nullable: true),
+                    DeleteByUserId = table.Column<int>(nullable: true),
+                    DeleteDate = table.Column<DateTime>(nullable: true),
+                    Reason = table.Column<string>(type: "ntext", nullable: false),
+                    PermissionCreateDate = table.Column<DateTime>(nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    TicketId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Permissions_Tickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "Tickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Photos",
                 columns: table => new
                 {
@@ -705,6 +780,37 @@ namespace SmartIntranet.DataAccess.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TicketOrders_Tickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "Tickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VacationLeaves",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    CreatedByUserId = table.Column<int>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    UpdateByUserId = table.Column<int>(nullable: true),
+                    UpdateDate = table.Column<DateTime>(nullable: true),
+                    DeleteByUserId = table.Column<int>(nullable: true),
+                    DeleteDate = table.Column<DateTime>(nullable: true),
+                    VacationKind = table.Column<byte>(nullable: false),
+                    Vacationlength = table.Column<int>(nullable: false),
+                    VacationCreateDate = table.Column<DateTime>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    TicketId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VacationLeaves", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VacationLeaves_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
@@ -1113,7 +1219,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     Salary = table.Column<string>(maxLength: 100, nullable: false),
                     Occupations = table.Column<string>(maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(maxLength: 300, nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 6, 29, 10, 2, 5, 492, DateTimeKind.Utc).AddTicks(3033)),
+                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 7, 9, 9, 51, 52, 568, DateTimeKind.Local).AddTicks(8760)),
                     EndDate = table.Column<DateTime>(nullable: false),
                     City = table.Column<string>(maxLength: 100, nullable: true),
                     Address = table.Column<string>(maxLength: 200, nullable: true),
@@ -1182,7 +1288,8 @@ namespace SmartIntranet.DataAccess.Migrations
                     UpdateDate = table.Column<DateTime>(nullable: true),
                     DeleteByUserId = table.Column<int>(nullable: true),
                     DeleteDate = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    VacationTotal = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1830,6 +1937,22 @@ namespace SmartIntranet.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_BusinessTravels_CauseId",
+                table: "BusinessTravels",
+                column: "CauseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessTravels_PlaceId",
+                table: "BusinessTravels",
+                column: "PlaceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessTravels_TicketId",
+                table: "BusinessTravels",
+                column: "TicketId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BusinessTripFiles_BusinessTripId",
                 table: "BusinessTripFiles",
                 column: "BusinessTripId");
@@ -1984,6 +2107,12 @@ namespace SmartIntranet.DataAccess.Migrations
                 name: "IX_NonWorkingDays_NonWorkingYearId",
                 table: "NonWorkingDays",
                 column: "NonWorkingYearId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Permissions_TicketId",
+                table: "Permissions",
+                column: "TicketId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonalContractFiles_ClauseId",
@@ -2164,6 +2293,12 @@ namespace SmartIntranet.DataAccess.Migrations
                 name: "IX_VacationContracts_VacationTypeId",
                 table: "VacationContracts",
                 column: "VacationTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VacationLeaves_TicketId",
+                table: "VacationLeaves",
+                column: "TicketId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Watchers_IntranetUserId",
@@ -2442,6 +2577,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 table: "Companies");
 
             migrationBuilder.DropTable(
+                name: "BusinessTravels");
+
+            migrationBuilder.DropTable(
                 name: "BusinessTripFiles");
 
             migrationBuilder.DropTable(
@@ -2449,9 +2587,6 @@ namespace SmartIntranet.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "CategoryNews");
-
-            migrationBuilder.DropTable(
-                name: "Causes");
 
             migrationBuilder.DropTable(
                 name: "ConfirmTicketUsers");
@@ -2473,6 +2608,9 @@ namespace SmartIntranet.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "NonWorkingDays");
+
+            migrationBuilder.DropTable(
+                name: "Permissions");
 
             migrationBuilder.DropTable(
                 name: "PersonalContractFiles");
@@ -2517,6 +2655,9 @@ namespace SmartIntranet.DataAccess.Migrations
                 name: "VacationContractFiles");
 
             migrationBuilder.DropTable(
+                name: "VacationLeaves");
+
+            migrationBuilder.DropTable(
                 name: "Watchers");
 
             migrationBuilder.DropTable(
@@ -2541,6 +2682,9 @@ namespace SmartIntranet.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "UserTokens",
                 schema: "Membership");
+
+            migrationBuilder.DropTable(
+                name: "Causes");
 
             migrationBuilder.DropTable(
                 name: "BusinessTrips");

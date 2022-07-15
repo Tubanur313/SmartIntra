@@ -17,7 +17,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //Xadica's local connection string
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranetSmart2;Trusted_Connection=False;MultipleActiveResultSets=true"); 
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranetSmart2;Trusted_Connection=False;MultipleActiveResultSets=true"); 
 
             //optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet4;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
 
@@ -99,6 +99,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<TerminationContractFile> TerminationContractFiles { get; set; }
         public DbSet<VacationType> VacationTypes { get; set; }
         public DbSet<VacationContract> VacationContracts { get; set; }
+        public DbSet<VacationContractDate> VacationContractDates { get; set; }
         public DbSet<VacationContractFile> VacationContractFiles { get; set; }
         public DbSet<BusinessTrip> BusinessTrips { get; set; }
         public DbSet<BusinessTripUser> BusinessTripUsers { get; set; }
