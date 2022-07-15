@@ -41,8 +41,9 @@ namespace SmartIntranet.Web.Controllers
         private readonly IWorkGraphicService _workGraphicService;
         private readonly IPositionService _positionService;
         private readonly ICompanyService _companyService;
+        private readonly IDepartmentService _departmentService;
 
-        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _db = db;
             _contractService = contractService;
@@ -55,6 +56,7 @@ namespace SmartIntranet.Web.Controllers
             _workGraphicService = workGraphicService;
             _positionService = positionService;
             _companyService = companyService;
+            _departmentService = departmentService;
         }
 
 
@@ -136,6 +138,7 @@ namespace SmartIntranet.Web.Controllers
 
                 formatKeys.Add("commandDate", result_model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", result_model.CommandNumber);
+                formatKeys.Add("contractDate", result_model.CommandDate.ToString("dd.MM.yyyy"));
 
                 if (model.Type == PersonalContractConst.SALARY)
                 {
@@ -146,6 +149,7 @@ namespace SmartIntranet.Web.Controllers
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_salary;
                     var clauseCommand = ContractFileReadyConst.personal_change_command_salary;
+                    var clauseResponsibility = ContractFileReadyConst.recruitment_financial_responsibility;
 
                     var file_extra = new PersonalContractFile();
                     file_extra.PersonalContractId = result_model.Id;
@@ -168,6 +172,17 @@ namespace SmartIntranet.Web.Controllers
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
                     file_command.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_command);
+
+                    var file_responsibility = new PersonalContractFile();
+                    file_responsibility.PersonalContractId = result_model.Id;
+                    file_responsibility.IsDeleted = false;
+
+                    var clause_result_responsibility = (await _clauseService.GetAllIncCompAsync(x => x.Key == clauseResponsibility && !x.IsDeleted))[0];
+                    file_responsibility.ClauseId = clause_result_responsibility.Id;
+                    StringBuilder content_responsibility = await GetDocxContent(clause_result_responsibility.FilePath, formatKeys);
+                    file_responsibility.FilePath = await AddContractFile(clause_result_responsibility.FilePath, PdfFormatKeys(formatKeys, content_responsibility));
+                    file_responsibility.CreatedDate = DateTime.Now;
+                    await _contractFileService.AddAsync(file_responsibility);
                 }
                 else if (model.Type== PersonalContractConst.POSITION)
                 {
@@ -179,6 +194,7 @@ namespace SmartIntranet.Web.Controllers
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_position;
                     var clauseCommand = ContractFileReadyConst.personal_change_command_position;
+                    var clauseResponsibility = ContractFileReadyConst.recruitment_financial_responsibility;
 
                     var file_extra = new PersonalContractFile();
                     file_extra.PersonalContractId = result_model.Id;
@@ -201,6 +217,17 @@ namespace SmartIntranet.Web.Controllers
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
                     file_command.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_command);
+
+                    var file_responsibility = new PersonalContractFile();
+                    file_responsibility.PersonalContractId = result_model.Id;
+                    file_responsibility.IsDeleted = false;
+
+                    var clause_result_responsibility = (await _clauseService.GetAllIncCompAsync(x => x.Key == clauseResponsibility && !x.IsDeleted))[0];
+                    file_responsibility.ClauseId = clause_result_responsibility.Id;
+                    StringBuilder content_responsibility = await GetDocxContent(clause_result_responsibility.FilePath, formatKeys);
+                    file_responsibility.FilePath = await AddContractFile(clause_result_responsibility.FilePath, PdfFormatKeys(formatKeys, content_responsibility));
+                    file_responsibility.CreatedDate = DateTime.Now;
+                    await _contractFileService.AddAsync(file_responsibility);
                 }
                 else if (model.Type == PersonalContractConst.SALARY_POSITION)
                 {
@@ -213,6 +240,7 @@ namespace SmartIntranet.Web.Controllers
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_salary_position;
                     var clauseCommand = ContractFileReadyConst.personal_change_command_salary_position;
+                    var clauseResponsibility = ContractFileReadyConst.recruitment_financial_responsibility;
 
                     var file_extra = new PersonalContractFile();
                     file_extra.PersonalContractId = result_model.Id;
@@ -235,6 +263,17 @@ namespace SmartIntranet.Web.Controllers
                     file_command.FilePath = await AddContractFile(clause_result_command.FilePath, PdfFormatKeys(formatKeys, content_command));
                     file_command.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_command);
+
+                    var file_responsibility = new PersonalContractFile();
+                    file_responsibility.PersonalContractId = result_model.Id;
+                    file_responsibility.IsDeleted = false;
+
+                    var clause_result_responsibility = (await _clauseService.GetAllIncCompAsync(x => x.Key == clauseResponsibility && !x.IsDeleted))[0];
+                    file_responsibility.ClauseId = clause_result_responsibility.Id;
+                    StringBuilder content_responsibility = await GetDocxContent(clause_result_responsibility.FilePath, formatKeys);
+                    file_responsibility.FilePath = await AddContractFile(clause_result_responsibility.FilePath, PdfFormatKeys(formatKeys, content_responsibility));
+                    file_responsibility.CreatedDate = DateTime.Now;
+                    await _contractFileService.AddAsync(file_responsibility);
                 }
                 else if (model.Type == PersonalContractConst.WORK_PLACE)
                 {
@@ -414,6 +453,8 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == id && !x.IsDeleted);
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
+            ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(
+                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == usr.CompanyId));
             return View(listModel);
         }
 
@@ -480,6 +521,7 @@ namespace SmartIntranet.Web.Controllers
 
                 formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
                 formatKeys.Add("commandNumber", model.CommandNumber);
+                formatKeys.Add("contractDate", model.CommandDate.ToString("dd.MM.yyyy"));
 
                 if (model.Type == PersonalContractConst.SALARY)
                 {

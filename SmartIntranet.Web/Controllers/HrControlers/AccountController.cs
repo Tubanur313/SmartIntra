@@ -456,6 +456,28 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetPositionWithDepartment(int departmentId)
+        {
+            var position = _map.Map<ICollection<PositionListDto>>(
+                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == departmentId))
+                 .Select(x => new { x.Id, x.Name });
+
+            return Ok(position);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetDepartmentWithCompany(int companyId)
+        {
+            var department = _map.Map<ICollection<DepartmentListDto>>(
+                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
+                 .Select(x => new { x.Id, x.Name });
+
+            return Ok(department);
+        }
+
+        [HttpGet]
         [Authorize(Policy = "account.update")]
         public async Task<IActionResult> Update(int id)
         {
