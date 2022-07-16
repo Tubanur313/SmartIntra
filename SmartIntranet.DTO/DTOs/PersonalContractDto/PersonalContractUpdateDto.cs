@@ -13,6 +13,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public DateTime CommandDate { get; set; }
         public string Type { get; set; }
         public int? PositionId { get; set; }
+        public int? DepartmentId { get; set; }
         public double? Salary { get; set; }
         public int UserId { get; set; }
         public int? WorkGraphicId { get; set; }

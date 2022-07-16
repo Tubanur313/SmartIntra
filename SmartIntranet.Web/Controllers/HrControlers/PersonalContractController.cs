@@ -188,6 +188,7 @@ namespace SmartIntranet.Web.Controllers
                 {
                     formatKeys.Add("oldPosition", usr.Position.Name);
                     usr2.PositionId = result_model.PositionId;
+                    usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
                     usr = await _userService.FindByUserAllInc(model.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
@@ -234,6 +235,7 @@ namespace SmartIntranet.Web.Controllers
                     formatKeys.Add("oldPosition", usr.Position.Name);
                     usr2.Salary = (double)result_model.Salary;
                     usr2.PositionId = result_model.PositionId;
+                    usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
                     usr = await _userService.FindByUserAllInc(model.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
@@ -441,6 +443,8 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var listModel = _map.Map<PersonalContractUpdateDto>(await _contractService.FindByIdAsync(id));
+            var position = await _positionService.FindByIdAsync((int)listModel.PositionId);
+            listModel.DepartmentId = position.DepartmentId;
             if (listModel == null)
             {
                 return NotFound();
@@ -448,7 +452,7 @@ namespace SmartIntranet.Web.Controllers
             var usr = await _userManager.FindByIdAsync(listModel.UserId.ToString());
             ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
             ViewBag.company = await _companyService.FindByIdAsync((int)usr.CompanyId);
-            ViewBag.positions = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId));
+            ViewBag.positions = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == listModel.DepartmentId));
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == id && !x.IsDeleted);
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
@@ -534,6 +538,7 @@ namespace SmartIntranet.Web.Controllers
                 {
                     formatKeys.Add("oldPosition", usr.Position.Name);
                     usr2.PositionId = model.PositionId;
+                    usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
                     usr = await _userService.FindByUserAllInc(model.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
@@ -543,6 +548,7 @@ namespace SmartIntranet.Web.Controllers
                     formatKeys.Add("oldPosition", usr.Position.Name);
                     usr2.Salary = (double)model.Salary;
                     usr2.PositionId = model.PositionId;
+                    usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
                     usr = await _userService.FindByUserAllInc(model.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
