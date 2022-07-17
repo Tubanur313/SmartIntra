@@ -153,7 +153,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "longContract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<LongContractListDto>(await _contractService.FindByIdAsync(id));
@@ -161,10 +161,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<LongContract>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

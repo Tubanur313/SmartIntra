@@ -29,9 +29,16 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "nonworkingyear.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            return View(_map.Map<ICollection<NonWorkingYearListDto>>(await _nonWorkingYearService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            var model = _map.Map<ICollection<NonWorkingYearListDto>>(await _nonWorkingYearService.GetAllIncCompAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<NonWorkingYearListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<NonWorkingYearListDto>());
         }
 
         [HttpGet]
@@ -113,7 +120,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "nonworkingyear.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<NonWorkingYearListDto>(await _nonWorkingYearService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -121,7 +128,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(transactionModel));
-            return Ok();
         }
     }
 }

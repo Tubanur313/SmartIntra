@@ -37,7 +37,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "workcalendar.list")]
-        public async Task<IActionResult> List(int id, int year_id)
+        public async Task<IActionResult> List(int id, int year_id, string success, string error)
         {
             var model = new List<WorkCalendarListView>();
             ViewBag.id = id;
@@ -112,7 +112,13 @@ namespace SmartIntranet.Web.Controllers
                 }
                 model.Add(item);
             }
-            return View(model);
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<WorkCalendarListView>>(model).ToList());
+            }
+            return View(new List<WorkCalendarListView>());
         }
 
         [HttpGet]
@@ -180,7 +186,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "workcalendar.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<WorkCalendarListDto>(await _workCalendarService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -188,10 +194,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

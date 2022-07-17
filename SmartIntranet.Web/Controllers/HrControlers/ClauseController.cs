@@ -35,10 +35,14 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            TempData["success"] = success;
-            TempData["error"] = error;
-            IEnumerable<ClauseListDto> data = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
-            return View(data);
+            var model = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<ClauseListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<ClauseListDto>());
         }
 
         [HttpGet]
@@ -125,7 +129,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "clause.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<ClauseListDto>(await _clauseService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -134,7 +138,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.IsDeleted = true;
             DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);
             await _clauseService.UpdateAsync(_map.Map<Clause>(transactionModel));
-            return Ok();
         }
     }
 }

@@ -32,11 +32,18 @@ namespace SmartIntranet.Web.Controllers
             _nonWorkingYearService = nonWorkingYearService;
         }
         [Authorize(Policy = "nonworkingday.list")]
-        public async Task<IActionResult> List(int id)
+        public async Task<IActionResult> List(int id, string success, string error)
         {
             if (id == 0 || (await _nonWorkingYearService.FindByIdAsync(id) == null)) return RedirectToAction("List", "NonWorkingYear");
             _nonWorkingYearId = id;
-            IEnumerable<NonWorkingDayListDto> data = _map.Map<ICollection<NonWorkingDayListDto>>(await _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted && x.NonWorkingYearId == id)).Select(x =>
+
+            var model = _map.Map<ICollection<NonWorkingDayListDto>>(await _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted && x.NonWorkingYearId == id));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<NonWorkingDayListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                    .Select(x =>
                 new NonWorkingDayListDto()
                 {
                     Name = x.Name,
@@ -46,9 +53,9 @@ namespace SmartIntranet.Web.Controllers
                     IsDeleted = x.IsDeleted,
                     Type = GetTypeNameByKey(x.Type),
                     DeleteByUserId = x.DeleteByUserId
-                });
-
-            return View(data);
+                }).ToList());
+            }
+            return View(new List<NonWorkingDayListDto>());
         }
 
         [HttpGet]
@@ -88,7 +95,7 @@ namespace SmartIntranet.Web.Controllers
                 model.CreatedDate = DateTime.Now;
                 model.IsDeleted = false;
                 model.NonWorkingYearId = _nonWorkingYearId;
-                
+
                 await _nonWorkingDayService.AddAsync(_map.Map<NonWorkingDay>(model));
                 return RedirectToAction("List", new { id = _nonWorkingYearId });
             }
@@ -99,7 +106,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Update(int id)
         {
             ViewBag.DayTypes = GetDayTypes();
-         
+
             var listModel = _map.Map<NonWorkingDayUpdateDto>(await _nonWorkingDayService.FindByIdAsync(id));
             if (listModel == null)
             {
@@ -122,7 +129,7 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 var current = GetSignInUserId();
-                
+
                 model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
 
@@ -132,7 +139,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "nonworkingday.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<NonWorkingDayListDto>(await _nonWorkingDayService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -140,7 +147,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _nonWorkingDayService.UpdateAsync(_map.Map<NonWorkingDay>(transactionModel));
-            return Ok();
         }
 
         public List<DayType> GetDayTypes()

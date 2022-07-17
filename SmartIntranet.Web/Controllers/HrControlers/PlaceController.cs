@@ -30,19 +30,26 @@ namespace SmartIntranet.Web.Controllers
             _placeService = placeService;
         }
         [Authorize(Policy = "place.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            IEnumerable<PlaceListDto> data = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList().Select(x =>
-            new PlaceListDto()
+            var model = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
+            if (model.Any())
             {
-                Id = x.Id,
-                Name = x.Name,
-                Amount = x.Amount,
-                Currency = GetCurrencyNameByKey(x.Currency),
-                IsDeleted = x.IsDeleted,
-                DeleteByUserId = x.DeleteByUserId
-            });
-            return View(data);
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<PlaceListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                    .Select(x =>
+                        new PlaceListDto()
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Amount = x.Amount,
+                            Currency = GetCurrencyNameByKey(x.Currency),
+                            IsDeleted = x.IsDeleted,
+                            DeleteByUserId = x.DeleteByUserId
+                        }).ToList());
+            }
+            return View(new List<PlaceListDto>());
         }
 
         [HttpGet]
@@ -115,7 +122,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "place.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<PlaceListDto>(await _placeService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -123,7 +130,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _placeService.UpdateAsync(_map.Map<Place>(transactionModel));
-            return Ok();
         }
 
         public List<Currency> GetCurrencies()

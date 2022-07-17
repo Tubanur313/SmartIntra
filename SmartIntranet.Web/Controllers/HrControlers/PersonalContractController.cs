@@ -693,7 +693,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "personalContract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _contractService.FindByIdAsync(id).Result;
             var current = GetSignInUserId();
@@ -718,16 +718,14 @@ namespace SmartIntranet.Web.Controllers
                     {
                         usr2.VacationExtraChild = (int)transactionModel.VacationDay - diff;
                     }
-
                 }
 
                 await _userManager.UpdateAsync(usr2);
 
-                transactionModel.DeleteDate = DateTime.Now.AddHours(4);
+                transactionModel.DeleteDate = DateTime.Now;
                 transactionModel.DeleteByUserId = current;
                 transactionModel.IsDeleted = true;
                 await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
-
 
                 DateTime work_start_date = usr2.StartWorkDate;
 
@@ -764,9 +762,7 @@ namespace SmartIntranet.Web.Controllers
                             ur.RemainCount = ur.VacationCount;
 
                             result_remain_model = await _userVacationRemains.AddReturnEntityAsync(ur);
-
                         }
-
 
                         var personal_contract_chgs = _contractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == PersonalContractConst.VACATION && x.CommandDate >= start_interval && x.CommandDate <= end_interval && x.IsMainVacation).Result;
                         if (personal_contract_chgs.Count() > 0)
@@ -816,12 +812,7 @@ namespace SmartIntranet.Web.Controllers
                 transactionModel.DeleteByUserId = current;
                 transactionModel.IsDeleted = true;
                 await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
-
             }
-        
-            return Ok();
         }
-
-       
     }
 }

@@ -34,10 +34,16 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "workgraphic.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-
-            return View(_map.Map<ICollection<WorkGraphicListDto>>(await _workGraphicService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            var model = _map.Map<ICollection<WorkGraphicListDto>>(await _workGraphicService.GetAllIncCompAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<WorkGraphicListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<WorkGraphicListDto>());
         }
 
         [HttpGet]
@@ -114,7 +120,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "workgraphic.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<WorkGraphicListDto>(await _workGraphicService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -122,10 +128,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

@@ -32,10 +32,16 @@ namespace SmartIntranet.Web.Controllers
             _terminationService = terminationService;
         }
         [Authorize(Policy = "terminationItem.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            IEnumerable<TerminationItemListDto> data = _map.Map<ICollection<TerminationItemListDto>>(await _terminationService.GetAllIncCompAsync(x => !x.IsDeleted));
-            return View(data);
+            var model = _map.Map<ICollection<TerminationItemListDto>>(await _terminationService.GetAllIncCompAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<TerminationItemListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<TerminationItemListDto>());
         }
 
         [HttpGet]
@@ -103,7 +109,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "terminationItem.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<TerminationItemListDto>(await _terminationService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -111,7 +117,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _terminationService.UpdateAsync(_map.Map<TerminationItem>(transactionModel));
-            return Ok();
         }
     }
 }

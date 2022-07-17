@@ -213,7 +213,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "businessTrip.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<BusinessTripListDto>(await _businessTripService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -221,7 +221,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _businessTripService.UpdateAsync(_map.Map<BusinessTrip>(transactionModel));
-            return Ok();
         }
     }
 }

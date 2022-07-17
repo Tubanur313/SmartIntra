@@ -160,9 +160,16 @@ namespace SmartIntranet.Web.Controllers
 
         [HttpGet]
         [Authorize(Policy = "account.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            return View(_map.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            var model = _map.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
+            if(model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<AppUserListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<AppUserListDto>());
         }
 
         [HttpGet]
@@ -763,7 +770,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "account.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var current = GetSignInUserId();
             var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == id);
@@ -771,8 +778,6 @@ namespace SmartIntranet.Web.Controllers
             updateUser.DeleteByUserId = current;
             updateUser.DeleteDate = DateTime.Now;
             await _userManager.UpdateAsync(updateUser);
-            return Ok();
-
         }
 
         [Authorize(Policy = "account.deleteUserContract")]

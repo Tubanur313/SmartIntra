@@ -63,8 +63,6 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "contract.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            TempData["success"] = success;
-            TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var contracts = _map.Map<List<ContractListDto>>(await _contractService.GetAllIncCompAsync(x => !x.IsDeleted));
@@ -133,8 +131,13 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
-            return View(result_list);
+            if (result_list.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<ContractListDto>());
         }
 
         [HttpGet]
@@ -380,7 +383,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "contract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = await _contractService.FindByIdAsync(id);
             var current = GetSignInUserId();
@@ -388,10 +391,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<Contract>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

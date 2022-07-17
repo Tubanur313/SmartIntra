@@ -577,7 +577,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "vacationContract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<VacationContractListDto>(await _contractService.FindByIdAsync(id));
@@ -585,7 +585,6 @@ namespace SmartIntranet.Web.Controllers
          
             if (vacation_type.Key == VacationTypeConst.LABOR)
             {
-
                 var dates = _db.VacationContractDates.Where(x => !x.IsDeleted && x.VacationId == id).ToList();
                 var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == transactionModel.UserId);
 
@@ -601,18 +600,13 @@ namespace SmartIntranet.Web.Controllers
                 }
                 updateUser.VacationTotal += transactionModel.CalendarDay;
                 await _userManager.UpdateAsync(updateUser);
-
             }
 
-            transactionModel.DeleteDate = DateTime.Now.AddHours(4);
+            transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<VacationContract>(transactionModel));
-
-            return Ok();
-
         }
-
 
         public void SetDefaultVacRemain(IntranetUser usr)
         {
