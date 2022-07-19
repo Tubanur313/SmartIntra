@@ -105,7 +105,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                         {
                             NewsFileAddDto file = new NewsFileAddDto()
                             {
-                                Name = _upload.UploadResizedImg(upload, "wwwroot/news/"),
+                                Name = await _upload.UploadResizedImg(upload, "wwwroot/news/"),
                                 NewsId = result.Id,
                             };
                             await _newsfileService.AddAsync(_map.Map<NewsFile>(file));
@@ -198,7 +198,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                         {
                             NewsFileAddDto file = new NewsFileAddDto()
                             {
-                                Name = _upload.UploadResizedImg(upload, "wwwroot/news/"),
+                                Name = await _upload.UploadResizedImg(upload, "wwwroot/news/"),
                                 NewsId = result.Id
                             };
                             await _newsfileService.AddAsync(_map.Map<NewsFile>(file));

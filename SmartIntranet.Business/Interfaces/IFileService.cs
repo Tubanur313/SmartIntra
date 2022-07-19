@@ -10,7 +10,7 @@ namespace SmartIntranet.Business.Interfaces
     {
         Task<string> Upload(IFormFile file, string root = "wwwroot/uploads");
         void Delete(string filename, string deletePath = "wwwroot/uploads");
-        string UploadResizedImg(IFormFile file, string root = "wwwroot/uploads");
+        Task<string> UploadResizedImg(IFormFile file, string root = "wwwroot/uploads");
         void IsExistFolderCreate(string root);
     }
 }

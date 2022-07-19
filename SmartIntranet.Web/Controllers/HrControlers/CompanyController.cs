@@ -82,7 +82,7 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        model.LogoPath = _upload.UploadResizedImg(logo, "wwwroot/logo/");
+                        model.LogoPath =await _upload.UploadResizedImg(logo, "wwwroot/logo/");
                     }
                 }
                 //if (await _companyService.AnyAsync(x => x.Name.ToUpper()
@@ -173,7 +173,7 @@ namespace SmartIntranet.Web.Controllers
                 if (!(logo is null) && logo.FileName != "logoDefault.png")
                 {
                     _upload.Delete(data.LogoPath, "wwwroot/logo/");
-                    model.LogoPath = _upload.UploadResizedImg(logo, "wwwroot/logo/");
+                    model.LogoPath = await _upload.UploadResizedImg(logo, "wwwroot/logo/");
                 }
                 else if (!(logo is null))
                 {

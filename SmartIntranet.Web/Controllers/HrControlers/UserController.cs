@@ -119,7 +119,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     return Ok(" Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !");
                 }
-                updateUser.Picture = _uploadService.UploadResizedImg(profile, "wwwroot/profile/");
+                updateUser.Picture = await _uploadService.UploadResizedImg(profile, "wwwroot/profile/");
                 await _userManager.UpdateAsync(updateUser);
                 return Ok(" Uğurla yeniləndi !");
             }
@@ -191,7 +191,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         return RedirectToAction("List");
                     }
 
-                    model.Picture = _uploadService.UploadResizedImg(profile, "wwwroot/profile/");
+                    model.Picture = await _uploadService.UploadResizedImg(profile, "wwwroot/profile/");
                 }
 
                 else if (profile != null)

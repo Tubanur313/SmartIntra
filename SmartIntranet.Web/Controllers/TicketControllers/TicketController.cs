@@ -537,7 +537,7 @@ namespace SmartIntranet.Web.Controllers
                         if (MimeTypeCheckExtension.İsImage(upload))
                         {
                             string folder = "/ticketPhoto/";
-                            string name = _upload.UploadResizedImg(upload, "wwwroot" + folder);
+                            string name = await _upload.UploadResizedImg(upload, "wwwroot" + folder);
                             PhotoAddDto dto = new PhotoAddDto
                             {
                                 Name = name,
@@ -1172,7 +1172,7 @@ namespace SmartIntranet.Web.Controllers
                     if (MimeTypeCheckExtension.İsImage(upload))
                     {
                         string folder = "/ticketPhoto/";
-                        string name = _upload.UploadResizedImg(upload, "wwwroot" + folder);
+                        string name = await _upload.UploadResizedImg(upload, "wwwroot" + folder);
                         PhotoAddDto dto = new PhotoAddDto
                         {
                             Name = name,
