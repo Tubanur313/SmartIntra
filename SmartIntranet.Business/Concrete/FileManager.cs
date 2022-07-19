@@ -16,7 +16,7 @@ namespace SmartIntranet.Business.Concrete
         public async Task<string> Upload(IFormFile file, string root = "wwwroot/uploads")
         {
             IsExistFolderCreate(root);
-            string fileName =NameOperation.CharacterRegulatory( file.FileName)+ DateTime.Now.ToString("yyyyMMddHHmmssff") + Path.GetExtension(file.FileName);
+            string fileName =NameOperation.CharacterRegulatory(Path.GetFileNameWithoutExtension(file.FileName) )+ DateTime.Now.ToString("yyyyMMddHHmmssff") + Path.GetExtension(file.FileName);
             //string fileName = await FileRenameAsync(file.FileName, root);
 
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), root, fileName);
@@ -39,7 +39,7 @@ namespace SmartIntranet.Business.Concrete
         public async Task<string> UploadResizedImg(IFormFile file, string root = "wwwroot/uploads")
         {
             IsExistFolderCreate(root);
-            string imageName = NameOperation.CharacterRegulatory(file.FileName) + DateTime.Now.ToString("yyyyMMddHHmmssff") + Path.GetExtension(file.FileName);
+            string imageName = NameOperation.CharacterRegulatory(Path.GetFileNameWithoutExtension(file.FileName)) + DateTime.Now.ToString("yyyyMMddHHmmssff") + Path.GetExtension(file.FileName);
             string path = Path.Combine(Directory.GetCurrentDirectory(), root + imageName);
             using (Image image =await Image.LoadAsync(file.OpenReadStream()))
             {
