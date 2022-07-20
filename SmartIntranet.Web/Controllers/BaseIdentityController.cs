@@ -282,11 +282,12 @@ namespace SmartIntranet.Web.Controllers
 
         protected async Task<string> AddFile(string root, IFormFile profile, string fileName = null)
         {
-            string imageName = fileName == null ? (Guid.NewGuid() + System.IO.Path.GetExtension(profile.FileName)) : fileName;
+            string imageName = fileName == null ? (Path.GetFileNameWithoutExtension(profile.FileName) +Guid.NewGuid() + System.IO.Path.GetExtension(profile.FileName)) : fileName;
             string path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), root + imageName);
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 await profile.CopyToAsync(stream);
+                await stream.FlushAsync();
             }
 
             return imageName;
@@ -299,12 +300,13 @@ namespace SmartIntranet.Web.Controllers
             byte[] byteArray = await System.IO.File.ReadAllBytesAsync(filePath);
             using (MemoryStream stream = new MemoryStream())
             {
-                stream.Write(byteArray, 0, (int)byteArray.Length);
+               await stream.WriteAsync(byteArray, 0, (int)byteArray.Length);
                 using (var doc = WordprocessingDocument.Open(stream, true))
                 {
-                    using (StreamWriter writer = new StreamWriter(doc.MainDocumentPart.GetStream(FileMode.Create)))
+                   await using (StreamWriter writer = new StreamWriter(doc.MainDocumentPart.GetStream(FileMode.Create)))
                     {
-                        writer.Write(content);
+                       await writer.WriteAsync(content);
+                        
                     }
                 }
                 string path = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/contractDocs/" + fileName);
