@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -56,21 +57,29 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
-                if ((await _nonWorkingYearService.GetAllAsync()).Any(x => x.Year == model.Year && !x.IsDeleted))
+                var add = _map.Map<NonWorkingYear>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
+                if (await _nonWorkingYearService.AddReturnEntityAsync(add) is null)
                 {
-                    ModelState.AddModelError("Year", "Bu il artıq mövcuddur");
-                    return RedirectToAction("Add");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                await _nonWorkingYearService.AddAsync(_map.Map<NonWorkingYear>(model));
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -106,16 +115,26 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
-                var current = GetSignInUserId();
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                await _nonWorkingYearService.UpdateAsync(_map.Map<NonWorkingYear>(model));
-                return RedirectToAction("List");
+                var data = await _nonWorkingYearService.FindByIdAsync(model.Id);
+                var update = _map.Map<NonWorkingYear>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _nonWorkingYearService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 

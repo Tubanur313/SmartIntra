@@ -29,7 +29,9 @@ namespace SmartIntranet.Core.Utilities.Messages
             public static string notFound = " Məlumat tapılmadı";
             public static string notComplete = "Daxil edilən məlumatlar tam deyil";
             public static string wrongFormat = " Daxil edilən fayllar image, jpeg, png və ya gif formatında olmalıdır !";
+            public static string wrongFormatDoc = " Daxil edilən fayllar pdf, docx və ya xlsx formatında olmalıdır !";
             public static string sameName = " Bu Adla olan məlumat artıq mövcuddur, Zəhmət olmazsa yeni dəyər daxil edin";
+            public static string sameMail = " Bu email artıq mövcuddur, Zəhmət olmazsa yeni dəyər daxil edin";
         }
     }
 }

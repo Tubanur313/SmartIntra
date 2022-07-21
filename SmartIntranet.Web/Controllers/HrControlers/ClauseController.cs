@@ -61,21 +61,31 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
-                model.IsDeletable = true;
-                model.IsBackground = false;
+                var add = _map.Map<Clause>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
+                add.IsDeletable = true;
+                add.IsBackground = false;
                 if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                 {
-                    model.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
+                    add.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
                 }
-                await _clauseService.AddAsync(_map.Map<Clause>(model));
+                if (await _clauseService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added
@@ -110,17 +120,22 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
+                var data = await _clauseService.FindByIdAsync(model.Id);
                 if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                 {
                     DeleteFile("wwwroot/clauseDocs/", model.FilePath);
                     await AddFile("wwwroot/clauseDocs/", readyDoc, model.FilePath);
                 }
+
                 var current = GetSignInUserId();
-
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-
-                await _clauseService.UpdateAsync(_map.Map<Clause>(model));
+                var update = _map.Map<Clause>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _clauseService.UpdateAsync(update);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated

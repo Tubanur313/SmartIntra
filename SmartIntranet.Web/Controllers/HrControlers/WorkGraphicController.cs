@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -36,12 +37,12 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "workgraphic.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var model = _map.Map<ICollection<WorkGraphicListDto>>(await _workGraphicService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var model = _map.Map<ICollection<WorkGraphicListDto>>(await _workGraphicService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             if (model.Any())
             {
                 TempData["success"] = success;
                 TempData["error"] = error;
-                return View(_map.Map<ICollection<WorkGraphicListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                return View(model);
             }
             return View(new List<WorkGraphicListDto>());
         }
@@ -70,17 +71,29 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
-                await _workGraphicService.AddAsync(_map.Map<WorkGraphic>(model));
-                return RedirectToAction("List");
-
+                var add = _map.Map<WorkGraphic>(model);
+                add.CreatedByUserId = current;
+                add.IsDeleted = false;
+                add.CreatedDate = DateTime.Now;
+                if (await _workGraphicService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -105,17 +118,27 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _workGraphicService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-             
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(model));
-                return RedirectToAction("List");
+                var update = _map.Map<WorkGraphic>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _workGraphicService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 

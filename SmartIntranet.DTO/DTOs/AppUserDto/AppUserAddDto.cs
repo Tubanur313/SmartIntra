@@ -47,13 +47,6 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public Department Department { get; set; }
         public int? PositionId { get; set; }
         public Position Position { get; set; }
-        public bool IsDeleted { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
         public decimal VacationTotal { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }

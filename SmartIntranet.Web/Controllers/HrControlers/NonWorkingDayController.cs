@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -86,18 +87,33 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.DayTypes = GetDayTypes();
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
-                model.NonWorkingYearId = _nonWorkingYearId;
+                var add = _map.Map<NonWorkingDay>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
+                add.NonWorkingYearId = _nonWorkingYearId;
 
-                await _nonWorkingDayService.AddAsync(_map.Map<NonWorkingDay>(model));
-                return RedirectToAction("List", new { id = _nonWorkingYearId });
+                if (await _nonWorkingDayService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded,
+                        id = _nonWorkingYearId
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added,
+                    id = _nonWorkingYearId
+                });
             }
         }
 
@@ -123,18 +139,29 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List", new { id = _nonWorkingYearId });
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete,
+                    id = _nonWorkingYearId
+                });
             }
             else
             {
+                var data = await _nonWorkingDayService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-
-                await _nonWorkingDayService.UpdateAsync(_map.Map<NonWorkingDay>(model));
-                return RedirectToAction("List", new { id = _nonWorkingYearId });
+                var update = _map.Map<NonWorkingDay>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _nonWorkingDayService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated,
+                    id = _nonWorkingYearId
+                });
             }
         }
 

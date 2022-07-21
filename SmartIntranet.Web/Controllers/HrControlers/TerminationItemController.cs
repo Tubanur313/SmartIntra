@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -60,16 +61,29 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
-                await _terminationService.AddAsync(_map.Map<TerminationItem>(model));
-                return RedirectToAction("List");
+                var add = _map.Map<TerminationItem>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
+                if (await _terminationService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -93,18 +107,27 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _terminationService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-
-                await _terminationService.UpdateAsync(_map.Map<TerminationItem>(model));
-                return RedirectToAction("List");
+                var update = _map.Map<TerminationItem>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _terminationService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 

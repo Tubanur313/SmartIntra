@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlConverter = iText.Html2pdf.HtmlConverter;
 using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -78,57 +79,62 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var usr2 = await _userManager.FindByIdAsync(model.UserId.ToString());
-                model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
-               
-                if (model.Type == PersonalContractConst.VACATION)
-                {
-                  
-                    model.LastFullVacationDay = usr2.VacationMainDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
-                        + usr2.VacationExtraChild;
-                    model.LastMainVacationDay = usr2.VacationMainDay;
+                var add = _map.Map<PersonalContract>(model);
+                add.IsDeleted = false;
+                add.CreatedDate = DateTime.Now;
 
-                    if (model.IsMainVacation)
-                    {
-                        model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
+                if (add.Type == PersonalContractConst.VACATION)
+                {
+
+                    add.LastFullVacationDay = usr2.VacationMainDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
                         + usr2.VacationExtraChild;
-                        model.NewMainVacationDay = model.VacationDay;
+                    add.LastMainVacationDay = usr2.VacationMainDay;
+
+                    if (add.IsMainVacation)
+                    {
+                        add.NewFullVacationDay = add.VacationDay + usr2.VacationExtraExperience + usr2.VacationExtraNature
+                        + usr2.VacationExtraChild;
+                        add.NewMainVacationDay = add.VacationDay;
                     }
                     else
                     {
-                        model.NewMainVacationDay = usr2.VacationMainDay;
+                        add.NewMainVacationDay = usr2.VacationMainDay;
 
-                        if (model.VacationExtraType == 0)
+                        if (add.VacationExtraType == 0)
                         {
-                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay +usr2.VacationExtraNature
+                            add.NewFullVacationDay = add.VacationDay + usr2.VacationMainDay +usr2.VacationExtraNature
                         + usr2.VacationExtraChild;
 
                         }
-                        else if (model.VacationExtraType == 1)
+                        else if (add.VacationExtraType == 1)
                         {
-                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraExperience
+                            add.NewFullVacationDay = add.VacationDay + usr2.VacationMainDay + usr2.VacationExtraExperience
                          + usr2.VacationExtraChild;
                         }
-                        else if (model.VacationExtraType == 2)
+                        else if (add.VacationExtraType == 2)
                         {
-                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
+                            add.NewFullVacationDay = add.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
                          + usr2.VacationExtraExperience;
                         }
 
                     }
-                }else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
+                }
+                else if (add.Type == PersonalContractConst.WORK_GRAPHIC)
                 {
-                    model.LastWorkGraphicId = usr2.WorkGraphicId;
+                    add.LastWorkGraphicId = (int)usr2.WorkGraphicId;
                 }
 
                 // Emek muqavile senedi
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_map.Map<PersonalContract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(add).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
 
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -140,7 +146,7 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("commandNumber", result_model.CommandNumber);
                 formatKeys.Add("contractDate", result_model.CommandDate.ToString("dd.MM.yyyy"));
 
-                if (model.Type == PersonalContractConst.SALARY)
+                if (add.Type == PersonalContractConst.SALARY)
                 {
                     usr2.Salary = (double)result_model.Salary;
                     await _userManager.UpdateAsync(usr2);
@@ -184,7 +190,7 @@ namespace SmartIntranet.Web.Controllers
                     file_responsibility.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_responsibility);
                 }
-                else if (model.Type== PersonalContractConst.POSITION)
+                else if (add.Type== PersonalContractConst.POSITION)
                 {
                     formatKeys.Add("oldPosition", usr.Position.Name);
                     usr2.PositionId = result_model.PositionId;
@@ -230,14 +236,14 @@ namespace SmartIntranet.Web.Controllers
                     file_responsibility.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_responsibility);
                 }
-                else if (model.Type == PersonalContractConst.SALARY_POSITION)
+                else if (add.Type == PersonalContractConst.SALARY_POSITION)
                 {
                     formatKeys.Add("oldPosition", usr.Position.Name);
                     usr2.Salary = (double)result_model.Salary;
                     usr2.PositionId = result_model.PositionId;
                     usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
-                    usr = await _userService.FindByUserAllInc(model.UserId);
+                    usr = await _userService.FindByUserAllInc(add.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
 
                     var clauseExtra = ContractFileReadyConst.personal_change_extra_salary_position;
@@ -277,7 +283,7 @@ namespace SmartIntranet.Web.Controllers
                     file_responsibility.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file_responsibility);
                 }
-                else if (model.Type == PersonalContractConst.WORK_PLACE)
+                else if (add.Type == PersonalContractConst.WORK_PLACE)
                 {
                     formatKeys.Add("workPlace", result_model.IsMainPlace ? "Əsas" : "Əlavə");
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
@@ -293,12 +299,12 @@ namespace SmartIntranet.Web.Controllers
                     file.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file);
                 }
-                else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
+                else if (add.Type == PersonalContractConst.WORK_GRAPHIC)
                 {
                     formatKeys.Add("workPlace", result_model.IsMainPlace ? "Əsas" : "Əlavə");
                     usr2.WorkGraphicId = result_model.WorkGraphicId;
                     await _userManager.UpdateAsync(usr2);
-                    usr = await _userService.FindByUserAllInc(model.UserId);
+                    usr = await _userService.FindByUserAllInc(add.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
 
                     var file = new PersonalContractFile();
@@ -311,7 +317,7 @@ namespace SmartIntranet.Web.Controllers
                     file.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file);
                 }
-                else if (model.Type == PersonalContractConst.VACATION)
+                else if (add.Type == PersonalContractConst.VACATION)
                 {
                     if (result_model.IsMainVacation)
                     {
@@ -324,7 +330,8 @@ namespace SmartIntranet.Web.Controllers
                         {
                             usr.VacationExtraExperience = (int)result_model.VacationDay;
                             usr2.VacationExtraExperience = (int)result_model.VacationDay;
-                        }else if (result_model.VacationExtraType == 1)
+                        }
+                        else if (result_model.VacationExtraType == 1)
                         {
                             usr.VacationExtraNature = (int)result_model.VacationDay;
                             usr2.VacationExtraNature = (int)result_model.VacationDay;
@@ -347,18 +354,18 @@ namespace SmartIntranet.Web.Controllers
                         decimal new_count = 0;
                         DateTime start_interval;
                         DateTime end_interval;
-                        if (((DateTime)model.CommandDate).Month > work_start_date.Month || (((DateTime)model.CommandDate).Month == work_start_date.Month && ((DateTime)model.CommandDate).Day >= work_start_date.Day))
+                        if (((DateTime)add.CommandDate).Month > work_start_date.Month || (((DateTime)add.CommandDate).Month == work_start_date.Month && ((DateTime)add.CommandDate).Day >= work_start_date.Day))
                         {
-                            start_interval = new DateTime(((DateTime)model.CommandDate).Year, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(((DateTime)model.CommandDate).Year + 1, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(((DateTime)add.CommandDate).Year, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(((DateTime)add.CommandDate).Year + 1, work_start_date.Month, work_start_date.Day);
                         }
                         else
                         {
-                            start_interval = new DateTime(((DateTime)model.CommandDate).Year - 1, work_start_date.Month, work_start_date.Day);
-                            end_interval = new DateTime(((DateTime)model.CommandDate).Year, work_start_date.Month, work_start_date.Day);
+                            start_interval = new DateTime(((DateTime)add.CommandDate).Year - 1, work_start_date.Month, work_start_date.Day);
+                            end_interval = new DateTime(((DateTime)add.CommandDate).Year, work_start_date.Month, work_start_date.Day);
                         }
 
-                        if (model.CommandDate>= start_interval && model.CommandDate <= end_interval)
+                        if (add.CommandDate>= start_interval && add.CommandDate <= end_interval)
                         {
                             var remains = _db.UserVacationRemains.Any(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
                             var result_remain_model = _db.UserVacationRemains.FirstOrDefault(x => x.AppUserId == usr2.Id && !x.IsDeleted && x.FromDate == start_interval);
@@ -430,11 +437,14 @@ namespace SmartIntranet.Web.Controllers
                     var clause_result = (await _clauseService.GetAllIncCompAsync(x => x.Key == clause && !x.IsDeleted))[0];
                     file.ClauseId = clause_result.Id;
                     StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
-                    file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));                   
+                    file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));
                     file.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file);
                 }
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -443,8 +453,12 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var listModel = _map.Map<PersonalContractUpdateDto>(await _contractService.FindByIdAsync(id));
-            var position = await _positionService.FindByIdAsync((int)listModel.PositionId);
-            listModel.DepartmentId = position.DepartmentId;
+            if (listModel.PositionId != null)
+            {
+                var position = await _positionService.FindByIdAsync((int)listModel.PositionId);
+                listModel.DepartmentId = position.DepartmentId;
+            }
+               
             if (listModel == null)
             {
                 return NotFound();
@@ -474,99 +488,105 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
+                var data = await _contractService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                var usr2 = await _userManager.FindByIdAsync(model.UserId.ToString());
+                var update = _map.Map<PersonalContract>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                var usr2 = await _userManager.FindByIdAsync(update.UserId.ToString());
 
-                if (model.Type == PersonalContractConst.VACATION)
+                if (update.Type == PersonalContractConst.VACATION)
                 {
-                    if (model.IsMainVacation)
+                    if (update.IsMainVacation)
                     {
-                        model.NewFullVacationDay = model.VacationDay + usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
-                        model.NewMainVacationDay = model.VacationDay;
+                        update.NewFullVacationDay = update.VacationDay + usr2.VacationExtraNature + usr2.VacationExtraExperience + usr2.VacationExtraChild;
+                        update.NewMainVacationDay = update.VacationDay;
                     }
                     else
                     {
-                   
-                        model.NewMainVacationDay = usr2.VacationMainDay;
-                        if (model.VacationExtraType == 0)
+
+                        update.NewMainVacationDay = usr2.VacationMainDay;
+                        if (update.VacationExtraType == 0)
                         {
-                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
+                            update.NewFullVacationDay = update.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
                         + usr2.VacationExtraChild;
 
                         }
-                        else if (model.VacationExtraType == 1)
+                        else if (update.VacationExtraType == 1)
                         {
-                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraExperience
+                            update.NewFullVacationDay = update.VacationDay + usr2.VacationMainDay + usr2.VacationExtraExperience
                          + usr2.VacationExtraChild;
                         }
-                        else if (model.VacationExtraType == 2)
+                        else if (update.VacationExtraType == 2)
                         {
-                            model.NewFullVacationDay = model.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
+                            update.NewFullVacationDay = update.VacationDay + usr2.VacationMainDay + usr2.VacationExtraNature
                          + usr2.VacationExtraExperience;
                         }
 
                     }
                 }
-                else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
+                else if (update.Type == PersonalContractConst.WORK_GRAPHIC)
                 {
-                    model.LastWorkGraphicId = usr2.WorkGraphicId;
+                    update.LastWorkGraphicId = (int)usr2.WorkGraphicId;
                 }
 
 
-                await _contractService.UpdateAsync(_map.Map<PersonalContract>(model));
+                await _contractService.UpdateAsync(update);
 
-                var usr = await _userService.FindByUserAllInc(model.UserId);
+                var usr = await _userService.FindByUserAllInc(update.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
 
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
-                formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("commandNumber", model.CommandNumber);
-                formatKeys.Add("contractDate", model.CommandDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("commandDate", update.CommandDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("commandNumber", update.CommandNumber);
+                formatKeys.Add("contractDate", update.CommandDate.ToString("dd.MM.yyyy"));
 
-                if (model.Type == PersonalContractConst.SALARY)
+                if (update.Type == PersonalContractConst.SALARY)
                 {
-                    usr.Salary = (double)model.Salary;
-                    usr2.Salary = (double)model.Salary;
+                    usr.Salary = (double)update.Salary;
+                    usr2.Salary = (double)update.Salary;
                     await _userManager.UpdateAsync(usr2);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
-                else if (model.Type== PersonalContractConst.POSITION)
+                else if (update.Type== PersonalContractConst.POSITION)
                 {
                     formatKeys.Add("oldPosition", usr.Position.Name);
-                    usr2.PositionId = model.PositionId;
+                    usr2.PositionId = update.PositionId;
                     usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
-                    usr = await _userService.FindByUserAllInc(model.UserId);
+                    usr = await _userService.FindByUserAllInc(update.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
-                else if (model.Type == PersonalContractConst.SALARY_POSITION)
+                else if (update.Type == PersonalContractConst.SALARY_POSITION)
                 {
                     formatKeys.Add("oldPosition", usr.Position.Name);
-                    usr2.Salary = (double)model.Salary;
-                    usr2.PositionId = model.PositionId;
+                    usr2.Salary = (double)update.Salary;
+                    usr2.PositionId = update.PositionId;
                     usr2.DepartmentId = model.DepartmentId;
                     await _userManager.UpdateAsync(usr2);
-                    usr = await _userService.FindByUserAllInc(model.UserId);
+                    usr = await _userService.FindByUserAllInc(update.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
-                else if (model.Type == PersonalContractConst.WORK_PLACE)
+                else if (update.Type == PersonalContractConst.WORK_PLACE)
                 {
-                    formatKeys.Add("workPlace", model.IsMainPlace == true ? "Əsas" : "Əlavə");
+                    formatKeys.Add("workPlace", update.IsMainPlace == true ? "Əsas" : "Əlavə");
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
-                else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
+                else if (update.Type == PersonalContractConst.WORK_GRAPHIC)
                 {
-                    formatKeys.Add("workPlace", model.IsMainPlace == true ? "Əsas" : "Əlavə");
-                    usr2.WorkGraphicId = (int)model.WorkGraphicId;
+                    formatKeys.Add("workPlace", update.IsMainPlace == true ? "Əsas" : "Əlavə");
+                    usr2.WorkGraphicId = (int)update.WorkGraphicId;
                     await _userManager.UpdateAsync(usr2);
-                    usr = await _userService.FindByUserAllInc(model.UserId);
+                    usr = await _userService.FindByUserAllInc(update.UserId);
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
-                else if (model.Type == PersonalContractConst.VACATION)
+                else if (update.Type == PersonalContractConst.VACATION)
                 {
                     if (model.IsMainVacation)
                     {
@@ -669,7 +689,8 @@ namespace SmartIntranet.Web.Controllers
 
                             usr2.VacationTotal = 0;
                             var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == usr2.Id && !x.IsDeleted);
-                            foreach (var itm in all_remains) {
+                            foreach (var itm in all_remains)
+                            {
                                 usr2.VacationTotal += itm.RemainCount;
                             }
                             await _userManager.UpdateAsync(usr2);
@@ -679,7 +700,7 @@ namespace SmartIntranet.Web.Controllers
                     formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 }
 
-                var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == model.Id && !x.IsDeleted);
+                var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == update.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
                     var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted).Result[0];
@@ -688,7 +709,10 @@ namespace SmartIntranet.Web.Controllers
                     el.FilePath = await AddContractFile(el.Clause.FilePath, PdfFormatKeys(formatKeys, content));
                     await _contractFileService.UpdateAsync(el);
                 }
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
@@ -697,7 +721,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var transactionModel = _contractService.FindByIdAsync(id).Result;
             var current = GetSignInUserId();
-        
+
             if (transactionModel.Type == "VACATION")
             {
                 var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());

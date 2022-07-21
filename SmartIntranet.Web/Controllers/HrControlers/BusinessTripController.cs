@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -74,16 +75,20 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", "Contract", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
+                var add = _map.Map<BusinessTrip>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
 
-                var result_model = _map.Map<BusinessTrip>(model);
+                var result_model = _map.Map<BusinessTrip>(add);
                 foreach (var item in result_model.BusinessTripUsers)
                 {
                     item.IsDeleted = false;
@@ -94,8 +99,8 @@ namespace SmartIntranet.Web.Controllers
                 List<IntranetUser> users = new List<IntranetUser>();
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
-                formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("commandNumber", model.CommandNumber);
+                formatKeys.Add("commandDate", add.CommandDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("commandNumber", add.CommandNumber);
                 for (int i = 0; i < businessTripUsers.Count; i++)
                 {
                     users.Add(await _userService.FindByUserAllInc(businessTripUsers[i].UserId));
@@ -126,8 +131,17 @@ namespace SmartIntranet.Web.Controllers
                 StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
                 file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content, businessTripUsers.Count));
                 file.CreatedDate= DateTime.Now;
-                await _businessTripFileService.AddAsync(file);
-                return RedirectToAction("List", "Contract");
+                if (await _businessTripFileService.AddReturnEntityAsync(file) is null)
+                {
+                    return RedirectToAction("List", "Contract", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -156,28 +170,35 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", "Contract", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _businessTripService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
+                var update = _map.Map<BusinessTrip>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
 
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-
-                IEnumerable<BusinessTripUser> businessTripUsersDb = _db.BusinessTripUsers.Where(x => x.BusinessTripId == model.Id);
+                IEnumerable<BusinessTripUser> businessTripUsersDb = _db.BusinessTripUsers.Where(x => x.BusinessTripId == update.Id);
                 _db.BusinessTripUsers.RemoveRange(businessTripUsersDb);
                 _db.SaveChanges();
 
-                await _businessTripService.UpdateAsync(_map.Map<BusinessTrip>(model));
+                await _businessTripService.UpdateAsync(update);
 
-                List<BusinessTripUser> businessTripUsers = model.BusinessTripUsers.ToList();
+                List<BusinessTripUser> businessTripUsers = update.BusinessTripUsers.ToList();
                 List<IntranetUser> users = new List<IntranetUser>();
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
-                formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("commandNumber", model.CommandNumber);
+                formatKeys.Add("commandDate", update.CommandDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("commandNumber", update.CommandNumber);
                 for (int i = 0; i < businessTripUsers.Count; i++)
                 {
                     users.Add(await _userService.FindByUserAllInc(businessTripUsers[i].UserId));
@@ -195,10 +216,10 @@ namespace SmartIntranet.Web.Controllers
                 var company = await _companyService.FindByIdAsync((int)users[0].CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
 
-                formatKeys.Add("cause", (await _causeService.FindByIdAsync(model.CauseId)).Name);
+                formatKeys.Add("cause", (await _causeService.FindByIdAsync(update.CauseId)).Name);
                 formatKeys = PdfStaticKeys(formatKeys, users[0], company, company_director);
 
-                var contract_files = await _businessTripFileService.GetAllIncAsync(x => x.BusinessTripId == model.Id && !x.IsDeleted);
+                var contract_files = await _businessTripFileService.GetAllIncAsync(x => x.BusinessTripId == update.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
                     var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted).Result[0];
@@ -208,7 +229,10 @@ namespace SmartIntranet.Web.Controllers
                     await _businessTripFileService.UpdateAsync(el);
                 }
 
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
