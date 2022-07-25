@@ -160,7 +160,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Seriyası və Nömrəsi: </label>
-                                <input type="text" maxlength=10 class="form-control custom-date" asp-for="IdCardNumber" autocomplete="off">
+                                <input type="text" class="form-control" asp-for="IdCardNumber" autocomplete="off">
                                 <span asp-validation-for="IdCardNumber" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -347,7 +347,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
-                                <input type="number" class="form-control" asp-for="VacationMainDay" autocomplete="off">
+                                <input type="number" value="0" class="form-control" asp-for="VacationMainDay" autocomplete="off">
                                 <span asp-validation-for="VacationMainDay" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -356,7 +356,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əmək Stajına görə: </label>
-                                <input type="number" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
+                                <input type="number"  value="0" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
 
                             </div>
                         </div>
@@ -367,7 +367,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əmək Şəraitinin Xarakterinə görə: </label>
-                                <input type="number" class="form-control" asp-for="VacationExtraNature" autocomplete="off">
+                                <input type="number"  value="0" class="form-control" asp-for="VacationExtraNature" autocomplete="off">
 
                             </div>
                         </div>
@@ -375,7 +375,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət 14 Yaş. İki. Çox Uşağı..: </label>
-                                <input type="number" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
+                                <input type="number"  value="0" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
 
                             </div>
                         </div>

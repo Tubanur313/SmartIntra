@@ -105,9 +105,10 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 var current = GetSignInUserId();
-             
+                var listModel = _map.Map<WorkGraphicUpdateDto>(await _workGraphicService.FindByIdAsync(model.Id));
                 model.UpdateDate = DateTime.Now;
                 model.UpdateByUserId = current;
+                model.Key = listModel.Key;
                 await _workGraphicService.UpdateAsync(_map.Map<WorkGraphic>(model));
                 return RedirectToAction("List");
             }

@@ -990,7 +990,7 @@ namespace SmartIntranet.Web.Controllers
 
             if(type == PersonalContractConst.VACATION)
             {
-                var del_list = _vacationContractService.GetAllIncCompAsync().Result;
+                var del_list = _vacationContractService.GetAllIncCompAsync(x=>x.UserId == usr2.Id && !x.IsDeleted).Result;
                 foreach (var el in del_list)
                 {
                     el.DeleteDate = DateTime.Now;
@@ -999,7 +999,7 @@ namespace SmartIntranet.Web.Controllers
                     await _vacationContractService.UpdateAsync(_map.Map<VacationContract>(el));
                 }
 
-                var del_con_list = _contractService.GetAllIncCompAsync().Result;
+                var del_con_list = _contractService.GetAllIncCompAsync(x => x.UserId == usr2.Id && !x.IsDeleted).Result;
                 foreach (var el in del_con_list)
                 {
                     el.DeleteDate = DateTime.Now;
