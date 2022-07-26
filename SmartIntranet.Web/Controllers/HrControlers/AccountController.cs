@@ -97,29 +97,30 @@ namespace SmartIntranet.Web.Controllers
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user == null)
                     {
-                        ViewBag.error = "Email ve ya şifre sehvdir";
+                        ViewBag.error = "Bele bir istifadeci movcud deyil!!!";
                         return View("Login", model);
                     }
 
-                    if (user.IsDeleted != true && !user.IsDeleted && isValid)
+                    if (!user.IsDeleted && isValid)
                     {
                         await _signInManager.SignOutAsync();
                         var identityResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
                         if (identityResult.Succeeded)
                         {
-                            
                             return RedirectToAction("Info", "News");
                         }
                     }
                     else
                     {
-                        ViewBag.error = "Sizin Akkount Deaktiv edilib";
+                        ViewBag.error = "Sizin Akkount Deaktiv edilib!!!";
                         return View("Login", model);
                     }
-                    ViewBag.error = "Email ve ya şifre sehvdir";
-                    return View("Login", model);
                 }
+
+                ViewBag.error = "Email ve ya şifre sehvdir!!!";
+                return View("Login", model);
             }
+            ViewBag.error = "Gozlenilmez xeta!!!";
             return View("Login", model);
         }
 
