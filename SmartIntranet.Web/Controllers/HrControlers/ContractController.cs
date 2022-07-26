@@ -183,6 +183,15 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("contractDatePlus", model.ContractStart.AddYears(1).ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (result_model.ContractEnd != null)
                     formatKeys.Add("contractDateEnd", result_model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
+                if (result_model.HasTerm)
+                {
+                    var range = result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən " + result_model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixinədək ";
+                    formatKeys.Add("contractDateRange", range);
+                }
+                else
+                {
+                    formatKeys.Add("contractDateRange", " müddətsiz ");
+                }
                 formatKeys.Add("contractNumber", result_model.ContractNumber);
                 formatKeys.Add("commandNumber", model.CommandNumber);
                 formatKeys.Add("commandDate", result_model.CommandDate.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
@@ -318,6 +327,17 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("contractDatePlus", model.ContractStart.AddYears(1).ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (model.ContractEnd != null)
                     formatKeys.Add("contractDateEnd", model.ContractEnd?.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
+
+                if (model.HasTerm)
+                {
+                    var range = model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən " + model.ContractEnd?.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixinədək ";
+                    formatKeys.Add("contractDateRange", range);
+                }
+                else
+                {
+                    formatKeys.Add("contractDateRange", " müddətsiz ");
+                }
+
                 formatKeys.Add("contractNumber", model.ContractNumber);
                 formatKeys.Add("commandNumber", model.CommandNumber);
                 formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));

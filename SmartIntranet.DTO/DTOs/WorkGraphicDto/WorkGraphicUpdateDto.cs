@@ -18,6 +18,7 @@ namespace SmartIntranet.DTO.DTOs.WorkGraphicDto
         public int Sunday { get; set; }
         public DateTime WorkStart { get; set; }
         public DateTime WorkEnd { get; set; }
+        public string Key { get; set; }
         public string Description { get; set; }
         public int? NonWorkingYearId { get; set; }
         public WorkGraphic NonWorkingYear { get; set; }
