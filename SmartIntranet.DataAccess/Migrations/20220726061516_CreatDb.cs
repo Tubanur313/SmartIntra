@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
-    public partial class CreateDb : Migration
+    public partial class CreatDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -610,7 +610,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "1000, 1"),
                     IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
@@ -1267,7 +1267,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     Salary = table.Column<string>(maxLength: 100, nullable: false),
                     Occupations = table.Column<string>(maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(maxLength: 300, nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 7, 15, 17, 38, 19, 259, DateTimeKind.Local).AddTicks(2278)),
+                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 7, 26, 10, 15, 16, 295, DateTimeKind.Local).AddTicks(6001)),
                     EndDate = table.Column<DateTime>(nullable: false),
                     City = table.Column<string>(maxLength: 100, nullable: true),
                     Address = table.Column<string>(maxLength: 200, nullable: true),
@@ -1285,7 +1285,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "1000, 1"),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),

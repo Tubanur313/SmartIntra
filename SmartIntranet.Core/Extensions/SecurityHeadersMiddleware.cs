@@ -23,7 +23,7 @@ namespace SmartIntranet.Core.Extensions
             context.Response.Headers.Add("referrer-policy", new StringValues("strict-origin-when-cross-origin"));
 
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
-            context.Response.Headers.Add("x-content-type-options", new StringValues("nosniff"));
+            //context.Response.Headers.Add("x-content-type-options", new StringValues("nosniff"));
 
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
             context.Response.Headers.Add("x-frame-options", new StringValues("DENY"));

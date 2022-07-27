@@ -343,7 +343,7 @@ namespace SmartIntranet.Web.Controllers
                 var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
                 IntranetUser appUser = new IntranetUser
                 {
-                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname),
+                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." +user.Fathername),
                     Name = user.Name,
                     Surname = user.Surname,
                     Fathername = user.Fathername,

@@ -12,7 +12,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
         public void Configure(EntityTypeBuilder<IntranetUser> builder)
         {
             builder.HasKey(I => I.Id);
-            builder.Property(I => I.Id).UseIdentityColumn();
+            builder.Property(I => I.Id).UseIdentityColumn(1000,1);
             builder.Property(I => I.Name).IsRequired();
             builder.Property(I => I.Surname).IsRequired();
             builder.Property(I => I.Picture).HasDefaultValue("default.png");
