@@ -191,7 +191,7 @@
                             $.ajaxSettings.autoReload=false;
                             $.ajax({
                                 url: '@Url.Action("SetClaim")',
-                                type: 'POST',
+                                type: 'get',
                                 data: {claimName,userId,selected},
                                 contentType: 'application/x-www-form-urlencoded',
                                 dataType:'json',
