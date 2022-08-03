@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Business.Provider;
@@ -20,8 +21,10 @@ using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
+using SmartIntranet.DTO.DTOs.UserCompDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Web.GoogleRecaptcha;
 using System;
@@ -36,6 +39,7 @@ namespace SmartIntranet.Web.Controllers
     
     public class AccountController : BaseIdentityController
     {
+        private readonly IUserCompService _userCompService;
         private readonly IConfiguration _configuration;
         private readonly GoogleConfigModel _googleConfig;
         private readonly IntranetContext _db;
@@ -53,12 +57,13 @@ namespace SmartIntranet.Web.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public AccountController(IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
+        public AccountController(IUserCompService userCompService,IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
             IPositionService positionService, IOptions<GoogleConfigModel> googleConfig) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
+            _userCompService = userCompService;
             _appRoleService = appRoleService;
             _googleConfig = googleConfig.Value;
             _workGraphicService = workGraphicService;
@@ -194,6 +199,12 @@ namespace SmartIntranet.Web.Controllers
                          from jUc in ljUc.DefaultIfEmpty()
                          select Tuple.Create(p, jUc != null)).ToList();
 
+            vm.Companies =await (from r in _db.Companies
+                              join ur in _db.UserComps.Where(_ => _.UserId == user.Id) on r.Id equals ur.CompanyId into ljUr
+                              from jUr in ljUr.DefaultIfEmpty()
+                              select Tuple.Create(r, jUr != null)).ToListAsync();
+
+            
 
             return View(vm);
         }
@@ -791,7 +802,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.setrole")]
         public async Task<IActionResult> SetRole(int userId, int roleId, bool selected)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _appUserService.FindByIdAsync(userId);
 
             if (user == null)
             {
@@ -813,7 +824,7 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
 
-            var role = await _db.Roles.FirstOrDefaultAsync(u => u.Id == roleId);
+            var role = await _appRoleService.FindByIdAsync(roleId);
 
             if (role == null)
             {
@@ -878,11 +889,96 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
         }
+        [Authorize(Policy = "account.setUserComp")]
+        public async Task<IActionResult> SetUserComp(int userId, int companyId, bool selected)
+        {
+            var user = await _appUserService.FindByIdAsync(userId);
+            
+            if (user == null)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "Bu istifadeci movcud deyil"
+                });
+            }
+
+            int? currentUserId = GetSignInUserId();
+
+            if (userId == currentUserId)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "Cari istifadeci ozunu selahiyyetlendire bilmez"
+                });
+            }
+
+            var company = await _companyService.FindByIdAsync(companyId);
+
+            if (company == null)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "Bu şirkət movcud deyil"
+                });
+            }
+
+            var userComp = await _userCompService.GetAllAsync(c=>c.CompanyId == companyId && c.UserId==userId);
+
+            if (selected == true && userComp.Count > 0)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "Bu şirkət artiq teyin edilib"
+                });
+            }
+            else if (selected == false && userComp == null)
+            {
+                return Ok(new
+                {
+                    error = true,
+                    message = "Bu şirkət bu istifadeciye aid deyil"
+                });
+            }
+
+
+            if (selected)
+            {
+               await _userCompService.AddAsync(new UserComp
+                {
+                    UserId = userId,
+                    CompanyId = companyId
+                });
+
+                
+                
+
+                return Ok(new
+                {
+                    error = false,
+                    message = $"istifadeciyə şirkət elave edildi"
+                });
+            }
+            else
+            {
+               var usercomp= await _userCompService.GetAsync(x=>x.UserId==userId && x.CompanyId==companyId);
+                await _userCompService.DeleteByIdAsync(usercomp.Id);
+                return Ok(new
+                {
+                    error = false,
+                    message = $"istifadeci şirkətdən cixarildi"
+                });
+            }
+        }
+
 
         [Authorize(Policy = "account.setclaim")]
         public async Task<IActionResult> SetClaim(int userId, string claimName, bool selected)
         {
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _appUserService.FindByIdAsync(userId);
 
             if (user == null)
             {

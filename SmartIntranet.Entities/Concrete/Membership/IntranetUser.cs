@@ -7,6 +7,7 @@ using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.Entities.Concrete.Membership
 {
@@ -56,6 +57,7 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public bool IsDeleted { get; set; }
         public decimal VacationTotal { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
+        public virtual ICollection<UserComp> UserComps { get; set; }
         public virtual ICollection<UserExperience> UserExperiences { get; set; }
         public virtual ICollection<UserVacationRemain> UserVacationRemains { get; set; }
         public virtual ICollection<News> News { get; set; }

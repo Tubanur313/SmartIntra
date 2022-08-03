@@ -1,4 +1,5 @@
 ﻿using SmartIntranet.Core.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
 using SmartIntranet.Entities.Concrete.Membership;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace SmartIntranet.Entities.Concrete.Intranet
         public virtual Company Parent { get; set; }
 
         public virtual ICollection<Company> Children { get; set; }
+        public virtual ICollection<UserComp> UserComps { get; set; }
         public virtual ICollection<Department> Departments { get; set; }
         public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<IntranetUser> IntranetUsers { get; set; }
