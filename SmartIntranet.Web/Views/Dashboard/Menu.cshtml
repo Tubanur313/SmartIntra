@@ -29,19 +29,20 @@
             <div class="row">
                 <!-- task, page, download counter  start -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="card">
+                    <div class="card card-left-border">
                         <div class="card-block">
                             <div class="row align-items-center">
-                                <div class="col-8">
-                                    <h4 class="text-c-yellow f-w-600">@ViewBag.totalCountUsers</h4>
+                                <div class="col-8"> 
                                     <h6 class="text-muted m-b-0">Əməkdaş</h6>
+                                    <h4 class="text-c-yellow f-w-600 margin-top-05">@ViewBag.totalCountUsers</h4>
+                                    <span>Ümumi Əməkdaş Sayı</span>
                                 </div>
                                 <div class="col-4 text-right">
                                     <i class="feather icon-user f-50 text-c-yellow"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-c-yellow">
+                      @*  <div class="card-footer bg-c-yellow">
                             <div class="row align-items-center">
                                 <div class="col-9">
                                     <p class="text-white m-b-0">Ümumi Əməkdaş Sayı</p>
@@ -51,82 +52,56 @@
                                 </div>
                             </div>
 
-                        </div>
+                        </div>*@
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
-                    <div class="card">
+                    <div class="card card-left-border">
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-green f-w-600">@ViewBag.totalCountTicket.ToString("0")</h4>
                                     <h6 class="text-muted m-b-0">Ticket</h6>
+                                    <h4 class="text-c-green f-w-600 margin-top-05">@ViewBag.totalCountTicket.ToString("0")</h4>
+                                    <span>Ümumi Ticket sayı</span>
                                 </div>
                                 <div class="col-4 text-right text-green">
                                     <i class="feather icon-book f-50 text-c-green"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-c-green">
-                            <div class="row align-items-center">
-                                <div class="col-9">
-                                    <p class="text-white m-b-0">Ümumi Ticket sayı </p>
-                                </div>
-                                <div class="col-3 text-right">
-                                    <i class="feather icon-trending-up text-white f-16"></i>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
-                    <div class="card">
+                    <div class="card card-left-border">
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-pink f-w-600">@ViewBag.closeCountTicket.ToString("0")</h4>
                                     <h6 class="text-muted m-b-0">Bağlı Ticket</h6>
+                                    <h4 class="text-c-pink f-w-600 margin-top-05">@ViewBag.closeCountTicket.ToString("0")</h4>
+                                    <span>Bağlı Ticket sayı</span>
                                 </div>
                                 <div class="col-4 text-right">
                                     <i class="feather icon-credit-card f-50 text-c-pink"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-c-pink">
-                            <div class="row align-items-center">
-                                <div class="col-9">
-                                    <p class="text-white m-b-0">Bağlı Ticket sayı</p>
-                                </div>
-                                <div class="col-3 text-right">
-                                    <i class="feather icon-trending-up text-white f-16"></i>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
-                    <div class="card">
+                    <div class="card card-left-border">
                         <div class="card-block">
                             <div class="row align-items-center">
                                 <div class="col-8">
-                                    <h4 class="text-c-blue f-w-600">@ViewBag.totalCountOrders</h4>
                                     <h6 class="text-muted m-b-0">Sifariş</h6>
+                                    <h4 class="text-c-blue f-w-600 margin-top-05">@ViewBag.totalCountOrders</h4>
+                                    <span>Ümumi Sifariş sayı</span>
                                 </div>
                                 <div class="col-4 text-right">
                                     <i class="feather icon-shopping-cart f-50 text-c-blue"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-c-blue">
-                            <div class="row align-items-center">
-                                <div class="col-9">
-                                    <p class="text-white m-b-0">Ümumi Sifariş sayı</p>
-                                </div>
-                                <div class="col-3 text-right">
-                                    <i class="feather icon-trending-up text-white f-16"></i>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>

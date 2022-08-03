@@ -59,7 +59,7 @@
         <div class="col-lg-12 col-xl-12">
             <!-- Job description card start -->
             <div class="card">
-                <div class="card-block contact-details">
+                <div class=" contact-details">
                     <div class="data_table_main table-responsive dt-responsive">
                         <table id="inventar"
                                class="table
@@ -77,7 +77,7 @@
                                     @if (User.HasAccess("stock.add"))
                                     {
                                         <th class="text-center">
-                                            <button onclick="showInPopup('@Url.Action("Add","Stock",null,Context.Request.Scheme)','İnventar əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                                            <button onclick="showInPopup('@Url.Action("Add","Stock",null,Context.Request.Scheme)','İnventar əlavə et')" type="button" class="btn btn-outline-primary "><i class="icofont icofont-plus m-0"></i></button>
                                         </th>
                                     }
                                 </tr>

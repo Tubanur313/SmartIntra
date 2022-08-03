@@ -1,9 +1,20 @@
 .main-signin-form {
-    padding: 1rem;
+    padding: 1rem; 
+    margin-top: 1rem;
 }
-
+.card .card-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.card .card-title {
+    font-weight: 500;
+    font-size: 1.285rem;
+}
     .main-signin-form .form-group {
-        margin-bottom: 1.5em;
+        margin-bottom: 2em;
     }
 
     .main-signin-form label.floatLabel {
