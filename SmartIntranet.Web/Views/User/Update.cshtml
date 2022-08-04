@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs  tabs" role="tablist">
+     <ul class="nav nav-tabs mb-3 tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
                    href="#home1" role="tab">General Information</a>
@@ -26,7 +26,7 @@
         </ul>
         <!-- Tab panes -->
         <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
-            <div class="tab-content tabs card-block">
+            <div class="tab-content tabs">
                 <div class="tab-pane active" id="home1"
                      role="tabpanel">
                     <input type="hidden" asp-for="Id" />
@@ -152,7 +152,7 @@
                             <div class="col-lg-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                       <div class="file upload btn btn-outline-primary mb-4" style="position: relative;overflow: hidden;">
                                             Logo Yüklə
                                             <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
                                         </div>
@@ -196,7 +196,7 @@
 
 
                             <div class="col-sm-6 col-xl-6">
-                                <div class="file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                               <div class="file upload btn btn-outline-primary mb-4" style="position: relative;overflow: hidden;">
                                     Fayl Yüklə
                                     <input id="file-upload" type="file" name="pdf" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
                                         text/plain, application/pdf" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />

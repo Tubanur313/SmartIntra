@@ -28,7 +28,7 @@
         </ul>
         <!-- Tab panes -->
         <form asp-action="Update" enctype="multipart/form-data" class="main-signin-form">
-            <div class="tab-content tabs card-block">
+            <div class="tab-content tabs">
                 <div class="tab-pane active" id="home1"
                      role="tabpanel">
                     <input type="hidden" asp-for="Id" />
@@ -161,7 +161,7 @@
                     <div class="row">
                         <div class="file-name col-sm-12 form-group ">
                             <label for="Logo" class="btn btn-mat btn-primary"><i class="icofont icofont-cloud-upload"></i> Logo Yüklə</label>
-                            <input type="file" style="visibility:hidden;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
+                            <input type="file" style="display:none;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
                         </div>
                         <div class="col-md-6  col-lg-6 col-sm-6 form-group">
                             @if (Model.LogoPath != null && Model.LogoPath.Length > 0 && Model.LogoPath != "logoDefault.png")
@@ -200,7 +200,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12 d-flex justify-content-between">
-                        <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                        <button type="submit" id="confirm-id" class="btn btn-dark-blue m-b-0 btn-block">
                             Təsdiqlə
                         </button>
 

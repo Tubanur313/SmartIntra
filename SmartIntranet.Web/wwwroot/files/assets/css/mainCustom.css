@@ -1,6 +1,6 @@
 .main-signin-form {
-    padding: 1rem; 
-    margin-top: 1rem;
+    /*padding: 1rem;*/ 
+    margin-top: 1.5rem;
 }
 .card .card-header {
     position: relative;
@@ -30,7 +30,7 @@
     }
 
     .main-signin-form label.floatLabel {
-        top: -12px;
+        top: -14px;
         background-color: rgb(255 255 255);
         font-size: 14px;
         z-index: 3;
@@ -56,4 +56,25 @@ form.is-readonly input[disabled], form.is-readonly textarea[disabled] {
 
 form.is-editing .btn-edit {
     display: none;
+}
+button, input, optgroup, select, textarea {
+    font-family: "Montserrat", sans-serif;
+}
+
+.main-custom-border {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+.form-group .form-radio:first-child {
+    margin-left: 0.5rem;
+    margin-top: 2px;
+}
+.form-control:disabled, .form-control[readonly] {
+    background-color: #fff !important;
+}
+.align-item-center{
+    align-items:center !important;
+}
+.pb-15{
+    padding-bottom:15px !important;
 }

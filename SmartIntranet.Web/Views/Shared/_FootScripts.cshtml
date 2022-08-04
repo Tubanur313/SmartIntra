@@ -1,5 +1,5 @@
 ﻿<script type="text/javascript"
-    src="~/files/bower_components2/jquery/dist/jquery.min.js"></script>
+        src="~/files/bower_components2/jquery/dist/jquery.min.js"></script>
 <!-- Required Jquery -->
 <script type="text/javascript"
         src="~/files/bower_components2/jquery-ui/jquery-ui.min.js"></script>
@@ -71,17 +71,129 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(document).ready(function() {
+        $(".pcoded-navbar, .pcoded-inner-navbar, #mCSB_1, #mCSB_1_container, #listed-links, .pcoded-hasmenu, .pcoded-hasmenu, #mCSB_1_container_wrapper").mouseover(function() {
+            if ($("#mobile-collapse i").hasClass("icon-toggle-left") && $('#' + "pcoded").attr("vertical-nav-type") === "offcanvas") {
+
+                $(".pcoded-navbar").mouseover(function() {
+                    console.log("hover olundu")
+                    var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                    if (dt == "desktop") {
+                        var dmc = "expanded";
+                        var dm = "offcanvas";
+                        var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                        if (dn == dm) {
+                            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                        }
+                        //else if (dn == dmc) {
+                        //    $('#' + "pcoded").attr("vertical-nav-type", dm);
+                        //}
+                        else {
+                            return false;
+                        }
+                    }
+                    $(".pcoded-hasmenu").mouseout(function() {
+                        if (dt == "desktop") {
+                            var dmc = "expanded";
+                            var dm = "offcanvas";
+                            var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                            if (dn == dmc) {
+                                $('#' + "pcoded").attr("vertical-nav-type", dm);
+                            } else {
+                                return false;
+                            }
+                        }
+                    });
+
+                });
+
+                //$(".pcoded-hasmenu").mouseover(function() {
+                //    console.log("hover olundu")
+                //    var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                //    if (dt == "desktop") {
+                //        var dmc = "expanded";
+                //        var dm = "offcanvas";
+                //        var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                //        if (dn == dm) {
+                //            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                //        } else {
+                //            return false;
+                //        }
+                //    }
+                //    $(".pcoded-hasmenu").mouseout(function() {
+                //        if (dt == "desktop") {
+                //            var dmc = "expanded";
+                //            var dm = "offcanvas";
+                //            var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                //            if (dn == dmc) {
+                //                $('#' + "pcoded").attr("vertical-nav-type", dm);
+                //            } else {
+                //                return false;
+                //            }
+                //        }
+                //    });
+                //});
+
+                //$("#mCSB_1_container_wrapper").mouseover(function() {
+                //    console.log("hover olundu")
+                //    var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                //    if (dt == "desktop") {
+                //        var dmc = "expanded";
+                //        var dm = "offcanvas";
+                //        var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                //        if (dn == dm) {
+                //            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                //        } else {
+                //            return false;
+                //        }
+                //    }
+                //    $("#mCSB_1_container_wrapper").mouseout(function() {
+                //        if (dt == "desktop") {
+                //            var dmc = "expanded";
+                //            var dm = "offcanvas";
+                //            var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                //            if (dn == dmc) {
+                //                $('#' + "pcoded").attr("vertical-nav-type", dm);
+                //            } else {
+                //                return false;
+                //            }
+                //        }
+                //    });
+                //});
+
+
+            } else {
+                console.log("right")
+                  var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                    if (dt == "desktop") {
+                        var dmc = "expanded";
+                        var dm = "offcanvas";
+                        var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                        if (dn == dm) {
+                            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                        }
+                        else if (dn == dmc) {
+                            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+            }
+
+        })
+
+
         //active tab and links
-        $("#listed-links").find('[href="'+window.location.pathname+'"]').parent().parent().parent().addClass('pcoded-trigger')
-        $("#listed-links").find('[href="'+window.location.pathname+'"]').parent().addClass('active')
-        $(function () {
+        $("#listed-links").find('[href="' + window.location.pathname + '"]').parent().parent().parent().addClass('pcoded-trigger')
+        $("#listed-links").find('[href="' + window.location.pathname + '"]').parent().addClass('active')
+        $(function() {
             var a = '@TempData["success"]';
             var b = '@TempData["error"]';
             if (a != '')
-                toastr.success(a,"Uğur !");
+                toastr.success(a, "Uğur !");
             if (b != '')
-                toastr.error(b,"Xəta !");
+                toastr.error(b, "Xəta !");
 
         });
         $("script").remove();

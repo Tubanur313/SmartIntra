@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs  tabs" role="tablist">
+     <ul class="nav nav-tabs mb-3 tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
                    href="#home3" role="tab">Müqavilə  </a>
@@ -47,7 +47,7 @@
         </ul>
         <!-- Tab panes -->
         <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
-            <div class="tab-content tabs card-block">
+            <div class="tab-content tabs">
                 <div class="tab-pane " id="home1" role="tabpanel">
 
 
@@ -81,27 +81,25 @@
                         </div>
 
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>  Cinsi: </label>
-                                <div class="form-radio">
-
-
-                                    <div class="radio radio-inline">
-                                        <label for="FEMALE">
-                                            <input type="radio" id="FEMALE" value="FEMALE" asp-for="Gender"
-                                                   checked="checked">
-                                            <i class="helper"></i>Qadın
-                                        </label>
-                                    </div>
-                                    <div class="radio radio-inline">
-                                        <label for="MALE">
-                                            <input type="radio" id="MALE" value="MALE" asp-for="Gender">
-                                            <i class="helper"></i>Kişi
-                                        </label>
+                               <div class="form-group">
+                                <label class="floatLabel">  Cinsi: </label>
+                                <div class="form-group main-custom-border">
+                                    <div class="form-radio">
+                                        <div class="radio radio-inline">
+                                            <label for="FEMALE">
+                                                <input type="radio" id="FEMALE" value="FEMALE" asp-for="Gender"
+                                                       checked="checked">
+                                                <i class="helper"></i>Qadın
+                                            </label>
+                                        </div>
+                                        <div class="radio radio-inline">
+                                            <label for="MALE">
+                                                <input type="radio" id="MALE" value="MALE" asp-for="Gender">
+                                                <i class="helper"></i>Kişi
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
 
@@ -428,7 +426,7 @@
                             <div class="col-lg-6">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                        <div class="file-name file upload btn btn-outline-primary btn-round mb-4" style="position: relative;overflow: hidden;">
                                             Şəkil Yüklə
                                             <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
                                         </div>
