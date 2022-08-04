@@ -17,6 +17,10 @@
                 <a class="nav-link" data-toggle="tab"
                    href="#profile1" role="tab">Selahiyyetler</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab"
+                   href="#profile2" role="tab">Şirkətlər</a>
+            </li>
 
         </ul>
         <!-- Tab panes -->
@@ -27,8 +31,8 @@
                     <table id="order-table1" class="table table-striped table-bordered nowrap">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
+                                <th>Icaze</th>
+                                <th>Ad</th>
 
 
                             </tr>
@@ -55,8 +59,8 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
+                                <th>Icaze</th>
+                                <th>Ad</th>
 
                             </tr>
                         </tfoot>
@@ -71,6 +75,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Position</th>
+
                         </tr>
                     </thead>
                     <tbody id="alert-sw_2">
@@ -101,6 +106,49 @@
                 </table>
 
             </div>
+            <div class="tab-pane" id="profile2" role="tabpanel">
+
+                <div class="dt-responsive table-responsive">
+                    <table id="order-table3" class="table table-striped table-bordered nowrap">
+                        <thead>
+                            <tr>
+                                <th>Icaze</th>
+                                <th>Ad</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody id="alert-sw_3">
+                            
+                            @foreach (var company in Model.Companies)
+                            {
+                                <tr>
+                                    <td class="row-identifier text-center">
+                                        <div class="checkbox-fade fade-in-primary d-">
+                                            <label>
+                                                <input class="permissions" id="company-@company.Item1.Id" data-company-id="@company.Item1.Id" type="checkbox" @(company.Item2 ? "checked" : "") value="">
+                                                <span class="cr">
+                                                    <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        @*<input id="role-@role.Item1.Id" data-role-id="@role.Item1.Id" type="checkbox" @(role.Item2 ? "checked" : "") />*@
+                                    </td>
+                                    <td><label for="company-@company.Item1.Id">@company.Item1.Name</label></td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Icaze</th>
+                                <th>Ad</th>
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
 
         </div>
         <!-- Checkbox Tree card start -->
@@ -112,105 +160,158 @@
 
 <script type="text/javascript" src="~/files/assets/js/script.js"></script>
 <script>
-        $(document).ready(function () {
-            $('#order-table1').DataTable({
-                "paging": true,
-                "ordering": true,
-                "bLengthChange": true,
-                "info": true,
-                "searching": true
-            });
-                    $('#order-table2').DataTable({
-                "paging": true,
-                "ordering": true,
-                "bLengthChange": true,
-                "info": true,
-                "searching": true
-            });
+        $(document).ready(function() {
+        $('#order-table1').DataTable({
+            "paging": true,
+            "ordering": true,
+            "bLengthChange": true,
+            "info": true,
+            "searching": true
+        });
+        $('#order-table2').DataTable({
+            "paging": true,
+            "ordering": true,
+            "bLengthChange": true,
+            "info": true,
+            "searching": true
+        });
+        $('#order-table3').DataTable({
+            "paging": true,
+            "ordering": true,
+            "bLengthChange": true,
+            "info": true,
+            "searching": true
+        });
 
-              $("#alert-sw_1").on("change", ".permissions",function(e){
+        $("#alert-sw_1").on("change", ".permissions", function(e) {
 
-                  let roleId = $(e.currentTarget).data('role-id');
-                  let selected = $(e.currentTarget).is(':checked');
-                  let userId = @Model.User.Id;
+            let roleId = $(e.currentTarget).data('role-id');
+            let selected = $(e.currentTarget).is(':checked');
+            let userId = @Model.User.Id;
 
-                  swal({
+            swal({
                     title: "Diqqət!",
                     text: `'@name'-istifadecisine bu rolu vermek istediyinizden eminsiniz?`,
                     icon: "warning",
                     buttons: ['Xeyr', 'Bəli']
                 })
-                    .then(willDelete => {
-                        if (willDelete) {
-                            $.ajax({
-                                url: '@Url.Action("SetRole")',
-                                type: 'get',
-                                data: {roleId,userId,selected},
-                                contentType: 'application/x-www-form-urlencoded',
-                                dataType:'json',
-                                success: function (response) {
+                .then(willDelete => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '@Url.Action("SetRole")',
+                            type: 'get',
+                            data: {
+                                userId,
+                                roleId,
+                                selected
+                            },
+                            contentType: 'application/x-www-form-urlencoded',
+                            dataType: 'json',
+                            success: function(response) {
 
                                 if (response.error == false) {
-                                    toastr.success(response.message,'Icra edildi');
+                                    toastr.success(response.message, 'Icra edildi');
+                                } else {
+                                    $(e.currentTarget).prop('checked', !selected);
+                                    toastr.warning(response.message, 'Diqqet');
                                 }
-                                else{
-                                    $(e.currentTarget).prop('checked',!selected);
-                                    toastr.warning(response.message,'Diqqet');
-                                }}
-                          });
-                        }
-                        else{
-                            $(e.currentTarget).prop('checked',!selected);
-                        }
-                    })
+                            }
+                        });
+                    } else {
+                        $(e.currentTarget).prop('checked', !selected);
+                    }
+                })
 
         });
 
-              $("#alert-sw_2").on("change", ".permissions",function(e){
+        $("#alert-sw_2").on("change", ".permissions", function(e) {
 
-                  let claimName = $(e.currentTarget).data('claim-name');
-                  let selected = $(e.currentTarget).is(':checked');
-                  let userId = @Model.User.Id;
+            let claimName = $(e.currentTarget).data('claim-name');
+            let selected = $(e.currentTarget).is(':checked');
+            let userId = @Model.User.Id;
 
-                  let message = `'@name'-istifadecisine ${claimName} imtiyazi vermek istediyinizden eminsiniz?`;
+            let message = `'@name'-istifadecisine ${claimName} imtiyazi vermek istediyinizden eminsiniz?`;
 
-                  if(selected == false)
-                  {
-                      message = `'@name'-istifadecisinden ${claimName} imtiyazi almaq istediyinizden eminsiniz?`;
-                  }
+            if (selected == false) {
+                message = `'@name'-istifadecisinden ${claimName} imtiyazi almaq istediyinizden eminsiniz?`;
+            }
 
 
-                  swal({
+            swal({
                     title: "Diqqət!",
                     text: message,
                     icon: "warning",
                     buttons: ['Xeyr', 'Bəli']
                 })
-                    .then(willDelete => {
-                        if (willDelete) {
-                            $.ajaxSettings.autoReload=false;
-                            $.ajax({
-                                url: '@Url.Action("SetClaim")',
-                                type: 'POST',
-                                data: {claimName,userId,selected},
-                                contentType: 'application/x-www-form-urlencoded',
-                                dataType:'json',
-                                success: function (response) {
+                .then(willDelete => {
+                    if (willDelete) {
+                        $.ajaxSettings.autoReload = false;
+                        $.ajax({
+                            url: '@Url.Action("SetClaim")',
+                            type: 'get',
+                            data: {
+                                userId,
+                                claimName,
+                                selected
+                            },
+                            contentType: 'application/x-www-form-urlencoded',
+                            dataType: 'json',
+                            success: function(response) {
 
                                 if (response.error == false) {
-                                    toastr.success(response.message,'Icra edildi');
+                                    toastr.success(response.message, 'Icra edildi');
+                                } else {
+                                    $(e.currentTarget).prop('checked', !selected);
+                                    toastr.warning(response.message, 'Diqqet');
                                 }
-                                else{
-                                    $(e.currentTarget).prop('checked',!selected);
-                                    toastr.warning(response.message,'Diqqet');
-                                }}
-                          });
-                        }
-                        else{
-                            $(e.currentTarget).prop('checked',!selected);
-                        }
-                    })
+                            }
+                        });
+                    } else {
+                        $(e.currentTarget).prop('checked', !selected);
+                    }
+                })
 
         });
+
+        $("#alert-sw_3").on("change", ".permissions", function(e) {
+
+            let companyId = $(e.currentTarget).data('company-id');
+            let selected = $(e.currentTarget).is(':checked');
+            let userId = @Model.User.Id;
+
+            swal({
+                    title: "Diqqət!",
+                    text: `'@name'-istifadecisine bu şirkəti vermek istediyinizden eminsiniz?`,
+                    icon: "warning",
+                    buttons: ['Xeyr', 'Bəli']
+                })
+                .then(willDelete => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: '@Url.Action("SetUserComp")',
+                            type: 'get',
+                            data: {
+                                userId,
+                                companyId,
+                                selected
+                            },
+                            contentType: 'application/x-www-form-urlencoded',
+                            dataType: 'json',
+                            success: function(response) {
+
+                                if (response.error == false) {
+                                    toastr.success(response.message, 'Icra edildi');
+                                } else {
+                                    $(e.currentTarget).prop('checked', !selected);
+                                    toastr.warning(response.message, 'Diqqet');
+                                }
+                            }
+                        });
+                    } else {
+                        $(e.currentTarget).prop('checked', !selected);
+                    }
+                })
+
         });
+    });
 </script>

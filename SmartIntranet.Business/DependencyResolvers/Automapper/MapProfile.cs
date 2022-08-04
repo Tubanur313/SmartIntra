@@ -38,11 +38,13 @@ using SmartIntranet.DTO.DTOs.TicketOrderDto;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
+using SmartIntranet.DTO.DTOs.UserCompDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
 using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
 using SmartIntranet.Entities.Concrete.Intranet.FAQ;
@@ -59,6 +61,12 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
     {
         public MapProfile()
         {
+            #region UserComp-UserCompDto
+            CreateMap<UserComp, UserCompAddDto>().ReverseMap();
+            
+            #endregion
+
+
             #region IntranetRole-AppUserDto
             CreateMap<IntranetUser, AppUserClaimsDto>();
             CreateMap<IntranetRole, AppRoleClaimsDto>();
