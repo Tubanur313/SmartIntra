@@ -75,112 +75,99 @@
         $(".pcoded-navbar, .pcoded-inner-navbar, #mCSB_1, #mCSB_1_container, #listed-links, .pcoded-hasmenu, .pcoded-hasmenu, #mCSB_1_container_wrapper").mouseover(function() {
             if ($("#mobile-collapse i").hasClass("icon-toggle-left") && $('#' + "pcoded").attr("vertical-nav-type") === "offcanvas") {
 
-                $(".pcoded-navbar").mouseover(function() {
-                    console.log("hover olundu")
-                    var dt = $('#' + "pcoded").attr("pcoded-device-type");
-                    if (dt == "desktop") {
-                        var dmc = "expanded";
-                        var dm = "offcanvas";
-                        var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                        if (dn == dm) {
-                            $('#' + "pcoded").attr("vertical-nav-type", dmc);
-                        }
-                        //else if (dn == dmc) {
-                        //    $('#' + "pcoded").attr("vertical-nav-type", dm);
-                        //}
-                        else {
-                            return false;
-                        }
+                //console.log("hover olundu")
+                var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                if (dt == "desktop") {
+                    var dmc = "expanded";
+                    var dm = "offcanvas";
+                    var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                    if (dn == dm) {
+                        $('#' + "pcoded").attr("vertical-nav-type", dmc);
                     }
-                    $(".pcoded-hasmenu").mouseout(function() {
-                        if (dt == "desktop") {
-                            var dmc = "expanded";
-                            var dm = "offcanvas";
-                            var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                            if (dn == dmc) {
-                                $('#' + "pcoded").attr("vertical-nav-type", dm);
-                            } else {
-                                return false;
-                            }
-                        }
-                    });
-
-                });
-
-                //$(".pcoded-hasmenu").mouseover(function() {
-                //    console.log("hover olundu")
-                //    var dt = $('#' + "pcoded").attr("pcoded-device-type");
-                //    if (dt == "desktop") {
-                //        var dmc = "expanded";
-                //        var dm = "offcanvas";
-                //        var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                //        if (dn == dm) {
-                //            $('#' + "pcoded").attr("vertical-nav-type", dmc);
-                //        } else {
-                //            return false;
-                //        }
-                //    }
-                //    $(".pcoded-hasmenu").mouseout(function() {
-                //        if (dt == "desktop") {
-                //            var dmc = "expanded";
-                //            var dm = "offcanvas";
-                //            var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                //            if (dn == dmc) {
-                //                $('#' + "pcoded").attr("vertical-nav-type", dm);
-                //            } else {
-                //                return false;
-                //            }
-                //        }
-                //    });
-                //});
-
-                //$("#mCSB_1_container_wrapper").mouseover(function() {
-                //    console.log("hover olundu")
-                //    var dt = $('#' + "pcoded").attr("pcoded-device-type");
-                //    if (dt == "desktop") {
-                //        var dmc = "expanded";
-                //        var dm = "offcanvas";
-                //        var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                //        if (dn == dm) {
-                //            $('#' + "pcoded").attr("vertical-nav-type", dmc);
-                //        } else {
-                //            return false;
-                //        }
-                //    }
-                //    $("#mCSB_1_container_wrapper").mouseout(function() {
-                //        if (dt == "desktop") {
-                //            var dmc = "expanded";
-                //            var dm = "offcanvas";
-                //            var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                //            if (dn == dmc) {
-                //                $('#' + "pcoded").attr("vertical-nav-type", dm);
-                //            } else {
-                //                return false;
-                //            }
-                //        }
-                //    });
-                //});
-
-
-            } else {
-                console.log("right")
-                  var dt = $('#' + "pcoded").attr("pcoded-device-type");
-                    if (dt == "desktop") {
-                        var dmc = "expanded";
-                        var dm = "offcanvas";
-                        var dn = $('#' + "pcoded").attr("vertical-nav-type");
-                        if (dn == dm) {
-                            $('#' + "pcoded").attr("vertical-nav-type", dmc);
-                        }
-                        else if (dn == dmc) {
-                            $('#' + "pcoded").attr("vertical-nav-type", dmc);
-                        }
-                        else {
-                            return false;
-                        }
+                    //else if (dn == dmc) {
+                    //    $('#' + "pcoded").attr("vertical-nav-type", dm);
+                    //}
+                    else {
+                        return false;
                     }
+                }
+
+                ////$(".pcoded-hasmenu").mouseover(function() {
+                ////    console.log("hover olundu")
+                ////    var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                ////    if (dt == "desktop") {
+                ////        var dmc = "expanded";
+                ////        var dm = "offcanvas";
+                ////        var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                ////        if (dn == dm) {
+                ////            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                ////        } else {
+                ////            return false;
+                ////        }
+                ////    }
+                ////    $(".pcoded-hasmenu").mouseout(function() {
+                ////        if (dt == "desktop") {
+                ////            var dmc = "expanded";
+                ////            var dm = "offcanvas";
+                ////            var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                ////            if (dn == dmc) {
+                ////                $('#' + "pcoded").attr("vertical-nav-type", dm);
+                ////            } else {
+                ////                return false;
+                ////            }
+                ////        }
+                ////    });
+                ////});
+
+                ////$("#mCSB_1_container_wrapper").mouseover(function() {
+                ////    console.log("hover olundu")
+                ////    var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                ////    if (dt == "desktop") {
+                ////        var dmc = "expanded";
+                ////        var dm = "offcanvas";
+                ////        var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                ////        if (dn == dm) {
+                ////            $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                ////        } else {
+                ////            return false;
+                ////        }
+                ////    }
+                ////    $("#mCSB_1_container_wrapper").mouseout(function() {
+                ////        if (dt == "desktop") {
+                ////            var dmc = "expanded";
+                ////            var dm = "offcanvas";
+                ////            var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                ////            if (dn == dmc) {
+                ////                $('#' + "pcoded").attr("vertical-nav-type", dm);
+                ////            } else {
+                ////                return false;
+                ////            }
+                ////        }
+                ////    });
+                ////});
+
             }
 
+        })
+        $(".pcoded-navbar, .pcoded-inner-navbar, #mCSB_1, #mCSB_1_container, #listed-links, .pcoded-hasmenu, .pcoded-hasmenu, #mCSB_1_container_wrapper").mouseout(function() {
+            if ($("#mobile-collapse i").hasClass("icon-toggle-left") && $('#' + "pcoded").attr("vertical-nav-type") === "expanded") {
+                //console.log("right")
+                var dt = $('#' + "pcoded").attr("pcoded-device-type");
+                if (dt == "desktop") {
+                    var dmc = "expanded";
+                    var dm = "offcanvas";
+                    var dn = $('#' + "pcoded").attr("vertical-nav-type");
+                    if (dn == dmc) {
+                        $('#' + "pcoded").attr("vertical-nav-type", dm);
+                    }
+                    //else if (dn == dmc) {
+                    //    $('#' + "pcoded").attr("vertical-nav-type", dmc);
+                    //}
+                    else {
+                        return false;
+                    }
+                }
+            }
         })
 
 

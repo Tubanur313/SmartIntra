@@ -18,30 +18,11 @@
     <link rel="stylesheet" type="text/css" href="~/files/assets/pages/list-scroll/list.css">
     <link rel="stylesheet" type="text/css" href="~/files/bower_components2/stroll/css/stroll.css">
 </head>
-<style>
-    .pt-3-half {
-        padding-top: 1.4rem;
-    }
-
-    .info-item {
-        margin-bottom: 30px;
-    }
-
-        .info-item p {
-            margin-bottom: 0 !important;
-        }
-
-    .icon-in-info {
-        align-items: center;
-        margin-right: 10px;
-        display: flex;
-    }
-</style>
 
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs  md-tabs" role="tablist">
+        <ul class="nav nav-tabs mb-4  md-tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
                    href="#home1" role="tab">
@@ -57,12 +38,12 @@
             </li>
             @if (Model.CategoryTicket.TicketType == TicketType.Purchasing)
             {
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#order" role="tab">
-                                <i class="icofont icofont-table"></i>&nbsp; Sifariş
-                            </a>
-                            <div class="slide"></div>
-                        </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#order" role="tab">
+                        <i class="icofont icofont-table"></i>&nbsp; Sifariş
+                    </a>
+                    <div class="slide"></div>
+                </li>
             }
 
         </ul>
@@ -74,10 +55,10 @@
                         <ul>
                             <li class="d-flex  info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-regular fa-hashtag mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-regular fa-hashtag   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Ticket Nömrəsi:</label>
+                                    <label class="font-weight-bold f-14-5">Ticket Nömrəsi:</label>
                                     <p>
                                         @Model.Id
                                     </p>
@@ -85,10 +66,10 @@
                             </li>
                             <li class="d-flex  info-item">
                                 <div class="icon-in-info">
-                                    <i class="mr-2 fas fa-paperclip text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="  fas fa-paperclip text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Başlıq:</label>
+                                    <label class="font-weight-bold f-14-5">Başlıq:</label>
                                     <p>
                                         @Model.Title
                                     </p>
@@ -96,10 +77,10 @@
                             </li>
                             <li class="d-flex info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-solid fa-c mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-solid fa-c   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Kateqoriya</label>
+                                    <label class="font-weight-bold f-14-5">Kateqoriya</label>
                                     <p>
                                         @Model.CategoryTicket.Name
                                     </p>
@@ -112,10 +93,10 @@
                         <ul>
                             <li class="d-flex info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-solid fa-calendar-days mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-solid fa-calendar-days   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Son dəyişiklik Tarixi:</label>
+                                    <label class="font-weight-bold f-14-5">Son dəyişiklik Tarixi:</label>
                                     <p>
                                         @(Model.UpdateDate == null ? "Yenilənməyib":Model.UpdateDate.Value.ToString("dd.MM.yyyy hh:mm"))
                                     </p>
@@ -123,10 +104,10 @@
                             </li>
                             <li class="d-flex info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-regular fa-calendar-xmark mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-regular fa-calendar-xmark   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Deadline Tarixi:</label>
+                                    <label class="font-weight-bold f-14-5">Deadline Tarixi:</label>
                                     <p>
                                         @( Model.DeadLineEnd ==null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(Model.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : Model.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
                                     </p>
@@ -134,10 +115,10 @@
                             </li>
                             <li class="d-flex  info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-solid fa-s mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-solid fa-s   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Status :</label>
+                                    <label class="font-weight-bold f-14-5">Status :</label>
                                     <p>
                                         @Model.StatusType.GetDisplayName()
                                     </p>
@@ -149,24 +130,24 @@
                     </div>
                     <div class="col-md-12 col-lg-4">
                         <ul>
-                            
+
                             @*<li class="d-flex info-item">
-                                <div class="icon-in-info">
-                                    <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
-                                </div>
-                                <div>
-                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
-                                    <p>
-                                        @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
-                                    </p>
-                                </div>
-                                </li>*@
+                            <div class="icon-in-info">
+                            <i class="fa-regular fa-calendar-plus   text-primary p-absolute text-center d-block f-30"></i>
+                            </div>
+                            <div>
+                            <label class="font-weight-bold f-14-5">Yaradılma Tarixi:</label>
+                            <p>
+                            @Model.CreatedDate.Value.ToString("dd.MM.yyyy hh:mm")
+                            </p>
+                            </div>
+                            </li>*@
                             <li class="d-flex info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-regular fa-calendar-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-regular fa-calendar-plus   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Yaradılma Tarixi:</label>
+                                    <label class="font-weight-bold f-14-5">Yaradılma Tarixi:</label>
                                     <p>
                                         @(Model.OpenDate!=null?Model.OpenDate.Value.ToString("dd.MM.yyyy hh:mm"):"Təyin edilməyib")
                                     </p>
@@ -175,10 +156,10 @@
                             <li class="d-flex  info-item">
                                 <div class="icon-in-info">
                                     <i class=""></i>
-                                    <i class="fa-solid fa-user-gear mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-solid fa-user-gear   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Dəstək:</label>
+                                    <label class="font-weight-bold f-14-5">Dəstək:</label>
                                     <p>
                                         @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.Name+Model.Supporter.Surname} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}" )
                                     </p>
@@ -186,10 +167,10 @@
                             </li>
                             <li class="d-flex  info-item">
                                 <div class="icon-in-info">
-                                    <i class="fa-solid fa-user-plus mr-2 text-primary p-absolute text-center d-block f-30"></i>
+                                    <i class="fa-solid fa-user-plus   text-primary p-absolute text-center d-block f-30"></i>
                                 </div>
                                 <div>
-                                    <label class="font-weight-bold">Ticket əlavə edən:</label>
+                                    <label class="font-weight-bold f-14-5">Ticket əlavə edən:</label>
                                     <p>
                                         @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.Name+Model.Employee.Surname} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}" )
                                     </p>
@@ -200,9 +181,10 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="form-group">
+                        <div class="form-group info-with-border">
                             @*<span asp-validation-for="Description" class="text-danger"></span>*@
-                            <label class="font-weight-bold">  Ətraflı: </label>
+                            <label class="font-weight-bold f-14-5" style="letter-spacing: 1px;">  Ətraflı: </label>
+                            <hr />
                             <p>@(Html.Raw(Model.Description!=null?Model.Description:""))</p>
                             <span class="messages"></span>
                         </div>
@@ -234,7 +216,7 @@
                                         <div class="">
                                             <textarea class="f-13 post-input msg-send" data-id="@Model.Id" id="comments" name="comments" rows="3" cols="10" required="" placeholder="Şərh bildirin....."></textarea>
                                             <div class="text-right m-t-20">
-                                                <a href="#" id="send" class="btn btn-primary waves-effect waves-light">Göndər</a>
+                                                <a href="#" id="send" class="btn btn-dark-blue waves-effect waves-light">Göndər</a>
                                             </div>
                                         </div>
                                     </div>
@@ -250,7 +232,7 @@
                                         <h3 class="">Fayllar</h3>
                                     </div>
                                     <div class="col-sm-12 d-flex justify-content-between">
-                                        <a id="fayl-photos" class="btn btn-primary m-b-0 btn-block text-white">
+                                        <a id="fayl-photos" class="btn btn-dark-blue m-b-0 btn-block text-white">
                                             Göstər
                                         </a>
                                     </div>
@@ -272,13 +254,13 @@
                                 </div>
                                 <div id="formData" method="POST" class="form-group" enctype="multipart/form-data">
 
-                                    <button type="button" class="btn btn-primary m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
+                                    <button type="button" class="btn btn-dark-blue m-b-0 btn-block" id="custom-button">Faylları Seçin</button>
                                     <input hidden="hidden" type="file" name="files" id="files" multiple class="form-control">
                                     <input type="hidden" asp-for="Id" />
 
                                     <div class="form-group row mt-3">
                                         <div class="col-sm-12 d-flex justify-content-between">
-                                            <button type="button" id="sub-btn" class="btn btn-primary m-b-0 disable btn-block">
+                                            <button type="button" id="sub-btn" class="btn btn-dark-blue m-b-0 disable btn-block">
                                                 Yüklə
                                             </button>
                                         </div>
@@ -322,7 +304,7 @@
                             <!-- Job description card start -->
                             <div class="card">
                                 <div class="card-block contact-details">
-                                     <div class="data_table_main table-responsive dt-responsive pb-15">
+                                    <div class="data_table_main table-responsive dt-responsive pb-15">
 
                                         <table id="simpletable1" class="table table-striped table-bordered nowrap">
                                             <thead>
@@ -344,18 +326,18 @@
                                                 {
                                                     @foreach (var order in Model.TicketOrders)
                                                     {
-                                                                        <tr>
-                                                                            <td>@order.Order.Id</td>
-                                                                            <td>@order.Order.Product</td>
-                                                                            <td>@order.Order.Currency</td>
-                                                                            <td>@order.Order.Quantity</td>
-                                                                            <td>@order.Order.WithoutVat</td>
-                                                                            <td>@order.Order.TotalWithoutTax</td>
-                                                                            <td>@order.Order.TaxType</td>
-                                                                            <td>@order.Order.Total</td>
-                                                                            <td>@order.Order.Seller</td>
-                                                                            <td>@order.Order.Description</td>
-                                                                        </tr>
+                                                        <tr>
+                                                            <td>@order.Order.Id</td>
+                                                            <td>@order.Order.Product</td>
+                                                            <td>@order.Order.Currency</td>
+                                                            <td>@order.Order.Quantity</td>
+                                                            <td>@order.Order.WithoutVat</td>
+                                                            <td>@order.Order.TotalWithoutTax</td>
+                                                            <td>@order.Order.TaxType</td>
+                                                            <td>@order.Order.Total</td>
+                                                            <td>@order.Order.Seller</td>
+                                                            <td>@order.Order.Description</td>
+                                                        </tr>
                                                     }
                                                 }
                                             </tbody>
@@ -390,76 +372,74 @@
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
 <script class="removable">
-    $(document).ready(function(){
-        $(".get-count-discuss").click(function(){
+    $(document).ready(function() {
+        $(".get-count-discuss").click(function() {
             $("#countId").html(`Müzakirələr (@(ViewBag.DiscCount>0 ? ViewBag.DiscCount:0))`);
         });
         $("#countId").click(function() {
-            $("#discussing").toggle(function(){
-               if ($(this).css('display') != 'none')
-                    {
-                        $.ajax({
-                            url : `@Url.Action("GetDiscuss","Discuss")`,
-                            type: "get",
-                            dataType:"html",
-                            data : ({
-                                ticketId:@Model.Id
-                            }),
-                            success: function(response) {
-                                $("#discussing").html(response)
-                            },
-                            error: function (response) {
-                                }
-                            });
-                     }
-                else{
+            $("#discussing").toggle(function() {
+                if ($(this).css('display') != 'none') {
+                    $.ajax({
+                        url: `@Url.Action("GetDiscuss","Discuss")`,
+                        type: "get",
+                        dataType: "html",
+                        data: ({
+                            ticketId: @Model.Id
+                                        }),
+                        success: function(response) {
+                            $("#discussing").html(response)
+                        },
+                        error: function(response) {
+                        }
+                    });
+                }
+                else {
                     $("#discussing").html(`
-                                <div class="loader animation-start">
-                                    <span class="circle delay-1 size-2"></span>
-                                    <span class="circle delay-2 size-4"></span>
-                                    <span class="circle delay-3 size-6"></span>
-                                    <span class="circle delay-4 size-7"></span>
-                                    <span class="circle delay-5 size-7"></span>
-                                    <span class="circle delay-6 size-6"></span>
-                                    <span class="circle delay-7 size-4"></span>
-                                    <span class="circle delay-8 size-2"></span>
-                                </div>`)
+                                            <div class="loader animation-start">
+                                                <span class="circle delay-1 size-2"></span>
+                                                <span class="circle delay-2 size-4"></span>
+                                                <span class="circle delay-3 size-6"></span>
+                                                <span class="circle delay-4 size-7"></span>
+                                                <span class="circle delay-5 size-7"></span>
+                                                <span class="circle delay-6 size-6"></span>
+                                                <span class="circle delay-7 size-4"></span>
+                                                <span class="circle delay-8 size-2"></span>
+                                            </div>`)
                 }
             });
         });
         $("#fayl-photos").click(function() {
-                $(this).text("Bağla");
-                    $("#photo").toggle(function(){
-                        if ($(this).css('display') != 'none')
-                        {
-                            $.ajax({
-                                url : `@Url.Action("GetPhoto","Photo")`,
-                                type: "get",
-                                dataType:"html",
-                                data : ({
-                                    ticketId:@Model.Id
-                                }),
-                                success: function(response) {
-                                    $("#photo").html(response)
-                                },
-                                error: function (response) {
-                                    }
-                                });
-                         }
-                         else{
-                             $("#fayl-photos").text("Göstər");
-                             $("#photo").html(`
-                                             <div class="col-md-12" >
-                                                 <div class="cell preloader5 loader-block" >
-                                                     <div class="circle-5 l"></div>
-                                                     <div class="circle-5 m"></div>
-                                                     <div class="circle-5 r"></div>
-                                                 </div>
-                                             </div>`)
-                         }
-                });
+            $(this).text("Bağla");
+            $("#photo").toggle(function() {
+                if ($(this).css('display') != 'none') {
+                    $.ajax({
+                        url: `@Url.Action("GetPhoto","Photo")`,
+                        type: "get",
+                        dataType: "html",
+                        data: ({
+                            ticketId: @Model.Id
+                                            }),
+                        success: function(response) {
+                            $("#photo").html(response)
+                        },
+                        error: function(response) {
+                        }
+                    });
+                }
+                else {
+                    $("#fayl-photos").text("Göstər");
+                    $("#photo").html(`
+                                                         <div class="col-md-12" >
+                                                             <div class="cell preloader5 loader-block" >
+                                                                 <div class="circle-5 l"></div>
+                                                                 <div class="circle-5 m"></div>
+                                                                 <div class="circle-5 r"></div>
+                                                             </div>
+                                                         </div>`)
+                }
+            });
         });
-        $("#custom-button").click(function(){
+        $("#custom-button").click(function() {
         });
         CKEDITOR.replace('comments');
         $('.ticket-slide').slick({
@@ -471,108 +451,106 @@
             prevArrow: false,
             nextArrow: false
         });
-        $('#send').on("click",function(){
+        $('#send').on("click", function() {
 
             let comment = CKEDITOR.instances['comments'].getData();
             let id = $("#comments").data("id");
             var lenght = CKEDITOR.instances['comments'].getData().replace(/<[^>]*>/gi, '').length;
-            if(lenght == 0){
+            if (lenght == 0) {
                 toastr.error("Şərh boş ola bilməz", "Xəta!");
                 return;
             }
 
             var formData = $('#data-input').getFormData({
-            Content: comment,
-            TicketId: id
+                Content: comment,
+                TicketId: id
             });
             $.ajax({
-            url : `@Url.Action("Discuss","Ticket")`,
-            type: "get",
-            data : formData,
-            async : false,
-            success: function(response) {
-                var html = ` <div class="media">
-                            <div class="media-body b-b-theme social-client-description">
-                            <div class="chat-header text-success">
-                             ${[response.fulname]}
-                                      <span class="text-muted">
-                                         ${[response.date]}
-                                      </span>
-                                  </div>
-                                  <p class="text-muted">
-                                    ${[response.comment]}
-                                  </p>
-                              </div>
-                          </div>`
-                $("#discussing").prepend(html);
-                $("#countId").text(`Müzakirələr (${[response.count]})`);
-                CKEDITOR.instances['comments'].setData('');
-            },
-            error: function (response) {
-            }
+                url: `@Url.Action("Discuss","Ticket")`,
+                type: "get",
+                data: formData,
+                async: false,
+                success: function(response) {
+                    var html = ` <div class="media">
+                                        <div class="media-body b-b-theme social-client-description">
+                                        <div class="chat-header text-success">
+                                         ${[response.fulname]}
+                                                  <span class="text-muted">
+                                                     ${[response.date]}
+                                                  </span>
+                                              </div>
+                                              <p class="text-muted">
+                                                ${[response.comment]}
+                                              </p>
+                                          </div>
+                                      </div>`
+                    $("#discussing").prepend(html);
+                    $("#countId").text(`Müzakirələr (${[response.count]})`);
+                    CKEDITOR.instances['comments'].setData('');
+                },
+                error: function(response) {
+                }
             });
         });
-        $(document).on("click","#custom-button",function ()
-        {
+        $(document).on("click", "#custom-button", function() {
             $("#sub-btn").removeClass("disable");
             $("#photo").hide("slow");
             $("#fayl-photos").text("Göstər");
             $("#photo").html(`
-                              <div class="col-md-12" >
-                                  <div class="cell preloader5 loader-block">
-                                      <div class="circle-5 l"></div>
-                                      <div class="circle-5 m"></div>
-                                      <div class="circle-5 r"></div>
-                                  </div>
-                              </div>
-                              `)
+                                          <div class="col-md-12" >
+                                              <div class="cell preloader5 loader-block">
+                                                  <div class="circle-5 l"></div>
+                                                  <div class="circle-5 m"></div>
+                                                  <div class="circle-5 r"></div>
+                                              </div>
+                                          </div>
+                                          `)
         });
-        $(document).on("click","#sub-btn",function ()
-        {
+        $(document).on("click", "#sub-btn", function() {
             let id = $("#Id").val();
             let file = $("input[name='files']")[0];
             let data = new FormData();
             var token = $('input[name="__RequestVerificationToken"]').val();
-            for(var i = 0 ;i < file.files.length;i++){
-                data.append("files",file.files[i])
+            for (var i = 0; i < file.files.length; i++) {
+                data.append("files", file.files[i])
             }
-            data.append("__RequestVerificationToken",token);
-            data.append("Id",id);
+            data.append("__RequestVerificationToken", token);
+            data.append("Id", id);
             $.ajax({
                 url: `@Url.Action("load","ticket")`,
                 type: 'post',
                 dataType: "json",
-                data:data,
-                cache:false,
+                data: data,
+                cache: false,
                 processData: false,
                 contentType: false,
-                beforeSend: function () {
+                beforeSend: function() {
                     $("#loadspin").removeClass("d-none");
                 },
-                success: function (res) {
+                success: function(res) {
                     $("#sub-btn").addClass("disable");
-                    setTimeout(function(){ $("#loadspin").addClass("d-none"); }, 9000);
+                    setTimeout(function() { $("#loadspin").addClass("d-none"); }, 9000);
                     $("#image_preview").html("");
                 },
-                error: function (error) {
+                error: function(error) {
                     $("#loadspin").addClass("d-none");
                 },
-                complete: function () {
+                complete: function() {
                     $("#sub-btn").addClass("disable");
                     $("#image_preview").html("");
                     swal("UĞUR!", "Fayllar uğurla yükləndi !", "success");
                 }
             });
         });
-            $('#simpletable1').DataTable({
-                retrieve: true,
-                "ordering": false,
-                paging: false,      
-                dom: 'Bfrtip',
-                buttons: [
-                   'excel'
-                ]
-            });
+        $('#simpletable1').DataTable({
+            retrieve: true,
+            "ordering": false,
+            paging: false,
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ]
+        });
         //$(window).on('click', function(e){
         // if($(e.target).attr('id') == 'form-modal-info'
         // || $(e.target).attr('id') =='closeBtn'
