@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-lg-12 col-xl-12">
         <!-- Nav tabs -->
-     <ul class="nav nav-tabs mb-3 tabs" role="tablist">
+        <ul class="nav nav-tabs mb-3 tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
                    href="#home3" role="tab">Müqavilə  </a>
@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="col-sm-6">
-                               <div class="form-group">
+                            <div class="form-group">
                                 <label class="floatLabel">  Cinsi: </label>
                                 <div class="form-group main-custom-border">
                                     <div class="form-radio">
@@ -354,7 +354,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əmək Stajına görə: </label>
-                                <input type="number"  value="0" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
+                                <input type="number" value="0" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
 
                             </div>
                         </div>
@@ -365,7 +365,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əmək Şəraitinin Xarakterinə görə: </label>
-                                <input type="number"  value="0" class="form-control" asp-for="VacationExtraNature" autocomplete="off">
+                                <input type="number" value="0" class="form-control" asp-for="VacationExtraNature" autocomplete="off">
 
                             </div>
                         </div>
@@ -373,7 +373,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət 14 Yaş. İki. Çox Uşağı..: </label>
-                                <input type="number"  value="0" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
+                                <input type="number" value="0" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
 
                             </div>
                         </div>
@@ -414,9 +414,9 @@
                         </div>
                     </div>
                     @* @for (var i = 0; i < 1; i++)
-                        {
-                        <div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" asp-for="UserExperiences[i].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control" autocomplete="off"> </div> <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span> <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span> <span class="messages"></span> </div> </div> </div>
-                        }*@
+                    {
+                    <div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" asp-for="UserExperiences[i].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" asp-for="UserExperiences[i].ExperienceStart" class="form-control" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" asp-for="UserExperiences[i].ExperienceEnd" class="form-control" autocomplete="off"> </div> <span asp-validation-for="UserExperiences[0].ExperienceStart" class="text-danger"></span> <span asp-validation-for="UserExperiences[0].ExperienceEnd" class="text-danger"></span> <span class="messages"></span> </div> </div> </div>
+                    }*@
                 </div>
 
 
@@ -491,66 +491,61 @@
 <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script>
-    //$.validator.setDefaults({ ignore:''});
-    $(document).ready(function () {
+    $.validator.setDefaults({ ignore: '' });
+    $(document).ready(function() {
 
-            let dateArray = [];
+        let dateArray = [];
 
-           $('.custom-date').each(function()
-            {
-                $(this).datepicker({
-                    //format: "dd.mm.yyyy"
-                })
+        $('.custom-date').each(function() {
+            $(this).datepicker({
+                format: "dd.mm.yyyy"
             })
+        })
 
-            $('#StartWorkDate').each(function()
-            {
-                $(this).datepicker({
-                    //format: "dd.mm.yyyy"
-                }).on('changeDate', function (ev) {
-                    $(this).change();
-                });
-                $(this).change(function () {
-                    getUserVacationDay();
-                });
-            })
+        $('#StartWorkDate').each(function() {
+            $(this).datepicker({
+                //format: "dd.mm.yyyy"
+            }).on('changeDate', function(ev) {
+                $(this).change();
+            });
+            $(this).change(function() {
+                getUserVacationDay();
+            });
+        })
 
-            $("form").submit( function(e) {
-                let isEmpty = false;
-                $(".experience-history").each(function(i, el){
-                     if(!$(el).val())
-                     {
-                          isEmpty = true;
-                     }
-                });
-                if(isEmpty)
-                {
-                    toastr.error(" Staj tarixi boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
+        $("form").submit(function(e) {
+            let isEmpty = false;
+            $(".experience-history").each(function(i, el) {
+                if (!$(el).val()) {
+                    isEmpty = true;
                 }
-                if(!checkDate())
-                {
-                    e.preventDefault();
-                    return;
-                }
-                 checkRemainCount(e);
+            });
+            if (isEmpty) {
+                toastr.error(" Staj tarixi boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            if (!checkDate()) {
+                e.preventDefault();
+                return;
+            }
+            checkRemainCount(e);
 
             var CompanyId = $('#CompanyId').combotree('getValue');
             var DepartmentId = $('#DepartmentId').combotree('getValue');
             var PositionId = $('#PositionId').combotree('getValue');
-            if(CompanyId.trim() === ""){
-               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
-               e.preventDefault();
-             }
-            if(DepartmentId.trim() === ""){
-               $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
-               e.preventDefault();
-             }
-             if(PositionId.trim() === ""){
-               $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
-               e.preventDefault();
-             }
-            });
+            if (CompanyId.trim() === "") {
+                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            }
+            if (DepartmentId.trim() === "") {
+                $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            }
+            if (PositionId.trim() === "") {
+                $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            }
+        });
 
         function setDisableAndOld() {
             dateArray = [];
@@ -558,40 +553,35 @@
             setDate('old');
         }
 
-        function checkRemainCount(e)
-         {
+        function checkRemainCount(e) {
             let isEmpty = false;
-            $(".remain-count").each(function(i, el){
-                    let val = $(el).val();
-                    if(!val)
-                    {
-                        isEmpty = true;
-                    }
+            $(".remain-count").each(function(i, el) {
+                let val = $(el).val();
+                if (!val) {
+                    isEmpty = true;
+                }
             });
-            if(isEmpty)
-            {
+            if (isEmpty) {
                 toastr.error(" Qalıq gün boş ola bilməz !", "Xəta!");
                 e.preventDefault();
                 return isEmpty;
             }
-         }
+        }
 
         function setDate(type) {
-            $(`.vacation-remain.${type}`).each(function (i, el) {
+            $(`.vacation-remain.${type}`).each(function(i, el) {
                 let val = $(el).val();
                 val = new Date(val);
                 val.setHours(0, 0, 0, 0);
                 let startMonth = val.getMonth() + 1;
                 let startDay = val.getDate();
                 let year = val.getFullYear();
-                if(type == 'disable')
-                {
+                if (type == 'disable') {
                     val = new Date(year, startDay - 1, startMonth);
                 }
                 startMonth = val.getMonth() + 1;
                 startDay = val.getDate();
-                if(i % 2 == 0)
-                {
+                if (i % 2 == 0) {
                     dateArray.push(val);
                 }
             })
@@ -628,14 +618,14 @@
             $('#VacationExtraExperience').val(vacationDay);
         }
 
-         function checkDate() {
+        function checkDate() {
             setDisableAndOld();
             let startYear;
             let valid = true;
-            $(".vacation-remain").each(function (i, el) {
+            $(".vacation-remain").each(function(i, el) {
                 let startWorkDate = $('#StartWorkDate').val();
-               //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
-               startWorkDate = new Date(startWorkDate);
+                //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
+                startWorkDate = new Date(startWorkDate);
                 startWorkDate.setHours(0, 0, 0, 0);
                 let startWorkMonth = startWorkDate.getMonth() + 1;
                 let startWorkDay = startWorkDate.getDate();
@@ -651,17 +641,17 @@
                     startMonth = val.getMonth() + 1;
                     startDay = val.getDate();
                 }
-                else if(el.classList.contains('new')) {
+                else if (el.classList.contains('new')) {
                     if (el.classList.contains('start') && startWorkDate > val) {
-                     toastr.error(" Məzuniyyət qalığının başlama tarixi işə başlama tarixindən kiçik ola bilməz !", "Xəta!");
-                      valid = false;
-                      return valid;
+                        toastr.error(" Məzuniyyət qalığının başlama tarixi işə başlama tarixindən kiçik ola bilməz !", "Xəta!");
+                        valid = false;
+                        return valid;
                     }
                     if (i % 2 == 1) {
                         if (year - startYear != 1) {
-                             toastr.error(" Aralıq 1 il olmalıdır !", "Xəta!");
-                              valid = false;
-                              return valid;
+                            toastr.error(" Aralıq 1 il olmalıdır !", "Xəta!");
+                            valid = false;
+                            return valid;
                         }
                     }
                     else {
@@ -669,14 +659,14 @@
                     }
                     if (startMonth != startWorkMonth || startDay != startWorkDay) {
                         toastr.error(" Ay və gün işə başlama tarixindəki ilə eyni olmalıdı !", "Xəta!");
-                         valid = false;
-                         return valid;
+                        valid = false;
+                        return valid;
                     }
                     if (valid && val && i % 2 == 0) {
                         if (dateArray.some(x => new Date(x).getTime() == new Date(val).getTime())) {
-                             toastr.error(" Tarix artıq mövcuddur !", "Xəta!");
-                              valid = false;
-                              return valid;
+                            toastr.error(" Tarix artıq mövcuddur !", "Xəta!");
+                            valid = false;
+                            return valid;
                         }
                         else {
                             dateArray.push(val)
@@ -684,80 +674,77 @@
                     }
                 }
             });
-             return valid;
-         }
+            return valid;
+        }
 
-            $("#addRow").click(function () {
-                let rowCount = parseInt($("#rowCount").val());
-                rowCount++;
-                $("#rowCount").val(rowCount);
-                let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experienceStart-${rowCount - 1} experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experienceEnd-${rowCount - 1} experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
-                $('#row-box').append(html);
+        $("#addRow").click(function() {
+            let rowCount = parseInt($("#rowCount").val());
+            rowCount++;
+            $("#rowCount").val(rowCount);
+            let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experienceStart-${rowCount - 1} experience-history" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experienceEnd-${rowCount - 1} experience-history" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
+            $('#row-box').append(html);
 
-                $('.input-daterange').datepicker({
-                    //format: "dd.mm.yyyy"
-                }).on('changeDate', function (ev) {
-                    $('.input-daterange').change();
-                });
-                $('.input-daterange').change(function () {
-                    getUserVacationDay();
-                });
+            $('.input-daterange').datepicker({
+                //format: "dd.mm.yyyy"
+            }).on('changeDate', function(ev) {
+                $('.input-daterange').change();
             });
-
-            $("#addVacDay").click(function (e) {
-                 if(!checkDate() || checkRemainCount(e))
-                 {
-                    return;
-                 }
-                let rowCount = parseInt($("#vacCount").val());
-                rowCount++;
-                $("#vacCount").val(rowCount);
-                let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
-                $('#vac-box').append(html);
-
-                $('.input-daterange').datepicker({
-                    //format: "dd.mm.yyyy"
-                });
+            $('.input-daterange').change(function() {
+                getUserVacationDay();
             });
+        });
+
+        $("#addVacDay").click(function(e) {
+            if (!checkDate() || checkRemainCount(e)) {
+                return;
+            }
+            let rowCount = parseInt($("#vacCount").val());
+            rowCount++;
+            $("#vacCount").val(rowCount);
+            let html = `<div class="row"><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].FromDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].FromDate-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ToDate" data-valmsg-replace="true"><span id="UserVacationRemains[${rowCount - 1}].ToDate-error" class=""></span></span> <span class="messages"></span> </div> </div> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Qalıq gün: </label> <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off"> <span class="messages"></span> </div> </div> </div>`
+            $('#vac-box').append(html);
+
+            $('.input-daterange').datepicker({
+                //format: "dd.mm.yyyy"
+            });
+        });
 
 
-            $("#Profile").change(function (e) {
-            if($('.file-name').isImage())
-            {
+        $("#Profile").change(function(e) {
+            if ($('.file-name').isImage()) {
                 $("#lview").show();
                 $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
             }
-            else
-            {
-                toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
+            else {
+                toastr.error("Diqqət", "Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
             }
-            });
+        });
 
-            $('#file-upload').change(function() {
+        $('#file-upload').change(function() {
 
             var file = $('#file-upload')[0].files[0].name;
 
             $('#uploaded').removeClass("d-none").text(file);
 
-            });
+        });
 
-            //phone number masking
-            $.mask.definitions['9'] = '';
-            $.mask.definitions['_'] = '[0-9]';
+        //phone number masking
+        $.mask.definitions['9'] = '';
+        $.mask.definitions['_'] = '[0-9]';
 
-            $("#PhoneNumber").on("focus",function(){
-                 $("#PhoneNumber").mask("+\994\ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+994 __-___-__-__"});
-            });
+        $("#PhoneNumber").on("focus", function() {
+            $("#PhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
+        });
 
     @* $('a[href="#home3"]').on('click', function(event){ *@
-                 $.ajax({
-            url: `@Url.Action("GetCompanyTree","Account")`,
-            type: "Get",
-            data: "",
-            dataType: "json",
-            cache: false,
-            success: function (data) {
-              $.ajax({
+            $.ajax({
+                url: `@Url.Action("GetCompanyTree","Account")`,
+                type: "Get",
+                data: "",
+                dataType: "json",
+                cache: false,
+                success: function(data) {
+                    $.ajax({
                         url: `@Url.Action("GetDepartmentTree","Account")`,
                         type: "Get",
                         data: {
@@ -765,27 +752,27 @@
                         },
                         dataType: "json",
                         cache: false,
-                        success: function (data) {
-                            if(data.length > 0){
-                               var tree = $('#DepartmentId').combotree({
-                                  data:data,
-                                  prompt:'Seçim edin'
+                        success: function(data) {
+                            if (data.length > 0) {
+                                var tree = $('#DepartmentId').combotree({
+                                    data: data,
+                                    prompt: 'Seçim edin'
                                 });
                                 //tree.combotree('disable')
                             }
-                            else{
-                                 var tree = $('#DepartmentId').combotree({
-                                    prompt:'Yoxdur !',
-                                 });
-                                 tree.combotree('disable')
+                            else {
+                                var tree = $('#DepartmentId').combotree({
+                                    prompt: 'Yoxdur !',
+                                });
+                                tree.combotree('disable')
                             }
                         },
-                        error: function (data) {
-                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        error: function(data) {
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                         }
-              })
+                    })
 
-              $.ajax({
+                    $.ajax({
                         url: `@Url.Action("GetPositionTree","Account")`,
                         type: "Get",
                         data: {
@@ -793,296 +780,302 @@
                         },
                         dataType: "json",
                         cache: false,
-                        success: function (data) {
-                            if(data.length > 0){
-                            var tre = $('#PositionId').combotree({
-                                 data:data,
-                                 prompt:'Seçim edin'
-                            });
-                            //tre.combotree('disable')
-                            }
-                            else{
-                            var tree = $('#PositionId').combotree({
-                                 prompt:'Yoxdur !',
-                            });
-                            tree.combotree('disable')
-                            }
-                        },
-                        error: function (data) {
-                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                        }
-              })
-
-              $('#CompanyId').combotree({
-                data:data,
-                prompt:'Seçim edin',
-                onClick:function(node){
-                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
-                    $.ajax({
-                        url: `@Url.Action("GetDepartmentTree","Account")`,
-                        type: "Get",
-                        data: {
-                            companyId:  node.id,
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            if(data.length > 0) {
-                                var tre =$('#DepartmentId').combotree({
-                                     data:data,
-                                     prompt:'Seçim edin'
+                        success: function(data) {
+                            if (data.length > 0) {
+                                var tre = $('#PositionId').combotree({
+                                    data: data,
+                                    prompt: 'Seçim edin',
+                                    onClick: function(node) {
+                                        $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
+                                    }
                                 });
-
+                                //tre.combotree('disable')
+                            }
+                            else {
                                 var tree = $('#PositionId').combotree({
-                                   prompt:'Seçim edin'
+                                    prompt: 'Yoxdur !',
                                 });
                                 tree.combotree('disable')
-                                $('#DepartmentId').combotree({
-                                data:data,
-                                prompt:'Seçim edin',
-                                onClick:function(node) {
-                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
-                                $.ajax({
-                                    url: `@Url.Action("GetPositionTree","Account")`,
-                                    type: "Get",
-                                    data: {
-                                        departmentId:  node.id,
-                                    },
-                                    dataType: "json",
-                                    cache: false,
-                                    success: function (data) {
-
-                                        if(data.length > 0){
-                                         var tree =  $('#PositionId').combotree({
-                                             data:data,
-                                             prompt:'Seçim edin'
-                                         });
-                                         tree.combotree('enable')
-                                         $('#PositionId').combotree('setValue', '')
-                                        }
-                                        else{
-                                           var tre = $('#PositionId').combotree({
-                                               prompt:'Yoxdur !',
-                                           });
-                                           tre.combotree('disable')
-                                           tre.combotree('setValue', '')
-                                        }
-                                    },
-                                    error: function (data) {
-                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                                    }
-                                })
-                                 }
-                                })
-                                tre.combotree('enable')
-                            }
-                            else{
-                             var tree = $('#DepartmentId').combotree({
-                                 prompt:'Yoxdur !',
-                             });
-                             tree.combotree('disable')
-                             tree.combotree('setValue', '')
-                             var tre = $('#PositionId').combotree({
-                                 prompt:'Yoxdur !',
-                             });
-                             tre.combotree('disable')
-                             tre.combotree('setValue', '')
                             }
                         },
-                        error: function (data) {
-                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                        error: function(data) {
+                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                         }
                     })
-                 }
-              })
 
-              $('#DepartmentId').combotree({
-                                data:data,
-                                prompt:'Seçim edin',
-                                onClick:function(node) {
-                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
-                                $.ajax({
-                                    url: `@Url.Action("GetPositionTree","Account")`,
-                                    type: "Get",
-                                    data: {
-                                        departmentId:  node.id,
-                                    },
-                                    dataType: "json",
-                                    cache: false,
-                                    success: function (data) {
+                    $('#CompanyId').combotree({
+                        data: data,
+                        prompt: 'Seçim edin',
+                        onClick: function(node) {
+                            $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                            $.ajax({
+                                url: `@Url.Action("GetDepartmentTree","Account")`,
+                                type: "Get",
+                                data: {
+                                    companyId: node.id,
+                                },
+                                dataType: "json",
+                                cache: false,
+                                success: function(data) {
+                                    if (data.length > 0) {
+                                        var tre = $('#DepartmentId').combotree({
+                                            data: data,
+                                            prompt: 'Seçim edin'
+                                        });
 
-                                        if(data.length > 0){
-                                         var tree =  $('#PositionId').combotree({
-                                             data:data,
-                                             prompt:'Seçim edin'
-                                         });
-                                         tree.combotree('enable')
-                                         $('#PositionId').combotree('setValue', '')
-                                        }
-                                        else{
-                                           var tre = $('#PositionId').combotree({
-                                               prompt:'Yoxdur !',
-                                           });
-                                           tre.combotree('disable')
-                                           tre.combotree('setValue', '')
-                                        }
-                                    },
-                                    error: function (data) {
-                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                                    }
-                                })
-                                 }
-                                })
-            },
-            error: function (data) {
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-            }
-        });
-        $.ajax({
-                    url: `@Url.Action("GetCompanyTree","Position")`,
-                    type: "Get",
-                    data: "",
-                    dataType: "json",
-                    cache: false,
-                    success: function (data) {
-                      $.ajax({
-                        url: `@Url.Action("GetDepartmentTree","Account")`,
-                        type: "Get",
-                        data: {
-                            companyId: $('#CompanyId').val(),
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            if(data.length > 0){
-                               var treeD =  $('#DepartmentId').combotree({
-                                  data:data
-                                });
-                                //treeD.combotree('disable')
-                                $.ajax({
-                                          url: `@Url.Action("GetPositionTree","Account")`,
-                                          type: "Get",
-                                          data: {
-                                              departmentId: $('#DepartmentId').val(),
-                                          },
-                                          dataType: "json",
-                                          cache: false,
-                                          success: function (data) {
-                                              if(data.length > 0){
-                                              var tree = $('#PositionId').combotree({
-                                                   data:data
-                                              });
-                                             // tree.combotree('disable')
-                                              }
-                                              else{
-                                              var tree = $('#PositionId').combotree({
-                                                   prompt:'Yoxdur !',
-                                              });
-                                              tree.combotree('disable')
-                                              }
-                                          },
-                                          error: function (data) {
-                                                  toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                                          }
-                                })
-                            }
-                            else{
-                                 var tree = $('#DepartmentId').combotree({
-                                    prompt:'Yoxdur !',
-                                 });
-                                 tree.combotree('disable')
-                            }
-                        },
-                        error: function (data) {
-                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                        }
-                      })
-
-                      $('#CompanyId').combotree({
-                            data:data,
-                            onClick:function(node){
-                             $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none");
-                             $.ajax({
-                             url: `@Url.Action("GetDepartmentTree","Account")`,
-                             type: "Get",
-                             data: {
-                                companyId:  node.id,
-                             },
-                             dataType: "json",
-                             cache: false,
-                             success: function (data) {
-                                if(data.length > 0) {
-                                    $('#DepartmentId').combotree({
-                                        data:data,
-                                        prompt:'Seçim edin'
-                                    })
-                                       $('#PositionId').combotree('setValue', '')
-                                       $('#DepartmentId').combotree({
-                                            onClick:function(node){
+                                        var tree = $('#PositionId').combotree({
+                                            prompt: 'Seçim edin'
+                                        });
+                                        tree.combotree('disable')
+                                        $('#DepartmentId').combotree({
+                                            data: data,
+                                            prompt: 'Seçim edin',
+                                            onClick: function(node) {
                                                 $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                                                 $.ajax({
                                                     url: `@Url.Action("GetPositionTree","Account")`,
                                                     type: "Get",
                                                     data: {
-                                                       departmentId:  node.id,
+                                                        departmentId: node.id,
                                                     },
                                                     dataType: "json",
                                                     cache: false,
-                                                    success: function (data){
-                                                        if(data.length>0){
-                                                       var treeP = $('#PositionId').combotree({
-                                                           data:data,
+                                                    success: function(data) {
 
-                                                           onClick:function(node){
-                                                               $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
-                                                           }
-                                                       });
-                                                       treeP.combotree('enable')
-                                                       $('#PositionId').combotree('setValue', '')
-                                                        }
-                                                        else{
-                                                        var treeP = $('#PositionId').combotree({
-                                                                 prompt:'Yoxdur !',
+                                                        if (data.length > 0) {
+                                                            var tree = $('#PositionId').combotree({
+                                                                data: data,
+                                                                prompt: 'Seçim edin'
                                                             });
-                                                            treeP.combotree('disable')
+                                                            tree.combotree('enable')
+                                                            $('#PositionId').combotree('setValue', '')
                                                         }
-
+                                                        else {
+                                                            var tre = $('#PositionId').combotree({
+                                                                prompt: 'Yoxdur !',
+                                                            });
+                                                            tre.combotree('disable')
+                                                            tre.combotree('setValue', '')
+                                                        }
+                                                    },
+                                                    error: function(data) {
+                                                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                                     }
                                                 })
                                             }
-                                       })
-                                }
-                                else{
-                                     var treeD = $('#DepartmentId').combotree({
-                                          prompt:'Yoxdur !',
-                                     });
-                                     treeD.combotree('disable')
-                                     treeD.combotree('setValue', '')
-                                     var treeP = $('#PositionId').combotree({
-                                          prompt:'Yoxdur !',
-                                     });
-                                     treeP.combotree('disable')
-                                     treeP.combotree('setValue', '')
+                                        })
+                                        tre.combotree('enable')
                                     }
-                             },
-                            error: function (data) {
+                                    else {
+                                        var tree = $('#DepartmentId').combotree({
+                                            prompt: 'Yoxdur !',
+                                        });
+                                        tree.combotree('disable')
+                                        tree.combotree('setValue', '')
+                                        var tre = $('#PositionId').combotree({
+                                            prompt: 'Yoxdur !',
+                                        });
+                                        tre.combotree('disable')
+                                        tre.combotree('setValue', '')
+                                    }
+                                },
+                                error: function(data) {
                                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                              }
-                          })
-                         }
-                      })
+                                }
+                            })
+                        }
+                    })
+
+                    $('#DepartmentId').combotree({
+                        data: data,
+                        prompt: 'Seçim edin',
+                        onClick: function(node) {
+                            $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                            $.ajax({
+                                url: `@Url.Action("GetPositionTree","Account")`,
+                                type: "Get",
+                                data: {
+                                    departmentId: node.id,
+                                },
+                                dataType: "json",
+                                cache: false,
+                                success: function(data) {
+
+                                    if (data.length > 0) {
+                                        var tree = $('#PositionId').combotree({
+                                            data: data,
+                                            prompt: 'Seçim edin',
+                                            onClick: function(node) {
+                                                $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
+                                            }
+                                        });
+                                        tree.combotree('enable')
+                                        $('#PositionId').combotree('setValue', '')
+                                    }
+                                    else {
+                                        var tre = $('#PositionId').combotree({
+                                            prompt: 'Yoxdur !',
+                                        });
+                                        tre.combotree('disable')
+                                        tre.combotree('setValue', '')
+                                    }
+                                },
+                                error: function(data) {
+                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                }
+                            })
+                        }
+                    })
+                },
+                error: function(data) {
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Position")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function(data) {
+                $.ajax({
+                    url: `@Url.Action("GetDepartmentTree","Account")`,
+                    type: "Get",
+                    data: {
+                        companyId: $('#CompanyId').val(),
                     },
-                    error: function (data) {
-                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                    dataType: "json",
+                    cache: false,
+                    success: function(data) {
+                        if (data.length > 0) {
+                            var treeD = $('#DepartmentId').combotree({
+                                data: data
+                            });
+                            //treeD.combotree('disable')
+                            $.ajax({
+                                url: `@Url.Action("GetPositionTree","Account")`,
+                                type: "Get",
+                                data: {
+                                    departmentId: $('#DepartmentId').val(),
+                                },
+                                dataType: "json",
+                                cache: false,
+                                success: function(data) {
+                                    if (data.length > 0) {
+                                        var tree = $('#PositionId').combotree({
+                                            data: data
+                                        });
+                                        // tree.combotree('disable')
+                                    }
+                                    else {
+                                        var tree = $('#PositionId').combotree({
+                                            prompt: 'Yoxdur !',
+                                        });
+                                        tree.combotree('disable')
+                                    }
+                                },
+                                error: function(data) {
+                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                }
+                            })
+                        }
+                        else {
+                            var tree = $('#DepartmentId').combotree({
+                                prompt: 'Yoxdur !',
+                            });
+                            tree.combotree('disable')
+                        }
+                    },
+                    error: function(data) {
+                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                     }
+                })
+
+                $('#CompanyId').combotree({
+                    data: data,
+                    onClick: function(node) {
+                        $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none");
+                        $.ajax({
+                            url: `@Url.Action("GetDepartmentTree","Account")`,
+                            type: "Get",
+                            data: {
+                                companyId: node.id,
+                            },
+                            dataType: "json",
+                            cache: false,
+                            success: function(data) {
+                                if (data.length > 0) {
+                                    $('#DepartmentId').combotree({
+                                        data: data,
+                                        prompt: 'Seçim edin'
+                                    })
+                                    $('#PositionId').combotree('setValue', '')
+                                    $('#DepartmentId').combotree({
+                                        onClick: function(node) {
+                                            $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                            $.ajax({
+                                                url: `@Url.Action("GetPositionTree","Account")`,
+                                                type: "Get",
+                                                data: {
+                                                    departmentId: node.id,
+                                                },
+                                                dataType: "json",
+                                                cache: false,
+                                                success: function(data) {
+                                                    if (data.length > 0) {
+                                                        var treeP = $('#PositionId').combotree({
+                                                            data: data,
+
+                                                            onClick: function(node) {
+                                                                $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
+                                                            }
+                                                        });
+                                                        treeP.combotree('enable')
+                                                        $('#PositionId').combotree('setValue', '')
+                                                    }
+                                                    else {
+                                                        var treeP = $('#PositionId').combotree({
+                                                            prompt: 'Yoxdur !',
+                                                        });
+                                                        treeP.combotree('disable')
+                                                    }
+
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                                else {
+                                    var treeD = $('#DepartmentId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    treeD.combotree('disable')
+                                    treeD.combotree('setValue', '')
+                                    var treeP = $('#PositionId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    treeP.combotree('disable')
+                                    treeP.combotree('setValue', '')
+                                }
+                            },
+                            error: function(data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                            }
+                        })
+                    }
+                })
+            },
+            error: function(data) {
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
         });
-              //event.preventDefault();
+        //event.preventDefault();
 
     @* }) *@
 
 
 
-    });
+                    });
 
 
 </script>

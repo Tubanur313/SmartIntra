@@ -608,14 +608,14 @@
 <!-- delete_ajax-->
 <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
 <script type="text/javascript">
-    //$.validator.setDefaults({ ignore:''});
+    $.validator.setDefaults({ ignore:''});
     $(document).ready(function() {
 
         let dateArray = [];
 
         $('.custom-date').each(function() {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             })
         })
 

@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <!-- Page-header start -->
 <div class="page-header">
     <div class="row justify-content-between">
@@ -18,6 +18,33 @@
 
 
     </div>
+    <form asp-action="List" method="post" class="card-block">
+        <div class="row">
+            <div class="col-sm-3">
+                <label class="floatLabel">   Şirkət: </label>
+                <div style="margin-bottom:20px">
+                    <input type="text" class="form-control" id="CompanyId" name="CompanyId" style="width:100%">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label class="floatLabel">  Şöbə: </label>
+                <div style="margin-bottom:20px">
+                    <input type="text" class="form-control" id="DepartmentId" name="DepartmentId" style="width:100%">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <label class="floatLabel">   Vəzifə: </label>
+                <div style="margin-bottom:20px">
+                    <input type="text" class="form-control" id="PositionId" name="PositionId" style="width:100%">
+                </div>
+            </div>
+            <div class=" col-sm-3 mt-4">
+                <button type="submit" class="btn btn-outline-success btn-round btn-block">
+                    Təsdiqlə
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 <!-- Page-header end -->
 <!-- Page body start -->
@@ -43,5 +70,121 @@
 @section CrudJs{
     <!-- delete_ajax-->
     <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+    <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+    <script class="removable" type="text/javascript">
+        $(document).ready(function($) {
+            $.ajax({
+                url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
+                type: "Get",
+                data: "",
+                dataType: "json",
+                cache: false,
+                success: function(data) {
+                    var tree = $('#DepartmentId').combotree({
+                        prompt: 'Seçim edin'
+                    });
+                    tree.combotree('disable')
+                    var tre = $('#PositionId').combotree({
+                        prompt: 'Seçim edin'
+                    });
+                    tre.combotree('disable')
+                    $('#CompanyId').combotree({
+                        data: data,
+                        prompt: 'Seçim edin',
+                        onClick: function(node) {
+                            $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                            var _id = node.id;
+                            $.ajax({
+                                url: `@Url.Action("GetDepartmentTree","Account")`,
+                                type: "Get",
+                                data: {
+                                    companyId: _id,
+                                },
+                                dataType: "json",
+                                cache: false,
+                                success: function(data) {
+                                    if (data.length > 0) {
+                                        $('#DepartmentId').combotree({
+                                            data: data,
+                                            prompt: 'Seçim edin'
+                                        });
+                                        var tree = $('#PositionId').combotree({
+                                            prompt: 'Seçim edin'
+                                        });
+                                        tree.combotree('disable')
+                                        $('#DepartmentId').combotree({
+                                            data: data,
+                                            prompt: 'Seçim edin',
+                                            onClick: function(node) {
+                                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                                var _id = node.id;
+                                                $.ajax({
+                                                    url: `@Url.Action("GetPositionTree","Account")`,
+                                                    type: "Get",
+                                                    data: {
+                                                        departmentId: _id,
+                                                    },
+                                                    dataType: "json",
+                                                    cache: false,
+                                                    success: function(data) {
+                                                        if (data.length > 0) {
+                                                            $('#PositionId').combotree({
+                                                                data: data,
+                                                                prompt: 'Seçim edin'
+                                                            });
+                                                        }
+                                                        else {
+                                                            var tree = $('#PositionId').combotree({
+                                                                prompt: 'Yoxdur !'
+                                                            });
+                                                            tree.combotree('disable')
+                                                        }
+                                                    },
+                                                    error: function(data) {
+                                                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                    else {
+                                        var tree = $('#DepartmentId').combotree({
+                                            prompt: 'Yoxdur !',
+                                        });
+                                        tree.combotree('disable')
+                                        var tre = $('#PositionId').combotree({
+                                            prompt: 'Yoxdur !',
+                                        });
+                                        tre.combotree('disable')
+                                    }
+                                },
+                                error: function(data) {
+                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                }
+                            })
+                        }
+                    })
+                },
+                error: function(data) {
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+            //$("form").submit(function(e) {
+            //    //e.preventDefault();
+            //    var CompanyId = $('#CompanyId').combotree('getValue');
+            //    var DepartmentId = $('#DepartmentId').combotree('getValue');
+
+            //    if (CompanyId === "") {
+            //        $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+            //        e.preventDefault();
+            //    }
+            //    if (DepartmentId === "") {
+            //        $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+            //        e.preventDefault();
+            //    }
+            //});
+        });
+    </script>
+
 }
 
