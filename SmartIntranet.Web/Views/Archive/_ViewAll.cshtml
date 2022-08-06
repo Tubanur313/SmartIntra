@@ -39,10 +39,19 @@
                                             @(archive.DepartmentId!=null?archive.Department.Name:"Təyin edilməyib")
                                         </td>
                                         <td>@(archive.AddedByUserId!=null?archive.AddedByUser.Fullname:"Təyin edilməyib")</td>
-                                                                                <td>
-                                            <a class="pl-4" target="_blank" href="~/archive/@archive.File" download>
-                                                <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
-                                            </a>
+                                        <td>
+                                            @if (!archive.IsDeleted)
+                                            {
+                                                <a class="pl-4" target="_blank" href="~/archive/@archive.File" download>
+                                                    <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="pl-4 disable">
+                                                    <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
+                                                </a>
+                                            }
                                         </td>
                                         @if (!archive.IsDeleted)
                                         {
