@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
-using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Entities.Concrete;

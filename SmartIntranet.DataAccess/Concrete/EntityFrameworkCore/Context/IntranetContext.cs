@@ -23,7 +23,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
             optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet6;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
 
             //Ilkin's local connection string
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmartTest322;Trusted_Connection=False;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmartTesting;Trusted_Connection=False;MultipleActiveResultSets=true");
 
             base.OnConfiguring(optionsBuilder);
         }

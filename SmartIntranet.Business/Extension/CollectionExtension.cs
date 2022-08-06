@@ -9,11 +9,14 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using SmartIntranet.Business.Provider;
 using SmartIntranet.Business.ValidationRules.FluentValidation;
+using SmartIntranet.Business.ValidationRules.FluentValidation.ArchiveValidate;
+using SmartIntranet.Business.ValidationRules.FluentValidation.FAQValidate;
 using SmartIntranet.Business.ValidationRules.FluentValidation.InventaryValidate;
 using SmartIntranet.Business.ValidationRules.FluentValidation.TicketTripValidate;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
+using SmartIntranet.DTO.DTOs.ArchiveDto;
 using SmartIntranet.DTO.DTOs.BusinessTripDto;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
@@ -24,6 +27,7 @@ using SmartIntranet.DTO.DTOs.ClauseDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.ContractDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
+using SmartIntranet.DTO.DTOs.FaqDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockCategoryDto;
 using SmartIntranet.DTO.DTOs.InventaryDtos.StockDto;
@@ -199,6 +203,12 @@ namespace SmartIntranet.Business.Extension
 
             services.AddTransient<IValidator<PermissionAddDto>, PermissionAddValidator>();
             services.AddTransient<IValidator<PermissionUpdateDto>, PermissionUpdateValidator>();
+            
+            services.AddTransient<IValidator<ArchiveAddDto>, ArchiveAddValidator>();
+            services.AddTransient<IValidator<ArchiveUpdateDto>, ArchiveUpdateValidator>();  
+            
+            services.AddTransient<IValidator<FaqAddDto>, FaqAddValidator>();
+            services.AddTransient<IValidator<FaqUpdateDto>, FaqUpdateValidator>();
         }
     }
 }
