@@ -166,9 +166,14 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var userCompId = _userManager.FindByIdAsync(GetSignInUserId().ToString()).Result.CompanyId;
-            var model = await _appUserService.GetAllIncUserAsync(userCompId);
-            return View(_map.Map<ICollection<AppUserListDto>>(model));
+            var user = await _userCompService.FirstOrDefault(GetSignInUserId());
+            if (user is null)
+            {
+                return View(new List<AppUserListDto>());
+            }
+            ICollection<AppUserListDto> model = new List<AppUserListDto>();
+            model.Add(_map.Map<AppUserListDto>(user.User));
+            return View(model);
         }
         [HttpPost]
         [Authorize(Policy = "account.list")]
@@ -235,11 +240,6 @@ namespace SmartIntranet.Web.Controllers
                         join ur in _db.UserRoles.Where(_ => _.UserId == user.Id) on r.Id equals ur.RoleId into ljUr
                         from jUr in ljUr.DefaultIfEmpty()
                         select Tuple.Create(r, jUr != null)).ToList();
-
-
-
-
-
 
             return View(vm);
         }

@@ -20,6 +20,11 @@ namespace SmartIntranet.Business.Concrete.IntraHr
             _genericDal = genericDal;
         }
 
+        public Task<UserComp> FirstOrDefault(int signInUserId)
+        {
+            return _userCompDal.FirstOrDefault(signInUserId);
+        }
+
         public Task<List<UserComp>> GetAllIncAsync(int signInUserId)
         {
             return _userCompDal.GetAllIncAsync(signInUserId);
