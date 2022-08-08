@@ -42,13 +42,25 @@
                 <input type="text" class="form-control" id="PositId" name="PositId" style="width:100%">
             </div>
         </div>
-        <div class="col-sm-6">
-            <label class="floatLabel">  Bitmə Tarixi: </label>
+@*        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="floatLabel">Sənəd növü: </label>
+                <select id="DocumentType" name="DocumentType" class="form-control">
+                    <option value="" selected disabled hidden>Seçim edin</option>
+                    @foreach (var item in ViewBag.contractTypes)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+        </div>*@
+        <div class="col-sm-4">
+            <label class="floatLabel">  Tarix aralığı: </label>
             <div class="form-group">
                 <input type="text" id="Interval" name="Interval" class="form-control" value="" />
             </div>
         </div>
-        <div class="offset-3 col-sm-3 mt-4">
+        <div class="col-sm-4 mt-4">
             <button type="submit" class="btn btn-outline-success btn-round btn-block">
                 Təsdiqlə
             </button>
@@ -86,7 +98,7 @@
     <script class="removable" type="text/javascript">
         $(document).ready(function($) {
             $.ajax({
-                url: `@Url.Action("GetCompanyTree","Account")`,
+                url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
                 type: "Get",
                 data: "",
                 dataType: "json",

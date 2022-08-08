@@ -67,7 +67,6 @@ namespace SmartIntranet.Web.Controllers
             TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
-            var signinUserCompId = _userService.FindByIdAsync(GetSignInUserId()).Result.CompanyId;
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync(x => !x.IsDeleted));
 
