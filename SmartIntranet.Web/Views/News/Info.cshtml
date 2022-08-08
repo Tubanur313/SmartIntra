@@ -242,7 +242,7 @@
 
                                     <div class="col-md-12">
 
-                                        <div class="card-block pb-5 pt-5">
+                                        <div style="padding-top:20px">
                                             @Model.GetPagenation(Url,"Info")
                                         </div>
 
@@ -256,8 +256,8 @@
                                 @*style="position:fixed;right:0;"*@
                                 <vc:contact-info></vc:contact-info>
                                 @*@await Component.InvokeAsync("ContactInfo")*@
-                                <div data-toggle="tooltip"
-                                     data-placement="right" title="üzərinə kliklə" class="calendar-bottom">
+                                <div 
+                                     data-placement="right" class="calendar-bottom">
                                     <div class="signboard outer">
                                         <div class="signboard front inner anim04c">
                                             <li class="year anim04c">
@@ -274,14 +274,14 @@
                                                     <span></span>
                                                 </li>
                                             </ul>
-                                            <li class="clock minute anim04c">
+                                          @*  <li class="clock minute anim04c">
                                                 <span></span>
                                             </li>
                                             <li class="calendarNormal date2 anim04c">
                                                 <span></span>
-                                            </li>
+                                            </li>*@
                                         </div>
-                                        <div class="signboard left inner anim04c">
+                                    @*    <div class="signboard left inner anim04c">
                                             <li class="clock hour anim04c">
                                                 <span></span>
                                             </li>
@@ -296,7 +296,7 @@
                                             <li class="calendarNormal month2 anim04c">
                                                 <span></span>
                                             </li>
-                                        </div>
+                                        </div>*@
                                     </div>
                                     <!-- main codes end -->
                                 </div>
@@ -354,21 +354,21 @@
             });
 
 
-            $(".moreless-button").each(function() {
+            //$(".moreless-button").each(function() {
 
-                $(this).click(function() {
+            //    $(this).click(function() {
 
-                    $(this).parent().parent().find('.moretext').toggle();
+            //        $(this).parent().parent().find('.moretext').toggle();
 
-                    if ($(this).text() == "Ətraflı") {
-                        $(this).parent().parent().find('.lesstext').hide();
-                        $(this).html("<i class='fa-solid fa-angle-up'></i>")
-                    } else {
-                        $(this).parent().parent().find('.lesstext').show();
-                        $(this).text("Ətraflı")
-                    }
-                });
-            });
+            //        if ($(this).text() == "Ətraflı") {
+            //            $(this).parent().parent().find('.lesstext').hide();
+            //            $(this).html("<i class='fa-solid fa-angle-up'></i>")
+            //        } else {
+            //            $(this).parent().parent().find('.lesstext').show();
+            //            $(this).text("Ətraflı")
+            //        }
+            //    });
+            //});
         });
     </script>
 }

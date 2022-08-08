@@ -33,9 +33,10 @@
     <link rel="stylesheet" type="text/css" href="~/files/assets/icon/icofont/css/icofont.css">
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css">
+    <link href="~/files/assets/css/mainCustom.css" rel="stylesheet" />
 </head>
 
-<body class="fix-menu">
+<body style="background-color: #fff !important;">
     <!-- Pre-loader start -->
     <div class="theme-loader">
         <div class="ball-scale">
@@ -75,31 +76,38 @@
     </div>
     <!-- Pre-loader end -->
 
-    <section class="login-block">
+    <section>
         <!-- Container-fluid starts -->
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    <!-- Authentication card start -->
-
-                    <form class="md-float-material form-material" asp-action="login"  id="LoginForm" method="post">
+        <div class="row">
+            <div class="col-sm-4 col-md-8 login-right-image">
+            </div>
+            <div class="col-sm-8 col-md-4 col-xs-12">
+                <!-- Authentication card start -->
+                <div style="margin: 25% 32px;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;">
+                    <form class="md-float-material form-material main-signin-form " asp-action="login" id="LoginForm" method="post" style="">
                         <div class="text-center">
                             @*<img src="~/files/assets/images/logo.png" alt="logo.png">*@
                             <img src="~/files/assets/images/common/sr-group-logo.png" alt="logo.png" />
                         </div>
 
-                        <div class="auth-box card">
+                        <div class="auth-box ">
                             <div class="card-block">
                                 <div class="row m-b-20">
                                 </div>
                                 <div>@ViewBag.error</div>
                                 <div class="form-group form-primary">
+                                    <label class="floatLabel">  Email: </label>
                                     <input type="email" class="form-control" asp-for="Email"
                                            placeholder="Email">
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                     <span class="form-bar"></span>
                                 </div>
                                 <div class="form-group form-primary">
+                                     <label class="floatLabel">  Şifrə: </label>
                                     <input type="password" class="form-control" asp-for="Password"
                                            placeholder="Şifrə">
                                     <span asp-validation-for="Password" class="text-danger"></span>
@@ -109,7 +117,7 @@
 
                                 <div class="row m-t-30">
                                     <div class="col-md-12">
-                                        <button class="g-recaptcha btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20"
+                                        <button class="g-recaptcha btn btn-dark-blue btn-md btn-block waves-effect waves-light text-center m-b-20"
                                                 data-sitekey="@googleConfig.Value.Key"
                                                 data-callback='onSubmit'
                                                 data-action='submit'>
@@ -120,8 +128,8 @@
 
                                 <hr />
                                 <div class="row">
-                                    <div class="col-md-10">
-                                        <p class="text-inverse text-left">
+                                    <div class="col-md-12">
+                                        <p class="text-inverse text-center align-item-center">
                                             <a href="https://srgroupco.com">
                                                 <b class="f-w-600">
                                                     srgroupco.com
@@ -130,37 +138,39 @@
                                         </p>
                                     </div>
                                     @*<div class="col-md-2">
-                                        <img class="img-fluid" src="~/files/assets/images/common/sr-gr-logo.svg"
-                                        alt="small-logo.png">
-                                        </div>*@
+                                    <img class="img-fluid" src="~/files/assets/images/common/sr-gr-logo.svg"
+                                    alt="small-logo.png">
+                                    </div>*@
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <!-- end of form -->
+
                 </div>
-                <!-- end of col-sm-12 -->
+
+                <!-- end of form -->
             </div>
-            <!-- end of row -->
+            <!-- end of col-sm-12 -->
         </div>
+        <!-- end of row -->
         <!-- end of container-fluid -->
     </section>
 
     <!-- Warning Section Ends -->
     <!-- Required Jquery -->
     @* <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["Google:RecaptchaV3SiteKey"]"></script>
-        <script>
-        grecaptcha.ready(function () {
-        grecaptcha.execute("@Configuration["Google:RecaptchaV3SiteKey"]", { action: "SignIn" })
-        .then(function (token) {
-        //double check
-        $('#LoginForm').prepend('<input type="hidden" name="token" value="' + token + '">');
-        $.getJSON("@Url.Action("RecaptchaVerify","User")&token=" + token, function (data) {
-        $('#LoginForm').find("input[type=submit]").prop("disabled", !data);
-        });
-        });
-        });
-        </script>*@
+    <script>
+    grecaptcha.ready(function () {
+    grecaptcha.execute("@Configuration["Google:RecaptchaV3SiteKey"]", { action: "SignIn" })
+    .then(function (token) {
+    //double check
+    $('#LoginForm').prepend('<input type="hidden" name="token" value="' + token + '">');
+    $.getJSON("@Url.Action("RecaptchaVerify","User")&token=" + token, function (data) {
+    $('#LoginForm').find("input[type=submit]").prop("disabled", !data);
+    });
+    });
+    });
+    </script>*@
     <script src="https://www.google.com/recaptcha/api.js"></script>
 
     <script>
@@ -199,7 +209,7 @@
     </script>
     <script>
 
-        $(document).keypress("u", function (e) {
+        $(document).keypress("u", function(e) {
             if (e.ctrlKey) {
                 return false;
             }
@@ -213,7 +223,7 @@
         // disable right click
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        document.onkeydown = function (e) {
+        document.onkeydown = function(e) {
 
             // disable F12 key
             if (e.keyCode == 123) {
