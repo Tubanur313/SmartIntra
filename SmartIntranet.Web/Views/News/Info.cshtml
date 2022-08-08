@@ -354,21 +354,21 @@
             });
 
 
-            //$(".moreless-button").each(function() {
+            $(".moreless-button").each(function() {
 
-            //    $(this).click(function() {
+                $(this).click(function() {
 
-            //        $(this).parent().parent().find('.moretext').toggle();
+                    $(this).parent().parent().find('.moretext').toggle();
 
-            //        if ($(this).text() == "Ətraflı") {
-            //            $(this).parent().parent().find('.lesstext').hide();
-            //            $(this).html("<i class='fa-solid fa-angle-up'></i>")
-            //        } else {
-            //            $(this).parent().parent().find('.lesstext').show();
-            //            $(this).text("Ətraflı")
-            //        }
-            //    });
-            //});
+                    if ($(this).text() == "Ətraflı") {
+                        $(this).parent().parent().find('.lesstext').hide();
+                        $(this).html("<i class='fa-solid fa-angle-up'></i>")
+                    } else {
+                        $(this).parent().parent().find('.lesstext').show();
+                        $(this).text("Ətraflı")
+                    }
+                });
+            });
         });
     </script>
 }
