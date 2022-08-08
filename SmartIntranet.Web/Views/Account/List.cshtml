@@ -23,19 +23,19 @@
             <div class="col-sm-3">
                 <label class="floatLabel">   Şirkət: </label>
                 <div style="margin-bottom:20px">
-                    <input type="text" class="form-control" id="CompanyId" name="CompanyId" style="width:100%">
+                    <input type="text" class="form-control" id="CompId" name="CompId" style="width:100%">
                 </div>
             </div>
             <div class="col-sm-3">
                 <label class="floatLabel">  Şöbə: </label>
                 <div style="margin-bottom:20px">
-                    <input type="text" class="form-control" id="DepartmentId" name="DepartmentId" style="width:100%">
+                    <input type="text" class="form-control" id="DepartId" name="DepartId" style="width:100%">
                 </div>
             </div>
             <div class="col-sm-3">
                 <label class="floatLabel">   Vəzifə: </label>
                 <div style="margin-bottom:20px">
-                    <input type="text" class="form-control" id="PositionId" name="PositionId" style="width:100%">
+                    <input type="text" class="form-control" id="PositId" name="PositId" style="width:100%">
                 </div>
             </div>
             <div class=" col-sm-3 mt-4">
@@ -80,19 +80,19 @@
                 dataType: "json",
                 cache: false,
                 success: function(data) {
-                    var tree = $('#DepartmentId').combotree({
+                    var tree = $('#DepartId').combotree({
                         prompt: 'Seçim edin'
                     });
                     tree.combotree('disable')
-                    var tre = $('#PositionId').combotree({
+                    var tre = $('#PositId').combotree({
                         prompt: 'Seçim edin'
                     });
                     tre.combotree('disable')
-                    $('#CompanyId').combotree({
+                    $('#CompId').combotree({
                         data: data,
                         prompt: 'Seçim edin',
                         onClick: function(node) {
-                            $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                            $('.CompId').text($('#CompId').data("val-required")).addClass("d-none")
                             var _id = node.id;
                             $.ajax({
                                 url: `@Url.Action("GetDepartmentTree","Account")`,
@@ -104,19 +104,19 @@
                                 cache: false,
                                 success: function(data) {
                                     if (data.length > 0) {
-                                        $('#DepartmentId').combotree({
+                                        $('#DepartId').combotree({
                                             data: data,
                                             prompt: 'Seçim edin'
                                         });
-                                        var tree = $('#PositionId').combotree({
+                                        var tree = $('#PositId').combotree({
                                             prompt: 'Seçim edin'
                                         });
                                         tree.combotree('disable')
-                                        $('#DepartmentId').combotree({
+                                        $('#DepartId').combotree({
                                             data: data,
                                             prompt: 'Seçim edin',
                                             onClick: function(node) {
-                                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                                $('.DepartId').text($('#DepartId').data("val-required")).addClass("d-none")
                                                 var _id = node.id;
                                                 $.ajax({
                                                     url: `@Url.Action("GetPositionTree","Account")`,
@@ -128,13 +128,13 @@
                                                     cache: false,
                                                     success: function(data) {
                                                         if (data.length > 0) {
-                                                            $('#PositionId').combotree({
+                                                            $('#PositId').combotree({
                                                                 data: data,
                                                                 prompt: 'Seçim edin'
                                                             });
                                                         }
                                                         else {
-                                                            var tree = $('#PositionId').combotree({
+                                                            var tree = $('#PositId').combotree({
                                                                 prompt: 'Yoxdur !'
                                                             });
                                                             tree.combotree('disable')
@@ -148,11 +148,11 @@
                                         })
                                     }
                                     else {
-                                        var tree = $('#DepartmentId').combotree({
+                                        var tree = $('#DepartId').combotree({
                                             prompt: 'Yoxdur !',
                                         });
                                         tree.combotree('disable')
-                                        var tre = $('#PositionId').combotree({
+                                        var tre = $('#PositId').combotree({
                                             prompt: 'Yoxdur !',
                                         });
                                         tre.combotree('disable')
@@ -171,15 +171,15 @@
             });
             //$("form").submit(function(e) {
             //    //e.preventDefault();
-            //    var CompanyId = $('#CompanyId').combotree('getValue');
-            //    var DepartmentId = $('#DepartmentId').combotree('getValue');
+            //    var CompId = $('#CompId').combotree('getValue');
+            //    var DepartId = $('#DepartId').combotree('getValue');
 
-            //    if (CompanyId === "") {
-            //        $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+            //    if (CompId === "") {
+            //        $('.CompId').text($('#CompId').data("val-required")).removeClass("d-none");
             //        e.preventDefault();
             //    }
-            //    if (DepartmentId === "") {
-            //        $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+            //    if (DepartId === "") {
+            //        $('.DepartId').text($('#DepartId').data("val-required")).removeClass("d-none");
             //        e.preventDefault();
             //    }
             //});

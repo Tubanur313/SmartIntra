@@ -173,9 +173,9 @@ namespace SmartIntranet.Web.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "account.list")]
-        public async Task<IActionResult> List(int CompanyId,int DepartmentId,int PositionId)
+        public async Task<IActionResult> List(int CompId,int DepartId,int PositId)
         {
-            var model = await _userCompService.GetAllIncUserWithFilterAsync(GetSignInUserId(), CompanyId, DepartmentId, PositionId);
+            var model = await _userCompService.GetAllIncUserWithFilterAsync(GetSignInUserId(), CompId, DepartId, PositId);
             return View(_map.Map<ICollection<AppUserListDto>>(model.Select(x => x.User)));
         }
         [HttpGet]
