@@ -24298,13 +24298,35 @@ div.dataTables_wrapper div.dataTables_paginate {
     margin-left: 80px;
 }
 
-.card-left-border {
-    border-left: 6px solid #744cbc;
+.card-left-border-orange {
+    border-left: 6px solid #ff9f43 !important;
+}
+.text-orange1 {
+    color: #ff9f43;
+}
+.card-left-border-blue {
+    border-left: 6px solid #7367f0 !important;
 }
 
-    .card-left-border span {
-        font-size: 10px
-    }
+.card-left-border span {
+    font-size: 10px
+}
+.text-red1 {
+    color: #ea5455 !important;
+}
+.card-left-border-text-red1 {
+    border-left: 6px solid #ea5455 !important;
+}
+.text-green1 {
+    color: #28c76f !important;
+}
+.card-left-border-text-green1 {
+    border-left: 6px solid #28c76f !important;
+}
+
+.text-blue {
+    color: #7367f0;
+}
 
 .margin-top-05 {
     margin-top: .5rem
@@ -24367,5 +24389,8 @@ div.dataTables_wrapper div.dataTables_paginate {
     border: 1px solid #d8d6de;
     padding: 1.5rem;
     border-radius: 0.357rem !important;
+}
+.table.dataTable thead tr th {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 /*# sourceMappingURL=style.css.map */

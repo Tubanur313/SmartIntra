@@ -13,7 +13,7 @@
 
 <div class="row">
     <div class="col-md-12">
-     <ul class="nav nav-tabs mb-3 tabs" role="tablist">
+        <ul class="nav nav-tabs mb-3 tabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab"
                    href="#home1" role="tab">Müqavilə məlumatları</a>
@@ -57,17 +57,20 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel">  Növ: </label>
-                            <select disabled name="select" asp-for="Type" name="Type" class="form-control">
-                                <option value="null" disabled selected hidden>Seçim edin</option>
-                                <option value="SALARY">Maaş dəyişikliyi</option>
-                                <option value="POSITION">Vəzifə dəyişikliyi</option>
-                                <option value="SALARY_POSITION">Maaş/Vəzifə dəyişikliyi</option>
-                                <option value="WORK_PLACE">İş yeri dəyişikliyi</option>
-                                <option value="WORK_GRAPHIC">İş qrafiki dəyişikliyi</option>
-                                <option value="VACATION">Məzuniyyət dəyişikliyi</option>
-                            </select>
-                            <span asp-validation-for="Type" class="text-danger"></span>
+                            <div class="form-group">
+                                <label class="floatLabel">  Növ: </label>
+                                <select disabled name="select" asp-for="Type" name="Type" class="form-control">
+                                    <option value="null" disabled selected hidden>Seçim edin</option>
+                                    <option value="SALARY">Maaş dəyişikliyi</option>
+                                    <option value="POSITION">Vəzifə dəyişikliyi</option>
+                                    <option value="SALARY_POSITION">Maaş/Vəzifə dəyişikliyi</option>
+                                    <option value="WORK_PLACE">İş yeri dəyişikliyi</option>
+                                    <option value="WORK_GRAPHIC">İş qrafiki dəyişikliyi</option>
+                                    <option value="VACATION">Məzuniyyət dəyişikliyi</option>
+                                </select>
+                                <span asp-validation-for="Type" class="text-danger"></span>
+                            </div>
+
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -80,12 +83,15 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <label class="floatLabel"> Sənəd tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
-                                <span asp-validation-for="CommandDate" class="text-danger"></span>
-                                <span class="messages"></span>
+                                <label class="floatLabel"> Sənəd tarixi: </label>
+                                <div class="form-group">
+                                    <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                                    <span asp-validation-for="CommandDate" class="text-danger"></span>
+                                    <span class="messages"></span>
+                                </div>
                             </div>
+
                         </div>
                         <div id="pos_div" class="col-sm-6">
                             <div class="form-group">
@@ -153,14 +159,13 @@
                                 <div class="form-radio">
                                     <div class="radio radio-inline ">
                                         <label for="IsMainVacationTrue">
-                                            <input  type="radio" id="IsMainVacationTrue" value="True" asp-for="IsMainVacation"
-                                                  >
+                                            <input type="radio" id="IsMainVacationTrue" value="True" asp-for="IsMainVacation">
                                             <i class="helper"></i>Əsas
                                         </label>
                                     </div>
                                     <div class="radio radio-inline ">
                                         <label for="IsMainVacationFalse">
-                                            <input  type="radio" id="IsMainVacationFalse" value="False" asp-for="IsMainVacation">
+                                            <input type="radio" id="IsMainVacationFalse" value="False" asp-for="IsMainVacation">
                                             <i class="helper"></i>Əlavə
                                         </label>
                                     </div>
@@ -170,7 +175,7 @@
                         <div class="col-sm-6" id="vacation_div">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət gün sayı: </label>
-                                <input  type="number" class="form-control " asp-for="VacationDay" autocomplete="off">
+                                <input type="number" class="form-control " asp-for="VacationDay" autocomplete="off">
                                 <span asp-validation-for="VacationDay" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -178,32 +183,32 @@
                         <input type="hidden" id="UserVacationDay" />
                         <input type="hidden" id="UserVacationDayDb" value="@Model.VacationDay" />
 
-                
-                <div class="col-sm-6" id="vacation_extra_div">
-                    <label class="floatLabel">  Əlavə Məzuniyyət Növü: </label>
-                    <select name="select" asp-for="VacationExtraType" name="VacationExtraType" class="form-control">
-                        <option value="null" disabled selected hidden>Seçim edin</option>
-                        <option value="0">Əmək stajına görə </option>
-                        <option value="1">Əmək şəraitinin xarakterinə görə</option>
-                        <option value="2">14 yaşadək ikidən çox uşağı olan qadına</option>
-                    </select>
-                    <span asp-validation-for="VacationExtraType" class="text-danger"></span>
-                </div>
 
-               
+                        <div class="col-sm-6" id="vacation_extra_div">
+                            <label class="floatLabel">  Əlavə Məzuniyyət Növü: </label>
+                            <select name="select" asp-for="VacationExtraType" name="VacationExtraType" class="form-control">
+                                <option value="null" disabled selected hidden>Seçim edin</option>
+                                <option value="0">Əmək stajına görə </option>
+                                <option value="1">Əmək şəraitinin xarakterinə görə</option>
+                                <option value="2">14 yaşadək ikidən çox uşağı olan qadına</option>
+                            </select>
+                            <span asp-validation-for="VacationExtraType" class="text-danger"></span>
+                        </div>
+
+
 
                     </div>
 
                     @*<div class="row">
 
-        <div id="salary_pos_div" class="col-sm-6">
-        <div class="form-group">
-        <label class="floatLabel">  Maaş: </label>
-        <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
-        </div>
-        </div>
+                    <div id="salary_pos_div" class="col-sm-6">
+                    <div class="form-group">
+                    <label class="floatLabel">  Maaş: </label>
+                    <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
+                    </div>
+                    </div>
 
-        </div>*@
+                    </div>*@
                     <input type="hidden" asp-for="UserId" />
                     <input type="hidden" asp-for="Type" />
                 </div>
@@ -233,7 +238,7 @@
 
 <script>
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         $("#salary_div").css('display', "none");
         $("#pos_div").css('display', "none");
@@ -245,12 +250,12 @@
         $("#vacation_extra_div").css('display', "none");
         let IsMainVac = $("#IsMainVacationTrue").is(":checked")
         let type_contract = $("#Type").val();
-        if(type_contract == 'VACATION' && IsMainVac==false){
-                $("#vacation_extra_div").css('display', "block");
-       
+        if (type_contract == 'VACATION' && IsMainVac == false) {
+            $("#vacation_extra_div").css('display', "block");
+
         }
 
-          if (type_contract == "SALARY") {
+        if (type_contract == "SALARY") {
             $("#salary_div").css('display', "block");
             $("#pos_div").css('display', "none");
             $("#place_div").css('display', "none");
@@ -311,63 +316,56 @@
 
         }
 
-        $('.input-daterange input').each(function () {
+        $('.input-daterange input').each(function() {
             $(this).datepicker({
                 //format: "dd.mm.yyyy"
             });
         });
 
-        $("form").submit( function(e) {
-                let type = $("#Type").val();
-                let salary = $("#Salary").val();
-                let positionId = $("#PositionId").val();
-                let isMainPlace = $("#IsMainPlace").val();
-                let workGraphicId = $("#WorkGraphicId").val();
-                let vacationDay = $("#VacationDay").val();
-                let vacationExtraType = $("#VacationExtraType").val();
-                let clauseId = $("#ClauseId").val();
-                let isMainVacation = $("#IsMainVacationTrue").is(":checked")
+        $("form").submit(function(e) {
+            let type = $("#Type").val();
+            let salary = $("#Salary").val();
+            let positionId = $("#PositionId").val();
+            let isMainPlace = $("#IsMainPlace").val();
+            let workGraphicId = $("#WorkGraphicId").val();
+            let vacationDay = $("#VacationDay").val();
+            let vacationExtraType = $("#VacationExtraType").val();
+            let clauseId = $("#ClauseId").val();
+            let isMainVacation = $("#IsMainVacationTrue").is(":checked")
 
-               
-                if(type == 'SALARY' && !salary)
-                {
-                    toastr.error(" Maaş boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-                else if(type == 'POSITION' && !positionId)
-                {
-                    toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-                else if(type == 'SALARY_POSITION' && !positionId)
-                {
-                    toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-                else if(type == 'SALARY_POSITION' && !salary)
-                {
-                    toastr.error(" Maaş boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-                else if(type == 'WORK_GRAPHIC' && !workGraphicId)
-                {
-                    toastr.error(" İstehsalat təqvimi boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-                else if(type == 'WORK_GRAPHIC' && !clauseId)
-                {
-                    toastr.error(" Şablon boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-                 else if(type == 'VACATION' && isMainVacation==false && !vacationExtraType)
-                {
-                    toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
-                    e.preventDefault();
-                }
-            });
+
+            if (type == 'SALARY' && !salary) {
+                toastr.error(" Maaş boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            else if (type == 'POSITION' && !positionId) {
+                toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            else if (type == 'SALARY_POSITION' && !positionId) {
+                toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            else if (type == 'SALARY_POSITION' && !salary) {
+                toastr.error(" Maaş boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            else if (type == 'WORK_GRAPHIC' && !workGraphicId) {
+                toastr.error(" İstehsalat təqvimi boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            else if (type == 'WORK_GRAPHIC' && !clauseId) {
+                toastr.error(" Şablon boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+            else if (type == 'VACATION' && isMainVacation == false && !vacationExtraType) {
+                toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
+                e.preventDefault();
+            }
+        });
 
         var type_id = $("#Type").val();
-  
+
         if (type_id == "SALARY") {
             $("#salary_div").css('display', "block");
             $("#pos_div").css('display', "none");
@@ -429,29 +427,27 @@
         }
 
         $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetUserVacationDay", "Account")',
-                data: {
-                    userId: $('#UserId').val(),
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $('#UserVacationDay').val(response);
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            type: 'Get',
+            url: '@Url.ActionLink("GetUserVacationDay", "Account")',
+            data: {
+                userId: $('#UserId').val(),
+            },
+            success: function(response) {
+                if (response.error == true) {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
                 }
-            });
+                $('#UserVacationDay').val(response);
+            },
+            error: function(response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
     });
 
 
-    $(document).on('change','#Type', function(){
+    $(document).on('change', '#Type', function() {
         var _id = $(this).val();
 
         if (_id == "SALARY") {
@@ -492,59 +488,56 @@
 
 
 
-    $(document).on('change','#UserId', function(){
-            var _id = $(this).val();
-            getPos(_id);
+    $(document).on('change', '#UserId', function() {
+        var _id = $(this).val();
+        getPos(_id);
     });
 
-    $(document).on('click','#IsMainVacationFalse', function(){
-         $('#VacationDay').val($('#UserVacationDay').val());
-           $("#vacation_extra_div").css('display', "block");
+    $(document).on('click', '#IsMainVacationFalse', function() {
+        $('#VacationDay').val($('#UserVacationDay').val());
+        $("#vacation_extra_div").css('display', "block");
     });
 
-    $(document).on('click','#IsMainVacationTrue', function(){
-         $('#VacationDay').val($('#UserVacationDayDb').val());
-           $("#vacation_extra_div").css('display', "none");
+    $(document).on('click', '#IsMainVacationTrue', function() {
+        $('#VacationDay').val($('#UserVacationDayDb').val());
+        $("#vacation_extra_div").css('display', "none");
     });
 
     function getPos(_id) {
-          $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetPositionWithUser", "Account")',
-                data: {
-                    userId: _id,
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#PositionId").empty();
-                    var html = "";
-
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-
-                    if(response.length>0)
-                    {
-                        $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                         $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        $.ajax({
+            type: 'Get',
+            url: '@Url.ActionLink("GetPositionWithUser", "Account")',
+            data: {
+                userId: _id,
+            },
+            success: function(response) {
+                if (response.error == true) {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
                 }
-           });
+                $("#PositionId").empty();
+                var html = "";
+
+                for (var i in response) {
+                    html += `<option value="${[response[i].id]}">
+                                ${[response[i].name]}</option>`
+                }
+
+                if (response.length > 0) {
+                    $("#PositionId").prop('disabled', false);
+                    $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
+                }
+                else {
+                    $("#PositionId").prop('disabled', false);
+                    $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                }
+
+            },
+            error: function(response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
     }
 
 
