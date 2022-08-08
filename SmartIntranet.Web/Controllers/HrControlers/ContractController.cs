@@ -140,7 +140,7 @@ namespace SmartIntranet.Web.Controllers
 
         [HttpPost]
         [Authorize(Policy = "contract.list")]
-        public async Task<IActionResult> List(int CompId, int DepartId, int PositId, string Interval)
+        public async Task<IActionResult> List(int CompId, int DepartId, int PositId, string Interval,string DocumentType)
         {
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
@@ -214,7 +214,12 @@ namespace SmartIntranet.Web.Controllers
             }
 
             result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+
+            if (DocumentType is null)
+            {
             return View(result_list);
+            }
+            return View(result_list.Where(x=>x.ContractKey== DocumentType).ToList());
         }
 
         [HttpGet]
