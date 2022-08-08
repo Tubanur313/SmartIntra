@@ -1,3 +1,14 @@
+button:focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+button:active {
+    outline: none !important;
+    border: none !important;
+}
+*:focus {
+    outline: none !important
+}
 .main-signin-form {
     /*padding: 1rem;*/
     margin-top: 1.5rem;
@@ -126,11 +137,41 @@ button, input, optgroup, select, textarea {
     right: 0;
     width: 329px;
 }
-
+.sortable-handler {
+    touch-action: none;
+}
+.btn-outline-fff{
+    border-color:#fff;
+    background-color:#fff;
+    border:none;
+}
+   
+.header-navbar .navbar-wrapper .navbar-container .header-notification .show-notification li:hover, .header-navbar .navbar-wrapper .navbar-container .header-notification .profile-notification li.profile-header-link:hover {
+    background-color: #fff;
+}
+.signboard {
+    width: 298px !important;
+    height: 200px !important;
+}
+.month, .day {
+    line-height: 80px !important;
+}
+.front {
+    background: #0A5A9C !important; 
+}
+.login-right-image {
+    box-sizing: border-box;
+    margin: 0px;
+    flex-direction: row;
+    background-image: url(/files/assets/images/signInIntranet.svg);
+    background-repeat: no-repeat;
+    background-color: rgb(250, 250, 250);
+    background-size: auto;
+    background-position: center center;
+}
 /*-----------------------------------------------------RESPONSIVE-----------------------------------------*/
-
 @media only screen and (max-width: 768px) {
-   /* .relative-news {
+    /* .relative-news {
         position: unset;
     }*/
     .news-list .social-designation {

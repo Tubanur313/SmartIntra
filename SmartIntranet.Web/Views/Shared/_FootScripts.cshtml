@@ -72,6 +72,7 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+
         $(".pcoded-navbar, .pcoded-inner-navbar, #mCSB_1, #mCSB_1_container, #listed-links, .pcoded-hasmenu, .pcoded-hasmenu, #mCSB_1_container_wrapper").mouseover(function() {
             if ($("#mobile-collapse i").hasClass("icon-toggle-left") && $('#' + "pcoded").attr("vertical-nav-type") === "offcanvas") {
 
@@ -169,8 +170,16 @@
                 }
             }
         })
+        //--------------------------------------------------------------------------
+        //window.addEventListener('wheel', { passive: false })
 
 
+        //window.addEventListener('touchstart', function() {
+        //    // some logic
+        //}, { passive: false }); 
+
+        //--------------------------------------------------------------------------
+        //window.addEventListener("touchstart", func, {passive: true} );
         //active tab and links
         $("#listed-links").find('[href="' + window.location.pathname + '"]').parent().parent().parent().addClass('pcoded-trigger')
         $("#listed-links").find('[href="' + window.location.pathname + '"]').parent().addClass('active')

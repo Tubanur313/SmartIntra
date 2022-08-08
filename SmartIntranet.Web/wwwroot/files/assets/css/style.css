@@ -260,7 +260,7 @@ p {
 
             .card .card-header .card-header-right .card-option {
                 -webkit-transition: 0.3s ease-in-out;
-                transition: 0.3s ease-in-out
+                transition: 0.3s ease-in-out;
             }
 
                 .card .card-header .card-header-right .card-option li {
@@ -1542,7 +1542,7 @@ a.bg-danger:focus, a.bg-danger:hover {
     }
 
     .md-tabs .nav-item.open .nav-link, .md-tabs .nav-item.open .nav-link:focus, .md-tabs .nav-item.open .nav-link:hover, .md-tabs .nav-link.active, .md-tabs .nav-link.active:focus, .md-tabs .nav-link.active:hover {
-        color: #01a9ac;
+        color: #00cfe8 !important;
         border: none;
         background-color: transparent;
         border-radius: 0
@@ -7824,6 +7824,14 @@ table thead .border-bottom-info th, table tbody .border-bottom-info th, table tb
     display: block
 }
 
+.pcoded .pcoded-content {
+    transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.pcoded[theme-layout="vertical"][vertical-placement="left"][vertical-nav-type="offcanvas"][vertical-effect="shrink"] .pcoded-navbar {
+    transition: transition: .4s cubic-bezier(.25,.8,.25,1),background 0s;
+}
+
 .pcoded-inner-navbar {
     display: block;
     position: relative
@@ -11426,8 +11434,14 @@ table thead .border-bottom-info th, table tbody .border-bottom-info th, table tb
     }
 
     .pcoded .pcoded-header[header-theme="theme1"] .navbar-logo a {
-        color: #fff
+        color: #fff;
     }
+
+        .pcoded .pcoded-header[header-theme="theme1"] .navbar-logo a.mobile-options {
+            color: #fff;
+            width: 40px;
+            height: 40px;
+        }
 
     .pcoded .pcoded-header[header-theme="theme1"] .navbar-wrapper .header-search .main-search .input-group .input-group-addon {
         color: #404E67
@@ -22478,7 +22492,7 @@ span.value {
             .header-navbar .navbar-wrapper .navbar-logo .mobile-options {
                 display: block;
                 position: absolute;
-                right: 30px
+                right: 19px
             }
 
         .header-navbar .navbar-container .nav-left, .header-navbar .navbar-wrapper .navbar-container .nav-right {
@@ -24307,6 +24321,7 @@ div.dataTables_wrapper div.dataTables_paginate {
     }
 
 .modal-body .nav-tabs .nav-item {
+    margin-bottom: 5px;
     margin-left: 5px;
 }
 

@@ -1,28 +1,33 @@
 ﻿@model AppUserInfoDto
 
- <ul class="nav-right">
+<ul class="nav-right">
 
-            
-                <li class="user-profile header-notification">
-                    <div class="dropdown-primary dropdown">
-                        <div class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="~/@(Model.Picture!=null?"profile/"+Model.Picture:"uploads/default.png")" class="img-radius " style=" height: 40px; width: 45px;">
-                            <span>@Model.Name @Model.Surname</span>
-                            <i class="feather icon-chevron-down"></i>
-                        </div>
-                        <ul class="show-notification profile-notification dropdown-menu">
-                            <li>
-                                <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.Id">
-                                    <i class="feather icon-user"></i> Şəxsi Kabinet
-                                </a>
-                            </li>
-                            <li>
-                                <a asp-action="SignOut" asp-controller="account">
-                                    <i class="feather icon-log-out"></i> Çıxış et
-                                </a>
-                            </li>
-                        </ul>
 
-                    </div>
+    <li class="user-profile header-notification">
+        <div class="dropdown-primary dropdown">
+            <div class="dropdown-toggle" data-toggle="dropdown">
+                <img src="~/@(Model.Picture!=null?"profile/"+Model.Picture:"uploads/default.png")" class="img-radius " style=" height: 40px; width: 45px;">
+                <span>@Model.Name @Model.Surname</span>
+                <i class="feather icon-chevron-down"></i>
+            </div>
+            <ul class="show-notification profile-notification dropdown-menu">
+                <li class="profile-header-link" style="padding:0">
+                    <button class="btn btn-outline-fff">
+                        <a asp-controller="User" asp-action="Profile" asp-route-id="@Model.Id">
+                            <i class="feather icon-user"></i> Şəxsi Kabinet
+                        </a>
+                    </button>
+
+                </li>
+                <li class="profile-header-link"  style="padding:0">
+                    <button class="btn  btn-outline-fff">
+                        <a asp-action="SignOut" asp-controller="account">
+                            <i class="feather icon-log-out"></i> Çıxış et
+                        </a>
+                    </button>
                 </li>
             </ul>
+
+        </div>
+    </li>
+</ul>
