@@ -33,5 +33,10 @@ namespace SmartIntranet.Business.Concrete
         {
             return _contractDal.GetAllIncCompAsync(filter);
         }
+
+        public Task<List<Contract>> GetAllIncCompAsync(int companyId, int departmentId, int positionId, string Interval)
+        {
+            return _contractDal.GetAllIncCompAsync(companyId, departmentId, positionId,Interval);
+        }
     }
 }

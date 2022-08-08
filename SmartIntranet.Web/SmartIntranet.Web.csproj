@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Dashboard\" />
+    <Folder Include="wwwroot\FAQs\" />
   </ItemGroup>
 
 </Project>

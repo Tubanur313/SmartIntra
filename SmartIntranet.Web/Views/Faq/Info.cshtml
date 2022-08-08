@@ -1,0 +1,57 @@
+﻿@model List<FaqListDto>
+
+<div class="row">
+
+    <div class="col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-header-text">Ən çox verilən Suallar və cavabları</h5>
+            </div>
+            <div class="card-block accordion-block">
+                <div id="accordion" role="tablist" aria-multiselectable="true">
+                    @foreach (var faq in Model)
+                    {
+
+                        <div class="accordion-panel">
+                            <div class="accordion-heading" role="tab" id="heading-@faq.Id">
+                                <h3 class="card-title accordion-title">
+                                    <a class="accordion-msg scale_active collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-@faq.Id" aria-expanded="false" aria-controls="collapse-@faq.Id">
+                                        @faq.Question
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapse-@faq.Id" class="panel-collapse in collapse" role="tabpanel" aria-labelledby="heading-@faq.Id" style="">
+                                <div class="accordion-content accordion-desc">
+                                    @if (faq.File != null)
+                                    {
+                                        <div class="col-lg-6 col-sm-6">
+                                            <div class="thumbnail">
+                                                <div class="thumb">
+                                                    <img src="~/FAQs/@faq.File" alt="" class="img-fluid img-thumbnail">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <p>
+                                        @faq.Answer
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>
+@*<script>
+    $(document).ready(function() {
+
+    });
+</script>*@

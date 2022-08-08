@@ -1,0 +1,202 @@
+﻿@model ArchiveUpdateDto
+
+@{
+    Layout = null;
+}
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id">
+            <input type="hidden" asp-for="File">
+            <div class="tab-content tabs card-block">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="floatLabel">  Ad: </label>
+                            <input type="text" class="form-control" asp-for="Name" autocomplete="off">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="floatLabel">İstifadəçi: </label>
+                            <select name="select" asp-for="AddedByUserId" name="AddedByUserId" class="form-control">
+                                <option value="" selected disabled hidden>Seçim edin</option>
+                                @foreach (AppUserDetailsDto item in ViewBag.users)
+                                {
+                                    <option value="@item.Id">@item.FullName | @item.Company | @item.Department | @item.Position</option>
+                                }
+                            </select>
+                            <span asp-validation-for="AddedByUserId" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="floatLabel">   Şirkət: </label>
+                        <div style="margin-bottom:20px">
+                            <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
+                            <span class="CompanyId text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="floatLabel">  Şöbə: </label>
+                        <div style="margin-bottom:20px">
+                            <input type="text" class="form-control" asp-for="DepartmentId" style="width:100%">
+                            <span class="DepartmentId text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="floatLabel"> Fayl: </label>
+                        <div class="file upload form-control mb-3" style="position: relative;overflow: hidden;">
+                            <i class="fas fa-cloud-upload-alt" style="color: #01a9ac"></i>
+                            <span id="pdfTxt"> Fayl yüklə</span>
+                            <input id="FaqFile" type="file" name="faqFile" style="cursor: pointer;position: absolute; font-size: 50px; opacity: 0; right: 0; top: 0;" />
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floatLabel">  Ətraflı: </label>
+                            <textarea type="text" class="form-control" asp-for="Description" style="width:100%"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary m-b-0 btn-block">
+                            Təsdiqlə
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+@await Html.PartialAsync("_ValidationScriptsPartial")
+<script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+<!-- ckeditor js -->
+<script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
+
+<script class="removable">
+
+    $(document).ready(function() {
+
+        CKEDITOR.replace('Description');
+
+        $('#pdfTxt').text($("#File").val());
+        $('#FaqFile').change(function() {
+            $("form").submit(function(e) {
+                let readyDoc = $("#FaqFile").val();
+                if (!(readyDoc)) {
+                    toastr.error(" Fayl boş ola bilməz !", "Xəta!");
+                    e.preventDefault();
+                }
+            });
+                var file = $('#FaqFile')[0].files[0].name;
+            $('#pdfTxt').text(file);
+
+        });
+
+        $.ajax({
+            url: `@Url.Action("GetCompanyTree","Archive")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function(data) {
+                $.ajax({
+                    url: `@Url.Action("GetDepartmentTree","Archive")`,
+                    type: "Get",
+                    data: {
+                        companyId: $('#CompanyId').val(),
+                    },
+                    dataType: "json",
+                    cache: false,
+                    success: function(data) {
+                        if (data.length > 0) {
+                            var tree = $('#DepartmentId').combotree({
+                                data: data,
+                                prompt: 'Seçim edin'
+                            });
+                        }
+                        else {
+                            var tree = $('#DepartmentId').combotree({
+                                prompt: 'Yoxdur !',
+                            });
+                            tree.combotree('disable')
+                        }
+                    },
+                    error: function(data) {
+                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                    }
+                })
+
+                $('#CompanyId').combotree({
+                    data: data,
+                    prompt: 'Seçim edin',
+                    onClick: function(node) {
+                        $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                        var _id = node.id;
+                        $.ajax({
+                            url: `@Url.Action("GetDepartmentTree","Archive")`,
+                            type: "Get",
+                            data: {
+                                companyId: _id,
+                            },
+                            dataType: "json",
+                            cache: false,
+                            success: function(data) {
+                                if (data.length > 0) {
+                                    $('#DepartmentId').combotree({
+                                        data: data,
+                                        prompt: 'Seçim edin',
+                                        onClick: function(node) {
+                                            $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+
+                                        }
+                                    });
+                                }
+                                else {
+                                    var tree = $('#DepartmentId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    tree.combotree('disable')
+                                }
+                            },
+                            error: function(data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                            }
+                        })
+                    }
+                })
+            },
+            error: function(data) {
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
+        $("form").submit(function(e) {
+            //e.preventDefault();
+            var CompanyId = $('#CompanyId').combotree('getValue');
+            var DepartmentId = $('#DepartmentId').combotree('getValue');
+            if (CompanyId === "") {
+                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            }
+            if (DepartmentId === "") {
+                $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            }
+
+
+            //var Description = CKEDITOR.instances['Description'].getData().replace(/<[^>]*>/gi, '').length;
+            //if (!(Description)) {
+            //    toastr.error("Məzmun boş ola bilməz", "Diqqət !");
+            //    e.preventDefault();
+            //}
+        });
+    });
+</script>

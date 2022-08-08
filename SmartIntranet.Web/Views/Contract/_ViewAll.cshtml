@@ -6,8 +6,8 @@
         <div class="col-lg-12 col-xl-12">
             <!-- Job description card start -->
             <div class="card">
-                <div class= contact-details">
-                     <div class="data_table_main table-responsive dt-responsive pb-15">
+                <div class=contact-details">
+                    <div class="data_table_main table-responsive dt-responsive pb-15">
                         <table id="simpletable"
                                class="table
                      table-striped
@@ -17,70 +17,70 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Əməkdaş</th>
-                                    <th>Müqavilə növü</th>
+                                    <th>Sənəd növü</th>
                                     <th>Sənəd nömrəsi</th>
                                     <th>Sənəd tarixi</th>
                                     <th class="text-center position-relative">
                                         @if (User.HasAccess("contract.add"))
                                         {
-                                            <button type="button"
-                                                class="btn btn-outline-success 
+                                        <button type="button"
+                                                class="btn btn-outline-success
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="icofont icofont-plus m-0"></i>
-                                            </button>
+                                            <i class="icofont icofont-plus m-0"></i>
+                                        </button>
 
-                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                @foreach (var el in ViewBag.contractTypes)
-                                                {
-                                                    @if (el.Key == "WORK_ACCEPT")
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Add","Contract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    }
-                                                    else if (el.Key == "PERSONAL_CHG")
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Add","PersonalContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    }
-                                                    else if (el.Key == "VACATION")
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Add","VacationContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    }
-                                                    else if (el.Key == "BUSINESS_TRIP")
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Add","BusinessTrip",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    }
-                                                    else if (el.Key == "TERMINATION")
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Add","TerminationContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    } else if (el.Key == "LONG_CONTRACT")
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Add","LongContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    }
-                                                    else
-                                                    {
-                                                        <li>
-                                                            <button type="button" class="w-100 text-left btn"> @el.Name </button>
-                                                        </li>
-                                                    }
+                                        <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                            @foreach (var el in ViewBag.contractTypes)
+                                            {
+                                            @if (el.Key == "WORK_ACCEPT")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Add","Contract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            }
+                                            else if (el.Key == "PERSONAL_CHG")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Add","PersonalContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            }
+                                            else if (el.Key == "VACATION")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Add","VacationContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            }
+                                            else if (el.Key == "BUSINESS_TRIP")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Add","BusinessTrip",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            }
+                                            else if (el.Key == "TERMINATION")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Add","TerminationContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            } else if (el.Key == "LONG_CONTRACT")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Add","LongContract",Context.Request.Scheme)', '@el.Name')" type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            }
+                                            else
+                                            {
+                                            <li>
+                                                <button type="button" class="w-100 text-left btn"> @el.Name </button>
+                                            </li>
+                                            }
 
-                                                }
+                                            }
 
 
-                                            </ul>
+                                        </ul>
 
 
 
@@ -93,209 +93,209 @@
                                 @foreach (var contract in Model)
                                 {
 
-                                    <tr>
-                                        <td>
-                                            @contract.Id
-                                        </td>
+                                <tr>
+                                    <td>
+                                        @contract.Id
+                                    </td>
 
-                                        <td>
-                                            @if (contract.ContractKey != "BUSINESS_TRIP")
-                                            {
-                                                <span>@(contract.User.Name) @(contract.User.Surname) / @(contract.User.Position.Company.Name!=null ? contract.User.Position.Company.Name : "Təyin edilməyib")/ @(contract.User.Position.Department.Name!=null ? contract.User.Position.Department.Name : "Təyin edilməyib")/ @(contract.User.Position.Name!=null ? contract.User.Position.Name : "Təyin edilməyib")</span>
-                                            }
-                                            else
-                                            {
-                                                <span>@contract.FullName</span>
-                                            }
-                                        </td>
-
-                                        <td>
-                                            @contract.ContractName
-                                        </td>
-
-
-                                        <td>
-                                            @if (contract.ContractNumber != null)
-                                            {
-                                                @contract.ContractNumber
-                                            }
-                                            else
-                                            {
-                                                @contract.CommandNumber
-                                            }
-                                        </td>
-
-                                        <td>
-                                            @if (contract.ContractStart != null)
-                                            {
-                                                <span>@contract.ContractStart.Value.ToString("dd.MM.yyyy")</span>
-                                            }
-                                            else if (contract.CommandDate != null)
-                                            {
-                                                <span>@contract.CommandDate.Value.ToString("dd.MM.yyyy")</span>
-                                            }
-                                        </td>
-
-                                        @if (contract.DeleteByUserId == null)
+                                    <td>
+                                        @if (contract.ContractKey != "BUSINESS_TRIP")
                                         {
-                                            <td class="dropdown text-center">
-                                                <button type="button"
+                                        <span>@(contract.User.Name) @(contract.User.Surname) / @(contract.User.Position.Company.Name!=null ? contract.User.Position.Company.Name : "Təyin edilməyib")/ @(contract.User.Position.Department.Name!=null ? contract.User.Position.Department.Name : "Təyin edilməyib")/ @(contract.User.Position.Name!=null ? contract.User.Position.Name : "Təyin edilməyib")</span>
+                                        }
+                                        else
+                                        {
+                                        <span>@contract.FullName</span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @contract.ContractName
+                                    </td>
+
+
+                                    <td>
+                                        @if (contract.ContractNumber != null)
+                                        {
+                                        @contract.ContractNumber
+                                        }
+                                        else
+                                        {
+                                        @contract.CommandNumber
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (contract.ContractStart != null)
+                                        {
+                                        <span>@contract.ContractStart.Value.ToString("dd.MM.yyyy")</span>
+                                        }
+                                        else if (contract.CommandDate != null)
+                                        {
+                                        <span>@contract.CommandDate.Value.ToString("dd.MM.yyyy")</span>
+                                        }
+                                    </td>
+
+                                    @if (contract.DeleteByUserId == null)
+                                    {
+                                    <td class="dropdown text-center">
+                                        <button type="button"
                                                 class="btn
                                                 btn-outline-info
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                    <i class="fa fa-list-ul"></i>
+                                            <i class="fa fa-list-ul"></i>
+                                        </button>
+                                        <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                            @if (User.HasAccess("contract.update"))
+                                            {
+
+                                            @if (contract.ContractKey == "WORK_ACCEPT")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Update","Contract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                    Yenilə
                                                 </button>
-                                                <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                    @if (User.HasAccess("contract.update"))
-                                                    {
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "PERSONAL_CHG")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Update","PersonalContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                    Yenilə
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "VACATION")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Update","VacationContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                    Yenilə
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "BUSINESS_TRIP")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Update","BusinessTrip",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                    Yenilə
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "TERMINATION")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Update","TerminationContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                    Yenilə
+                                                </button>
+                                            </li>
+                                            } else if (contract.ContractKey == "LONG_CONTRACT")
+                                            {
+                                            <li>
+                                                <button onclick="showInPopup('@Url.Action("Update","LongContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
+                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
+                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                    Yenilə
+                                                </button>
+                                            </li>
+                                            }
+                                            }
 
-                                                        @if (contract.ContractKey == "WORK_ACCEPT")
-                                                        {
-                                                            <li>
-                                                                <button onclick="showInPopup('@Url.Action("Update","Contract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
-                                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
-                                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                    Yenilə
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "PERSONAL_CHG")
-                                                        {
-                                                            <li>
-                                                                <button onclick="showInPopup('@Url.Action("Update","PersonalContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
-                                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
-                                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                    Yenilə
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "VACATION")
-                                                        {
-                                                            <li>
-                                                                <button onclick="showInPopup('@Url.Action("Update","VacationContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
-                                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
-                                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                    Yenilə
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "BUSINESS_TRIP")
-                                                        {
-                                                            <li>
-                                                                <button onclick="showInPopup('@Url.Action("Update","BusinessTrip",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
-                                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
-                                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                    Yenilə
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "TERMINATION")
-                                                        {
-                                                            <li>
-                                                                <button onclick="showInPopup('@Url.Action("Update","TerminationContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
-                                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
-                                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                    Yenilə
-                                                                </button>
-                                                            </li>
-                                                        } else if (contract.ContractKey == "LONG_CONTRACT")
-                                                        {
-                                                            <li>
-                                                                <button onclick="showInPopup('@Url.Action("Update","LongContract",new {id=contract.Id},Context.Request.Scheme)','Yenilə')"
-                                                                        class="w-100 text-left btn  btn-default waves-effect md-trigger text-warning">
-                                                                    <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                    Yenilə
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                    }
+                                            @if (User.HasAccess("contract.delete"))
+                                            {
+                                            @if (contract.ContractKey == "WORK_ACCEPT")
+                                            {
+                                            <li>
+                                                <button onclick="removeItem(@contract.Id, `@contract.CommandNumber`, `@Url.Action("Delete", "Contract").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                    Sil
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "PERSONAL_CHG")
+                                            {
+                                            <li>
+                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "PersonalContract").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                    Sil
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "VACATION")
+                                            {
 
-                                                    @if (User.HasAccess("contract.delete"))
-                                                    {
-                                                        @if (contract.ContractKey == "WORK_ACCEPT")
-                                                        {
-                                                            <li>
-                                                                <button onclick="removeItem(@contract.Id, `@contract.CommandNumber`, `@Url.Action("Delete", "Contract").ToString()`)"
-                                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                    Sil
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "PERSONAL_CHG")
-                                                        {
-                                                            <li>
-                                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "PersonalContract").ToString()`)"
-                                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                    Sil
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "VACATION")
-                                                        {
-
-                                                            <li>
-                                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "VacationContract").ToString()`)"
-                                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                    Sil
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "BUSINESS_TRIP")
-                                                        {
-                                                            <li>
-                                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "BusinessTrip").ToString()`)"
-                                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                    Sil
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                        else if (contract.ContractKey == "TERMINATION")
-                                                        {
-                                                            <li>
-                                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "TerminationContract").ToString()`)"
-                                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                    Sil
-                                                                </button>
-                                                            </li>
-                                                        }else if (contract.ContractKey == "LONG_CONTRACT")
-                                                        {
-                                                            <li>
-                                                                <button onclick="removeItem(@contract.Id, ` `,  `@Url.Action("Delete", "LongContract").ToString()`)"
-                                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                    Sil
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                    }
-                                                </ul>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td class="dropdown text-center">
-                                                <button disabled type="button"
+                                            <li>
+                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "VacationContract").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                    Sil
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "BUSINESS_TRIP")
+                                            {
+                                            <li>
+                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "BusinessTrip").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                    Sil
+                                                </button>
+                                            </li>
+                                            }
+                                            else if (contract.ContractKey == "TERMINATION")
+                                            {
+                                            <li>
+                                                <button onclick="removeItem(@contract.Id, `@contract.ContractNumber`, `@Url.Action("Delete", "TerminationContract").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                    Sil
+                                                </button>
+                                            </li>
+                                            }else if (contract.ContractKey == "LONG_CONTRACT")
+                                            {
+                                            <li>
+                                                <button onclick="removeItem(@contract.Id, ` `,  `@Url.Action("Delete", "LongContract").ToString()`)"
+                                                        class="btn btn-default waves-effect md-trigger  text-danger">
+                                                    <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                    Sil
+                                                </button>
+                                            </li>
+                                            }
+                                            }
+                                        </ul>
+                                    </td>
+                                    }
+                                    else
+                                    {
+                                    <td class="dropdown text-center">
+                                        <button disabled type="button"
                                                 class="btn
                                                 btn-outline-danger
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                    <i class="fa fa-list-ul"></i>
-                                                </button>
-                                            </td>
-                                        }
+                                            <i class="fa fa-list-ul"></i>
+                                        </button>
+                                    </td>
+                                    }
 
 
-                                    </tr>
+                                </tr>
 
                                 }
                             </tbody>
@@ -305,7 +305,7 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Əməkdaş</th>
-                                    <th>Müqavilə növü</th>
+                                    <th>Sənəd növü</th>
                                     <th>Sənəd nömrəsi</th>
                                     <th>Sənəd tarixi</th>
                                     <th class="text-center">-----</th>

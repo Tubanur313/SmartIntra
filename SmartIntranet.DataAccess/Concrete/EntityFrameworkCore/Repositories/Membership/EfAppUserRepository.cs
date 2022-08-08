@@ -80,5 +80,87 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .AnyAsync(x => x.Email == email);
         }
 
+        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int compId, int departId, int positId)
+        {
+            using var context = new IntranetContext();
+
+            if (compId > 0 && departId > 0 && positId > 0)
+            {
+                return await context.Users
+                .Where(x =>
+                x.CompanyId == compId &&
+                x.DepartmentId == departId &&
+                x.PositionId == positId &&
+                x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)
+                .Include(x => x.Position)
+                .Include(x => x.Company)
+                .Include(x => x.Department)
+                .Include(x => x.Grade)
+                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                .ToListAsync();
+            }
+            else if (compId > 0 && departId > 0 && positId == 0)
+            {
+                return await context.Users
+                .Where(x =>
+                x.CompanyId == compId &&
+                x.DepartmentId == departId &&
+                x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)
+                .Include(x => x.Position)
+                .Include(x => x.Company)
+                .Include(x => x.Department)
+                .Include(x => x.Grade)
+                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                .ToListAsync();
+            }
+            else if (compId > 0 && departId == 0 && positId == 0)
+            {
+                return await context.Users
+                .Where(x =>
+                x.CompanyId == compId &&
+                x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)
+                .Include(x => x.Position)
+                .Include(x => x.Company)
+                .Include(x => x.Department)
+                .Include(x => x.Grade)
+                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                .ToListAsync();
+            }
+            else
+            {
+                return await context.Users
+                .Where(x =>
+                x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)
+                .Include(x => x.Position)
+                .Include(x => x.Company)
+                .Include(x => x.Department)
+                .Include(x => x.Grade)
+                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                .ToListAsync();
+            }
+        }
+
+        public async Task<List<IntranetUser>> GetAllIncUserAsync(int? userCompId)
+        {
+            using var context = new IntranetContext();
+            if (userCompId is null)
+            {
+                return new List<IntranetUser>();
+            }
+            else
+            {
+                return await context.Users
+                    .Where(x =>
+                    x.Email != "tahiroglumahir@gmail.com"
+                    && x.CompanyId == userCompId && !x.IsDeleted)
+                    .Include(x => x.Position)
+                    .Include(x => x.Company)
+                    .Include(x => x.Department)
+                    .Include(x => x.Grade)
+                    .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                    .ToListAsync();
+            }
+
+        }
     }
 }

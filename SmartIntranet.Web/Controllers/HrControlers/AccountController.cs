@@ -35,8 +35,8 @@ using System.Net;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.Controllers
-{   
-    
+{
+
     public class AccountController : BaseIdentityController
     {
         private readonly IUserCompService _userCompService;
@@ -57,7 +57,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
-        public AccountController(IUserCompService userCompService,IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
+        public AccountController(IUserCompService userCompService, IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
@@ -162,15 +162,21 @@ namespace SmartIntranet.Web.Controllers
             return result;
         }
 
-
-
         [HttpGet]
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            return View(_map.Map<ICollection<AppUserListDto>>(await _appUserService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            var userCompId = _userManager.FindByIdAsync(GetSignInUserId().ToString()).Result.CompanyId;
+            var model = await _appUserService.GetAllIncUserAsync(userCompId);
+            return View(_map.Map<ICollection<AppUserListDto>>(model));
         }
-
+        [HttpPost]
+        [Authorize(Policy = "account.list")]
+        public async Task<IActionResult> List(int CompId,int DepartId,int PositId)
+        {
+            var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
+            return View(_map.Map<ICollection<AppUserListDto>>(model));
+        }
         [HttpGet]
         [Authorize(Policy = "account.permission")]
         public async Task<IActionResult> Permission(int id)
@@ -199,12 +205,12 @@ namespace SmartIntranet.Web.Controllers
                          from jUc in ljUc.DefaultIfEmpty()
                          select Tuple.Create(p, jUc != null)).ToList();
 
-            vm.Companies =await (from r in _db.Companies
-                              join ur in _db.UserComps.Where(_ => _.UserId == user.Id) on r.Id equals ur.CompanyId into ljUr
-                              from jUr in ljUr.DefaultIfEmpty()
-                              select Tuple.Create(r, jUr != null)).ToListAsync();
+            vm.Companies = await (from r in _db.Companies
+                                  join ur in _db.UserComps.Where(_ => _.UserId == user.Id) on r.Id equals ur.CompanyId into ljUr
+                                  from jUr in ljUr.DefaultIfEmpty()
+                                  select Tuple.Create(r, jUr != null)).ToListAsync();
 
-            
+
 
             return View(vm);
         }
@@ -336,7 +342,7 @@ namespace SmartIntranet.Web.Controllers
                 }
                 var current = GetSignInUserId();
                 List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
-                if (user.UserVacationRemains!=null && user.UserVacationRemains.Count() > 0)
+                if (user.UserVacationRemains != null && user.UserVacationRemains.Count() > 0)
                 {
                     foreach (var el in user.UserVacationRemains)
                     {
@@ -354,7 +360,7 @@ namespace SmartIntranet.Web.Controllers
                 var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
                 IntranetUser appUser = new IntranetUser
                 {
-                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." +user.Fathername),
+                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." + user.Fathername),
                     Name = user.Name,
                     Surname = user.Surname,
                     Fathername = user.Fathername,
@@ -398,13 +404,19 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted == false));
                 TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
 
                 return RedirectToAction("List", user);
             }
         }
 
+        public async Task<IActionResult> GetCompanyTreeBySignInUser()
+        {
+            var userComps = await _userCompService.GetAllIncAsync(GetSignInUserId());
+            var tree = DropDownTreeExtensions.BuildTrees(userComps.Select(x => x.Company).ToList());
+            return new JsonResult(tree);
+        }
         public async Task<IActionResult> GetCompanyTree()
         {
             var tree = DropDownTreeExtensions.BuildTrees(await _companyService
@@ -463,7 +475,7 @@ namespace SmartIntranet.Web.Controllers
         {
             var usr = await _userManager.FindByIdAsync(userId.ToString());
             var position = _map.Map<ICollection<PositionListDto>>(
-                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == usr.DepartmentId))
+                await _positionService.GetAllAsync(x => x.IsDeleted == false && x.DepartmentId == usr.DepartmentId))
                  .Select(x => new { x.Id, x.Name });
 
             return Ok(position);
@@ -474,7 +486,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetPositionWithDepartment(int departmentId)
         {
             var position = _map.Map<ICollection<PositionListDto>>(
-                await _positionService.GetAllAsync(x => x.IsDeleted  == false && x.DepartmentId == departmentId))
+                await _positionService.GetAllAsync(x => x.IsDeleted == false && x.DepartmentId == departmentId))
                  .Select(x => new { x.Id, x.Name });
 
             return Ok(position);
@@ -485,7 +497,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetDepartmentWithCompany(int companyId)
         {
             var department = _map.Map<ICollection<DepartmentListDto>>(
-                await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == companyId))
+                await _departmentService.GetAllAsync(x => x.IsDeleted == false && x.CompanyId == companyId))
                  .Select(x => new { x.Id, x.Name });
 
             return Ok(department);
@@ -531,7 +543,7 @@ namespace SmartIntranet.Web.Controllers
                     ur.AppUserId = id;
                     ur.UsedCount = 0;
                     ur.VacationCount = listModel.VacationMainDay + listModel.VacationExtraNature + listModel.VacationExtraExperience
-                         + listModel.VacationExtraChild; 
+                         + listModel.VacationExtraChild;
                     ur.RemainCount = ur.VacationCount;
 
                     await _userVacationRemains.AddAsync(ur);
@@ -542,7 +554,7 @@ namespace SmartIntranet.Web.Controllers
             var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == listModel.Id);
             updateUser.VacationTotal = 0;
             var all_remains = _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted);
-            foreach(var el in all_remains)
+            foreach (var el in all_remains)
             {
                 updateUser.VacationTotal += el.RemainCount;
             }
@@ -551,7 +563,7 @@ namespace SmartIntranet.Web.Controllers
             listModel.VacationTotal = updateUser.VacationTotal;
 
 
-              var levels = new List<LevelType>();
+            var levels = new List<LevelType>();
             levels.Add(new LevelType() { Id = EducationLevelConstant.PRIMARY_VOCATIONAL, Name = "İlkin peşə təhsili" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.GENERAL_SECONDARY, Name = "Ümumi orta təhsil" });
             levels.Add(new LevelType() { Id = EducationLevelConstant.BACHELORS, Name = "Bakalavr" });
@@ -570,7 +582,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.docs = _map.Map<ICollection<UserContractListDto>>(await _userContractService.GetContractsByActiveUserIdAsync(id));
 
-            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted  && x.IsEditable).ToListAsync();
+            listModel.UserVacationRemains = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted && x.IsEditable).ToListAsync();
             ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == id && !x.IsDeleted && !x.IsEditable).ToListAsync();
             ViewBag.position = _map.Map<ICollection<PositionListDto>>(await _positionService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.department = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted != true));
@@ -672,7 +684,8 @@ namespace SmartIntranet.Web.Controllers
                             updateUser.StartWorkDate != model.StartWorkDate)
                         {
                             await DelUserInfos(updateUser.Id, PersonalContractConst.VACATION);
-                        }else if (updateUser.Salary != model.Salary)
+                        }
+                        else if (updateUser.Salary != model.Salary)
                         {
                             await DelUserInfos(updateUser.Id, PersonalContractConst.SALARY);
                         }
@@ -893,7 +906,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> SetUserComp(int userId, int companyId, bool selected)
         {
             var user = await _appUserService.FindByIdAsync(userId);
-            
+
             if (user == null)
             {
                 return Ok(new
@@ -925,7 +938,7 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
 
-            var userComp = await _userCompService.GetAllAsync(c=>c.CompanyId == companyId && c.UserId==userId);
+            var userComp = await _userCompService.GetAllAsync(c => c.CompanyId == companyId && c.UserId == userId);
 
             if (selected == true && userComp.Count > 0)
             {
@@ -947,14 +960,14 @@ namespace SmartIntranet.Web.Controllers
 
             if (selected)
             {
-               await _userCompService.AddAsync(new UserComp
+                await _userCompService.AddAsync(new UserComp
                 {
                     UserId = userId,
                     CompanyId = companyId
                 });
 
-                
-                
+
+
 
                 return Ok(new
                 {
@@ -964,7 +977,7 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-               var usercomp= await _userCompService.GetAsync(x=>x.UserId==userId && x.CompanyId==companyId);
+                var usercomp = await _userCompService.GetAsync(x => x.UserId == userId && x.CompanyId == companyId);
                 await _userCompService.DeleteByIdAsync(usercomp.Id);
                 return Ok(new
                 {
@@ -1075,7 +1088,7 @@ namespace SmartIntranet.Web.Controllers
 
             var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == usr2.Id && x.Type == type).Result.OrderBy(x => x.CommandDate).ToList();
 
-            
+
             foreach (var el in personal_contract_chgs)
             {
                 var el_del = _personalContractService.FindByIdAsync(el.Id).Result;
@@ -1085,9 +1098,9 @@ namespace SmartIntranet.Web.Controllers
                 await _personalContractService.UpdateAsync(_map.Map<PersonalContract>(el_del));
             }
 
-            if(type == PersonalContractConst.VACATION)
+            if (type == PersonalContractConst.VACATION)
             {
-                var del_list = _vacationContractService.GetAllIncCompAsync(x=>x.UserId == usr2.Id && !x.IsDeleted).Result;
+                var del_list = _vacationContractService.GetAllIncCompAsync(x => x.UserId == usr2.Id && !x.IsDeleted).Result;
                 foreach (var el in del_list)
                 {
                     el.DeleteDate = DateTime.Now;

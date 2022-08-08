@@ -77,10 +77,10 @@
                         }
 
                         @*<li class="">
-        <a asp-controller="account" asp-action="Info">
-        <span class="pcoded-mtext">Permission</span>
-        </a>
-        </li>*@
+                    <a asp-controller="account" asp-action="Info">
+                    <span class="pcoded-mtext">Permission</span>
+                    </a>
+                    </li>*@
 
                         @if (User.HasAccess("nonworkingyear.list"))
                         {
@@ -125,10 +125,10 @@
                             </li>
                         }
                         @*<li class="">
-        <a asp-controller="account" asp-action="Info">
-        <span class="pcoded-mtext">Permission</span>
-        </a>
-        </li>*@
+                    <a asp-controller="account" asp-action="Info">
+                    <span class="pcoded-mtext">Permission</span>
+                    </a>
+                    </li>*@
                         @if (User.HasAccess("cause.list"))
                         {
                             <li class="">
@@ -219,31 +219,34 @@
                         {
                             <li class="">
                                 <a asp-controller="CategoryTicket" asp-action="list">
-                                <span class="pcoded-mtext">Kateqoriya</span>
-                            </a>
-                        </li>}
+                                    <span class="pcoded-mtext">Kateqoriya</span>
+                                </a>
+                            </li>
+                        }
                         @if (User.HasAccess("ticket.checklist"))
                         {
                             <li class="">
                                 <a asp-controller="checklist" asp-action="list">
-                                <span class="pcoded-mtext">Checklist</span>
-                            </a>
-                        </li>}
+                                    <span class="pcoded-mtext">Checklist</span>
+                                </a>
+                            </li>
+                        }
                         @if (User.HasAccess("smtp.index"))
                         {
                             <li class="">
                                 <a asp-controller="SmtpEmail" asp-action="index">
-                                <span class="pcoded-mtext">SMTP Mail Server</span>
-                            </a>
-                        </li>}
-                        @* @if (User.HasAccess("order.list"))
-                            {
-                            <li class="">
-                            <a asp-controller="order" asp-action="list">
-                            <span class="pcoded-mtext">Sifarişlər</span>
-                            </a>
+                                    <span class="pcoded-mtext">SMTP Mail Server</span>
+                                </a>
                             </li>
-                            }*@
+                        }
+                        @* @if (User.HasAccess("order.list"))
+                    {
+                    <li class="">
+                    <a asp-controller="order" asp-action="list">
+                    <span class="pcoded-mtext">Sifarişlər</span>
+                    </a>
+                    </li>
+                    }*@
                     </ul>
                 </li>
             }
@@ -318,6 +321,51 @@
                         <li class="">
                             <a asp-controller="StockCategory" asp-action="List">
                                 <span class="pcoded-mtext">İnventar Kateqoriya</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            }
+            @if (User.HasAccess("Faq.list"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon">
+                            <i class="icofont icofont-support-faq"></i>
+                        </span>
+                        <span class="pcoded-mtext">FAQ</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="Faq" asp-action="List">
+                                <span class="pcoded-mtext">FAQ siyahı</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="Faq" asp-action="Info">
+                                <span class="pcoded-mtext">Sual və Cavablar</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            } 
+            @if (User.HasAccess("Archive.list"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon">
+                            <i class="icofont icofont-archive"></i>
+                        </span>
+                        <span class="pcoded-mtext">Arxiv</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        <li class="">
+                            <a asp-controller="Archive" asp-action="List">
+                                <span class="pcoded-mtext">Arxiv siyahı</span>
                             </a>
                         </li>
                     </ul>

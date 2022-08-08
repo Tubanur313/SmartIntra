@@ -43,7 +43,7 @@ namespace SmartIntranet.Web.Controllers
         private readonly IBusinessTripService _businessTripService;
         private readonly ILongContractService _longContractService;
 
-        public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, ITerminationContractService terminationContractService, IMapper mapper, IContractService contractService, IPersonalContractService personalContractService, IContractFileService contractFileService, IClauseService clauseService,  IContractTypeService contractTypeService, IVacationContractService vacationContractService, IAppUserService userService, IWorkGraphicService workGraphicService, ICompanyService companyService, ILongContractService longContractService, IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, ITerminationContractService terminationContractService, IMapper mapper, IContractService contractService, IPersonalContractService personalContractService, IContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IVacationContractService vacationContractService, IAppUserService userService, IWorkGraphicService workGraphicService, ICompanyService companyService, ILongContractService longContractService, IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _contractService = contractService;
             _personalContractService = personalContractService;
@@ -67,7 +67,9 @@ namespace SmartIntranet.Web.Controllers
             TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
-            var contracts = _map.Map<List<ContractListDto>>(await _contractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var signinUserCompId = _userService.FindByIdAsync(GetSignInUserId()).Result.CompanyId;
+            var contracts = _map.Map<List<ContractListDto>>(await _contractService
+                .GetAllIncCompAsync(x => !x.IsDeleted));
 
             var work_accept = "WORK_ACCEPT";
             var el_work_accept = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == work_accept).Result[0].Name;
@@ -81,7 +83,86 @@ namespace SmartIntranet.Web.Controllers
             var personal_contracts = _map.Map<List<ContractListDto>>(await _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted));
             var personal_chg = "PERSONAL_CHG";
             var el_personal_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == personal_chg).Result[0].Name;
-                foreach (var el in personal_contracts)
+            foreach (var el in personal_contracts)
+            {
+                el.ContractKey = personal_chg;
+                el.ContractName = el_personal_chg;
+                result_list.Add(el);
+            }
+
+
+            var vacation_contracts = _map.Map<List<ContractListDto>>(await _vacationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var vacation_chg = "VACATION";
+            var el_vacation_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == vacation_chg).Result[0].Name;
+            foreach (var el in vacation_contracts)
+            {
+                el.ContractKey = vacation_chg;
+                el.ContractName = el_vacation_chg;
+                result_list.Add(el);
+            }
+
+            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
+            var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+            var business_trip = "BUSINESS_TRIP";
+            var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+            foreach (var el in business_trips)
+            {
+                int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                el.ContractKey = business_trip;
+                el.ContractName = el_business_trip;
+                result_list.Add(el);
+            }
+
+            var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var termination_chg = "TERMINATION";
+            var el_termination_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == termination_chg).Result[0].Name;
+            foreach (var el in termination_contracts)
+            {
+                el.ContractKey = termination_chg;
+                el.ContractName = el_termination_chg;
+                result_list.Add(el);
+            }
+
+            var long_contracts = _map.Map<List<ContractListDto>>(await _longContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var long_chg = "LONG_CONTRACT";
+            var el_long_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == long_chg).Result[0].Name;
+            foreach (var el in long_contracts)
+            {
+                el.ContractKey = long_chg;
+                el.ContractName = el_long_chg;
+                result_list.Add(el);
+            }
+
+            result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            return View(result_list);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "contract.list")]
+        public async Task<IActionResult> List(int CompId, int DepartId, int PositId, string Interval)
+        {
+            ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
+            List<ContractListDto> result_list = new List<ContractListDto>();
+
+
+            var contracts = _map.Map<List<ContractListDto>>(await _contractService
+                .GetAllIncCompAsync(CompId, DepartId, PositId, Interval));
+
+            var work_accept = "WORK_ACCEPT";
+            var el_work_accept = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == work_accept).Result[0].Name;
+            foreach (var el in contracts)
+            {
+                el.ContractKey = work_accept;
+                el.ContractName = el_work_accept;
+                result_list.Add(el);
+            }
+
+            var personal_contracts = _map.Map<List<ContractListDto>>(await _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var personal_chg = "PERSONAL_CHG";
+            var el_personal_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == personal_chg).Result[0].Name;
+            foreach (var el in personal_contracts)
             {
                 el.ContractKey = personal_chg;
                 el.ContractName = el_personal_chg;
@@ -141,7 +222,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "contract.detail")]
         public async Task<IActionResult> Detail()
         {
-            
+
             return View();
         }
 
@@ -149,10 +230,10 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "contract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
-            ViewBag.clauses = await _clauseService.GetAllAsync(x=> !x.IsDeleted && !x.IsBackground);
+            ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
             return View();
         }
 
@@ -167,10 +248,8 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
-
-             
                 var current = GetSignInUserId();
-                var result_model =  _contractService.AddReturnEntityAsync(_map.Map<Contract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(_map.Map<Contract>(model)).Result;
 
                 // Keys formats
                 var usr = await _appUserService.FindByUserAllInc(result_model.UserId);
@@ -223,7 +302,7 @@ namespace SmartIntranet.Web.Controllers
                     if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                     {
                         contractFile.ClauseId = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_labor_contract && !x.IsDeleted).Result[0].Id;
-                        contractFile.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc); 
+                        contractFile.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc);
                         contractFile.CreatedDate = DateTime.Now;
                     }
                 }
@@ -234,7 +313,7 @@ namespace SmartIntranet.Web.Controllers
                 commandFile.ContractId = result_model.Id;
                 commandFile.IsDeleted = false;
                 commandFile.IsClause = true;
-                var command_clause = _clauseService.GetAllIncCompAsync(x=>x.Key == ContractFileReadyConst.recruitment_command && !x.IsDeleted).Result[0];
+                var command_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_command && !x.IsDeleted).Result[0];
                 commandFile.ClauseId = command_clause.Id;
 
                 StringBuilder content1 = await GetDocxContent(command_clause.FilePath, formatKeys);
@@ -269,7 +348,6 @@ namespace SmartIntranet.Web.Controllers
                 {
                     success = Messages.Add.Added
                 });
-
             }
         }
 
@@ -280,7 +358,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var listModel = _map.Map<ContractUpdateDto>(await _contractService.FindByIdAsync(id));
-            
+
             if (listModel == null)
             {
                 return NotFound();
@@ -289,7 +367,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.company = await _companyService.FindByIdAsync((int)usr.CompanyId);
 
 
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted == false));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Id == usr.Id && x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
@@ -349,9 +427,9 @@ namespace SmartIntranet.Web.Controllers
                 //
 
                 var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.ContractId == model.Id && !x.IsDeleted);
-                foreach(var el in contract_files)
+                foreach (var el in contract_files)
                 {
-                    if(el.Clause.Key != ContractFileReadyConst.recruitment_command &&
+                    if (el.Clause.Key != ContractFileReadyConst.recruitment_command &&
                         el.Clause.Key != ContractFileReadyConst.recruitment_financial_responsibility &&
                         el.Clause.Key != ContractFileReadyConst.recruitment_privacy)
                     {
@@ -389,7 +467,7 @@ namespace SmartIntranet.Web.Controllers
                         el.IsClause = true;
                         await _contractFileService.UpdateAsync(el);
                     }
-                        
+
 
                 }
                 return RedirectToAction("List", new
