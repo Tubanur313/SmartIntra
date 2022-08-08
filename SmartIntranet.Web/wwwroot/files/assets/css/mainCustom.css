@@ -162,6 +162,7 @@ button, input, optgroup, select, textarea {
 .login-right-image {
     box-sizing: border-box;
     margin: 0px;
+    height: 100vh;
     flex-direction: row;
     background-image: url(/files/assets/images/signInIntranet.svg);
     background-repeat: no-repeat;
