@@ -14,6 +14,7 @@ namespace SmartIntranet.DataAccess.Interfaces
         Task<IntranetUser> FindUserPosWithId(int id);
         Task<bool> IsExistEmail(string email);
         Task<List<IntranetUser>> GetAllIncludeAsync(Expression<Func<IntranetUser, bool>> filter);
-
+        Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int compId, int departId, int positId);
+        Task<List<IntranetUser>> GetAllIncUserAsync(int? userCompId);
     }
 }

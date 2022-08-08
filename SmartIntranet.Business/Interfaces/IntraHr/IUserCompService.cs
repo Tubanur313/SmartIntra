@@ -7,7 +7,5 @@ namespace SmartIntranet.Business.Interfaces.IntraHr
     public interface IUserCompService : IGenericService<UserComp>
     {
         Task<List<UserComp>> GetAllIncAsync(int signInUserId);
-        Task<List<UserComp>> GetAllIncUserAsync(int signInUserId);
-        Task<List<UserComp>> GetAllIncUserWithFilterAsync(int signInUserId, int companyId, int departmentId, int positionId);
     }
 }

@@ -25,14 +25,5 @@ namespace SmartIntranet.Business.Concrete.IntraHr
             return _userCompDal.GetAllIncAsync(signInUserId);
         }
 
-        public Task<List<UserComp>> GetAllIncUserAsync(int signInUserId)
-        {
-            return _userCompDal.GetAllIncUserAsync(signInUserId);
-        }
-
-        public Task<List<UserComp>> GetAllIncUserWithFilterAsync(int signInUserId, int companyId, int departmentId, int positionId)
-        {
-            return _userCompDal.GetAllIncUserWithFilterAsync( signInUserId,  companyId,  departmentId, positionId);
-        }
     }
 }

@@ -162,21 +162,20 @@ namespace SmartIntranet.Web.Controllers
             return result;
         }
 
-
-
         [HttpGet]
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var model = await _userCompService.GetAllIncUserAsync(GetSignInUserId());
-            return View(_map.Map<ICollection<AppUserListDto>>(model.Select(x=>x.User)));
+            var userCompId = _userManager.FindByIdAsync(GetSignInUserId().ToString()).Result.CompanyId;
+            var model = await _appUserService.GetAllIncUserAsync(userCompId);
+            return View(_map.Map<ICollection<AppUserListDto>>(model));
         }
         [HttpPost]
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List(int CompId,int DepartId,int PositId)
         {
-            var model = await _userCompService.GetAllIncUserWithFilterAsync(GetSignInUserId(), CompId, DepartId, PositId);
-            return View(_map.Map<ICollection<AppUserListDto>>(model.Select(x => x.User)));
+            var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
+            return View(_map.Map<ICollection<AppUserListDto>>(model));
         }
         [HttpGet]
         [Authorize(Policy = "account.permission")]
