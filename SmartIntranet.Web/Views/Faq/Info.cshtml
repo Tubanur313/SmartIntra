@@ -1,57 +1,130 @@
 ﻿@model List<FaqListDto>
 
-<div class="row">
+<div class="faq-card">
+    <div class="card-block">
+        <div>
+            <h2 class="faq-header">Ən çox verilən suallar</h2>
+        </div>
+        <div class="row">
+          @*  <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="faq-navigation d-flex justify-content-between flex-column mb-2 mb-md-0">
+                    <ul class="nav-left nav flex-column nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home5" role="tab" aria-selected="true">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#profile5" role="tab" aria-selected="false">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#messages5" role="tab" aria-selected="false">Messages</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#settings5" role="tab" aria-selected="false">Settings</a>
+                        </li>
+                    </ul>
+                </div>
 
-    <div class="col-lg-12 col-xl-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-header-text">Ən çox verilən Suallar və cavabları</h5>
-            </div>
-            <div class="card-block accordion-block">
-                <div id="accordion" role="tablist" aria-multiselectable="true">
-                    @foreach (var faq in Model)
-                    {
 
-                        <div class="accordion-panel">
-                            <div class="accordion-heading" role="tab" id="heading-@faq.Id">
-                                <h3 class="card-title accordion-title">
-                                    <a class="accordion-msg scale_active collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-@faq.Id" aria-expanded="false" aria-controls="collapse-@faq.Id">
-                                        @faq.Question
-                                    </a>
-                                </h3>
-                            </div>
-                            <div id="collapse-@faq.Id" class="panel-collapse in collapse" role="tabpanel" aria-labelledby="heading-@faq.Id" style="">
-                                <div class="accordion-content accordion-desc">
-                                    @if (faq.File != null)
-                                    {
-                                        <div class="col-lg-6 col-sm-6">
-                                            <div class="thumbnail">
-                                                <div class="thumb">
-                                                    <img src="~/FAQs/@faq.File" alt="" class="img-fluid img-thumbnail">
+            </div>*@
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home5" role="tabpanel">
+                        <div class="accordion-margin mt-2 accordion collapse-icon"  id="accordion">
+
+                            @foreach (var faq in Model)
+                            {
+                                <div class="accordion-item ">
+                                    <div class="d-flex justify-content-between myAccording-head" id="faqHeading-@faq.Id"
+                                     data-toggle="collapse"
+                                     data-target="#faqCollapse-@faq.Id"
+                                     data-aria-expanded="true"
+                                     data-aria-controls="faqCollapse-@faq.Id">
+                                        <h2 class="accordion-header">
+                                            <button type="button" class="accordion-button">
+                                                @faq.Question
+                                            </button>
+                                        </h2>
+                                        <i class="fas fa-eye-slash" style="margin-top: 23px;margin-right: 20px;" aria-hidden="true"></i>
+
+                                        <i class="fas fa-eye" style="margin-top: 23px;margin-right: 20px;" aria-hidden="true"></i>
+                                    </div>
+
+                                    <div id="faqCollapse-@faq.Id"
+                                     aria-labelledby="faqHeading-@faq.Id"
+                                     data-parent="#accordion"
+                                     class="accordion-collapse collapse @*show*@"
+                                     style="">
+                                        <div class="accordion-body"> 
+                                            <p style="padding-left:15px">
+                                                @faq.Answer
+                                            </p>
+                                            @if (faq.File != null)
+                                            {
+                                                <div class="col-lg-6 col-sm-6">
+                                                    <div class="thumbnail">
+                                                        <div class="thumb">
+                                                            <img src="~/FAQs/@faq.File" alt="" class="img-fluid img-thumbnail">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            }
+
+                                           
                                         </div>
-                                    }
+                                    </div>
 
-                                    <p>
-                                        @faq.Answer
-                                    </p>
                                 </div>
-                            </div>
-                        </div>
-                    }
+                            }
 
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="profile5" role="tabpanel">
+                        <p class="m-0">
+                            2.Cras consequat in enim ut
+                            efficitur. Nulla posuere elit quis auctor
+                            interdum praesent sit amet nulla vel enim
+                            amet. Donec convallis tellus neque, et
+                            imperdiet felis amet.
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="messages5" role="tabpanel">
+                        <p class="m-0">
+                            3. This is Photoshop's version of
+                            Lorem IpThis is Photoshop's version of Lorem
+                            Ipsum. Proin gravida nibh vel velit auctor
+                            aliquet. Aenean sollicitudin, lorem quis
+                            bibendum auctor, nisi elit consequat ipsum,
+                            nec sagittis sem nibh id elit. Lorem ipsum
+                            dolor sit amet, consectetuer adipiscing
+                            elit. Aenean commodo ligula eget dolor.
+                            Aenean mas Cum sociis natoque penatibus et
+                            magnis dis.....
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="settings5" role="tabpanel">
+                        <p class="m-0">
+                            4.Cras consequat in enim ut
+                            efficitur. Nulla posuere elit quis auctor
+                            interdum praesent sit amet nulla vel enim
+                            amet. Donec convallis tellus neque, et
+                            imperdiet felis amet.
+                        </p>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 
 
 
-
 </div>
+
 @*<script>
     $(document).ready(function() {
 
     });
 </script>*@
+
