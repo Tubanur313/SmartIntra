@@ -256,18 +256,49 @@ namespace SmartIntranet.Web.Controllers
             }
             else if (Interval != null && DocumentType == null)
             {
-                var startD = Convert.ToDateTime(Interval.Split("-").First());
-                var endD = Convert.ToDateTime(Interval.Split("-").Last());
-                return View(result_list.Where(x => x.ContractStart >= startD
-                && x.ContractStart <= endD).ToList());
+                return View(result_list);
             }
-            else if (Interval == null && DocumentType != null)
+            else if (CompId == 0 && PositId == 0 && DepartId == 0 && Interval == null && DocumentType != null)
             {
                 return View(result_list.Where(x => x.ContractKey == DocumentType).ToList());
             }
+            else if (CompId > 0 && PositId == 0 && DepartId == 0)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId == 0)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId > 0)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId
+                && s.User.PositionId == PositId
+                ).ToList());
+            }           
+            else if (CompId > 0 && PositId == 0 && DepartId == 0 && DocumentType !=null)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                &&  s.ContractKey == DocumentType).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId == 0 && DocumentType != null)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId > 0 && DocumentType != null)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId
+                && s.User.PositionId == PositId
+                && s.ContractKey == DocumentType
+                ).ToList());
+            }
             else
             {
-                return View(result_list);
+                return View(new List<ContractListDto>());
             }
         }
 
