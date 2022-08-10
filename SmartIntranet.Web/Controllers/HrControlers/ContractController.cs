@@ -136,7 +136,6 @@ namespace SmartIntranet.Web.Controllers
             }
 
             result_list = result_list
-                .Where(x => x.User.CompanyId == compIdOfUser)
                 .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(result_list);
         }
