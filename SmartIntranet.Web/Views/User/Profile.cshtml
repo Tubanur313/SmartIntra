@@ -50,24 +50,24 @@
 
                                 <div class="row">
                                     @*<div class="col-md-2">
-                                        <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
-                                        Şəkil Yüklə
-                                        <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
-                                        </div>
-                                        </div>*@
+                                    <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+                                    Şəkil Yüklə
+                                    <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
+                                    </div>
+                                    </div>*@
                                     <div class="col-md-12  col-lg-12 col-sm-12">
                                         @*    <div class="pt-0">
-                                            <img src="~/profile/@Model.AppUserImageDto.Picture" class="pb-2" style="width: 200px; height: 200px;" alt="Default Avatar" />
-                                            <div class="tower-file">
-                                            <input type="file" id="demoInput4" />
-                                            <label for="demoInput4" class="tower-file-button">
-                                            <span class="mdi mdi-upload"></span>Select a File
-                                            </label>
-                                            <button type="button" class="tower-file-clear tower-file-button">
-                                            Clear
-                                            </button>
-                                            </div>
-                                            </div>*@
+                                        <img src="~/profile/@Model.AppUserImageDto.Picture" class="pb-2" style="width: 200px; height: 200px;" alt="Default Avatar" />
+                                        <div class="tower-file">
+                                        <input type="file" id="demoInput4" />
+                                        <label for="demoInput4" class="tower-file-button">
+                                        <span class="mdi mdi-upload"></span>Select a File
+                                        </label>
+                                        <button type="button" class="tower-file-clear tower-file-button">
+                                        Clear
+                                        </button>
+                                        </div>
+                                        </div>*@
                                         <div class="pt-0">
                                             <div class="tower-file">
                                                 <input type="file" id="demoInput4">
@@ -86,37 +86,31 @@
                                     </div>
 
                                     @*<div class="col-md-5 col-lg-5 col-sm-5">
-                                        <div id="lview" style="display:none!important;">
-                                        <div class="pt-0">
-                                        <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
-                                        </div>
-                                        </div>
-                                        </div>*@
+                                    <div id="lview" style="display:none!important;">
+                                    <div class="pt-0">
+                                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
+                                    </div>
+                                    </div>
+                                    </div>*@
                                 </div>
 
                             </div>
                         </div>
-                        <div class="card">
+                        <div class="card faq-card">
 
                             <div class="card-block">
-                                <ul class="nav nav-tabs md-tabs tabs-left b-none" style="width: 200px;"
-                                    role="tablist">
-                                    <li class="nav-item" style="display: flex; justify-content: space-between;">
-                                        <a class="nav-link active" data-toggle="tab"
-                                           href="#home5" role="tab">
-                                            <i class="icofont icofont-info-square  p-r-25 p-l-25"></i>Şəxsi Məlumatlar
-                                        </a>
-                                        <div class="slide"></div>
-                                    </li>
-
-                                    <li class="nav-item" style="display: flex; justify-content: space-between;">
-                                        <a class="nav-link" data-toggle="tab"
-                                           href="#profile5" role="tab">
-                                            <i class="icofont icofont-key-hole p-r-25 p-l-25"></i>Şifrə Yeniləmə
-                                        </a>
-                                        <div class="slide"></div>
-                                    </li>
-                                </ul>
+                                <div class="d-flex justify-content-between flex-column mb-2 mb-md-0">
+                                    <ul class="nav-left nav flex-column nav-pills" role="tablist">
+                                        <li class="nav-item" style="margin-bottom: 1rem;">
+                                            <a class="nav-link active" data-toggle="tab" href="#home5" role="tab" aria-selected="true">Şəxsi Məlumatlar</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#profile5" role="tab" aria-selected="false">Şifrə Yeniləmə</a>
+                                        </li>
+                                      
+                                    </ul>
+                                </div>
+                    
                             </div>
                         </div>
 
@@ -128,13 +122,13 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <div>
-                                            <h1 class="card-header-text" style=" color: #01a9ac;">
+                                            <h1 class="card-header-text" style=" color: #00cfe8 !important;">
                                                 Şəxsi Məlumatlar
                                             </h1>
                                         </div>
                                         <div>
                                             @*<button type="button" class="btn btn-default btn-edit js-edit">Edit</button>
-                                                <button type="button" class="btn btn-default btn-save js-save">Save</button>*@
+                                            <button type="button" class="btn btn-default btn-save js-save">Save</button>*@
                                         </div>
                                     </div>
                                     <div class="card-block">
@@ -178,83 +172,83 @@
 <!-- Toastr js -->
 <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-    $("#Profile").change(function (e) {
-        $("#lview").show();
-        $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
-    });
+        $("#Profile").change(function(e) {
+            $("#lview").show();
+            $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+        });
 
     });
 
 </script>
 <script>
-     $(document).ready(function($) {
-               //phone number masking
-               $.mask.definitions['9'] = '';
-               $.mask.definitions['_'] = '[0-9]';
-               $("#PhoneNumber").mask("+___ __-___-__-__",{clearMaskOnLostFocus: false,placeholder: "+___ __-___-__-__"});
+    $(document).ready(function($) {
+        //phone number masking
+        $.mask.definitions['9'] = '';
+        $.mask.definitions['_'] = '[0-9]';
+        $("#PhoneNumber").mask("+___ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+___ __-___-__-__" });
 
 
 
-               $('#demoInput4').fileInput({
-                  iconClass: 'mdi mdi-fw mdi-upload'
-               });
+        $('#demoInput4').fileInput({
+            iconClass: 'mdi mdi-fw mdi-upload'
+        });
 
 
-               $("#demoInput4").on('change', function (e) {
-                   e.preventDefault();
-                         var formdata = new FormData();
-                         var _image = $('#demoInput4')[0].files[0];
-                         var _id = @Model.AppUserImageDto.Id;
-                         var token = $('input[name="__RequestVerificationToken"]').val();
-                         formdata.append("__RequestVerificationToken",token);
-                         formdata.append('profile', _image);
+        $("#demoInput4").on('change', function(e) {
+            e.preventDefault();
+            var formdata = new FormData();
+            var _image = $('#demoInput4')[0].files[0];
+            var _id = @Model.AppUserImageDto.Id;
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            formdata.append("__RequestVerificationToken", token);
+            formdata.append('profile', _image);
 
-                        swal({
-                            title: `Diqqət`,
-                            text: `Yenilənsin?`,
-                            icon: "warning",
-                            buttons: ["Xeyr", "Bəli"],
-                            dangerMode: true,
-                        }).then((willDelete) => {
-                            if (willDelete) {
-                                $.ajax({
-                                    type: 'post',
-                                    url: '@Url.ActionLink("ImageUpdate","User")',
-                                    data: formdata,
-                                    async: false,
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
-                                    success: function (response) {
-                                        //sorgu ugurla neticelenende
-                                        if (response.error == true) {
+            swal({
+                title: `Diqqət`,
+                text: `Yenilənsin?`,
+                icon: "warning",
+                buttons: ["Xeyr", "Bəli"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'post',
+                        url: '@Url.ActionLink("ImageUpdate","User")',
+                        data: formdata,
+                        async: false,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            //sorgu ugurla neticelenende
+                            if (response.error == true) {
 
-                                            toastr.error(response, "Xəta baş verdi!");
-                                            return;
-                                        }
-
-                                        toastr.success(response,"Uğur!");
-                                         setTimeout(function () {
-                                          window.location.reload();
-                                      }, 1000)
-                                    },
-                                    error: function (response) {
-                                        //sorgu ugursuz neticelenende
-
-                                        toastr.error(response, "Xəta!");
-                                    }
-                                });
-                            }else{
-                                      toastr.success('Əməliyat datandırıldı');
-                                         setTimeout(function () {
-                                          window.location.reload();
-                                      }, 1000)
+                                toastr.error(response, "Xəta baş verdi!");
+                                return;
                             }
-                        });
 
-               })
+                            toastr.success(response, "Uğur!");
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000)
+                        },
+                        error: function(response) {
+                            //sorgu ugursuz neticelenende
+
+                            toastr.error(response, "Xəta!");
+                        }
+                    });
+                } else {
+                    toastr.success('Əməliyat datandırıldı');
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000)
+                }
+            });
+
+        })
 
     });
 
