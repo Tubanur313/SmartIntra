@@ -12,7 +12,7 @@
                                class="table table-striped table-bordered nowrap">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>№</th>
                                     <th>Ad</th>
                                     <th>Təsvir</th>
                                     <th class="text-center">
@@ -29,7 +29,7 @@
 
                                     <tr>
                                         <td>
-                                            @grade.Id
+                                            #@grade.Id
                                         </td>
                                         <td>@grade.GradeName</td>
                                         <td>@(grade.Description!=null?grade.Description:"Boşdur")</td>
@@ -90,15 +90,6 @@
                                 }
                             </tbody>
 
-
-                            <tfoot>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Ad</th>
-                                    <th>Təsvir</th>
-                                    <th class="text-center">-----</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
