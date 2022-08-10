@@ -15,7 +15,7 @@
                      nowrap">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>№</th>
                                     <th>Ad</th>
                                     <th class="text-center">
                                         @if (User.HasAccess("cause.add"))
@@ -32,7 +32,7 @@
 
                                     <tr>
                                         <td>
-                                            @cause.Id
+                                            #@cause.Id
                                         </td>
 
                                         <td>@cause.Name</td>
@@ -90,13 +90,7 @@
                                     </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Ad</th>
-                                    <th class="text-center">-----</th>
-                                </tr>
-                            </tfoot>
+                           
                         </table>
                     </div>
                 </div>

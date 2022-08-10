@@ -23,7 +23,7 @@
                      nowrap">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>№</th>
                                     <th>Şöbə</th>
                                     <th>Şirkət</th>
                                     <th>Üst Şöbə</th>
@@ -40,7 +40,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @department.Id
+                                            #@department.Id
                                         </td>
                                         <td>@department.Name</td>
                                         @if (!(department.Company is null))
@@ -102,15 +102,7 @@
                                     </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Ad</th>
-                                    <th>Şirkət</th>
-                                    <th>Üst Şöbə</th>
-                                    <th class="text-center">-----</th>
-                                </tr>
-                            </tfoot>
+                           
                         </table>
                     </div>
                 </div>

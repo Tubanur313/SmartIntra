@@ -14,7 +14,7 @@
                      nowrap">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>№</th>
                                     <th>İl</th>
                                     <th class="text-center">
                                         @if (User.HasAccess("nonworkingyear.add"))
@@ -29,7 +29,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @year.Id
+                                            #@year.Id
                                         </td>
                                         <td>@year.Year</td>
 
@@ -94,12 +94,6 @@
                                     </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>İl</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>

@@ -12,7 +12,7 @@
                      nowrap">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>№</th>
                                     <th>Ad</th>
                                     @if (User.HasAccess("checkList.add"))
                                     {
@@ -27,7 +27,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @checkList.Id
+                                            #@checkList.Id
                                         </td>
                                         <td>@checkList.Name</td>
                                         <td class="dropdown text-center">
@@ -66,13 +66,7 @@
                                     </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Ad</th>
-                                    <th class="text-center">-----</th>
-                                </tr>
-                            </tfoot>
+                        
                         </table>
                     </div>
                 </div>

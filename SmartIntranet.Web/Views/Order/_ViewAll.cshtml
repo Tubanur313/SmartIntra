@@ -15,7 +15,7 @@
                      nowrap">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>№</th>
                                     <th>Məhsul</th>
                                     <th>Ö/V</th>
                                     <th>Say</th>
@@ -45,7 +45,7 @@
                                 @foreach (var order in Model)
                                 {
                                     <tr>
-                                        <td>@order.Id</td>
+                                        <td>#@order.Id</td>
                                         <td>@order.Product</td>
                                         <td>@order.Currency</td>
                                         <td>@order.Quantity</td>
