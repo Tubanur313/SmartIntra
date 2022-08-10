@@ -19,6 +19,7 @@ namespace SmartIntranet.Web.ViewComponents
 
         public IViewComponentResult Invoke()
         {
+            
             var identityUserName = _userManager.FindByNameAsync(User.Identity.Name).Result;
             var model = _map.Map<AppUserInfoDto>(identityUserName);
             return View(model);

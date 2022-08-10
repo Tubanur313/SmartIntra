@@ -1,4 +1,4 @@
-﻿var monthNames = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun", "İyul", "Auqust",
+﻿var monthNames = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "İyun", "İyul", "Avqust",
     "Sentyabr", "Oktyabr", "Noyabr", "Dekabr"];
 var dayNames = ["Bazar", "Bazar Ertəsi", "Çərşənbə axşamı", "Çərşənbə", "Cümə axşamı", "Cümə", "Şənbə"];
 

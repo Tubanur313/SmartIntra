@@ -50,8 +50,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
         [HttpGet]
         [Authorize(Policy = "user.profile")]
-        public async Task<IActionResult> Profile(int id)
+        public async Task<IActionResult> Profile()
         {
+            int id = GetSignInUserId();
             AppUserProfileUpdateDto appUserProfileUpdateDto = new AppUserProfileUpdateDto()
             {
                 AppUserPassDto = _map.Map<AppUserPassDto>(await _appUserService.FindByUserAllInc(id)),
@@ -69,14 +70,16 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> Profile(AppUserProfileAddDto model/*, IFormFile profile*/)
         {
             var current = GetSignInUserId();
-            var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == model.Id);
+            //var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == model.Id);
+            var updateUser =await _appUserService.GetAsync(c=>c.Id == current && c.IsDeleted==false);
 
             if (updateUser != null)
             {
                 updateUser.PhoneNumber = model.PhoneNumber;
+                updateUser.Address = model.Address;
                 updateUser.UpdateByUserId = current;
 
-                IdentityResult result = await _userManager.UpdateAsync(updateUser);
+               await _appUserService.UpdateAsync(updateUser);
             }
             else
                 TempData["error"] = " İstifadəçi tapılmadı !";
@@ -95,9 +98,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
         [HttpGet]
         [Authorize(Policy = "user.newPassword")]
-        public async Task<IActionResult> NewPassword(int id)
+        public async Task<IActionResult> NewPassword()
         {
-
+            int id = GetSignInUserId();
             var listModel = _map.Map<AppUserPassDto>(await _appUserService.FindByIdAsync(id));
             if (listModel == null)
             {
@@ -160,8 +163,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
         [HttpGet]
         [Authorize(Policy = "user.update")]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Update()
         {
+            int id = GetSignInUserId();
             var model = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted != true));
             ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(await _departmentService.GetAllAsync(x => x.IsDeleted != true));
