@@ -200,7 +200,7 @@ namespace SmartIntranet.Web.Controllers
 
 
 
-            vm.Roles = await (from r in _db.Roles
+            vm.Roles = await (from r in _db.Roles.Where(x => x.IsDeleted == false)
                               join ur in _db.UserRoles.Where(_ => _.UserId == user.Id) on r.Id equals ur.RoleId into ljUr
                               from jUr in ljUr.DefaultIfEmpty()
                               select Tuple.Create(r, jUr != null)).ToListAsync();
@@ -210,7 +210,7 @@ namespace SmartIntranet.Web.Controllers
                          from jUc in ljUc.DefaultIfEmpty()
                          select Tuple.Create(p, jUc != null)).ToList();
 
-            vm.Companies = await (from r in _db.Companies
+            vm.Companies = await (from r in _db.Companies.Where(x=>x.IsDeleted == false)
                                   join ur in _db.UserComps.Where(_ => _.UserId == user.Id) on r.Id equals ur.CompanyId into ljUr
                                   from jUr in ljUr.DefaultIfEmpty()
                                   select Tuple.Create(r, jUr != null)).ToListAsync();

@@ -67,8 +67,9 @@ namespace SmartIntranet.Web.Controllers
             TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
+            var compIdOfUser = _userService.FindByIdAsync(GetSignInUserId()).Result.CompanyId;
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
-                .GetAllIncCompAsync(x => !x.IsDeleted));
+                .GetAllIncCompAsync(compIdOfUser));
 
             var work_accept = "WORK_ACCEPT";
             var el_work_accept = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == work_accept).Result[0].Name;
@@ -134,13 +135,15 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            result_list = result_list
+                .Where(x => x.User.CompanyId == compIdOfUser)
+                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(result_list);
         }
 
         [HttpPost]
         [Authorize(Policy = "contract.list")]
-        public async Task<IActionResult> List(int CompId, int DepartId, int PositId, string Interval,string DocumentType)
+        public async Task<IActionResult> List(int CompId, int DepartId, int PositId, string Interval, string DocumentType)
         {
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
@@ -149,6 +152,7 @@ namespace SmartIntranet.Web.Controllers
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync(CompId, DepartId, PositId, Interval));
 
+
             var work_accept = "WORK_ACCEPT";
             var el_work_accept = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == work_accept).Result[0].Name;
             foreach (var el in contracts)
@@ -158,7 +162,12 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var personal_contracts = _map.Map<List<ContractListDto>>(await _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var personal_contracts = _map.Map<List<ContractListDto>>(await _personalContractService
+                .GetAllIncCompAsync(x => !x.IsDeleted
+                //&& x.User.CompanyId == CompId
+                //&& x.User.DepartmentId == DepartId
+                //&& x.User.PositionId == PositId
+                ));
             var personal_chg = "PERSONAL_CHG";
             var el_personal_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == personal_chg).Result[0].Name;
             foreach (var el in personal_contracts)
@@ -169,7 +178,12 @@ namespace SmartIntranet.Web.Controllers
             }
 
 
-            var vacation_contracts = _map.Map<List<ContractListDto>>(await _vacationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var vacation_contracts = _map.Map<List<ContractListDto>>(await _vacationContractService
+                .GetAllIncCompAsync(x => !x.IsDeleted
+                //&& x.User.CompanyId == CompId
+                //&& x.User.DepartmentId == DepartId
+                //&& x.User.PositionId == PositId
+                ));
             var vacation_chg = "VACATION";
             var el_vacation_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == vacation_chg).Result[0].Name;
             foreach (var el in vacation_contracts)
@@ -179,7 +193,9 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
+            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted
+                && x.CompanyId == CompId
+            );
             var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
             var business_trip = "BUSINESS_TRIP";
             var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
@@ -193,7 +209,12 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService
+                .GetAllIncCompAsync(x => !x.IsDeleted
+                //&& x.User.CompanyId == CompId
+                //&& x.User.DepartmentId == DepartId
+                //&& x.User.PositionId == PositId
+                ));
             var termination_chg = "TERMINATION";
             var el_termination_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == termination_chg).Result[0].Name;
             foreach (var el in termination_contracts)
@@ -203,7 +224,12 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var long_contracts = _map.Map<List<ContractListDto>>(await _longContractService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var long_contracts = _map.Map<List<ContractListDto>>(await _longContractService
+                .GetAllIncCompAsync(x => !x.IsDeleted
+                //&& x.User.CompanyId == CompId
+                //&& x.User.DepartmentId == DepartId
+                //&& x.User.PositionId == PositId
+                ));
             var long_chg = "LONG_CONTRACT";
             var el_long_chg = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == long_chg).Result[0].Name;
             foreach (var el in long_contracts)
@@ -215,11 +241,65 @@ namespace SmartIntranet.Web.Controllers
 
             result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
 
-            if (DocumentType is null)
+
+            if (CompId == 0 && PositId == 0 && DepartId == 0 && Interval == null && DocumentType == null)
             {
-            return View(result_list);
+                return View(new List<ContractListDto>());
             }
-            return View(result_list.Where(x=>x.ContractKey== DocumentType).ToList());
+            else if (Interval != null && DocumentType != null)
+            {
+                var startD = Convert.ToDateTime(Interval.Split("-").First());
+                var endD = Convert.ToDateTime(Interval.Split("-").Last());
+                return View(result_list.Where(x => x.ContractStart >= startD
+                && x.ContractStart <= endD
+                && x.ContractKey == DocumentType).ToList());
+            }
+            else if (Interval != null && DocumentType == null)
+            {
+                return View(result_list);
+            }
+            else if (CompId == 0 && PositId == 0 && DepartId == 0 && Interval == null && DocumentType != null)
+            {
+                return View(result_list.Where(x => x.ContractKey == DocumentType).ToList());
+            }
+            else if (CompId > 0 && PositId == 0 && DepartId == 0)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId == 0)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId > 0)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId
+                && s.User.PositionId == PositId
+                ).ToList());
+            }           
+            else if (CompId > 0 && PositId == 0 && DepartId == 0 && DocumentType !=null)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                &&  s.ContractKey == DocumentType).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId == 0 && DocumentType != null)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList());
+            }
+            else if (CompId > 0 && PositId > 0 && DepartId > 0 && DocumentType != null)
+            {
+                return View(result_list.Where(s => s.User.CompanyId == CompId
+                && s.User.DepartmentId == DepartId
+                && s.User.PositionId == PositId
+                && s.ContractKey == DocumentType
+                ).ToList());
+            }
+            else
+            {
+                return View(new List<ContractListDto>());
+            }
         }
 
         [HttpGet]
