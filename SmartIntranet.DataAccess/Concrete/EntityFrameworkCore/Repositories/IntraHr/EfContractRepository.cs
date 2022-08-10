@@ -61,7 +61,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                        .ThenInclude(z => z.Departments).Where(x =>
                        x.User.CompanyId == companyId
                        && x.User.DepartmentId == departmentId
-                       && x.User.DepartmentId == positionId
+                       && x.User.PositionId == positionId
                        && !x.IsDeleted
                        )
                        .OrderByDescending(c => c.User.Name).ToListAsync();
@@ -85,8 +85,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                        .ThenInclude(z => z.Position).ThenInclude(z => z.Company)
                        .ThenInclude(z => z.Departments).Where(x => x.User.CompanyId == companyId
                        && !x.IsDeleted
-                       && x.CommandDate >= startD
-                       && x.CommandDate <= endD
+                       && x.ContractStart.Date >= startD.Date
+                       && x.ContractStart.Date <= endD.Date
                        )
                        .OrderByDescending(c => c.User.Name).ToListAsync();
                 }
@@ -98,8 +98,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                        x.User.CompanyId == companyId
                        && x.User.DepartmentId == departmentId
                        && !x.IsDeleted
-                       && x.CommandDate >= startD
-                       && x.CommandDate <= endD
+                       && x.ContractStart.Date >= startD.Date
+                       && x.ContractStart.Date <= endD.Date
                        )
                        .OrderByDescending(c => c.User.Name).ToListAsync();
                 }
@@ -110,10 +110,10 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                        .ThenInclude(z => z.Departments).Where(x =>
                        x.User.CompanyId == companyId
                        && x.User.DepartmentId == departmentId
-                       && x.User.DepartmentId == positionId
+                       && x.User.PositionId == positionId
                        && !x.IsDeleted
-                       && x.CommandDate >= startD
-                       && x.CommandDate <= endD
+                       && x.ContractStart.Date >= startD.Date
+                       && x.ContractStart.Date <= endD.Date
                        )
                        .OrderByDescending(c => c.User.Name).ToListAsync();
                 }
@@ -122,16 +122,24 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     return await context.Contracts.Include(x => x.User)
                         .ThenInclude(z => z.Position).ThenInclude(z => z.Company)
                         .ThenInclude(z => z.Departments).Where(x => !x.IsDeleted
-                        && x.CommandDate >= startD
-                        && x.CommandDate <= endD)
+                       && x.ContractStart.Date >= startD.Date
+                       && x.ContractStart.Date <= endD.Date)
                         .OrderByDescending(c => c.User.Name).ToListAsync();
                 }
             }
+        }
 
+        public async Task<List<Contract>> GetAllIncCompAsync(int? compIdOfUser)
+        {
+            using var context = new IntranetContext();
 
-
-
-
+            return await context.Contracts.Include(x => x.User)
+                .ThenInclude(z => z.Position)
+                .ThenInclude(z => z.Company)
+                .ThenInclude(z => z.Departments)
+                .Where(x => x.User.CompanyId != compIdOfUser && !x.IsDeleted)
+                .OrderByDescending(c => c.User.Name)
+                .ToListAsync();
         }
     }
 
