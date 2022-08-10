@@ -192,9 +192,7 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted
-                && x.CompanyId == CompId
-            );
+            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
             var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
             var business_trip = "BUSINESS_TRIP";
             var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
