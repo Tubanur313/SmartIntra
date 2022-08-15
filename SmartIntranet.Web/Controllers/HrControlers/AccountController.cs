@@ -166,7 +166,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var userCompId = _appUserService.FindByIdAsync(GetSignInUserId()).Result.CompanyId;
+            var userCompId = _userCompService.FirstOrDefault(GetSignInUserId()).Result.CompanyId;
             var model = await _appUserService.GetAllIncUserWithFilterAsync(userCompId);
             return View(_map.Map<ICollection<AppUserListDto>>(model));
         }
