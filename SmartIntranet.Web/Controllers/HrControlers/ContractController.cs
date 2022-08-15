@@ -81,7 +81,7 @@ namespace SmartIntranet.Web.Controllers
             TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
-            var compIdOfUser = _userCompService.FirstOrDefault(GetSignInUserId()).Result.CompanyId;
+            var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync());
 
@@ -148,8 +148,13 @@ namespace SmartIntranet.Web.Controllers
                 el.ContractName = el_long_chg;
                 result_list.Add(el);
             }
+
+            if (userComp is null)
+            {
+                return View(new List<ContractListDto>());
+            }
             result_list = result_list
-                .Where(s => s.User.CompanyId == compIdOfUser)
+                .Where(s => s.User.CompanyId == userComp.CompanyId)
                 .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(result_list);
         }

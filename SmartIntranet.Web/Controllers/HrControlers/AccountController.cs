@@ -29,6 +29,7 @@ using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Web.GoogleRecaptcha;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -166,13 +167,22 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var userCompId = _userCompService.FirstOrDefault(GetSignInUserId()).Result.CompanyId;
-            var model = await _appUserService.GetAllIncUserWithFilterAsync(userCompId);
-            return View(_map.Map<ICollection<AppUserListDto>>(model));
+            var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
+
+            if (userComp is null)
+            {
+                return View(new List<AppUserListDto>());
+            }
+            else
+            {
+                var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
+                return View(_map.Map<ICollection<AppUserListDto>>(model));
+            }
+
         }
         [HttpPost]
         [Authorize(Policy = "account.list")]
-        public async Task<IActionResult> List(int CompId,int DepartId,int PositId)
+        public async Task<IActionResult> List(int CompId, int DepartId, int PositId)
         {
             var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
             return View(_map.Map<ICollection<AppUserListDto>>(model));
@@ -205,7 +215,7 @@ namespace SmartIntranet.Web.Controllers
                          from jUc in ljUc.DefaultIfEmpty()
                          select Tuple.Create(p, jUc != null)).ToList();
 
-            vm.Companies = await (from r in _db.Companies.Where(x=>x.IsDeleted == false)
+            vm.Companies = await (from r in _db.Companies.Where(x => x.IsDeleted == false)
                                   join ur in _db.UserComps.Where(_ => _.UserId == user.Id) on r.Id equals ur.CompanyId into ljUr
                                   from jUr in ljUr.DefaultIfEmpty()
                                   select Tuple.Create(r, jUr != null)).ToListAsync();

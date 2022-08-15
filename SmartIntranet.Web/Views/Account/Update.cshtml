@@ -614,8 +614,9 @@
         let dateArray = [];
 
         $('.custom-date').each(function() {
+            //console.log($('.custom-date'))
             $(this).datepicker({
-                format: "dd.mm.yyyy"
+                formatDate: "dd.mm.yyyy"
             })
         })
 
