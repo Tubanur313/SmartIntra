@@ -24,11 +24,14 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.Business.Interfaces.IntraHr;
+using NPOI.SS.Formula.Functions;
 
 namespace SmartIntranet.Web.Controllers
 {
     public class ContractController : BaseIdentityController
     {
+        private readonly IUserCompService _userCompService;
         private readonly IContractService _contractService;
         private readonly IPersonalContractService _personalContractService;
         private readonly ITerminationContractService _terminationContractService;
@@ -43,8 +46,18 @@ namespace SmartIntranet.Web.Controllers
         private readonly IBusinessTripService _businessTripService;
         private readonly ILongContractService _longContractService;
 
-        public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, ITerminationContractService terminationContractService, IMapper mapper, IContractService contractService, IPersonalContractService personalContractService, IContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IVacationContractService vacationContractService, IAppUserService userService, IWorkGraphicService workGraphicService, ICompanyService companyService, ILongContractService longContractService, IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService,
+            IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
+            ITerminationContractService terminationContractService, IMapper mapper,
+            IContractService contractService, IPersonalContractService personalContractService, 
+            IContractFileService contractFileService, IClauseService clauseService, 
+            IContractTypeService contractTypeService, IVacationContractService vacationContractService,
+            IAppUserService userService, IWorkGraphicService workGraphicService, 
+            ICompanyService companyService, ILongContractService longContractService,
+            IUserCompService userCompService,
+            IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
+
             _contractService = contractService;
             _personalContractService = personalContractService;
             _terminationContractService = terminationContractService;
@@ -52,6 +65,7 @@ namespace SmartIntranet.Web.Controllers
             _contractTypeService = contractTypeService;
             _contractFileService = contractFileService;
             _longContractService = longContractService;
+            _userCompService = userCompService;
             _userService = userService;
             _clauseService = clauseService;
             _workGraphicService = workGraphicService;
@@ -67,9 +81,9 @@ namespace SmartIntranet.Web.Controllers
             TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
-            var compIdOfUser = _userService.FindByIdAsync(GetSignInUserId()).Result.CompanyId;
+            var compIdOfUser = _userCompService.FirstOrDefault(GetSignInUserId()).Result.CompanyId;
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
-                .GetAllIncCompAsync(compIdOfUser));
+                .GetAllIncCompAsync());
 
             var work_accept = "WORK_ACCEPT";
             var el_work_accept = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == work_accept).Result[0].Name;
@@ -134,9 +148,8 @@ namespace SmartIntranet.Web.Controllers
                 el.ContractName = el_long_chg;
                 result_list.Add(el);
             }
-
             result_list = result_list
-                .Where(x => x.User.CompanyId == compIdOfUser)
+                .Where(s => s.User.CompanyId == compIdOfUser)
                 .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
             return View(result_list);
         }
@@ -193,9 +206,7 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted
-                && x.CompanyId == CompId
-            );
+            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
             var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
             var business_trip = "BUSINESS_TRIP";
             var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;

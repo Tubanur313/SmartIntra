@@ -162,5 +162,27 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             }
 
         }
+
+        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int? userCompId)
+        {
+            using var context = new IntranetContext();
+            if (userCompId is null)
+            {
+                return new List<IntranetUser>();
+            }
+            else
+            {
+                return await context.Users
+                    .Where(x =>
+                    x.Email != "tahiroglumahir@gmail.com"
+                    && x.CompanyId == userCompId && !x.IsDeleted)
+                    .Include(x => x.Position)
+                    .Include(x => x.Company)
+                    .Include(x => x.Department)
+                    .Include(x => x.Grade)
+                    .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                    .ToListAsync();
+            }
+        }
     }
 }

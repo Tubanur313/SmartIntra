@@ -166,14 +166,9 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var user = await _userCompService.FirstOrDefault(GetSignInUserId());
-            if (user is null)
-            {
-                return View(new List<AppUserListDto>());
-            }
-            ICollection<AppUserListDto> model = new List<AppUserListDto>();
-            model.Add(_map.Map<AppUserListDto>(user.User));
-            return View(model);
+            var userCompId = _userCompService.FirstOrDefault(GetSignInUserId()).Result.CompanyId;
+            var model = await _appUserService.GetAllIncUserWithFilterAsync(userCompId);
+            return View(_map.Map<ICollection<AppUserListDto>>(model));
         }
         [HttpPost]
         [Authorize(Policy = "account.list")]

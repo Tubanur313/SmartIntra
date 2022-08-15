@@ -16,7 +16,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         public async Task<List<Contract>> GetAllIncCompAsync()
         {
             using var context = new IntranetContext();
-            return await context.Contracts.OrderByDescending(c => c.ContractStart).ToListAsync();
+            return await context.Contracts.Include(x => x.User)
+            .ThenInclude(z => z.Position)
+            .ThenInclude(z => z.Company)
+            .ThenInclude(z => z.Departments)
+            .OrderByDescending(c => c.ContractStart)
+            .ToListAsync();
         }
 
         public async Task<List<Contract>> GetAllIncCompAsync(Expression<Func<Contract, bool>> filter)

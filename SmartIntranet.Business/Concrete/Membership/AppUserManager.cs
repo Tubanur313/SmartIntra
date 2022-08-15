@@ -57,6 +57,11 @@ namespace SmartIntranet.Business.Concrete
             return await _userDal.GetAllIncUserWithFilterAsync(compId, departId, positId);
         }
 
+        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int? userCompId)
+        {
+            return await _userDal.GetAllIncUserWithFilterAsync(userCompId);
+        }
+
         public async Task<bool> IsExistEmail(string email)
         {
             return await _userDal.IsExistEmail(email);
