@@ -15,7 +15,6 @@
                                     <th>№</th>
                                     <th>Kateqoriya</th>
                                     <th>Sual</th>
-                                    <th>Cavab</th>   
                                     <th class="text-center">
                                         @if (User.HasAccess("faq.add"))
                                         {
@@ -34,58 +33,40 @@
                                         </td>
                                         <td>@faq.FaqCategory.GetDisplayName()</td>
                                         <td>@faq.Question</td>
-                                        <td>@faq.Answer</td>
-                                        @if (!faq.IsDeleted)
-                                        {
-                                           <td class="dropdown text-center">
-                                                   <button type="button"
+                                        <td class="dropdown text-center">
+                                            <button type="button"
                                                 class="btn
                                                 btn-outline-info
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                    <i class="fa fa-list-ul"></i>
-                                                </button>
-                                                <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                    @if (User.HasAccess("faq.update"))
-                                                    {
-                                                        <li>
-                                                            <button onclick="showInPopup('@Url.Action("Update","Faq",new {id=faq.Id},Context.Request.Scheme)','Yenilə')"
+                                                <i class="fa fa-list-ul"></i>
+                                            </button>
+                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                                @if (User.HasAccess("faq.update"))
+                                                {
+                                                    <li>
+                                                        <button onclick="showInPopup('@Url.Action("Update","Faq",new {id=faq.Id},Context.Request.Scheme)','Yenilə')"
                                                         class="btn  btn-default waves-effect md-trigger text-warning">
-                                                                <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                                Yenilə
-                                                            </button>
-                                                        </li>
-                                                    }
-                                                    @if (User.HasAccess("faq.delete"))
-                                                    {
-                                                        <li>
-                                                            <button onclick="removeItem(@faq.Id,`@faq.Question`,`@Url.Action("Delete","Faq").ToString()`)"
+                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                            Yenilə
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (User.HasAccess("faq.delete"))
+                                                {
+                                                    <li>
+                                                        <button onclick="removeItem(@faq.Id,`@faq.Question`,`@Url.Action("Delete","Faq").ToString()`)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
-                                                                <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                                Sil
-                                                            </button>
-                                                        </li>
-                                                    }
+                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                            Sil
+                                                        </button>
+                                                    </li>
+                                                }
 
-                                                </ul>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td class="dropdown text-center">
-                                                   <button disabled type="button"
-                                                class="btn
-                                                btn-outline-danger
-                                                @*dropdown-toggle*@"
-                                                data-toggle="dropdown"
-                                                aria-haspopup="true"
-                                                aria-expanded="false">
-                                                    <i class="fa fa-list-ul"></i>
-                                                </button>
-                                            </td>
-                                        }
+                                            </ul>
+                                        </td>
 
                                     </tr>
 

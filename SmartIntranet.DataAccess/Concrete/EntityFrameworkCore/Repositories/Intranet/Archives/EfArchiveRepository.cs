@@ -10,7 +10,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Int
 {
     public class EfArchiveRepository : EfGenericRepository<Archive>, IArchiveDal
     {
-        public async Task<List<Archive>> GetAllIncAsync()
+        public async Task<List<Archive>> GetAllIncAsync(int companyId)
         {
             using var context = new IntranetContext();
             return await context.Archives
@@ -20,7 +20,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Int
                          .ThenInclude(x => x.Company)
                          .ThenInclude(x => x.Departments)
                          .ThenInclude(x => x.Positions)
-                .OrderByDescending(c => c.Id).ToListAsync();
+                .OrderByDescending(c => c.Id)
+                .Where(x=>!x.IsDeleted && x.CompanyId == companyId)
+                .ToListAsync();
         }
     }
 }

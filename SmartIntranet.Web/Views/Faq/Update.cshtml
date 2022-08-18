@@ -18,13 +18,7 @@
                             <span asp-validation-for="Question" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="floatLabel">  Cavab: </label>
-                            <input type="text" class="form-control" asp-for="Answer">
-                            <span asp-validation-for="Answer" class="text-danger"></span>
-                        </div>
-                    </div>
+
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="floatLabel">  Kateqoriya: </label>
@@ -46,6 +40,13 @@
                             <input id="FaqFile" type="file" name="faqFile" style="cursor: pointer;position: absolute; font-size: 50px; opacity: 0; right: 0; top: 0;" />
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="floatLabel">  Cavab: </label>
+                            <textarea type="text" class="form-control" asp-for="Answer"></textarea>
+                            <span class="Answer text-danger "></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12 d-flex justify-content-between">
@@ -59,13 +60,26 @@
     </div>
 
 </div>
-@await Html.PartialAsync("_ValidationScriptsPartial")
+@await Html.PartialAsync("_ValidationScriptsPartial");
+<!-- ckeditor js -->
+<script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
 <script>
     $(document).ready(function () {
+        // ckeditor
+        CKEDITOR.replace('Answer');
         $('#pdfTxt').text($("#File").val());
         $('#FaqFile').change(function () {
             var file = $('#FaqFile')[0].files[0].name;
             $('#pdfTxt').text(file);
+        });
+        $("form").on("submit", function (e) {
+            var Answer = CKEDITOR.instances['Answer'].getData().replace(/<[^>]*>/gi, '').length;
+            if (!(Answer)) {
+                $('.Answer').text($('#Answer').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            } else {
+                $('.Answer').addClass("d-none");
+            }
         });
     });
 </script>

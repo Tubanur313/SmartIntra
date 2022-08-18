@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Intranet.Archives;
 using SmartIntranet.Core.Utilities.Messages;
@@ -20,6 +21,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
 {
     public class ArchiveController : BaseIdentityController
     {
+        private readonly IUserCompService _userCompService;
         private readonly IArchiveService _archiveService;
         private readonly IFileService _upload;
         private readonly IDepartmentService _departmentService;
@@ -34,6 +36,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             IDepartmentService departmentService,
             ICompanyService companyService,
             IAppUserService userService,
+            IUserCompService userCompService,
             IMapper map
             )
             : base(userManager, httpContextAccessor, signInManager, map)
@@ -43,19 +46,30 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
             _departmentService = departmentService;
             _companyService = companyService;
             _userService = userService;
+            _userCompService = userCompService;
         }
         [HttpGet]
         [Authorize(Policy = "archive.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var model = await _archiveService.GetAllIncAsync();
-            if (model.Count > 0)
+            //var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
+            var user = await _userService.GetAsync(x => x.Id == GetSignInUserId());
+            if (user is null || user.CompanyId == null)
             {
-                TempData["success"] = success;
-                TempData["error"] = error;
-                return View(_map.Map<List<ArchiveListDto>>(model));
+                return View(new List<ArchiveListDto>());
             }
-            return View(new List<ArchiveListDto>());
+            else
+            {
+                var model = await _archiveService.GetAllIncAsync((int)user.CompanyId);
+                if (model.Count > 0)
+                {
+                    TempData["success"] = success;
+                    TempData["error"] = error;
+                    return View(_map.Map<List<ArchiveListDto>>(model));
+                }
+                return View(new List<ArchiveListDto>());
+            }
+
         }
         [HttpGet]
         [Authorize(Policy = "archive.add")]

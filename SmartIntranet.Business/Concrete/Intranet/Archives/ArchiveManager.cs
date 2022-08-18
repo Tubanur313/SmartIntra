@@ -20,9 +20,10 @@ namespace SmartIntranet.Business.Concrete.Intranet.Archives
             _archiveDal = archiveDal;
         }
 
-        public Task<List<Archive>> GetAllIncAsync()
+
+        public Task<List<Archive>> GetAllIncAsync(int companyId)
         {
-            return _archiveDal.GetAllIncAsync();
+            return _archiveDal.GetAllIncAsync(companyId);
         }
     }
 }

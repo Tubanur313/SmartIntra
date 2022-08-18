@@ -35,7 +35,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         [Authorize(Policy = "faq.info")]
         public async Task<IActionResult> Info()
         {
-            var model = await _faqService.GetAllAsync();
+            var model = await _faqService.GetAllAsync(x=>!x.IsDeleted);
             if (model.Count > 0)
             {
                 return View(_map.Map<List<FaqListDto>>(model));
@@ -46,7 +46,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         [Authorize(Policy = "faq.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var model = await _faqService.GetAllAsync();
+            var model = await _faqService.GetAllAsync(x => !x.IsDeleted);
             if (model.Count > 0)
             {
                 TempData["success"] = success;
