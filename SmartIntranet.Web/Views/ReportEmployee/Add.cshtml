@@ -31,7 +31,7 @@
                 <div class="col-sm-6">
                     <label class="floatLabel"> Tarix: </label>
                     <div class="form-group">
-                        <input asp-for="ReportDate" type="month" class="form-control" id="inputDate">
+                        <input asp-for="ReportDate" type="text" class="form-control custom-date" id="inputDate">
                         <span asp-validation-for="ReportDate" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -54,6 +54,16 @@
 
 <script>
     $(document).ready(function () {
+
+        $('.custom-date').each(function()
+        {
+            $(this).datepicker({
+                format: "MM yyyy",
+                viewMode: "months", 
+                minViewMode: "months"
+            })
+        })
+
         $('.input-daterange input').each(function () {
             $(this).datepicker({
                 //format: "dd.mm.yyyy"

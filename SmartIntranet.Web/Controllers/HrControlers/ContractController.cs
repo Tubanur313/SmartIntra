@@ -77,8 +77,6 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "contract.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            TempData["success"] = success;
-            TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
@@ -153,10 +151,13 @@ namespace SmartIntranet.Web.Controllers
             {
                 return View(new List<ContractListDto>());
             }
-            result_list = result_list
-                .Where(s => s.User.CompanyId == userComp.CompanyId)
-                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
-            return View(result_list);
+            if (result_list.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<ContractListDto>());
         }
 
         [HttpPost]
@@ -358,7 +359,10 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
@@ -375,10 +379,10 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("contractDate", result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 formatKeys.Add("contractDatePlus", model.ContractStart.AddYears(1).ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (result_model.ContractEnd != null)
-                    formatKeys.Add("contractDateEnd", result_model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
+                    formatKeys.Add("contractDateEnd", result_model.ContractEnd?.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")));
                 if (result_model.HasTerm)
                 {
-                    var range = result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən " + result_model.ContractEnd.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixinədək ";
+                    var range = result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən " + result_model.ContractEnd?.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixinədək ";
                     formatKeys.Add("contractDateRange", range);
                 }
                 else
@@ -504,13 +508,19 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
+                var data = await _contractService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                await _contractService.UpdateAsync(_map.Map<Contract>(model));
+                var update = _map.Map<Contract>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _contractService.UpdateAsync(update);
 
                 // Keys formats
-                var usr = await _appUserService.FindByUserAllInc(model.UserId);
+                var usr = await _appUserService.FindByUserAllInc(update.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
 
@@ -547,7 +557,7 @@ namespace SmartIntranet.Web.Controllers
                         el.Clause.Key != ContractFileReadyConst.recruitment_financial_responsibility &&
                         el.Clause.Key != ContractFileReadyConst.recruitment_privacy)
                     {
-                        if (model.ContractFileType == ContractConst.UPLOAD_FILE)
+                        if (update.ContractFileType == ContractConst.UPLOAD_FILE)
                         {
                             if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                             {
@@ -560,14 +570,14 @@ namespace SmartIntranet.Web.Controllers
                         }
                         else
                         {
-                            var clause = _clauseService.GetAllIncCompAsync(x => x.Id == model.ClauseId && !x.IsDeleted).Result[0];
+                            var clause = _clauseService.GetAllIncCompAsync(x => x.Id == update.ClauseId && !x.IsDeleted).Result[0];
                             DeleteFile("wwwroot/contractDocs/", el.FilePath);
 
                             StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys);
                             var new_el = _contractFileService.FindByIdAsync(el.Id).Result;
                             new_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content));
                             new_el.IsClause = true;
-                            new_el.ClauseId = model.ClauseId;
+                            new_el.ClauseId = update.ClauseId;
                             await _contractFileService.UpdateAsync(new_el);
                         }
                     }
@@ -592,7 +602,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "contract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = await _contractService.FindByIdAsync(id);
             var current = GetSignInUserId();
@@ -600,10 +610,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<Contract>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

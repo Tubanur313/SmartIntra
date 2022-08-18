@@ -27,6 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -83,14 +84,18 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
-                model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                var add = _map.Map<TerminationContract>(model);
+                add.IsDeleted = false;
+                add.CreatedDate = DateTime.Now;
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_map.Map<TerminationContract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(add).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
                 var usr2 = await _userManager.FindByIdAsync(result_model.UserId.ToString());
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
@@ -120,11 +125,11 @@ namespace SmartIntranet.Web.Controllers
                 }
                 formatKeys.Add("outOfWork", outOfWork);
                 formatKeys.Add("notificationWork", notificationWork);
-                var tr_el = _terminationItemService.FindByIdAsync(model.TerminationItemId).Result;
-                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId, model.TerminationDate).ToString());
+                var tr_el = _terminationItemService.FindByIdAsync(add.TerminationItemId).Result;
+                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId, add.TerminationDate).ToString());
                 formatKeys.Add("trItem", tr_el.Name + " (" + tr_el.Description + ")");
-                formatKeys.Add("isAgree", model.IsAgree ? "bildirmişdir" : "bildirməmişdir");
-                formatKeys.Add("contractBase", model.Description);
+                formatKeys.Add("isAgree", add.IsAgree ? "bildirmişdir" : "bildirməmişdir");
+                formatKeys.Add("contractBase", add.Description);
                 formatKeys.Add("terminationDate", result_model.TerminationDate.ToString("dd.MM.yyyy"));
                 if (result_model.ReductionDate != null)
                 formatKeys.Add("reductionDate",((DateTime)result_model.ReductionDate).ToString("dd.MM.yyyy"));
@@ -133,9 +138,9 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("commandNumber", result_model.CommandNumber);
 
                 var doc_key = ContractFileReadyConst.termination_base;
-                if (model.IsReduction)
+                if (add.IsReduction)
                 {
-                    if (model.IsAgree)
+                    if (add.IsAgree)
                     {
                         doc_key = ContractFileReadyConst.termination_reduction_agree;
                     }
@@ -145,7 +150,7 @@ namespace SmartIntranet.Web.Controllers
                     }
                 }
              
-                usr = await _userService.FindByUserAllInc(model.UserId);
+                usr = await _userService.FindByUserAllInc(add.UserId);
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                
                 var file_extra = new TerminationContractFile();
@@ -158,7 +163,10 @@ namespace SmartIntranet.Web.Controllers
                 file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
                 await _contractFileService.AddAsync(file_extra);
 
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -198,17 +206,25 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _contractService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                await _contractService.UpdateAsync(_map.Map<TerminationContract>(model));
+                var update = _map.Map<TerminationContract>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _contractService.UpdateAsync(update);
 
-                var usr = await _userService.FindByUserAllInc(model.UserId);
+                var usr = await _userService.FindByUserAllInc(update.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
                 DateTime work_start_date = usr.StartWorkDate;
@@ -238,22 +254,22 @@ namespace SmartIntranet.Web.Controllers
                 formatKeys.Add("outOfWork", outOfWork);
                 formatKeys.Add("notificationWork", notificationWork);
 
-                var tr_el = _terminationItemService.FindByIdAsync(model.TerminationItemId).Result;
-                formatKeys.Add("vacDayCount", GetRemainVacDay(model.UserId, model.TerminationDate).ToString());
+                var tr_el = _terminationItemService.FindByIdAsync(update.TerminationItemId).Result;
+                formatKeys.Add("vacDayCount", GetRemainVacDay(update.UserId, update.TerminationDate).ToString());
                 formatKeys.Add("trItem", tr_el.Name + " (" + tr_el.Description + ")");
-                formatKeys.Add("isAgree", model.IsAgree ? "bildirmişdir" : "bildirməmişdir");
-                formatKeys.Add("contractBase", model.Description);
-                formatKeys.Add("terminationDate", model.TerminationDate.ToString("dd.MM.yyyy"));
-                if (model.ReductionDate != null)
-                    formatKeys.Add("reductionDate", ((DateTime)model.ReductionDate).ToString("dd.MM.yyyy"));
-                formatKeys.Add("reductionNumber", model.ReductionNumber);
-                formatKeys.Add("commandDate", model.CommandDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("commandNumber", model.CommandNumber);
+                formatKeys.Add("isAgree", update.IsAgree ? "bildirmişdir" : "bildirməmişdir");
+                formatKeys.Add("contractBase", update.Description);
+                formatKeys.Add("terminationDate", update.TerminationDate.ToString("dd.MM.yyyy"));
+                if (update.ReductionDate != null)
+                    formatKeys.Add("reductionDate", ((DateTime)update.ReductionDate).ToString("dd.MM.yyyy"));
+                formatKeys.Add("reductionNumber", update.ReductionNumber);
+                formatKeys.Add("commandDate", update.CommandDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("commandNumber", update.CommandNumber);
 
                 var doc_key = ContractFileReadyConst.termination_base;
-                if (model.IsReduction)
+                if (update.IsReduction)
                 {
-                    if (model.IsAgree)
+                    if (update.IsAgree)
                     {
                         doc_key = ContractFileReadyConst.termination_reduction_agree;
                     }
@@ -262,10 +278,10 @@ namespace SmartIntranet.Web.Controllers
                         doc_key = ContractFileReadyConst.termination_reduction_not_agree;
                     }
                 }
-                usr = await _userService.FindByUserAllInc(model.UserId);
+                usr = await _userService.FindByUserAllInc(update.UserId);
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
               
-                var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.TerminationContractId == model.Id && !x.IsDeleted);
+                var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.TerminationContractId == update.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
                     var clause = _clauseService.GetAllIncCompAsync(x => x.Key == doc_key && !x.IsDeleted).Result[0];
@@ -276,12 +292,15 @@ namespace SmartIntranet.Web.Controllers
                     edit_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content));
                     await _contractFileService.UpdateAsync(edit_el);
                 }
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
         [Authorize(Policy = "terminationContract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<TerminationContractListDto>(await _contractService.FindByIdAsync(id));
@@ -289,9 +308,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<TerminationContract>(transactionModel));
-          
-            return RedirectToAction("List", "Contract");
-
         }
 
         // helper

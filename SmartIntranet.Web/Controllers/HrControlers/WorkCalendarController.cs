@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -37,7 +38,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "workcalendar.list")]
-        public async Task<IActionResult> List(int id, int year_id)
+        public async Task<IActionResult> List(int id, int year_id, string success, string error)
         {
             var model = new List<WorkCalendarListView>();
             ViewBag.id = id;
@@ -112,7 +113,13 @@ namespace SmartIntranet.Web.Controllers
                 }
                 model.Add(item);
             }
-            return View(model);
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<WorkCalendarListView>>(model).ToList());
+            }
+            return View(new List<WorkCalendarListView>());
         }
 
         [HttpGet]
@@ -129,17 +136,33 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
-                await _workCalendarService.AddAsync(_map.Map<WorkCalendar>(model));
-                return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
-
+                var add = _map.Map<WorkCalendar>(model);
+                add.CreatedByUserId = current;
+                add.IsDeleted = false;
+                add.CreatedDate = DateTime.Now;
+                if (await _workCalendarService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded,
+                        id = model.WorkGraphicId,
+                        year_id = model.NonWorkingYearId
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added,
+                    id = model.WorkGraphicId,
+                    year_id = model.NonWorkingYearId
+                });
             }
         }
 
@@ -162,8 +185,10 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
@@ -171,16 +196,27 @@ namespace SmartIntranet.Web.Controllers
                 //{
                 //    return RedirectToAction("Delete", new { id = model.Id });
                 //}
+                var data = await _workCalendarService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(model));
-                return RedirectToAction("List", new { id = model.WorkGraphicId, year_id = model.NonWorkingYearId });
+                var update = _map.Map<WorkCalendar>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _workCalendarService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated,
+                    id = model.WorkGraphicId,
+                    year_id = model.NonWorkingYearId
+                });
             }
         }
 
         [Authorize(Policy = "workcalendar.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<WorkCalendarListDto>(await _workCalendarService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -188,10 +224,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _workCalendarService.UpdateAsync(_map.Map<WorkCalendar>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

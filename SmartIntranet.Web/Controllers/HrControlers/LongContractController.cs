@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -52,14 +53,18 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", "Contract", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
-                model.IsDeleted = false;
-                model.CreatedDate = DateTime.Now;
+                var add = _map.Map<LongContract>(model);
+                add.IsDeleted = false;
+                add.CreatedDate = DateTime.Now;
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_map.Map<LongContract>(model)).Result;
+                var result_model = _contractService.AddReturnEntityAsync(_map.Map<LongContract>(add)).Result;
                 var usr = await _userService.FindByUserAllInc(result_model.UserId);
                 var usr2 = await _userManager.FindByIdAsync(result_model.UserId.ToString());
                 var company = await _companyService.FindByIdAsync((int)usr2.CompanyId);
@@ -67,8 +72,8 @@ namespace SmartIntranet.Web.Controllers
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
                
-                formatKeys.Add("fromDate", model.FromDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("toDate", model.ToDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("fromDate", add.FromDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("toDate", add.ToDate.ToString("dd.MM.yyyy"));
                 var doc_key = "long_contract";
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
               
@@ -84,7 +89,10 @@ namespace SmartIntranet.Web.Controllers
                 file_extra.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(file_extra);
 
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -116,30 +124,38 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _contractService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                await _contractService.UpdateAsync(_map.Map<LongContract>(model));
+                var update = _map.Map<LongContract>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _contractService.UpdateAsync(update);
 
-                var usr = await _userService.FindByUserAllInc(model.UserId);
+                var usr = await _userService.FindByUserAllInc(update.UserId);
                 var company = await _companyService.FindByIdAsync((int)usr.CompanyId);
                 var company_director = await _userManager.FindByIdAsync(company.LeaderId.ToString());
                 Dictionary<string, string> formatKeys = new Dictionary<string, string>();
 
                
                
-                formatKeys.Add("fromDate", model.FromDate.ToString("dd.MM.yyyy"));
-                formatKeys.Add("toDate", model.ToDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("fromDate", update.FromDate.ToString("dd.MM.yyyy"));
+                formatKeys.Add("toDate", update.ToDate.ToString("dd.MM.yyyy"));
                 var doc_key = "long_contract";
-                usr = await _userService.FindByUserAllInc(model.UserId);
+                usr = await _userService.FindByUserAllInc(update.UserId);
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                
-                var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.LongContractId == model.Id && !x.IsDeleted);
+                var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.LongContractId == update.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
                     var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted).Result[0];
@@ -148,12 +164,15 @@ namespace SmartIntranet.Web.Controllers
                     el.FilePath = await AddContractFile(el.Clause.FilePath, PdfFormatKeys(formatKeys, content));
                     await _contractFileService.UpdateAsync(el);
                 }
-                return RedirectToAction("List", "Contract");
+                return RedirectToAction("List", "Contract", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
         [Authorize(Policy = "longContract.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var current = GetSignInUserId();
             var transactionModel = _map.Map<LongContractListDto>(await _contractService.FindByIdAsync(id));
@@ -161,10 +180,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<LongContract>(transactionModel));
-            return Ok();
-
         }
-
-
     }
 }

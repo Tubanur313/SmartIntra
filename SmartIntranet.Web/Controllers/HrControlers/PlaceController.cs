@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -30,19 +31,26 @@ namespace SmartIntranet.Web.Controllers
             _placeService = placeService;
         }
         [Authorize(Policy = "place.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            IEnumerable<PlaceListDto> data = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList().Select(x =>
-            new PlaceListDto()
+            var model = _map.Map<ICollection<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
+            if (model.Any())
             {
-                Id = x.Id,
-                Name = x.Name,
-                Amount = x.Amount,
-                Currency = GetCurrencyNameByKey(x.Currency),
-                IsDeleted = x.IsDeleted,
-                DeleteByUserId = x.DeleteByUserId
-            });
-            return View(data);
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<PlaceListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                    .Select(x =>
+                        new PlaceListDto()
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Amount = x.Amount,
+                            Currency = GetCurrencyNameByKey(x.Currency),
+                            IsDeleted = x.IsDeleted,
+                            DeleteByUserId = x.DeleteByUserId
+                        }).ToList());
+            }
+            return View(new List<PlaceListDto>());
         }
 
         [HttpGet]
@@ -62,18 +70,32 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var add = _map.Map<Place>(model);
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
-                if (model.Currency == null)
-                    model.Currency = "";
-                await _placeService.AddAsync(_map.Map<Place>(model));
-                return RedirectToAction("List");
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
+                if (add.Currency == null)
+                    add.Currency = "";
+
+                if (await _placeService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -97,25 +119,35 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _placeService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
+                var update = _map.Map<Place>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                if (update.Currency == null)
+                    update.Currency = "";
 
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                if (model.Currency == null)
-                    model.Currency = "";
-
-                await _placeService.UpdateAsync(_map.Map<Place>(model));
-                return RedirectToAction("List");
+                await _placeService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
         [Authorize(Policy = "place.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<PlaceListDto>(await _placeService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -123,7 +155,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _placeService.UpdateAsync(_map.Map<Place>(transactionModel));
-            return Ok();
         }
 
         public List<Currency> GetCurrencies()

@@ -14,6 +14,7 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Business.Provider;
 using SmartIntranet.Core.Extensions;
+using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.AppUserDto;
@@ -325,8 +326,10 @@ namespace SmartIntranet.Web.Controllers
 
                 if (!MimeTypeCheckExtension.İsImage(profile))
                 {
-                    TempData["error"] = " Daxil edilən fayllar image, png və ya gif formatında olmalıdır !";
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.wrongFormat
+                    });
                 }
             }
 
@@ -337,8 +340,10 @@ namespace SmartIntranet.Web.Controllers
 
                 if (sendUserEmailExist)
                 {
-                    TempData["error"] = " Daxil edilən email istifadə olunur !";
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.sameMail
+                    });
                 }
 
                 if (profile != null && profile.FileName != "default.png")
@@ -405,14 +410,25 @@ namespace SmartIntranet.Web.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(appUser, user.Password);
-                return RedirectToAction("List");
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        success = Messages.Add.Added
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Add.notAdded
+                });
             }
             else
             {
-                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted == false));
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-
-                return RedirectToAction("List", user);
+                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
 
@@ -607,8 +623,10 @@ namespace SmartIntranet.Web.Controllers
                 {
                     if (!MimeTypeCheckExtension.İsImage(profile))
                     {
-                        TempData["error"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
-                        return RedirectToAction("List");
+                        return RedirectToAction("List", new
+                        {
+                            error = Messages.Error.wrongFormat
+                        });
                     }
 
                     // model.Picture = AddResizedImage("wwwroot/profile/", profile);
@@ -623,8 +641,10 @@ namespace SmartIntranet.Web.Controllers
                     }
                     else
                     {
-                        TempData["error"] = " Daxil edilən Profil rəsmi image, png və ya gif formatında olmalıdır !";
-                        return RedirectToAction("List");
+                        return RedirectToAction("List", new
+                        {
+                            error = Messages.Error.wrongFormat
+                        });
                     }
                 }
                 else
@@ -644,7 +664,10 @@ namespace SmartIntranet.Web.Controllers
                     if (!string.IsNullOrEmpty(model.Email))
                         updateUser.Email = model.Email;
                     else
-                        ModelState.AddModelError("", "Email boş ola bilməz !");
+                        return RedirectToAction("List", new
+                        {
+                            error = Messages.Error.notComplete
+                        });
 
 
 
@@ -765,35 +788,50 @@ namespace SmartIntranet.Web.Controllers
                         {
                             if (pdf == null)
                             {
-                                return RedirectToAction("List");
+                                return RedirectToAction("List", new
+                                {
+                                    success = Messages.Update.updated
+                                });
                             }
                             else
                             {
                                 if (MimeTypeCheckExtension.İsDocument(pdf))
                                 {
-                                    TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
+                                    return RedirectToAction("List", new
+                                    {
+                                        error = Messages.Error.notComplete
+                                    });
                                 }
                                 else
                                 {
-                                    TempData["error"] = " Daxil edilən fayl pdf, docx və ya xlsx formatında olmalıdır !";
+                                    return RedirectToAction("List", new
+                                    {
+                                        error = Messages.Error.wrongFormatDoc
+                                    });
                                 }
-                                return RedirectToAction("List");
+                                return RedirectToAction("List", new
+                                {
+                                    success = Messages.Update.updated
+                                });
                             }
                         }
                     }
                 }
                 else
-                    TempData["error"] = " İstifadəçi tapılmadı !";
-                return RedirectToAction("List");
-
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Error.notFound
+                    });
             }
 
-            TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notComplete
+            });
         }
 
         [Authorize(Policy = "account.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var current = GetSignInUserId();
             var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == id);
@@ -801,8 +839,6 @@ namespace SmartIntranet.Web.Controllers
             updateUser.DeleteByUserId = current;
             updateUser.DeleteDate = DateTime.Now;
             await _userManager.UpdateAsync(updateUser);
-            return Ok();
-
         }
 
         [Authorize(Policy = "account.deleteUserContract")]

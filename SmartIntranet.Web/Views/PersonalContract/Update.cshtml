@@ -93,11 +93,29 @@
                             </div>
 
                         </div>
+                        <div id="dep_div" class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şöbə: </label>
+                                <select asp-for="DepartmentId" class="form-control">
+                                    <option value="" disabled selected hidden>Seçim edin</option>
+                                    @foreach (var item in ViewBag.departments)
+                                    {
+                                        @*if(item.Id == ViewBag.departmentId)
+                                        {*@
+                                            <option value="@item.Id">@item.Name</option>
+                                       @* }
+                                        else
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }*@
+                                    }
+                                </select>
+                            </div>
+                        </div>
                         <div id="pos_div" class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Vəzifə: </label>
                                 <select name="select" asp-for="PositionId" name="PositionId" class="form-control">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
                                     @foreach (var item in ViewBag.positions)
                                     {
                                         <option value="@item.Id">@item.Name</option>
@@ -201,14 +219,14 @@
 
                     @*<div class="row">
 
-                    <div id="salary_pos_div" class="col-sm-6">
-                    <div class="form-group">
-                    <label class="floatLabel">  Maaş: </label>
-                    <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
-                    </div>
-                    </div>
+                        <div id="salary_pos_div" class="col-sm-6">
+                        <div class="form-group">
+                        <label class="floatLabel">  Maaş: </label>
+                        <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
+                        </div>
+                        </div>
 
-                    </div>*@
+                        </div>*@
                     <input type="hidden" asp-for="UserId" />
                     <input type="hidden" asp-for="Type" />
                 </div>
@@ -238,307 +256,317 @@
 
 <script>
 
-    $(document).ready(function() {
+     $(document).ready(function () {
 
-        $("#salary_div").css('display', "none");
-        $("#pos_div").css('display', "none");
-        $("#place_div").css('display', "none");
-        $("#graphic_div").css('display', "none");
-        $("#vacation_div").css('display', "none");
-        $("#clause_div").css('display', "none");
-        $("#vacation_type_div").css('display', "none");
-        $("#vacation_extra_div").css('display', "none");
-        let IsMainVac = $("#IsMainVacationTrue").is(":checked")
-        let type_contract = $("#Type").val();
-        if (type_contract == 'VACATION' && IsMainVac == false) {
+         $("#salary_div").css('display', "none");
+         $("#pos_div").css('display', "none");
+         $("#dep_div").css('display', "none");
+         $("#place_div").css('display', "none");
+         $("#graphic_div").css('display', "none");
+         $("#vacation_div").css('display', "none");
+         $("#clause_div").css('display', "none");
+         $("#vacation_type_div").css('display', "none");
+         $("#vacation_extra_div").css('display', "none");
+         let IsMainVac = $("#IsMainVacationTrue").is(":checked")
+         let type_contract = $("#Type").val();
+         if(type_contract == 'VACATION' && IsMainVac==false){
+                 $("#vacation_extra_div").css('display', "block");
+
+         }
+
+           if (type_contract == "SALARY") {
+             $("#salary_div").css('display', "block");
+             $("#pos_div").css('display', "none");
+             $("#dep_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_contract == "POSITION") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "block");
+             $("#dep_div").css('display', "block");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_contract == "SALARY_POSITION") {
+             $("#salary_div").css('display', "block");
+             $("#pos_div").css('display', "block");
+             $("#dep_div").css('display', "block");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_contract == "WORK_PLACE") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "none");
+             $("#dep_div").css('display', "none");
+             $("#place_div").css('display', "block");
+             $("#graphic_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_contract == "WORK_GRAPHIC") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "none");
+             $("#dep_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "block");
+             $("#clause_div").css('display', "block");
+             $("#vacation_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_contract == "VACATION") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "none");
+             $("#dep_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_div").css('display', "block");
+             $("#vacation_type_div").css('display', "block");
+         }
+
+         $('.input-daterange input').each(function () {
+             $(this).datepicker({
+                 //format: "dd.mm.yyyy"
+             });
+         });
+
+         $("form").submit( function(e) {
+                 let type = $("#Type").val();
+                 let salary = $("#Salary").val();
+                 let positionId = $("#PositionId").val();
+                 let isMainPlace = $("#IsMainPlace").val();
+                 let workGraphicId = $("#WorkGraphicId").val();
+                 let vacationDay = $("#VacationDay").val();
+                 let vacationExtraType = $("#VacationExtraType").val();
+                 let clauseId = $("#ClauseId").val();
+                 let isMainVacation = $("#IsMainVacationTrue").is(":checked")
+
+
+                 if(type == 'SALARY' && !salary)
+                 {
+                     toastr.error(" Maaş boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+                 else if(type == 'POSITION' && !positionId)
+                 {
+                     toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+                 else if(type == 'SALARY_POSITION' && !positionId)
+                 {
+                     toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+                 else if(type == 'SALARY_POSITION' && !salary)
+                 {
+                     toastr.error(" Maaş boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+                 else if(type == 'WORK_GRAPHIC' && !workGraphicId)
+                 {
+                     toastr.error(" İstehsalat təqvimi boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+                 else if(type == 'WORK_GRAPHIC' && !clauseId)
+                 {
+                     toastr.error(" Şablon boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+                  else if(type == 'VACATION' && isMainVacation==false && !vacationExtraType)
+                 {
+                     toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
+                     e.preventDefault();
+                 }
+             });
+
+         var type_id = $("#Type").val();
+
+         if (type_id == "SALARY") {
+             $("#salary_div").css('display', "block");
+             $("#pos_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_id == "POSITION") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "block");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_id == "SALARY_POSITION") {
+             $("#salary_div").css('display', "block");
+             $("#pos_div").css('display', "block");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_id == "WORK_PLACE") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "none");
+             $("#place_div").css('display', "block");
+             $("#graphic_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_id == "WORK_GRAPHIC") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "block");
+             $("#clause_div").css('display', "block");
+             $("#vacation_div").css('display', "none");
+             $("#vacation_type_div").css('display', "none");
+             $("#vacation_extra_div").css('display', "none");
+         }
+         else if (type_id == "VACATION") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#clause_div").css('display', "none");
+             $("#vacation_div").css('display', "block");
+             $("#vacation_type_div").css('display', "block");
+         }
+
+         $.ajax({
+                 type: 'Get',
+                 url: '@Url.ActionLink("GetUserVacationDay", "Account")',
+                 data: {
+                     userId: $('#UserId').val(),
+                 },
+                 success: function (response)
+                 {
+                     if (response.error == true)
+                     {
+                         toastr.error(response.message, "Xəta baş verdi!");
+                         return;
+                     }
+                     $('#UserVacationDay').val(response);
+                 },
+                 error: function (response) {
+                     $("#overlay").fadeOut(300);
+                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                 }
+             });
+     });
+
+
+     $(document).on('change','#Type', function(){
+         var _id = $(this).val();
+
+         if (_id == "SALARY") {
+             $("#PositionId").empty();
+             $("#PositionId").prop('disabled', false);
+             $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`);
+
+             $("#salary_div").css('display', "block");
+             $("#pos_div").css('display', "none");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+         }
+         else if (_id == "POSITION") {
+             $("#salary_div").css('display', "none");
+             $("#pos_div").css('display', "block");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+         }
+         else if (_id == "SALARY_POSITION") {
+             $("#salary_div").css('display', "block");
+             $("#pos_div").css('display', "block");
+             $("#place_div").css('display', "none");
+             $("#graphic_div").css('display', "none");
+             $("#vacation_div").css('display', "none");
+         }
+     });
+
+     $(document).on('change','#UserId', function(){
+             var _id = $(this).val();
+             getPos(_id);
+     });
+
+     $(document).on('click','#IsMainVacationFalse', function(){
+          $('#VacationDay').val($('#UserVacationDay').val());
             $("#vacation_extra_div").css('display', "block");
+     });
 
-        }
-
-        if (type_contract == "SALARY") {
-            $("#salary_div").css('display', "block");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
+     $(document).on('click','#IsMainVacationTrue', function(){
+          $('#VacationDay').val($('#UserVacationDayDb').val());
             $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_contract == "POSITION") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "block");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_contract == "SALARY_POSITION") {
-            $("#salary_div").css('display', "block");
-            $("#pos_div").css('display', "block");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_contract == "WORK_PLACE") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "block");
-            $("#graphic_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_contract == "WORK_GRAPHIC") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "block");
-            $("#clause_div").css('display', "block");
-            $("#vacation_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_contract == "VACATION") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_div").css('display', "block");
-            $("#vacation_type_div").css('display', "block");
-
-        }
-
-        $('.input-daterange input').each(function() {
-            $(this).datepicker({
-                //format: "dd.mm.yyyy"
-            });
-        });
-
-        $("form").submit(function(e) {
-            let type = $("#Type").val();
-            let salary = $("#Salary").val();
-            let positionId = $("#PositionId").val();
-            let isMainPlace = $("#IsMainPlace").val();
-            let workGraphicId = $("#WorkGraphicId").val();
-            let vacationDay = $("#VacationDay").val();
-            let vacationExtraType = $("#VacationExtraType").val();
-            let clauseId = $("#ClauseId").val();
-            let isMainVacation = $("#IsMainVacationTrue").is(":checked")
-
-
-            if (type == 'SALARY' && !salary) {
-                toastr.error(" Maaş boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-            else if (type == 'POSITION' && !positionId) {
-                toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-            else if (type == 'SALARY_POSITION' && !positionId) {
-                toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-            else if (type == 'SALARY_POSITION' && !salary) {
-                toastr.error(" Maaş boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-            else if (type == 'WORK_GRAPHIC' && !workGraphicId) {
-                toastr.error(" İstehsalat təqvimi boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-            else if (type == 'WORK_GRAPHIC' && !clauseId) {
-                toastr.error(" Şablon boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-            else if (type == 'VACATION' && isMainVacation == false && !vacationExtraType) {
-                toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
-                e.preventDefault();
-            }
-        });
-
-        var type_id = $("#Type").val();
-
-        if (type_id == "SALARY") {
-            $("#salary_div").css('display', "block");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_id == "POSITION") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "block");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_id == "SALARY_POSITION") {
-            $("#salary_div").css('display', "block");
-            $("#pos_div").css('display', "block");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_id == "WORK_PLACE") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "block");
-            $("#graphic_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_id == "WORK_GRAPHIC") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "block");
-            $("#clause_div").css('display', "block");
-            $("#vacation_div").css('display', "none");
-            $("#vacation_type_div").css('display', "none");
-            $("#vacation_extra_div").css('display', "none");
-        }
-        else if (type_id == "VACATION") {
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#clause_div").css('display', "none");
-            $("#vacation_div").css('display', "block");
-            $("#vacation_type_div").css('display', "block");
-        }
-
-        $.ajax({
-            type: 'Get',
-            url: '@Url.ActionLink("GetUserVacationDay", "Account")',
-            data: {
-                userId: $('#UserId').val(),
-            },
-            success: function(response) {
-                if (response.error == true) {
-                    toastr.error(response.message, "Xəta baş verdi!");
-                    return;
-                }
-                $('#UserVacationDay').val(response);
-            },
-            error: function(response) {
-                $("#overlay").fadeOut(300);
-                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-            }
-        });
-    });
-
-
-    $(document).on('change', '#Type', function() {
-        var _id = $(this).val();
-
-        if (_id == "SALARY") {
-            $("#PositionId").empty();
-            $("#PositionId").prop('disabled', false);
-            $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`);
-
-            $("#salary_div").css('display', "block");
-            $("#pos_div").css('display', "none");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-        }
-        else if (_id == "POSITION") {
-            var _id = $("#UserId").val();
-            if (_id != null) {
-                getPos(_id);
-            }
-            $("#salary_div").css('display', "none");
-            $("#pos_div").css('display', "block");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-        }
-        else if (_id == "SALARY_POSITION") {
-            var _id = $("#UserId").val();
-            if (_id != null) {
-                getPos(_id);
-            }
-
-            $("#salary_div").css('display', "block");
-            $("#pos_div").css('display', "block");
-            $("#place_div").css('display', "none");
-            $("#graphic_div").css('display', "none");
-            $("#vacation_div").css('display', "none");
-        }
-    });
-
-
-
-    $(document).on('change', '#UserId', function() {
-        var _id = $(this).val();
-        getPos(_id);
-    });
-
-    $(document).on('click', '#IsMainVacationFalse', function() {
-        $('#VacationDay').val($('#UserVacationDay').val());
-        $("#vacation_extra_div").css('display', "block");
-    });
-
-    $(document).on('click', '#IsMainVacationTrue', function() {
-        $('#VacationDay').val($('#UserVacationDayDb').val());
-        $("#vacation_extra_div").css('display', "none");
-    });
+     });
 
     function getPos(_id) {
-        $.ajax({
-            type: 'Get',
-            url: '@Url.ActionLink("GetPositionWithUser", "Account")',
-            data: {
-                userId: _id,
-            },
-            success: function(response) {
-                if (response.error == true) {
-                    toastr.error(response.message, "Xəta baş verdi!");
-                    return;
-                }
-                $("#PositionId").empty();
-                var html = "";
+         $.ajax({
+             type: 'Get',
+             url: '@Url.ActionLink("GetPositionWithDepartment", "Account")',
+             data: {
+                 departmentId: _id,
+             },
+             success: function (response)
+             {
+                 if (response.error == true)
+                 {
+                     toastr.error(response.message, "Xəta baş verdi!");
+                     return;
+                 }
+                 $("#PositionId").empty();
+                 var html = "";
 
-                for (var i in response) {
-                    html += `<option value="${[response[i].id]}">
-                                ${[response[i].name]}</option>`
-                }
+                 for (var i in response) {
+                     html += `<option value="${[response[i].id]}">
+                     ${[response[i].name]}</option>`
+                 }
 
-                if (response.length > 0) {
-                    $("#PositionId").prop('disabled', false);
-                    $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
-                }
-                else {
-                    $("#PositionId").prop('disabled', false);
-                    $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                }
+                 if(response.length>0)
+                 {
+                     $("#PositionId").prop('disabled', false);
+                     $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                 }
+                 else{
+                         $("#PositionId").prop('disabled', false);
+                     $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                 }
 
-            },
-            error: function(response) {
-                $("#overlay").fadeOut(300);
-                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-            }
-        });
-    }
+             },
+             error: function (response) {
+                 $("#overlay").fadeOut(300);
+                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+             }
+         });
+     }
 
-
+      $(document).on('change','#DepartmentId', function(){
+         var _id = $(this).val();
+         getPos(_id);
+     });
 </script>

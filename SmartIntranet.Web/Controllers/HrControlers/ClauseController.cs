@@ -35,10 +35,14 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            TempData["success"] = success;
-            TempData["error"] = error;
-            IEnumerable<ClauseListDto> data = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
-            return View(data);
+            var model = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<ClauseListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<ClauseListDto>());
         }
 
         [HttpGet]
@@ -57,21 +61,31 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
-                model.IsDeletable = true;
-                model.IsBackground = false;
+                var add = _map.Map<Clause>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
+                add.IsDeletable = true;
+                add.IsBackground = false;
                 if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                 {
-                    model.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
+                    add.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
                 }
-                await _clauseService.AddAsync(_map.Map<Clause>(model));
+                if (await _clauseService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added
@@ -106,17 +120,22 @@ namespace SmartIntranet.Web.Controllers
             }
             else
             {
+                var data = await _clauseService.FindByIdAsync(model.Id);
                 if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                 {
                     DeleteFile("wwwroot/clauseDocs/", model.FilePath);
                     await AddFile("wwwroot/clauseDocs/", readyDoc, model.FilePath);
                 }
+
                 var current = GetSignInUserId();
-
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-
-                await _clauseService.UpdateAsync(_map.Map<Clause>(model));
+                var update = _map.Map<Clause>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                await _clauseService.UpdateAsync(update);
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -125,7 +144,7 @@ namespace SmartIntranet.Web.Controllers
         }
 
         [Authorize(Policy = "clause.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<ClauseListDto>(await _clauseService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -134,7 +153,6 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.IsDeleted = true;
             DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);
             await _clauseService.UpdateAsync(_map.Map<Clause>(transactionModel));
-            return Ok();
         }
     }
 }

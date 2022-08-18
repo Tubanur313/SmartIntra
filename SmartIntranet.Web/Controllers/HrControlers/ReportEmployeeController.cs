@@ -17,6 +17,7 @@ using NPOI.SS.UserModel;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using System.Linq;
 using SmartIntranet.DTO.DTOs;
+using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -48,10 +49,16 @@ namespace SmartIntranet.Web.Controllers
             _appUserService = appUserService;
         }
         [Authorize(Policy = "reportEmployee.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
-            IEnumerable<ReportEmployeeListDto> data = _map.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
-            return View(data);
+            var model = _map.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<ReportEmployeeListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<ReportEmployeeListDto>());
         }
 
         [HttpGet]
@@ -71,20 +78,33 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
                 var current = GetSignInUserId();
-                model.CreatedByUserId = current;
-                model.CreatedDate = DateTime.Now;
-                model.IsDeleted = false;
+                var add = _map.Map<ReportEmployee>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                add.IsDeleted = false;
 
-                model.FilePath = Guid.NewGuid() +".xlsx";
-                ExcellGenerate(model);
-              
-                await _reportService.AddAsync(_map.Map<ReportEmployee>(model));
-                return RedirectToAction("List");
+                add.FilePath = Guid.NewGuid() +".xlsx";
+                ExcellGenerate(add);
+
+                if (await _reportService.AddReturnEntityAsync(add) is null)
+                {
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
+                }
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
         }
 
@@ -108,24 +128,36 @@ namespace SmartIntranet.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["error"] = " Daxil edilən məlumatlar tam deyil !";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
             else
             {
+                var data = await _reportService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
-                
-                model.UpdateDate = DateTime.Now;
-                model.UpdateByUserId = current;
-                DeleteFile("wwwroot/reportDocs/", model.FilePath);
-                ExcellGenerate(model);
-                await _reportService.UpdateAsync(_map.Map<ReportEmployee>(model));
-                return RedirectToAction("List");
+                var update = _map.Map<ReportEmployee>(model);
+                update.UpdateByUserId = GetSignInUserId();
+                update.CreatedByUserId = data.CreatedByUserId;
+                update.DeleteByUserId = data.DeleteByUserId;
+                update.CreatedDate = data.CreatedDate;
+                update.UpdateDate = DateTime.Now;
+                update.DeleteDate = data.DeleteDate;
+                update.FilePath = data.FilePath;
+                DeleteFile("wwwroot/reportDocs/", update.FilePath);
+                ExcellGenerate(update);
+
+                await _reportService.UpdateReturnEntityAsync(update);
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Update.updated
+                });
             }
         }
 
         [Authorize(Policy = "reportEmployee.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _map.Map<ReportEmployeeListDto>(await _reportService.FindByIdAsync(id));
             var current = GetSignInUserId();
@@ -133,10 +165,9 @@ namespace SmartIntranet.Web.Controllers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             await _reportService.UpdateAsync(_map.Map<ReportEmployee>(transactionModel));
-            return RedirectToAction("List");
         }
 
-        private void ExcellGenerate(ReportEmployeeDto model)
+        private void ExcellGenerate(ReportEmployee model)
         {
             var users = _appUserService.GetAllIncludeAsync(x => x.CompanyId == model.CompanyId && !x.IsDeleted).Result;
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/reportDocs/" + model.FilePath);
