@@ -474,7 +474,7 @@
                                             <div class="border text-center pt-2">
                                                 <div class="pt-0">
                                                     <label class="floatLabel">Yeni Şəkil:</label>
-                                                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" alt=""/>
+                                                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" alt="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -487,7 +487,7 @@
 
 
                             <div class="col-sm-6 col-xl-6">
-                               <div class="file upload btn btn-outline-primary mb-4" style="position: relative;overflow: hidden;">
+                                <div class="file upload btn btn-outline-primary mb-4" style="position: relative;overflow: hidden;">
                                     Müqavilə Yüklə
                                     <input id="file-upload" type="file" name="pdf" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
                                         text/plain, application/pdf" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
@@ -608,12 +608,12 @@
 <!-- delete_ajax-->
 <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
 <script type="text/javascript">
-    $.validator.setDefaults({ ignore:''});
-    $(document).ready(function() {
+    $.validator.setDefaults({ ignore: '' });
+    $(document).ready(function () {
 
         let dateArray = [];
 
-        $('.custom-date').each(function() {
+        $('.custom-date').each(function () {
             //console.log($('.custom-date'))
             $(this).datepicker({
                 formatDate: "dd.mm.yyyy"
@@ -621,9 +621,9 @@
         })
 
         function getTotalCount() {
-            $('.remain-count').change(function() {
+            $('.remain-count').change(function () {
                 let totalCount = +$('#VacationTotalMain').text();
-                $(".remain-count").each(function(i, el) {
+                $(".remain-count").each(function (i, el) {
                     let val = $(el).val();
                     if (val) {
                         totalCount += +val;
@@ -635,20 +635,20 @@
 
         getTotalCount();
 
-        $('#StartWorkDate').each(function() {
+        $('#StartWorkDate').each(function () {
             $(this).datepicker({
                 //format: "dd.mm.yyyy"
-            }).on('changeDate', function(ev) {
+            }).on('changeDate', function (ev) {
                 $(this).change();
             });
-            $(this).change(function() {
+            $(this).change(function () {
                 getUserVacationDay();
             });
         })
 
-        $("form").submit(function(e) {
+        $("form").submit(function (e) {
             let isEmpty = false;
-            $(".experience-history").each(function(i, el) {
+            $(".experience-history").each(function (i, el) {
                 let val = $(el).val();
                 if (!val) {
                     isEmpty = true;
@@ -722,7 +722,7 @@
 
         function checkRemainCount(e) {
             let isEmpty = false;
-            $(".remain-count").each(function(i, el) {
+            $(".remain-count").each(function (i, el) {
                 let val = $(el).val();
                 if (!val) {
                     isEmpty = true;
@@ -736,7 +736,7 @@
         }
 
         function setDate(type) {
-            $(`.vacation-remain.${type}`).each(function(i, el) {
+            $(`.vacation-remain.${type}`).each(function (i, el) {
                 let val = $(el).val();
                 val = new Date(val);
                 val.setHours(0, 0, 0, 0);
@@ -758,7 +758,7 @@
             setDisableAndOld();
             let startYear;
             let valid = true;
-            $(".vacation-remain").each(function(i, el) {
+            $(".vacation-remain").each(function (i, el) {
                 let startWorkDate = $('#StartWorkDate').val();
                 //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
                 startWorkDate = new Date(startWorkDate);
@@ -819,18 +819,18 @@
             //format: "dd.mm.yyyy"
         });
 
-        $('.input-daterange-experience-history').each(function() {
+        $('.input-daterange-experience-history').each(function () {
             $(this).datepicker({
                 //format: "dd.mm.yyyy"
-            }).on('changeDate', function(ev) {
+            }).on('changeDate', function (ev) {
                 $(this).change();
             });
-            $(this).change(function() {
+            $(this).change(function () {
                 getUserVacationDay();
             });
         })
 
-        $("#addRow").click(function() {
+        $("#addRow").click(function () {
             let rowCount = parseInt($("#rowCount").val());
             rowCount++;
             $("#rowCount").val(rowCount);
@@ -839,15 +839,15 @@
 
             $('.input-daterange').datepicker({
                 //format: "dd.mm.yyyy"
-            }).on('changeDate', function(ev) {
+            }).on('changeDate', function (ev) {
                 $('.input-daterange').change();
             });
-            $('.input-daterange').change(function() {
+            $('.input-daterange').change(function () {
                 getUserVacationDay();
             });
         });
 
-        $("#addVacDay").click(function(e) {
+        $("#addVacDay").click(function (e) {
             if (!checkDate() || checkRemainCount(e)) {
                 return;
             }
@@ -855,26 +855,26 @@
             rowCount++;
             $("#vacCount").val(rowCount);
             let html = `<div class="row">
-                                    <div class="col-sm-5" >
-                                        <div class="form-group">
-                                            <label class="floatLabel"> Tarix: </label>
-                                            <div class="input-group input-daterange mb-0">
-                                                <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
-                                                <div class="input-group-addon">to</div>
-                                                <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
+                                        <div class="col-sm-5" >
+                                            <div class="form-group">
+                                                <label class="floatLabel"> Tarix: </label>
+                                                <div class="input-group input-daterange mb-0">
+                                                    <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
+                                                    <div class="input-group-addon">to</div>
+                                                    <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="form-group">
-                                            <label class="floatLabel"> Qalıq gün: </label>
-                                            <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
+                                        <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <label class="floatLabel"> Qalıq gün: </label>
+                                                <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
+                                            </div>
                                         </div>
-                                    </div>
-                                     <div class="col-sm-2 text-right">
-                                         Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
-                                    </div>
-                                </div>`
+                                         <div class="col-sm-2 text-right">
+                                             Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
+                                        </div>
+                                    </div>`
             $('#vac-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -885,23 +885,23 @@
         });
 
         function removeDay() {
-            $('.removeVacDay').click(function() {
+            $('.removeVacDay').click(function () {
                 $(this).parent().parent().remove();
             })
         }
 
-        $("#Profile").change(function(e) {
+        $("#Profile").change(function (e) {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
         });
-        $('#file-upload').change(function() {
+        $('#file-upload').change(function () {
             var file = $('#file-upload')[0].files[0].name;
             $('#uploaded').removeClass("d-none").text(file);
         });
         //phone number masking
         $.mask.definitions['9'] = '';
         $.mask.definitions['_'] = '[0-9]';
-        $("#PhoneNumber").on("focus", function() {
+        $("#PhoneNumber").on("focus", function () {
             $("#PhoneNumber").mask("+___ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+___ __-___-__-__" });
         });
     @* $('a[href="#home3"]').on('click', function(event) { *@
@@ -911,7 +911,7 @@
                 data: "",
                 dataType: "json",
                 cache: false,
-                success: function(data) {
+                success: function (data) {
                     $.ajax({
                         url: `@Url.Action("GetDepartmentTree","Account")`,
                         type: "Get",
@@ -920,7 +920,7 @@
                         },
                         dataType: "json",
                         cache: false,
-                        success: function(data) {
+                        success: function (data) {
                             if (data.length > 0) {
                                 var tree = $('#DepartmentId').combotree({
                                     data: data,
@@ -935,7 +935,7 @@
                                 tree.combotree('disable')
                             }
                         },
-                        error: function(data) {
+                        error: function (data) {
                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                         }
                     })
@@ -948,7 +948,7 @@
                         },
                         dataType: "json",
                         cache: false,
-                        success: function(data) {
+                        success: function (data) {
                             if (data.length > 0) {
                                 var tre = $('#PositionId').combotree({
                                     data: data,
@@ -963,7 +963,7 @@
                                 tree.combotree('disable')
                             }
                         },
-                        error: function(data) {
+                        error: function (data) {
                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                         }
                     })
@@ -971,7 +971,7 @@
                     $('#CompanyId').combotree({
                         data: data,
                         prompt: 'Seçim edin',
-                        onClick: function(node) {
+                        onClick: function (node) {
                             $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
                             $.ajax({
                                 url: `@Url.Action("GetDepartmentTree","Account")`,
@@ -981,7 +981,7 @@
                                 },
                                 dataType: "json",
                                 cache: false,
-                                success: function(data) {
+                                success: function (data) {
                                     if (data.length > 0) {
                                         var tre = $('#DepartmentId').combotree({
                                             data: data,
@@ -995,7 +995,10 @@
                                         $('#DepartmentId').combotree({
                                             data: data,
                                             prompt: 'Seçim edin',
-                                            onClick: function(node) {
+                                            onLoadSuccess: function () {
+                                                $('#DepartmentId').combotree('setValue', '');
+                                            },
+                                            onClick: function (node) {
                                                 $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                                                 $.ajax({
                                                     url: `@Url.Action("GetPositionTree","Account")`,
@@ -1005,7 +1008,7 @@
                                                     },
                                                     dataType: "json",
                                                     cache: false,
-                                                    success: function(data) {
+                                                    success: function (data) {
 
                                                         if (data.length > 0) {
                                                             var tree = $('#PositionId').combotree({
@@ -1023,7 +1026,7 @@
                                                             tre.combotree('setValue', '')
                                                         }
                                                     },
-                                                    error: function(data) {
+                                                    error: function (data) {
                                                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                                     }
                                                 })
@@ -1044,7 +1047,7 @@
                                         tre.combotree('setValue', '')
                                     }
                                 },
-                                error: function(data) {
+                                error: function (data) {
                                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                 }
                             })
@@ -1054,7 +1057,7 @@
                     $('#DepartmentId').combotree({
                         data: data,
                         prompt: 'Seçim edin',
-                        onClick: function(node) {
+                        onClick: function (node) {
                             $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                             $.ajax({
                                 url: `@Url.Action("GetPositionTree","Account")`,
@@ -1064,7 +1067,7 @@
                                 },
                                 dataType: "json",
                                 cache: false,
-                                success: function(data) {
+                                success: function (data) {
 
                                     if (data.length > 0) {
                                         var tree = $('#PositionId').combotree({
@@ -1082,24 +1085,24 @@
                                         tre.combotree('setValue', '')
                                     }
                                 },
-                                error: function(data) {
+                                error: function (data) {
                                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                 }
                             })
                         }
                     })
                 },
-                error: function(data) {
+                error: function (data) {
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
             });
         $.ajax({
-            url: `@Url.Action("GetCompanyTree","Position")`,
+            url: `@Url.Action("GetCompanyTree","Account")`,
             type: "Get",
             data: "",
             dataType: "json",
             cache: false,
-            success: function(data) {
+            success: function (data) {
                 $.ajax({
                     url: `@Url.Action("GetDepartmentTree","Account")`,
                     type: "Get",
@@ -1108,7 +1111,7 @@
                     },
                     dataType: "json",
                     cache: false,
-                    success: function(data) {
+                    success: function (data) {
                         if (data.length > 0) {
                             var treeD = $('#DepartmentId').combotree({
                                 data: data
@@ -1122,7 +1125,7 @@
                                 },
                                 dataType: "json",
                                 cache: false,
-                                success: function(data) {
+                                success: function (data) {
                                     if (data.length > 0) {
                                         var tree = $('#PositionId').combotree({
                                             data: data
@@ -1136,7 +1139,7 @@
                                         tree.combotree('disable')
                                     }
                                 },
-                                error: function(data) {
+                                error: function (data) {
                                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                 }
                             })
@@ -1148,14 +1151,14 @@
                             tree.combotree('disable')
                         }
                     },
-                    error: function(data) {
+                    error: function (data) {
                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                     }
                 })
 
                 $('#CompanyId').combotree({
                     data: data,
-                    onClick: function(node) {
+                    onClick: function (node) {
                         $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none");
                         $.ajax({
                             url: `@Url.Action("GetDepartmentTree","Account")`,
@@ -1165,7 +1168,7 @@
                             },
                             dataType: "json",
                             cache: false,
-                            success: function(data) {
+                            success: function (data) {
                                 if (data.length > 0) {
                                     $('#DepartmentId').combotree({
                                         data: data,
@@ -1173,7 +1176,10 @@
                                     })
                                     $('#PositionId').combotree('setValue', '')
                                     $('#DepartmentId').combotree({
-                                        onClick: function(node) {
+                                        onLoadSuccess: function () {
+                                            $('#DepartmentId').combotree('setValue', '');
+                                        },
+                                        onClick: function (node) {
                                             $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
                                             $.ajax({
                                                 url: `@Url.Action("GetPositionTree","Account")`,
@@ -1183,12 +1189,12 @@
                                                 },
                                                 dataType: "json",
                                                 cache: false,
-                                                success: function(data) {
+                                                success: function (data) {
                                                     if (data.length > 0) {
                                                         var treeP = $('#PositionId').combotree({
                                                             data: data,
 
-                                                            onClick: function(node) {
+                                                            onClick: function (node) {
                                                                 $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
                                                             }
                                                         });
@@ -1220,18 +1226,18 @@
                                     treeP.combotree('setValue', '')
                                 }
                             },
-                            error: function(data) {
+                            error: function (data) {
                                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                             }
                         })
                     }
                 })
             },
-            error: function(data) {
+            error: function (data) {
                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
     @* }); *@
-            });
+                });
 </script>
 @await Html.PartialAsync("_ValidationScriptsPartial")

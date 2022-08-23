@@ -97,7 +97,7 @@
                                                 @if (User.HasAccess("CategoryTicket.delete"))
                                                 {
                                                     <li>
-                                                        <button onclick="removeItem(@category.Id,`@category.Name`,`@Url.Action("Delete","CategoryTicket").ToString()`)"
+                                                        <button onclick="removeItemWithoutReloud(@category.Id,`@category.Name`,`@Url.Action("Delete","CategoryTicket").ToString()`,this)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
                                                             <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
                                                             Sil

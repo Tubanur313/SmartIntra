@@ -154,6 +154,9 @@
                                     $('#DepartmentId').combotree({
                                         data: data,
                                         prompt: 'Seçim edin',
+                                        onLoadSuccess: function () {
+                                            $('#DepartmentId').combotree('setValue', '');
+                                        },
                                         onClick: function(node) {
                                             $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
 

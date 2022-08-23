@@ -8,6 +8,41 @@
     return data;
 }
 
+//delete listed items without reloud from table
+function removeItemWithoutReloud(_id, _name, _path, elem) {
+
+    swal({
+        title: `Diqqət`,
+        text: `Əminsiniz ki, '${_name}' siyahıdan silinsin?`,
+        icon: "warning",
+        buttons: ["Xeyr", "Bəli"],
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: 'get',
+                url: _path,
+                datatype: 'json',
+                data: { id: _id },
+                success: function (response) {
+                    //sorgu ugurla neticelenende
+                    if (response.error == true) {
+
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    toastr.success(response.message, "Uğurla silindi!");
+                    $(elem).parent().closest("tr").remove();
+                },
+                error: function (response) {
+                    //sorgu ugursuz neticelenende
+
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        }
+    });
+}
 
 //delete listed items from table
 function removeItem(_id, _name, _path) {

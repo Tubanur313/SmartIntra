@@ -33,7 +33,7 @@
                     <label class="floatLabel">   Şirkət: </label>
                     <div style="margin-bottom:20px">
                         <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">
-                    <span class="CompanyId text-danger"></span>
+                        <span class="CompanyId text-danger"></span>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -59,7 +59,7 @@
 <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script class="removable">
-    $( document ).ready(function() {
+    $(document).ready(function () {
         $.ajax({
             url: `@Url.Action("GetCompanyTree","Department")`,
             type: "Get",
@@ -68,84 +68,87 @@
             cache: false,
             success: function (data) {
                 var tree = $('#ParentId').combotree({
-                 prompt:'Seçim edin',
+                    prompt: 'Seçim edin',
                 });
                 $.ajax({
-                        url: `@Url.Action("GetDepartmentTree","Department")`,
-                        type: "Get",
-                        data: {
-                            companyId: $('#CompanyId').val(),
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            if(data.length > 0){
+                    url: `@Url.Action("GetDepartmentTree","Department")`,
+                    type: "Get",
+                    data: {
+                        companyId: $('#CompanyId').val(),
+                    },
+                    dataType: "json",
+                    cache: false,
+                    success: function (data) {
+                        if (data.length > 0) {
                             $('#ParentId').combotree({
-                                 data:data,
-                                 prompt:'Seçim edin'
+                                data: data,
+                                prompt: 'Seçim edin'
                             });
-                            }
-                            else{
+                        }
+                        else {
                             var tree = $('#ParentId').combotree({
-                                 prompt:'Yoxdur !',
+                                prompt: 'Yoxdur !',
                             });
                             tree.combotree('disable')
-                            }
-                        },
-                        error: function (data) {
+                        }
+                    },
+                    error: function (data) {
+                        $("#overlay").fadeOut(300);
+                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                    }
+                })
+                //tree.combotree('disable')
+                $('#CompanyId').combotree({
+                    data: data,
+                    prompt: 'Seçim edin',
+                    onClick: function () {
+                        $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                        $("#overlay").fadeIn(300);
+                        $.ajax({
+                            url: `@Url.Action("GetDepartmentTree","Department")`,
+                            type: "Get",
+                            data: {
+                                companyId: $('#CompanyId').val(),
+                            },
+                            dataType: "json",
+                            cache: false,
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $('#ParentId').combotree({
+                                        data: data,
+                                        prompt: 'Seçim edin',
+                                        onLoadSuccess: function () {
+                                            $('#ParentId').combotree('setValue', '');
+                                        },
+                                    });
+                                }
+                                else {
+                                    var tree = $('#ParentId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    tree.combotree('setValue', '');
+                                    tree.combotree('disable');
+                                }
+                            },
+                            error: function (data) {
                                 $("#overlay").fadeOut(300);
                                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                        }
+                            }
+                        })
+                    }
                 })
-              //tree.combotree('disable')
-              $('#CompanyId').combotree({
-                data:data,
-                prompt:'Seçim edin',
-                onClick:function(){
-                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
-                    $("#overlay").fadeIn(300);
-                    $.ajax({
-                        url: `@Url.Action("GetDepartmentTree","Department")`,
-                        type: "Get",
-                        data: {
-                           companyId: $('#CompanyId').val(),
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            if(data.length > 0){
-                            $('#ParentId').combotree({
-                                 data:data,
-                                 prompt:'Seçim edin'
-                            });
-                            }
-                            else{
-                            var tree = $('#ParentId').combotree({
-                                 prompt:'Yoxdur !',
-                            });
-                            tree.combotree('setValue', '');
-                            tree.combotree('disable');
-                            }
-                        },
-                        error: function (data) {
-                             $("#overlay").fadeOut(300);
-                             toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                        }
-                    })
-                 }
-              })
             },
             error: function (data) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
-        $("form").submit(function (e){
+        $("form").submit(function (e) {
             //e.preventDefault();
             var val = $('#CompanyId').combotree('getValue');
-            if(val === ""){
-               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
-               e.preventDefault();
+            if (val === "") {
+                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
             }
         });
     });

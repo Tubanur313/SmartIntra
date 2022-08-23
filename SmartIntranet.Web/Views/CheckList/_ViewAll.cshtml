@@ -54,7 +54,7 @@
                                                 @if (User.HasAccess("checkList.delete"))
                                                 {
                                                     <li>
-                                                        <button onclick="removeItem(@checkList.Id,`@checkList.Name`,`@Url.Action("Delete","checkList").ToString()`)"
+                                                        <button onclick="removeItemWithoutReloud(@checkList.Id,`@checkList.Name`,`@Url.Action("Delete","checkList").ToString()`,this)"
                                                         class="btn btn-default waves-effect md-trigger  text-danger">
                                                             <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
                                                             Sil
