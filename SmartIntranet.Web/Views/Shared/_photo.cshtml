@@ -84,9 +84,7 @@
             <div class="thumbnail">
                 <div class="thumb">
                     <a href="~/ticketPhoto/@photo.Name" download>
-                        <img src="~/@(photo!=null? "ticketPhoto/"+photo.Name:"uploads/default.png")"
-                     class="img-fluid width-100 m-b-20" data-toggle="tooltip" data-html="true" data-placement="top"
-                     title="@(photo!=null?photo.Name:"default.png")">
+                        <img src="~/@(photo!=null? "ticketPhoto/"+photo.Name:"uploads/default.png")" class="img-fluid width-100 m-b-20" data-toggle="tooltip" data-html="true" data-placement="top" title="@(photo!=null?photo.Name:"default.png")" alt="">
                     </a>
                 </div>
             </div>
