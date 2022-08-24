@@ -5,12 +5,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete

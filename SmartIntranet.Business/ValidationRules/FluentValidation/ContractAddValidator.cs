@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
 using SmartIntranet.DTO.DTOs.ContractDto;
-using SmartIntranet.DTO.DTOs.WorkGraphicDto;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {

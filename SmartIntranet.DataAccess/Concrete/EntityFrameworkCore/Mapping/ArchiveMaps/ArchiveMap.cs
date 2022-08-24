@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping.ArchiveMaps
 {

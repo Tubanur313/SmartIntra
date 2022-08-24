@@ -1,7 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-
-namespace SmartIntranet.DTO.DTOs.TicketDto
+﻿namespace SmartIntranet.DTO.DTOs.TicketDto
 {
     public class TicketCategoryDto
     {

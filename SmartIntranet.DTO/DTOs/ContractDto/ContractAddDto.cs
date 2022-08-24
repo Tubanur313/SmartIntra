@@ -1,8 +1,6 @@
 ﻿using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.ContractDto
 {
@@ -32,5 +30,7 @@ namespace SmartIntranet.DTO.DTOs.ContractDto
         public int? DeleteByUserId { get; set; }
         public DateTime? DeleteDate { get; set; }
         public bool IsDeleted { get; set; }
+        public bool SendMail { get; set; }
+        public bool SendNews { get; set; }
     }
 }

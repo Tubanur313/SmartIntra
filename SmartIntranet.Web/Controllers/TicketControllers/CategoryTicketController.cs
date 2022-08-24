@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Extension;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
-using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CategoryTicketDto;
@@ -14,8 +13,6 @@ using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 

@@ -2,14 +2,10 @@
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.BusinessTripDto;
 using SmartIntranet.DTO.DTOs.CauseDto;
-using SmartIntranet.DTO.DTOs.ClauseDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
-using SmartIntranet.DTO.DTOs.NonWorkingDayDto;
 using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;

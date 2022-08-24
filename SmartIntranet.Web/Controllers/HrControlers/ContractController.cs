@@ -1,31 +1,25 @@
 ﻿using AutoMapper;
 using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.ContractDto;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
-using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Business.Interfaces.IntraHr;
-using NPOI.SS.Formula.Functions;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.DTO.DTOs.NewsDto;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -45,17 +39,18 @@ namespace SmartIntranet.Web.Controllers
         private readonly IAppUserService _appUserService;
         private readonly IBusinessTripService _businessTripService;
         private readonly ILongContractService _longContractService;
+        private readonly ICategoryService _categoryService;
 
         public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService,
             IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             ITerminationContractService terminationContractService, IMapper mapper,
-            IContractService contractService, IPersonalContractService personalContractService, 
-            IContractFileService contractFileService, IClauseService clauseService, 
+            IContractService contractService, IPersonalContractService personalContractService,
+            IContractFileService contractFileService, IClauseService clauseService,
             IContractTypeService contractTypeService, IVacationContractService vacationContractService,
-            IAppUserService userService, IWorkGraphicService workGraphicService, 
+            IAppUserService userService, IWorkGraphicService workGraphicService,
             ICompanyService companyService, ILongContractService longContractService,
             IUserCompService userCompService,
-            IBusinessTripService businessTripService) : base(userManager, httpContextAccessor, signInManager, mapper)
+            IBusinessTripService businessTripService, ICategoryService categoryService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
 
             _contractService = contractService;
@@ -72,6 +67,7 @@ namespace SmartIntranet.Web.Controllers
             _companyService = companyService;
             _appUserService = appUserService;
             _businessTripService = businessTripService;
+            _categoryService = categoryService;
         }
 
         [Authorize(Policy = "contract.list")]
@@ -81,7 +77,7 @@ namespace SmartIntranet.Web.Controllers
             TempData["error"] = error;
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
-            var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
+            var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync());
 
@@ -458,6 +454,28 @@ namespace SmartIntranet.Web.Controllers
                 financialResponsibilityFile.FilePath = await AddContractFile(financial_clause.FilePath, PdfFormatKeys(formatKeys, content3));
                 financialResponsibilityFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(financialResponsibilityFile);
+                var category = await _categoryService
+                    .GetAsync(x => x.Name == "Məlumat" || x.Name == "Melumat"|| x.Name=="Malumat");
+                
+                
+                if (model.SendNews)
+                {
+                    var newsAddDto = new NewsAddDto()
+                    {
+                        Title = "Yeni Əməkdaş",
+                        Description = "<p>Hörmətli əməkdaşlar,</p>\r\n\r\n" +
+                                "<p>&nbsp;</p>\r\n\r\n<p>SR komandasına yeni işçi qatılır!</p>" +
+                                $"\r\n\r\n<p><strong>{model.User.Fullname}</strong></p>\r\n\r\n<p>&nbsp;</p>" +
+                                $"\r\n\r\n<p>{model.User.Company.Name} ( {model.User.Position.Name})</p>" +
+                                "\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>İş yeri ilə tanış olmasına," +
+                                "ona şirkətimizin xoş atmosferinə mümkün" +
+                                "qədər tez uyğunlaşmasına kömək edəcəyinizə inanırıq və" +
+                                " əməkdaşımıza uğurlar arzu edirik!</p>\r\n\r\n<p>&nbsp;</p>",
+                        AppUserId = current,
+
+                    };
+                }
+
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added

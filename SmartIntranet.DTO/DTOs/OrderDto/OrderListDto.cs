@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-
-namespace SmartIntranet.DTO.DTOs.OrderDto
+﻿namespace SmartIntranet.DTO.DTOs.OrderDto
 {
     public class OrderListDto
     {

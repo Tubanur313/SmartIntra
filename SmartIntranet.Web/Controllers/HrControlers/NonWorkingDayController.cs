@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.AppUserDto;
-using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.NonWorkingDayDto;
 using SmartIntranet.Entities.Concrete;
@@ -13,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;

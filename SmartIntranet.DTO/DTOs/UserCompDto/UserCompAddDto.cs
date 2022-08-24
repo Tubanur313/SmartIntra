@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartIntranet.DTO.DTOs.UserCompDto
+﻿namespace SmartIntranet.DTO.DTOs.UserCompDto
 {
     public class UserCompAddDto
     {

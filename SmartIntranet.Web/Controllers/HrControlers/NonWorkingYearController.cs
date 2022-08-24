@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
 using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.AppUserDto;
-using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartIntranet.Business.Extension
+﻿namespace SmartIntranet.Business.Extension
 {
   public  static class UpperCase
     {

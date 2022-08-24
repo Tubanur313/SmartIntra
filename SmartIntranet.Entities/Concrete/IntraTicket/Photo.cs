@@ -1,5 +1,4 @@
 ﻿using SmartIntranet.Core.Entities.Concrete;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartIntranet.Entities.Concrete.IntraTicket
 {

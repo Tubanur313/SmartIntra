@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.GradeDto;
 
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation

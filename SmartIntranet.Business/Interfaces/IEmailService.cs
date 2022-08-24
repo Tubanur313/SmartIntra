@@ -1,9 +1,4 @@
-﻿using MimeKit;
-using SmartIntranet.Core.Entities.Enum;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SmartIntranet.Core.Entities.Enum;
 
 namespace SmartIntranet.Business.Interfaces
 {

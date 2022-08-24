@@ -1,6 +1,4 @@
-﻿using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete;
+﻿using SmartIntranet.DataAccess.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Enum;

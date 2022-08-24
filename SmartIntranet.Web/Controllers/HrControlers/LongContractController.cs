@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.PersonalContractDto;
-using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 

@@ -1,8 +1,5 @@
-﻿using SmartIntranet.Entities.Concrete.Membership;
-using SmartIntranet.Core.Entities.Concrete;
-using System;
+﻿using SmartIntranet.Core.Entities.Concrete;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartIntranet.Entities.Concrete
 {

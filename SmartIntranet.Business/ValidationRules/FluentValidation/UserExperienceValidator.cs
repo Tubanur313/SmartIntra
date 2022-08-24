@@ -1,10 +1,5 @@
 ﻿using FluentValidation;
-using SmartIntranet.DTO.DTOs.ClauseDto;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {

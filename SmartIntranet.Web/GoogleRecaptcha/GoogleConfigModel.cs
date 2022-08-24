@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SmartIntranet.Web.GoogleRecaptcha
+﻿namespace SmartIntranet.Web.GoogleRecaptcha
 {
     public class GoogleConfigModel
     {
