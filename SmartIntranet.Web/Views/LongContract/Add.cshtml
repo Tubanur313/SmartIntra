@@ -42,7 +42,7 @@
                 <div class="col-sm-6">
                     <label class="floatLabel"> Başlama tarixi: </label>
                     <div class="form-group">
-                        <input asp-for="FromDate" type="date" class="form-control" id="FromDate">
+                        <input asp-for="FromDate" type="text" class="form-control custom-date" id="FromDate">
                         <span asp-validation-for="FromDate" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -52,7 +52,7 @@
                     <div class="form-group">
                         <label class="floatLabel">  Bitmə tarixi: </label>
                         <div class="form-group">
-                            <input asp-for="ToDate" type="date" class="form-control" id="ToDate">
+                            <input asp-for="ToDate" type="text" class="form-control custom-date" id="ToDate">
                             <span asp-validation-for="ToDate" class="text-danger"></span>
                             <span class="messages"></span>
                         </div>
@@ -79,6 +79,12 @@
 
     $(document).ready(function () {
 
+        $('.custom-date').each(function() {
+            $(this).datepicker({
+                format: "dd.mm.yyyy"
+            })
+        })
+
         $('.input-daterange input').each(function () {
             $(this).datepicker({
                 //format: "dd.mm.yyyy"
@@ -88,12 +94,7 @@
         $("form").submit( function(e) {
 
         });
-
-       
     });
-
-
-
   
     $(document).on('change','#CompanyId', function(){
         var _id = $(this).val();

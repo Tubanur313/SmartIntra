@@ -487,7 +487,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> GetStartWorkDate(int userId)
         {
             var usr = await _appUserService.FindByUserAllInc(userId);
-            return Ok(usr.StartWorkDate.ToString("MM/dd/yyyy"));
+            return Ok(usr.StartWorkDate.ToString("dd.MM.yyyy"));
         }
 
         [HttpGet]

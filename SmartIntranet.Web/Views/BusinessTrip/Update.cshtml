@@ -68,7 +68,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel"> Sənəd tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="CommandDate" type="text" class="form-control custom-date" id="inputDate">
                                 <span asp-validation-for="CommandDate" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -186,11 +186,15 @@
 <script>
     $(document).ready(function () {
 
-         $('.input-daterange input').each(function () {
+        $('.custom-date').each(function() {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
-            });
-         });
+                format: "dd.mm.yyyy"
+            })
+        })
+
+        $('.input-daterange').datepicker({
+            format: "dd.mm.yyyy"
+        });
 
         $("#addRow").click(function () {
                 let companyId = $("#CompanyId").val();
@@ -234,11 +238,9 @@
                     </div>`
                 $('#row-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        //format: "dd.mm.yyyy"
-                    });
-                });
+               $('.input-daterange').datepicker({
+                format: "dd.mm.yyyy"
+               });
                 getCompanyUsers(companyId, rowCount);
                 getPlaces(rowCount);
           });

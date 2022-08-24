@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -13,6 +14,7 @@ using SmartIntranet.Business.Extension;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.Web.GoogleRecaptcha;
+using System.Globalization;
 
 namespace SmartTicket.Web
 {
@@ -73,6 +75,18 @@ namespace SmartTicket.Web
             //IntranetDBSeed.SeedTerminationItem(app);
             //IntranetDBSeed.SeedContractType(app);
             app.UseMiddleware<SecurityHeadersMiddleware>();
+            var supportedCultures = new[]
+            {
+               new CultureInfo("az-AZ"),
+
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("ru-RU"),
+                SupportedCultures=supportedCultures,
+                SupportedUICultures=supportedCultures
+            });
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

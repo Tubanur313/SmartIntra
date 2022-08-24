@@ -2,6 +2,7 @@
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.TerminationContractDto
@@ -14,10 +15,13 @@ namespace SmartIntranet.DTO.DTOs.TerminationContractDto
         public int RemainVacationCount { get; set; } // emrin mezmunu
         public bool IsReduction { get; set; }
         public bool IsAgree { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime TerminationDate { get; set; }
         public string CommandNumber { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime CommandDate { get; set; }
         public string ReductionNumber { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? ReductionDate { get; set; }
         public int UserId { get; set; }
         public int TerminationItemId { get; set; }

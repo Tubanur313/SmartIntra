@@ -51,7 +51,7 @@
                 <div class="col-sm-6">
                     <label class="floatLabel"> Sənəd tarixi: </label>
                     <div class="form-group">
-                        <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                        <input asp-for="CommandDate" type="text" class="form-control custom-date" id="inputDate">
                         <span asp-validation-for="CommandDate" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -72,7 +72,7 @@
                 <div class="col-sm-6">
                     <label class="floatLabel"> Xitam tarixi: </label>
                     <div class="form-group">
-                        <input asp-for="TerminationDate" type="date" class="form-control" id="terminationDate">
+                        <input asp-for="TerminationDate" type="text" class="form-control custom-date" id="terminationDate">
                         <span asp-validation-for="TerminationDate" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -122,7 +122,7 @@
                 <div class="col-sm-6" id="reduction_date">
                     <label class="floatLabel"> İxtisar sən. tarixi: </label>
                     <div class="form-group">
-                        <input asp-for="ReductionDate" type="date" class="form-control" id="reductionDate">
+                        <input asp-for="ReductionDate" type="text" class="form-control custom-date" id="reductionDate">
                      
                     </div>
                 </div>
@@ -170,6 +170,12 @@
 <script>
 
     $(document).ready(function () {
+
+        $('.custom-date').each(function() {
+            $(this).datepicker({
+                format: "dd.mm.yyyy"
+            })
+        })
 
         $("#reduction_number").css('display', "none");
         $("#reduction_date").css('display', "none");
