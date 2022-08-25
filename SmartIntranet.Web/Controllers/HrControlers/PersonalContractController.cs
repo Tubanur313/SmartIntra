@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -35,8 +36,12 @@ namespace SmartIntranet.Web.Controllers
         private readonly IPositionService _positionService;
         private readonly ICompanyService _companyService;
         private readonly IDepartmentService _departmentService;
-
-        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        private readonly INewsService _newsService;
+        private readonly ICategoryNewsService _categoryNewsService;
+        private readonly IEmailService _emailSender;
+        private readonly ICategoryService _categoryService;
+        private readonly INewsFileService _newsFileService;
+        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService, INewsService newsService, ICategoryNewsService categoryNewsService, IEmailService emailSender, ICategoryService categoryService, INewsFileService newsFileService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _db = db;
             _contractService = contractService;
@@ -50,6 +55,11 @@ namespace SmartIntranet.Web.Controllers
             _positionService = positionService;
             _companyService = companyService;
             _departmentService = departmentService;
+            _newsService = newsService;
+            _categoryNewsService = categoryNewsService;
+            _emailSender = emailSender;
+            _categoryService = categoryService;
+            _newsFileService = newsFileService;
         }
 
 
@@ -114,7 +124,8 @@ namespace SmartIntranet.Web.Controllers
                         }
 
                     }
-                }else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
+                }
+                else if (model.Type == PersonalContractConst.WORK_GRAPHIC)
                 {
                     model.LastWorkGraphicId = usr2.WorkGraphicId;
                 }
@@ -424,6 +435,50 @@ namespace SmartIntranet.Web.Controllers
                     file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content));                   
                     file.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file);
+                }
+
+                if (model.SendNews)
+                {   
+                    var userC = await _userService.FindByUserAllInc(model.UserId);
+                    var gender = userC.Gender == "MALE" ? "bəy" : "xanım";
+                    var news = new News
+                    {
+                        Title = "Vəzifə Dəyişikliyi",
+                        Description = "Hörmətli həmkarlar." +
+                                      $"\r\nNəzərinizə çatdırmaq istərdim ki, {userC.Fullname} artıq {userC.Company.Name} şirkətdə {userC.Position} olaraq fəaliyyətinə davam edəcəkdir. " +
+                                      $"\r\n{userC.Name}"+" "+ $"{gender}" +
+                                      ", yeni pozisiyanızda Sizə uğurlar diləyirik!",
+                        AppUserId = null,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
+                    };
+                    var newsResult = await _newsService.AddReturnEntityAsync(news);
+                    var newsCategoryId = await _categoryService
+                        .GetAsync(x => x.Name == "Məlumat"
+                                       || x.Name == "Melumat"
+                                       || x.Name == "Malumat");
+                    //var newsFile = new NewsFile
+                    //{
+                    //    Name = userC.Picture,
+                    //    NewsId = newsResult.Id,
+                    //    CreatedByUserId = current,
+                    //    CreatedDate = DateTime.Now
+                    //};
+                    var categoryNews = new CategoryNews
+                    {
+                        NewsId = newsResult.Id,
+                        CategoryId = newsCategoryId.Id,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
+                    };
+                    //await _newsFileService.AddAsync(newsFile);
+                    await _categoryNewsService.AddAsync(categoryNews);
+                };
+                if (model.SendMail)
+                {
+                    var userC = await _userService.FindByUserAllInc(model.UserId);
+                    var gender = userC.Gender == "MALE" ? "bəy" : "xanım";
+                    _emailSender.ContactChangeSendEmail(userC.Fullname, usr.Name, gender, userC.Company.Name, usr.Position.Name);
                 }
                 return RedirectToAction("List", "Contract");
             }

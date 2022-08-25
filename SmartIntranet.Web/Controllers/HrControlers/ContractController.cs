@@ -19,7 +19,8 @@ using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
-using SmartIntranet.DTO.DTOs.NewsDto;
+using SmartIntranet.Entities.Concrete.Intranet;
+
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -40,6 +41,11 @@ namespace SmartIntranet.Web.Controllers
         private readonly IBusinessTripService _businessTripService;
         private readonly ILongContractService _longContractService;
         private readonly ICategoryService _categoryService;
+        private readonly INewsFileService _newsFileService;
+        private readonly INewsService _newsService;
+        private readonly ICategoryNewsService _categoryNewsService;
+        private readonly IEmailService _emailSender;
+
 
         public ContractController(UserManager<IntranetUser> userManager, IAppUserService appUserService,
             IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
@@ -50,7 +56,7 @@ namespace SmartIntranet.Web.Controllers
             IAppUserService userService, IWorkGraphicService workGraphicService,
             ICompanyService companyService, ILongContractService longContractService,
             IUserCompService userCompService,
-            IBusinessTripService businessTripService, ICategoryService categoryService) : base(userManager, httpContextAccessor, signInManager, mapper)
+            IBusinessTripService businessTripService, ICategoryService categoryService, INewsFileService newsFileService, INewsService newsService, ICategoryNewsService categoryNewsService, IEmailService emailSender) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
 
             _contractService = contractService;
@@ -68,6 +74,10 @@ namespace SmartIntranet.Web.Controllers
             _appUserService = appUserService;
             _businessTripService = businessTripService;
             _categoryService = categoryService;
+            _newsFileService = newsFileService;
+            _newsService = newsService;
+            _categoryNewsService = categoryNewsService;
+            _emailSender = emailSender;
         }
 
         [Authorize(Policy = "contract.list")]
@@ -332,7 +342,6 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "contract.detail")]
         public async Task<IActionResult> Detail()
         {
-
             return View();
         }
 
@@ -396,10 +405,12 @@ namespace SmartIntranet.Web.Controllers
                 //
 
                 // Emek muqavile senedi
-                var contractFile = new ContractFile();
-                contractFile.ContractId = result_model.Id;
-                contractFile.IsDeleted = false;
-                contractFile.IsClause = model.ContractFileType == ContractConst.TEMPLATE ? true : false;
+                var contractFile = new ContractFile
+                {
+                    ContractId = result_model.Id,
+                    IsDeleted = false,
+                    IsClause = model.ContractFileType == ContractConst.TEMPLATE ? true : false
+                };
                 contractFile.ClauseId = contractFile.IsClause ? model.ClauseId : null;
                 if (contractFile.IsClause)
                 {
@@ -419,10 +430,12 @@ namespace SmartIntranet.Web.Controllers
                 await _contractFileService.AddAsync(contractFile);
 
                 // Emr senedi
-                var commandFile = new ContractFile();
-                commandFile.ContractId = result_model.Id;
-                commandFile.IsDeleted = false;
-                commandFile.IsClause = true;
+                var commandFile = new ContractFile
+                {
+                    ContractId = result_model.Id,
+                    IsDeleted = false,
+                    IsClause = true
+                };
                 var command_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_command && !x.IsDeleted).Result[0];
                 commandFile.ClauseId = command_clause.Id;
 
@@ -431,10 +444,12 @@ namespace SmartIntranet.Web.Controllers
                 contractFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(commandFile);
                 // Mexfilik senedi
-                var privacyFile = new ContractFile();
-                privacyFile.ContractId = result_model.Id;
-                privacyFile.IsDeleted = false;
-                privacyFile.IsClause = true;
+                var privacyFile = new ContractFile
+                {
+                    ContractId = result_model.Id,
+                    IsDeleted = false,
+                    IsClause = true
+                };
                 var privacy_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_privacy && !x.IsDeleted).Result[0];
                 privacyFile.ClauseId = privacy_clause.Id;
 
@@ -443,10 +458,12 @@ namespace SmartIntranet.Web.Controllers
                 privacyFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(privacyFile);
                 // Maddi mesuliyyet senedi
-                var financialResponsibilityFile = new ContractFile();
-                financialResponsibilityFile.ContractId = result_model.Id;
-                financialResponsibilityFile.IsDeleted = false;
-                financialResponsibilityFile.IsClause = true;
+                var financialResponsibilityFile = new ContractFile
+                {
+                    ContractId = result_model.Id,
+                    IsDeleted = false,
+                    IsClause = true
+                };
                 var financial_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_financial_responsibility && !x.IsDeleted).Result[0];
                 financialResponsibilityFile.ClauseId = financial_clause.Id;
 
@@ -455,27 +472,62 @@ namespace SmartIntranet.Web.Controllers
                 financialResponsibilityFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(financialResponsibilityFile);
                 var category = await _categoryService
-                    .GetAsync(x => x.Name == "Məlumat" || x.Name == "Melumat"|| x.Name=="Malumat");
-                
-                
+                    .AnyAsync(x => x.Name == "Məlumat"
+                               || x.Name == "Melumat"
+                               || x.Name == "Malumat");
+                if (!category)
+                {
+                    var ctgr = new Category
+                    {
+                        Name = "Məlumat",
+                        CreatedByUserId = GetSignInUserId(),
+                        CreatedDate = DateTime.Now
+                    };
+                    await _categoryService.AddAsync(ctgr);
+                }
                 if (model.SendNews)
                 {
-                    var newsAddDto = new NewsAddDto()
+                    var news = new News
                     {
                         Title = "Yeni Əməkdaş",
                         Description = "<p>Hörmətli əməkdaşlar,</p>\r\n\r\n" +
-                                "<p>&nbsp;</p>\r\n\r\n<p>SR komandasına yeni işçi qatılır!</p>" +
-                                $"\r\n\r\n<p><strong>{model.User.Fullname}</strong></p>\r\n\r\n<p>&nbsp;</p>" +
-                                $"\r\n\r\n<p>{model.User.Company.Name} ( {model.User.Position.Name})</p>" +
-                                "\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>İş yeri ilə tanış olmasına," +
-                                "ona şirkətimizin xoş atmosferinə mümkün" +
-                                "qədər tez uyğunlaşmasına kömək edəcəyinizə inanırıq və" +
-                                " əməkdaşımıza uğurlar arzu edirik!</p>\r\n\r\n<p>&nbsp;</p>",
-                        AppUserId = current,
-
+                                      "<p>SR komandasına yeni işçi qatılır!</p>" +
+                                      $"\r\n\r\n<p><strong>{usr.Fullname}</strong></p>" +
+                                      $"\r\n\r\n<p>{usr.Company.Name} ({usr.Position.Name})</p> <p>&nbsp;</p>\r\n\r\n" +
+                                      "\r\n\r\n<p>İş yeri ilə tanış olmasına,</p> <p>&nbsp;</p>\r\n\r\n" +
+                                      "ona şirkətimizin xoş atmosferinə mümkün qədər" +
+                                      "\r\n\r\n tez uyğunlaşmasına  kömək edəcəyinizə inanırıq və </p> <p>&nbsp;</p>\r\n\r\n" +
+                                      "əməkdaşımıza uğurlar arzu edirik!</p>\r\n\r\n",
+                        AppUserId = null,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
                     };
+                    var newsResult = await _newsService.AddReturnEntityAsync(news);
+                    var newsCategoryId = await _categoryService
+                        .GetAsync(x => x.Name == "Məlumat"
+                                       || x.Name == "Melumat"
+                                       || x.Name == "Malumat");
+                    var newsFile = new NewsFile
+                    {
+                        Name = usr.Picture,
+                        NewsId = newsResult.Id,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
+                    };
+                    var categoryNews = new CategoryNews
+                    {
+                        NewsId = newsResult.Id,
+                        CategoryId = newsCategoryId.Id,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
+                    };
+                    await _newsFileService.AddAsync(newsFile);
+                    await _categoryNewsService.AddAsync(categoryNews);
+                };
+                if (model.SendMail)
+                {
+                    _emailSender.ContactSendEmail( usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
                 }
-
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added

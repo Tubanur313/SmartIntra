@@ -31,5 +31,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public int? DeleteByUserId { get; set; }
         public DateTime? DeleteDate { get; set; }
         public bool IsDeleted { get; set; }
+        public bool SendMail { get; set; }
+        public bool SendNews { get; set; }
     }
 }

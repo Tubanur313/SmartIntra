@@ -1,4 +1,5 @@
-﻿@model Pagination<NewsListDto>
+﻿@using System.IO
+@model Pagination<NewsListDto>
 @{
     ViewData["Title"] = "Info";
 }
@@ -10,6 +11,7 @@
         #sections {
             word-wrap: break-word;
         }
+
         .moretext {
             display: none;
         }
@@ -19,9 +21,11 @@
         .addReadMore.showlesscontent .readLess {
             display: none;
         }
+
         .addReadMore.showmorecontent .readMore {
             display: none;
         }
+
         .addReadMore .readMore,
         .addReadMore .readLess {
             font-weight: bold;
@@ -29,6 +33,7 @@
             color: cadetblue;
             cursor: pointer;
         }
+
         .addReadMoreWrapTxt.showmorecontent .SecSec,
         .addReadMoreWrapTxt.showmorecontent .readLess {
             display: block;
@@ -55,20 +60,30 @@
                                             <div class="bg-white p-relative">
                                                 <div class="md-float-material card-block  user-box news-list">
 
-                                                    @foreach (var news in Model.Items)
+                                                @foreach (var news in Model.Items)
                                                 {
                                                     if (news.NewsFiles.Count != 0)
                                                     {
                                                         <div class="row p-t-10 p-b-10">
                                                             <div class="col-lg-3 col-md-6 col-sm-12 news-slide">
-
                                                                 @foreach (var photo in news.NewsFiles)
                                                                 {
-                                                                    <a href="#">
-                                                                        <img src="~/news/@(photo.Name!=null?photo.Name:"default.png")"
-                                                                 class="img-fluid width-100"
-                                                                 alt="img-edit">
-                                                                    </a>
+                                                                    var fullpath = string.Join("\\", System.IO.Path
+                                                                    .GetFullPath(photo.Name).Split("\\").SkipLast(1).ToArray());
+
+                                                                    if (File.Exists(fullpath + @"\wwwroot\profile\" + photo.Name))
+                                                                    {
+                                                                        <a href="#">
+                                                                            <img src="~/profile/@(photo.Name!=null?photo.Name:"default.png")" class="img-fluid width-100" alt="img-edit">
+                                                                        </a>
+                                                                    }
+                                                                    if (File.Exists(fullpath + @"\wwwroot\news\" + photo.Name))
+                                                                    {
+                                                                        <a href="#">
+                                                                            <img src="~/news/@(photo.Name!=null?photo.Name:"default.png")" class="img-fluid width-100" alt="img-edit">
+                                                                        </a>
+                                                                    }
+
                                                                 }
                                                             </div>
                                                             <div class="col-lg-9 col-md-6 col-sm-12">
@@ -86,15 +101,24 @@
                                                                                         <div class="d-flex">
                                                                                             <a class="media-left" href="#!" style="padding-right: 15px;">
                                                                                                 <img class="media-object
-                                                                                                img-radius" src="~/profile/@news.AppUser.Picture" style=" height: 40px; width: 40px;" alt="">
+                                                                                                img-radius" src="~/@(news.AppUser!=null?$"profile/{news.AppUser.Picture}":"uploads/SRLogo.png")" style=" height: 40px; width: 40px;" alt="">
                                                                                             </a>
                                                                                             <div class="media-right" style=" display: grid;">
                                                                                                 <small class="chat-header">
                                                                                                     Paylaşdı
                                                                                                 </small>
-                                                                                                <span class="text-muted f-w-600">
-                                                                                                    @news.AppUser.Name @news.AppUser.Surname
-                                                                                                </span>
+                                                                                                @if (news.AppUser is null)
+                                                                                                {
+                                                                                                    <span class="text-muted f-w-600">
+                                                                                                        SR GRoup Co.
+                                                                                                    </span>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <span class="text-muted f-w-600">
+                                                                                                        @news.AppUser.Name @news.AppUser.Surname
+                                                                                                    </span>
+                                                                                                }
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="d-grid">
@@ -156,7 +180,7 @@
                                                         <div class="row p-t-10 p-b-10">
                                                             <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <div class="row">
-                                                                                                                                   <div class="col-sm-12">
+                                                                    <div class="col-sm-12">
                                                                         <div class="media">
                                                                             <div class="media-body" style="">
                                                                                 <div class="chat-header">
@@ -169,15 +193,25 @@
                                                                                         <div class="d-flex">
                                                                                             <a class="media-left" href="#!" style="padding-right: 15px;">
                                                                                                 <img class="media-object
-                                                                                                img-radius" src="~/profile/@news.AppUser.Picture" style=" height: 40px; width: 40px;" alt="">
+                                                                                                img-radius" src="~/@(news.AppUser!=null?$"profile/{news.AppUser.Picture}":"uploads/SRLogo.png")" style=" height: 40px; width: 40px;" alt="">
                                                                                             </a>
                                                                                             <div class="media-right" style=" display: grid;">
                                                                                                 <small class="chat-header">
                                                                                                     Paylaşdı
                                                                                                 </small>
-                                                                                                <span class="text-muted f-w-600">
-                                                                                                    @news.AppUser.Name @news.AppUser.Surname
-                                                                                                </span>
+                                                                                                @if (news.AppUser is null)
+                                                                                                {
+                                                                                                    <span class="text-muted f-w-600">
+                                                                                                        SR GRoup Co.
+                                                                                                    </span>
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    <span class="text-muted f-w-600">
+                                                                                                        @news.AppUser.Name @news.AppUser.Surname
+                                                                                                    </span>
+                                                                                                }
+
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="d-grid">
@@ -228,7 +262,8 @@
                                                                             <button class="moreless-button btn btn-outline-light text-dark">Ətraflı</button>
                                                                         </div>
 
-                                                                    </div> </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <hr>
@@ -252,15 +287,14 @@
                                 <!-- Friends tab end -->
                                 <!-- Row end -->
                             </div>
-                            <div class="col-xl-3   col-sm-12 relative-news" >
+                            <div class="col-xl-3   col-sm-12 relative-news">
                                 @*style="position:fixed;right:0;"*@
                                 <vc:contact-info></vc:contact-info>
                                 @*@await Component.InvokeAsync("ContactInfo")*@
-                                <div 
-                                     data-placement="right" class="calendar-bottom">
+                                <div data-placement="right" class="calendar-bottom">
                                     <div class="signboard outer calendar-height-custom">
                                         <div class="signboard front inner anim04c">
-                                            
+
                                             <ul class="calendarMain anim04c">
                                                 <li class="month anim04c">
                                                     <span></span>
@@ -272,28 +306,28 @@
                                                     <span></span>
                                                 </li>
                                             </ul>
-                                          @*  <li class="clock minute anim04c">
-                                                <span></span>
+                                            @*  <li class="clock minute anim04c">
+                                            <span></span>
                                             </li>
                                             <li class="calendarNormal date2 anim04c">
-                                                <span></span>
+                                            <span></span>
                                             </li>*@
                                         </div>
-                                    @*    <div class="signboard left inner anim04c">
-                                            <li class="clock hour anim04c">
-                                                <span></span>
-                                            </li>
-                                            <li class="calendarNormal day2 anim04c">
-                                                <span></span>
-                                            </li>
+                                        @*    <div class="signboard left inner anim04c">
+                                        <li class="clock hour anim04c">
+                                        <span></span>
+                                        </li>
+                                        <li class="calendarNormal day2 anim04c">
+                                        <span></span>
+                                        </li>
                                         </div>
                                         <div class="signboard right inner anim04c">
-                                            <li class="clock second anim04c">
-                                                <span></span>
-                                            </li>
-                                            <li class="calendarNormal month2 anim04c">
-                                                <span></span>
-                                            </li>
+                                        <li class="clock second anim04c">
+                                        <span></span>
+                                        </li>
+                                        <li class="calendarNormal month2 anim04c">
+                                        <span></span>
+                                        </li>
                                         </div>*@
                                     </div>
                                     <!-- main codes end -->
@@ -332,7 +366,7 @@
     <script type="text/javascript" src="~/files/assets/pages/wall/wall.js"></script>
 
     <script class="removable" type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
             $('#myInput').hideseek({
@@ -352,9 +386,9 @@
             });
 
 
-            $(".moreless-button").each(function() {
+            $(".moreless-button").each(function () {
 
-                $(this).click(function() {
+                $(this).click(function () {
 
                     $(this).parent().parent().find('.moretext').toggle();
 

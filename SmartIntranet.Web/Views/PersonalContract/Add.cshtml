@@ -146,7 +146,7 @@
                     </div>
                 </div>
 
-                     <div class="col-sm-6" id="vacation_div">
+                <div class="col-sm-6" id="vacation_div">
                     <div class="form-group">
                         <label class="floatLabel"> Məzuniyyət gün sayı: </label>
                         <input type="number" class="form-control" asp-for="VacationDay" autocomplete="off">
@@ -156,7 +156,7 @@
                 </div>
                 <input type="hidden" id="UserVacationDay" />
 
-                   <div class="col-sm-6" id="vacation_extra_div">
+                <div class="col-sm-6" id="vacation_extra_div">
                     <label class="floatLabel">  Əlavə Məzuniyyət Növü: </label>
                     <select name="select" asp-for="VacationExtraType" name="VacationExtraType" class="form-control">
                         <option value="null" disabled selected hidden>Seçim edin</option>
@@ -166,21 +166,44 @@
                     </select>
                     <span asp-validation-for="VacationExtraType" class="text-danger"></span>
                 </div>
+                <div class="col-sm-6">
+                    <div id="infomail" class="form-group row has-success d-none">
+                        <div class="col-sm-12 mt-2">
+                            <div class="checkbox-fade fade-in-primary">
+                                <label>
+                                    <input type="checkbox" asp-for="SendMail" class="input-danger">
+                                    <span class="cr">
+                                        <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                    </span>
+                                    <span>Mail göndər</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-fade fade-in-primary">
+                                <label>
+                                    <input type="checkbox" asp-for="SendNews">
+                                    <span class="cr">
+                                        <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                    </span>
+                                    <span>Xəbər əlavə et</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-               
-              
+
             </div>
 
-         
+
 
             @*<div class="row">
-                <div id="salary_pos_div" class="col-sm-6">
-                <div class="form-group">
-                <label class="floatLabel">  Maaş: </label>
-                <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
-                </div>
-                </div>
-                </div>*@
+            <div id="salary_pos_div" class="col-sm-6">
+            <div class="form-group">
+            <label class="floatLabel">  Maaş: </label>
+            <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
+            </div>
+            </div>
+            </div>*@
 
             <div class="form-group row mt-3">
                 <div class="col-sm-12 d-flex justify-content-between">
@@ -215,7 +238,7 @@
             });
         });
 
-        $("form").submit( function(e) {
+        $("form").submit(function (e) {
             let type = $("#Type").val();
             let salary = $("#Salary").val();
             let positionId = $("#PositionId").val();
@@ -225,51 +248,45 @@
             let clauseId = $("#ClauseId").val();
             let isMainVacation = $("#IsMainVacationTrue").val();
 
-            if(type == 'SALARY' && !salary)
-            {
+            if (type == 'SALARY' && !salary) {
                 toastr.error(" Maaş boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
-            else if(type == 'POSITION' && !positionId)
-            {
+            else if (type == 'POSITION' && !positionId) {
                 toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
-            else if(type == 'SALARY_POSITION' && !positionId)
-            {
+            else if (type == 'SALARY_POSITION' && !positionId) {
                 toastr.error(" Vəzifə boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
-            else if(type == 'SALARY_POSITION' && !salary)
-            {
+            else if (type == 'SALARY_POSITION' && !salary) {
                 toastr.error(" Maaş boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
-            else if(type == 'WORK_GRAPHIC' && !workGraphicId)
-            {
+            else if (type == 'WORK_GRAPHIC' && !workGraphicId) {
                 toastr.error(" İstehsalat təqvimi boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
-            else if(type == 'WORK_GRAPHIC' && !clauseId)
-            {
+            else if (type == 'WORK_GRAPHIC' && !clauseId) {
                 toastr.error(" Şablon boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
-            else if(type == 'VACATION' && !vacationDay)
-            {
+            else if (type == 'VACATION' && !vacationDay) {
                 toastr.error(" Məzuniyyət gün sayı boş ola bilməz !", "Xəta!");
                 e.preventDefault();
-            } else if(type == 'VACATION' && isMainVacation=='False' && !vacationExtraType)
-            {
+            } else if (type == 'VACATION' && isMainVacation == 'False' && !vacationExtraType) {
                 toastr.error(" Məzuniyyət əlavə gün növü boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
         });
     });
 
-    $(document).on('change','#Type', function(){
+    $(document).on('change', '#Type', function () {
         var _id = $(this).val();
-
+        if (!$("#infomail").hasClass("d-none")) {
+            $("#infomail").addClass("d-none");
+        }
         if (_id == "SALARY") {
             $("#PositionId").empty();
             $("#PositionId").prop('disabled', false);
@@ -298,6 +315,9 @@
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
             $("#vacation_extra_div").css('display', "none");
+            if($("#infomail").hasClass("d-none")) {
+                $("#infomail").removeClass("d-none");
+            }
 
         }
         else if (_id == "SALARY_POSITION") {
@@ -313,6 +333,10 @@
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
             $("#vacation_extra_div").css('display', "none");
+            if ($("#infomail").hasClass("d-none")) {
+                $("#infomail").removeClass("d-none");
+            } 
+            
         }
         else if (_id == "WORK_PLACE") {
             $("#salary_div").css('display', "none");
@@ -323,6 +347,9 @@
             $("#vacation_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
             $("#vacation_extra_div").css('display', "none");
+                        if($("#infomail").hasClass("d-none")) {
+                $("#infomail").removeClass("d-none");
+            }
         }
         else if (_id == "WORK_GRAPHIC") {
             $("#salary_div").css('display', "none");
@@ -345,83 +372,78 @@
         }
     });
 
-    $(document).on('change','#UserId', function(){
-            var _id = $(this).val();
-            getPos(_id);
+    $(document).on('change', '#UserId', function () {
+        var _id = $(this).val();
+        getPos(_id);
 
-            $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetUserVacationDay", "Account")',
-                data: {
-                    userId: _id,
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $('#UserVacationDay').val(response);
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        $.ajax({
+            type: 'Get',
+            url: '@Url.ActionLink("GetUserVacationDay", "Account")',
+            data: {
+                userId: _id,
+            },
+            success: function (response) {
+                if (response.error == true) {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
                 }
-            });
+                $('#UserVacationDay').val(response);
+            },
+            error: function (response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
     });
 
-    $(document).on('click','#IsMainVacationFalse', function(){
-         $('#VacationDay').val($('#UserVacationDay').val());
-           $("#vacation_extra_div").css('display', "block");
+    $(document).on('click', '#IsMainVacationFalse', function () {
+        $('#VacationDay').val($('#UserVacationDay').val());
+        $("#vacation_extra_div").css('display', "block");
     })
 
-    $(document).on('click','#IsMainVacationTrue', function(){
-         $('#VacationDay').val('');
-         $("#vacation_extra_div").css('display', "none");
+    $(document).on('click', '#IsMainVacationTrue', function () {
+        $('#VacationDay').val('');
+        $("#vacation_extra_div").css('display', "none");
     })
 
     function getPos(_id) {
-          $.ajax({
-                type: 'Get',
-                url: '@Url.ActionLink("GetPositionWithUser", "Account")',
-                data: {
-                    userId: _id,
-                },
-                success: function (response)
-                {
-                    if (response.error == true)
-                    {
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
-                    }
-                    $("#PositionId").empty();
-                    var html = "";
-
-                    for (var i in response) {
-                        html += `<option value="${[response[i].id]}">
-                        ${[response[i].name]}</option>`
-                    }
-
-                    if(response.length>0)
-                    {
-                        $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                    }
-                    else{
-                         $("#PositionId").prop('disabled', false);
-                        $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                    }
-
-                },
-                error: function (response) {
-                    $("#overlay").fadeOut(300);
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        $.ajax({
+            type: 'Get',
+            url: '@Url.ActionLink("GetPositionWithUser", "Account")',
+            data: {
+                userId: _id,
+            },
+            success: function (response) {
+                if (response.error == true) {
+                    toastr.error(response.message, "Xəta baş verdi!");
+                    return;
                 }
-           });
+                $("#PositionId").empty();
+                var html = "";
+
+                for (var i in response) {
+                    html += `<option value="${[response[i].id]}">
+                            ${[response[i].name]}</option>`
+                }
+
+                if (response.length > 0) {
+                    $("#PositionId").prop('disabled', false);
+                    $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
+                }
+                else {
+                    $("#PositionId").prop('disabled', false);
+                    $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                }
+
+            },
+            error: function (response) {
+                $("#overlay").fadeOut(300);
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
     }
 
-    $(document).on('change','#CompanyId', function(){
+    $(document).on('change', '#CompanyId', function () {
         var _id = $(this).val();
 
         $.ajax({
@@ -430,10 +452,8 @@
             data: {
                 companyId: _id,
             },
-            success: function (response)
-            {
-                if (response.error == true)
-                {
+            success: function (response) {
+                if (response.error == true) {
                     toastr.error(response.message, "Xəta baş verdi!");
                     return;
                 }
@@ -442,15 +462,14 @@
 
                 for (var i in response) {
                     html += `<option value="${[response[i].id]}">
-                    ${[response[i].name]}</option>`
+                        ${[response[i].name]}</option>`
                 }
 
-                if(response.length>0)
-                {
+                if (response.length > 0) {
                     $("#UserId").prop('disabled', false);
-                    $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
                 }
-                else{
+                else {
                     $("#UserId").prop('disabled', false);
                     $("#UserId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
                 }
@@ -460,7 +479,7 @@
                 $("#overlay").fadeOut(300);
                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
-       });
+        });
     });
 
 </script>
