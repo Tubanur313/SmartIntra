@@ -23,5 +23,8 @@ namespace SmartIntranet.DTO.DTOs.ContractDto
         public Clause Clause { get; set; }
         public int UserId { get; set; }
         public IntranetUser User { get; set; }
+
+        public bool SendMail { get; set; }
+        public bool SendNews { get; set; }
     }
 }

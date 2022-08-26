@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Utilities.Messages;
+using System.Linq;
 
 namespace SmartIntranet.Web.Controllers
 {
