@@ -85,7 +85,7 @@
                             <div  class="form-group">
  <label class="floatLabel">  Sənəd Tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="CommandDate" type="text" class="form-control custom-date" id="inputDate">
                                 <span asp-validation-for="CommandDate" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -345,9 +345,16 @@
 <script>
 
     $(document).ready(function () {
+
+          $('.custom-date').each(function() {
+            $(this).datepicker({
+                format: "dd.mm.yyyy"
+            })
+        })
+
         $('.input-daterange input').each(function () {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             });
         });
     });

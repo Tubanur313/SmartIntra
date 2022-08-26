@@ -25,9 +25,7 @@
         </ul>
         <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedDate" />
-            <input type="hidden" asp-for="CreatedByUserId" />
-            <div class="tab-content tabs">
+            <div class="tab-content tabs card-block">
                 <div class="tab-pane active" id="home1"
                      role="tabpanel">
                     <div class="row">
@@ -70,7 +68,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel"> Sənəd tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="CommandDate" type="text" class="form-control custom-date" id="inputDate">
                                 <span asp-validation-for="CommandDate" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -143,9 +141,9 @@
                                     <div class="form-group">
                                         <label class="floatLabel"> Tarix: </label>
                                         <div class="input-group input-daterange mb-0">
-                                            <input type="text" asp-for="BusinessTripUsers[i].StartDate" class="form-control date" autocomplete="off">
+                                            <input type="text" asp-for="BusinessTripUsers[i].StartDate" class="form-control" autocomplete="off">
                                             <div class="input-group-addon">to</div>
-                                            <input type="text" asp-for="BusinessTripUsers[i].EndDate" class="form-control date" autocomplete="off">
+                                            <input type="text" asp-for="BusinessTripUsers[i].EndDate" class="form-control" autocomplete="off">
                                         </div>
                                         <span asp-validation-for="BusinessTripUsers[i].StartDate" class="text-danger"></span>
                                         <span asp-validation-for="BusinessTripUsers[i].EndDate" class="text-danger"></span>
@@ -188,11 +186,15 @@
 <script>
     $(document).ready(function () {
 
-         $('.input-daterange input').each(function () {
+        $('.custom-date').each(function() {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
-            });
-         });
+                format: "dd.mm.yyyy"
+            })
+        })
+
+        $('.input-daterange').datepicker({
+            format: "dd.mm.yyyy"
+        });
 
         $("#addRow").click(function () {
                 let companyId = $("#CompanyId").val();
@@ -228,19 +230,17 @@
                         <div class="form-group">
                             <label class="floatLabel"> Tarix: </label>
                             <div class="input-group input-daterange mb-0">
-                                <input type="text" name="BusinessTripUsers[${rowCount - 1}].StartDate" class="form-control date" autocomplete="off">
+                                <input type="text" name="BusinessTripUsers[${rowCount - 1}].StartDate" class="form-control" autocomplete="off">
                                 <div class="input-group-addon">to</div>
-                                <input type="text" name="BusinessTripUsers[${rowCount - 1}].EndDate" class="form-control date" autocomplete="off">
+                                <input type="text" name="BusinessTripUsers[${rowCount - 1}].EndDate" class="form-control" autocomplete="off">
                             </div>
                         </div>
                     </div>`
                 $('#row-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        //format: "dd.mm.yyyy"
-                    });
-                });
+               $('.input-daterange').datepicker({
+                format: "dd.mm.yyyy"
+               });
                 getCompanyUsers(companyId, rowCount);
                 getPlaces(rowCount);
           });

@@ -135,7 +135,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             return View(vm);
         }
         [Authorize(Policy = "role.delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task Delete(int id)
         {
             var transactionModel = _roleManager.Roles.FirstOrDefault(I => I.Id == id);
             var current = GetSignInUserId();
@@ -143,8 +143,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
             IdentityResult result = await _roleManager.UpdateAsync(transactionModel);
-            return RedirectToAction("List");
-
         }
         [Authorize(Policy = "role.setclaim")]
         public async Task<IActionResult> SetClaim(int roleId, string claimName, bool selected)

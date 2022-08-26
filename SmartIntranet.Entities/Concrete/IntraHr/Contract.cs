@@ -10,7 +10,7 @@ namespace SmartIntranet.Entities.Concrete
     {
         public string ContractFileType { get; set; }
         public DateTime ContractStart { get; set; }
-        public DateTime ContractEnd { get; set; }
+        public DateTime? ContractEnd { get; set; }
         public DateTime CommandDate { get; set; }
         public string ContractNumber { get; set; }
         public string CommandNumber { get; set; }

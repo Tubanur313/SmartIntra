@@ -64,9 +64,17 @@
                 <div class="col-sm-6">
                     <label class="floatLabel"> Sənəd tarixi: </label>
                     <div class="form-group">
-                        <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                        <input asp-for="CommandDate" type="text" class="form-control custom-date" id="inputDate">
                         <span asp-validation-for="CommandDate" class="text-danger"></span>
                         <span class="messages"></span>
+                    </div>
+                </div>
+                <div id="dep_div" class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel">  Şöbə: </label>
+                        <select asp-for="DepartmentId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
+                        </select>
                     </div>
                 </div>
                 <div id="pos_div" class="col-sm-6">
@@ -192,6 +200,8 @@
                 </div>
 
 
+
+
             </div>
 
 
@@ -223,8 +233,15 @@
 
     $(document).ready(function () {
 
+        $('.custom-date').each(function() {
+            $(this).datepicker({
+                format: "dd.mm.yyyy"
+            })
+        })
+
         $("#salary_div").css('display', "none");
         $("#pos_div").css('display', "none");
+        $("#dep_div").css('display', "none");
         $("#place_div").css('display', "none");
         $("#graphic_div").css('display', "none");
         $("#vacation_div").css('display', "none");
@@ -234,7 +251,7 @@
 
         $('.input-daterange input').each(function () {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             });
         });
 
@@ -289,26 +306,22 @@
         }
         if (_id == "SALARY") {
             $("#PositionId").empty();
-            $("#PositionId").prop('disabled', false);
             $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`);
 
             $("#salary_div").css('display', "block");
             $("#pos_div").css('display', "none");
+            $("#dep_div").css('display', "none");
             $("#place_div").css('display', "none");
             $("#graphic_div").css('display', "none");
             $("#vacation_div").css('display', "none");
             $("#clause_div").css('display', "none");
             $("#vacation_type_div").css('display', "none");
             $("#vacation_extra_div").css('display', "none");
-
         }
         else if (_id == "POSITION") {
-            var _id = $("#UserId").val();
-            if (_id != null) {
-                getPos(_id);
-            }
             $("#salary_div").css('display', "none");
             $("#pos_div").css('display', "block");
+            $("#dep_div").css('display', "block");
             $("#place_div").css('display', "none");
             $("#graphic_div").css('display', "none");
             $("#vacation_div").css('display', "none");
@@ -321,12 +334,9 @@
 
         }
         else if (_id == "SALARY_POSITION") {
-            var _id = $("#UserId").val();
-            if (_id != null) {
-                getPos(_id);
-            }
             $("#salary_div").css('display', "block");
             $("#pos_div").css('display', "block");
+            $("#dep_div").css('display', "block");
             $("#place_div").css('display', "none");
             $("#graphic_div").css('display', "none");
             $("#vacation_div").css('display', "none");
@@ -341,6 +351,7 @@
         else if (_id == "WORK_PLACE") {
             $("#salary_div").css('display', "none");
             $("#pos_div").css('display', "none");
+            $("#dep_div").css('display', "none");
             $("#place_div").css('display', "block");
             $("#graphic_div").css('display', "none");
             $("#clause_div").css('display', "none");
@@ -354,6 +365,7 @@
         else if (_id == "WORK_GRAPHIC") {
             $("#salary_div").css('display', "none");
             $("#pos_div").css('display', "none");
+            $("#dep_div").css('display', "none");
             $("#place_div").css('display', "none");
             $("#graphic_div").css('display', "block");
             $("#clause_div").css('display', "block");
@@ -364,6 +376,7 @@
         else if (_id == "VACATION") {
             $("#salary_div").css('display', "none");
             $("#pos_div").css('display', "none");
+            $("#dep_div").css('display', "none");
             $("#place_div").css('display', "none");
             $("#graphic_div").css('display', "none");
             $("#clause_div").css('display', "none");
@@ -443,9 +456,89 @@
         });
     }
 
-    $(document).on('change', '#CompanyId', function () {
-        var _id = $(this).val();
+    function getDep(_id) {
+          $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetDepartmentWithCompany", "Account")',
+                data: {
+                    companyId: _id,
+                },
+                success: function (response)
+                {
+                    if (response.error == true)
+                    {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#DepartmentId").empty();
+                    var html = "";
 
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                        ${[response[i].name]}</option>`
+                    }
+
+                    if(response.length>0)
+                    {
+                        $("#DepartmentId").prop('disabled', false);
+                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    }
+                    else{
+                         $("#DepartmentId").prop('disabled', false);
+                        $("#DepartmentId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+                    $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`);
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+           });
+    }
+
+    //function getPos(_id) {
+    //      $.ajax({
+    //            type: 'Get',
+    //            url: '@Url.ActionLink("GetPositionWithUser", "Account")',
+    //            data: {
+    //                userId: _id,
+    //            },
+    //            success: function (response)
+    //            {
+    //                if (response.error == true)
+    //                {
+    //                    toastr.error(response.message, "Xəta baş verdi!");
+    //                    return;
+    //                }
+    //                $("#PositionId").empty();
+    //                var html = "";
+
+    //                for (var i in response) {
+    //                    html += `<option value="${[response[i].id]}">
+    //                    ${[response[i].name]}</option>`
+    //                }
+
+    //                if(response.length>0)
+    //                {
+    //                    $("#PositionId").prop('disabled', false);
+    //                    $("#PositionId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+    //                }
+    //                else{
+    //                     $("#PositionId").prop('disabled', false);
+    //                    $("#PositionId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+    //                }
+
+    //            },
+    //            error: function (response) {
+    //                $("#overlay").fadeOut(300);
+    //                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+    //            }
+    //       });
+    //}
+
+    $(document).on('change','#CompanyId', function(){
+        var _id = $(this).val();
+        getDep(_id);
         $.ajax({
             type: 'Get',
             url: '@Url.ActionLink("GetCompanyUsers", "Account")',
@@ -480,6 +573,11 @@
                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
+    });
+
+     $(document).on('change','#DepartmentId', function(){
+        var _id = $(this).val();
+        getPos(_id);
     });
 
 </script>

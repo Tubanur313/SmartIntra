@@ -17,7 +17,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public string Gender { get; set; }
         public string Fullname { get; set; }
         public double Salary { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime StartWorkDate { get; set; }
         public string Pin { get; set; }
         public int WorkGraphicId { get; set; }
@@ -32,13 +32,13 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public string IdCardType { get; set; }
         public bool IsMainPlace { get; set; } // esas is yeri, komekci
         public string IdCardNumber { get; set; } // serial + number
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime IdCardGiveDate { get; set; }
         public string IdCardGivePlace { get; set; } // veren qurum
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime IdCardExpireDate { get; set; }
         public string RegisterAdress { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? Birthday { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }

@@ -16,8 +16,6 @@
         <form asp-action="Update" class="main-signin-form">
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="NonWorkingYearId" />
-            <input type="hidden" asp-for="CreatedDate" />
-            <input type="hidden" asp-for="CreatedByUserId" />
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -72,7 +70,7 @@
 
     $( document ).ready(function() {
          $('.input-daterange').datepicker({
-         format: "mm/dd/yyyy"
+         format: "dd.mm.yyyy"
         });
      });
 

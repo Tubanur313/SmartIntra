@@ -562,9 +562,9 @@
                                     <div class="form-group">
                                         <label class="floatLabel"> Tarix: </label>
                                         <div class="input-group input-daterange mb-0 align-item-center">
-                                            <input type="text" value="@item.FromDate.ToString("MM/dd/yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
+                                            <input type="text" value="@item.FromDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain start disable disabled_custom" autocomplete="off">
                                             <span class="input-group-addon">to</span>
-                                            <input type="text" value="@item.ToDate.ToString("MM/dd/yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
+                                            <input type="text" value="@item.ToDate.ToString("dd.MM.yyyy")" readonly class="form-control vacation-remain end disable disabled_custom" autocomplete="off">
                                         </div>
                                         <span class="messages"></span>
                                     </div>
@@ -616,7 +616,7 @@
         $('.custom-date').each(function () {
             //console.log($('.custom-date'))
             $(this).datepicker({
-                formatDate: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             })
         })
 
@@ -637,8 +637,8 @@
 
         $('#StartWorkDate').each(function () {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
-            }).on('changeDate', function (ev) {
+                format: "dd.mm.yyyy"
+            }).on('changeDate', function(ev) {
                 $(this).change();
             });
             $(this).change(function () {
@@ -686,8 +686,8 @@
             let elemets = document.getElementsByClassName('experience-history');
             let totalDays = 0;
             let startWorkDate = $('#StartWorkDate').val();
-            //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1] - 1, startWorkDate.split('.')[0]);
-            startWorkDate = new Date(startWorkDate);
+            startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1] - 1, startWorkDate.split('.')[0]);
+            //startWorkDate = new Date(startWorkDate);
             startWorkDate.setHours(0, 0, 0, 0);
             let nowDate = new Date();
             nowDate.setHours(0, 0, 0, 0);
@@ -696,10 +696,10 @@
                 let endEl = $(`.experienceEnd-${index}`).val();
                 if (!(startEl && endEl))
                     break;
-                //let dateStart = new Date(startEl.split('.')[2], startEl.split('.')[1] - 1, startEl.split('.')[0]);
-                let dateStart = new Date(startEl);
-                //let dateEnd = new Date(endEl.split('.')[2], endEl.split('.')[1] - 1, endEl.split('.')[0]);
-                let dateEnd = new Date(endEl);
+                let dateStart = new Date(startEl.split('.')[2], startEl.split('.')[1] - 1, startEl.split('.')[0]);
+                //let dateStart = new Date(startEl);
+                let dateEnd = new Date(endEl.split('.')[2], endEl.split('.')[1] - 1, endEl.split('.')[0]);
+                //let dateEnd = new Date(endEl);
                 totalDays += Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24));
             }
             totalDays += Math.ceil((new Date().getTime() - startWorkDate.getTime()) / (1000 * 3600 * 24));
@@ -760,14 +760,14 @@
             let valid = true;
             $(".vacation-remain").each(function (i, el) {
                 let startWorkDate = $('#StartWorkDate').val();
-                //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
-                startWorkDate = new Date(startWorkDate);
+                startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
+                //startWorkDate = new Date(startWorkDate);
                 startWorkDate.setHours(0, 0, 0, 0);
                 let startWorkMonth = startWorkDate.getMonth() + 1;
                 let startWorkDay = startWorkDate.getDate();
                 let val = $(el).val();
-                //val = new Date(val.split('.')[2], val.split('.')[1]-1, val.split('.')[0]);
-                val = new Date(val);
+                val = new Date(val.split('.')[2], val.split('.')[1]-1, val.split('.')[0]);
+                //val = new Date(val);
                 val.setHours(0, 0, 0, 0);
                 let startMonth = val.getMonth() + 1;
                 let startDay = val.getDate();
@@ -816,13 +816,13 @@
         }
 
         $('.input-daterange').datepicker({
-            //format: "dd.mm.yyyy"
+            format: "dd.mm.yyyy"
         });
 
         $('.input-daterange-experience-history').each(function () {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
-            }).on('changeDate', function (ev) {
+                format: "dd.mm.yyyy"
+            }).on('changeDate', function(ev) {
                 $(this).change();
             });
             $(this).change(function () {
@@ -838,8 +838,8 @@
             $('#row-box').append(html);
 
             $('.input-daterange').datepicker({
-                //format: "dd.mm.yyyy"
-            }).on('changeDate', function (ev) {
+                format: "dd.mm.yyyy"
+            }).on('changeDate', function(ev) {
                 $('.input-daterange').change();
             });
             $('.input-daterange').change(function () {
@@ -878,7 +878,7 @@
             $('#vac-box').append(html);
 
             $('.input-daterange').datepicker({
-                //format: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             });
             getTotalCount();
             removeDay();

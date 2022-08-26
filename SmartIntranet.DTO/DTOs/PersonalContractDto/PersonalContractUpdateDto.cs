@@ -1,5 +1,8 @@
 ﻿using SmartIntranet.Entities.Concrete.Membership;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.PersonalContractDto
 {
@@ -7,9 +10,11 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
     {
         public int Id { get; set; }
         public string CommandNumber { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime CommandDate { get; set; }
         public string Type { get; set; }
         public int? PositionId { get; set; }
+        public int? DepartmentId { get; set; }
         public double? Salary { get; set; }
         public int UserId { get; set; }
         public int? WorkGraphicId { get; set; }
@@ -24,13 +29,5 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public bool IsMainVacation { get; set; }
         public int VacationExtraType { get; set; }
         public IntranetUser User { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public bool IsDeleted { get; set; }
-     
     }
 }

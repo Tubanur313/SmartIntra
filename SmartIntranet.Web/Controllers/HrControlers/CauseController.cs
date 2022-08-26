@@ -29,14 +29,14 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "cause.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            TempData["success"] = success;
-            TempData["error"] = error;
-            IEnumerable<CauseListDto> data = _map.
-                Map<ICollection<CauseListDto>>(await _causeService
-                .GetAllIncAsync(x => !x.IsDeleted))
-                .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
-                .ToList();
-            return View(data);
+            var model = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
+            if (model.Any())
+            {
+                TempData["success"] = success;
+                TempData["error"] = error;
+                return View(_map.Map<ICollection<CauseListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+            }
+            return View(new List<CauseListDto>());
         }
 
         [HttpGet]

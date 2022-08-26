@@ -81,7 +81,7 @@
                         <div class="col-sm-6">
                             <label class="floatLabel"> Sənəd tarixi: </label>
                             <div class="form-group">
-                                <input asp-for="CommandDate" type="date" class="form-control" id="inputDate">
+                                <input asp-for="CommandDate" type="text" class="form-control custom-date" id="inputDate">
                                 <span asp-validation-for="CommandDate" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
@@ -101,7 +101,7 @@
                             <div class="form-group">
                                 <label class="floatLabel"> Məz. başlama tarixi: </label>
                                 <div class="form-group">
-                                    <input asp-for="FromDate" type="date" class="form-control id="FromDate">
+                                    <input asp-for="FromDate" type="text" class="form-control custom-date" id="FromDate">
                                     <span asp-validation-for="FromDate" class="text-danger"></span>
                                     <span class="messages"></span>
                                 </div>
@@ -111,7 +111,7 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Məz. bitmə tarixi: </label>
                                 <div class="form-group">
-                                    <input asp-for="ToDate" type="date" class="form-control " id="ToDate">
+                                    <input asp-for="ToDate" type="text" class="form-control custom-date" id="ToDate">
                                     <span asp-validation-for="ToDate" class="text-danger"></span>
                                     <span class="messages"></span>
                                 </div>
@@ -203,6 +203,13 @@
 
 <script>
     $(document).ready(function() {
+
+         $('.custom-date').each(function() {
+            $(this).datepicker({
+                format: "dd.mm.yyyy"
+            })
+        })
+
         var vac_id = $("#VacationTypeId").val();
         getVacationTypeDisplay(vac_id, false);
         $("#labor_vacation").css('display', "none");
@@ -210,7 +217,7 @@
 
         $('.input-daterange input').each(function() {
             $(this).datepicker({
-                //format: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             });
         });
 
@@ -227,14 +234,14 @@
             let valid = true;
             $(".vacation-remain").each(function(i, el) {
                 let startWorkDate = $('#StartWorkDate').val();
-                //startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
-                startWorkDate = new Date(startWorkDate);
+                startWorkDate = new Date(startWorkDate.split('.')[2], startWorkDate.split('.')[1]-1, startWorkDate.split('.')[0]);
+                //startWorkDate = new Date(startWorkDate);
                 startWorkDate.setHours(0, 0, 0, 0);
                 let startWorkMonth = startWorkDate.getMonth() + 1;
                 let startWorkDay = startWorkDate.getDate();
                 let val = $(el).val();
-                //val = new Date(val.split('.')[2], val.split('.')[1]-1, val.split('.')[0]);
-                val = new Date(val);
+                val = new Date(val.split('.')[2], val.split('.')[1]-1, val.split('.')[0]);
+                //val = new Date(val);
                 val.setHours(0, 0, 0, 0);
                 let startMonth = val.getMonth() + 1;
                 let startDay = val.getDate();
@@ -353,7 +360,7 @@
             $('#vac-box').append(html);
 
             $('.input-daterange').datepicker({
-                //format: "dd.mm.yyyy"
+                format: "dd.mm.yyyy"
             });
             removeDay();
         });
@@ -366,10 +373,12 @@
 
         $('#FromDate').change(function() {
             var date = $(this).val();
+            date = new Date(date.split('.')[2], date.split('.')[1]-1, date.split('.')[0]);
             $("#CalendarDay").val("0");
             var to_date = $("#ToDate").val();
+             to_date = new Date(to_date.split('.')[2], to_date.split('.')[1]-1, to_date.split('.')[0]);
             if (date != null && date != "" && to_date != null && to_date != "") {
-                var diff = new Date(Date.parse(to_date) - Date.parse(date));
+                var diff = to_date.getTime() - date.getTime();
                 var days = diff / 1000 / 60 / 60 / 24;
                 days += 1;
 
@@ -379,10 +388,12 @@
 
         $('#ToDate').change(function() {
             var to_date = $(this).val();
+            to_date = new Date(to_date.split('.')[2], to_date.split('.')[1]-1, to_date.split('.')[0]);
             $("#CalendarDay").val("0");
             var date = $("#FromDate").val();
+            date = new Date(date.split('.')[2], date.split('.')[1]-1, date.split('.')[0]);
             if (date != null && date != "" && to_date != null && to_date != "") {
-                var diff = new Date(Date.parse(to_date) - Date.parse(date));
+                var diff = to_date.getTime() - date.getTime();
                 var days = diff / 1000 / 60 / 60 / 24;
                 days += 1;
                 $("#CalendarDay").val(days.toString());
@@ -419,8 +430,10 @@
                     if (remain_check) {
                         var date = $("#FromDate").val();
                         var to_date = $("#ToDate").val();
+                        date = new Date(date.split('.')[2], date.split('.')[1]-1, date.split('.')[0]);
+                        to_date = new Date(to_date.split('.')[2], to_date.split('.')[1]-1, to_date.split('.')[0]);
                         if (date != null && date != "" && to_date != null && to_date != "") {
-                            var diff = new Date(Date.parse(to_date) - Date.parse(date));
+                          var diff = to_date.getTime() - date.getTime();
                             var days = diff / 1000 / 60 / 60 / 24;
                             days += 1;
                             $("#CalendarDay").val(days.toString());

@@ -1,6 +1,9 @@
 ﻿using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.ContractDto
 {
@@ -8,8 +11,11 @@ namespace SmartIntranet.DTO.DTOs.ContractDto
     {
         public int Id { get; set; }
         public string ContractFileType { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime ContractStart { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime CommandDate { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? ContractEnd { get; set; }
         public string ContractNumber { get; set; }
         public string CommandNumber { get; set; }
@@ -23,13 +29,5 @@ namespace SmartIntranet.DTO.DTOs.ContractDto
         public Clause Clause { get; set; }
         public int UserId { get; set; }
         public IntranetUser User { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public bool IsDeleted { get; set; }
-     
     }
 }

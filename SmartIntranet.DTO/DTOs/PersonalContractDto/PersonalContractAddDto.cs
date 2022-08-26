@@ -11,6 +11,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public string Type { get; set; }
         public int VacationExtraType { get; set; } // experience 0 , nature 1, child 2
         public int? PositionId { get; set; }
+        public int? DepartmentId { get; set; }
         public double? Salary { get; set; }
         public int UserId { get; set; }
         public int? WorkGraphicId { get; set; }
@@ -24,13 +25,6 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public int? ClauseId { get; set; }
         public bool IsMainVacation { get; set; }
         public IntranetUser User { get; set; }
-        public int? CreatedByUserId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public int? UpdateByUserId { get; set; }
-        public DateTime UpdateDate { get; set; }
-        public int? DeleteByUserId { get; set; }
-        public DateTime? DeleteDate { get; set; }
-        public bool IsDeleted { get; set; }
         public bool SendMail { get; set; }
         public bool SendNews { get; set; }
     }
