@@ -18,20 +18,6 @@
                     </div>
 
                     <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="floatLabel">İstifadəçi: </label>
-                            <select name="select" asp-for="AddedByUserId" name="AddedByUserId" class="form-control">
-                                <option value="" selected disabled hidden>Seçim edin</option>
-                                @foreach (AppUserDetailsDto item in ViewBag.users)
-                                {
-                                    <option value="@item.Id">@item.FullName | @item.Company | @item.Department | @item.Position</option>
-                                }
-                            </select>
-                            <span asp-validation-for="AddedByUserId" class="text-danger"></span>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
                         <label class="floatLabel">   Şirkət: </label>
                         <div style="margin-bottom:20px">
                             <input type="text" class="form-control" asp-for="CompanyId" style="width:100%">

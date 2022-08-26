@@ -11,6 +11,7 @@ using SmartIntranet.Business.Interfaces.Intranet.Archives;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.ArchiveDto;
+using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
@@ -73,9 +74,8 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         }
         [HttpGet]
         [Authorize(Policy = "archive.add")]
-        public async Task<IActionResult> AddAsync()
+        public IActionResult Add()
         {
-            ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             return View();
         }
         [HttpPost]
@@ -84,8 +84,10 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         {
             if (ModelState.IsValid)
             {
+                var current = GetSignInUserId();
                 var add = _map.Map<Archive>(model);
-                add.CreatedByUserId = GetSignInUserId();
+                add.CreatedByUserId = current;
+                add.AddedByUserId = current;
                 add.CreatedDate = DateTime.Now;
                 if (faqFile != null)
                 {
@@ -115,7 +117,6 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
         [Authorize(Policy = "archive.update")]
         public async Task<IActionResult> Update(int id)
         {
-            ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
             var data = _map.Map<ArchiveUpdateDto>(await _archiveService.FindByIdAsync(id));
             if (data is null)
                 return RedirectToAction("List", new { error = Messages.Error.notFound });
@@ -136,6 +137,7 @@ namespace SmartIntranet.Web.Controllers.InfoControllers
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;
+                update.AddedByUserId = data.AddedByUserId;
                 if (faqFile != null)
                 {
                     _upload.Delete(data.File, "wwwroot/archive");
