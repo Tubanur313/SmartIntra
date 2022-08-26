@@ -25,5 +25,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public int? ClauseId { get; set; }
         public bool IsMainVacation { get; set; }
         public IntranetUser User { get; set; }
+        public bool SendMail { get; set; }
+        public bool SendNews { get; set; }
     }
 }
