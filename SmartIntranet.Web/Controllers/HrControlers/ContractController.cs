@@ -526,7 +526,7 @@ namespace SmartIntranet.Web.Controllers
                 };
                 if (model.SendMail)
                 {
-                    _emailSender.ContactSendEmail( usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
+                    _emailSender.ContractSendEmail( usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
                 }
                 return RedirectToAction("List", new
                 {

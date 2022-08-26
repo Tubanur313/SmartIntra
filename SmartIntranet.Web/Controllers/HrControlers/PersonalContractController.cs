@@ -445,7 +445,7 @@ namespace SmartIntranet.Web.Controllers
                     {
                         Title = "Vəzifə Dəyişikliyi",
                         Description = "Hörmətli həmkarlar." +
-                                      $"\r\nNəzərinizə çatdırmaq istərdim ki, {userC.Fullname} artıq {userC.Company.Name} şirkətdə {userC.Position} olaraq fəaliyyətinə davam edəcəkdir. " +
+                                      $"\r\nNəzərinizə çatdırmaq istərdim ki, {userC.Fullname} artıq {userC.Company.Name} şirkətdə {userC.Position.Name} olaraq fəaliyyətinə davam edəcəkdir. " +
                                       $"\r\n{userC.Name}"+" "+ $"{gender}" +
                                       ", yeni pozisiyanızda Sizə uğurlar diləyirik!",
                         AppUserId = null,

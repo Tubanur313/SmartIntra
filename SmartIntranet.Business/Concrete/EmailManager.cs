@@ -901,7 +901,7 @@ namespace SmartIntranet.Business.Concrete
             }
         }
 
-        public async void  ContactSendEmail(string userFullName, string company, string department, string position, string userProfile)
+        public async void  ContractSendEmail(string userFullName, string company, string department, string position, string userProfile)
         {
             var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
             var emailMessage = new MimeMessage();
@@ -915,7 +915,7 @@ namespace SmartIntranet.Business.Concrete
             {
                 HtmlBody = string.Format("<p>Hörmətli əməkdaşlar,</p>\r\n\r\n" +
                                          "<p>SR komandasına yeni işçi qatılır!</p>" +
-                                         $" <img height=\"240\" width=\"240\" src=\"{fullpath + @"\wwwroot\profile\" + userProfile}\" alt=\"img-edit\">" +
+                                         $" <img height=\"240\" width=\"260\" src=\"{fullpath + @"\wwwroot\profile\" + userProfile}\" alt=\"img-edit\">" +
                                          $"\r\n\r\n<p><strong>{userFullName}</strong></p>" +
                                          $"\r\n\r\n<p>{company} ({department}/{position})</p>" +
                                         "\r\n\r\n<p>İş yeri ilə tanış olmasına,\r\n\r\n" +
@@ -939,10 +939,10 @@ namespace SmartIntranet.Business.Concrete
             emailMessage.Subject = "Vəzifə Dəyişikliyi";
             var bodyBuilder = new BodyBuilder
             {
-                HtmlBody = string.Format("Hörmətli həmkarlar." +
-                                         $"\r\nNəzərinizə çatdırmaq istərdim ki, {userCFullname} artıq {companyName} şirkətində {positionName} olaraq fəaliyyətinə davam edəcəkdir. " +
-                                         $"\r\n{usrName}" + " " + $"{gender}" +
-                                         ", yeni pozisiyanızda Sizə uğurlar diləyirik!")
+                HtmlBody = string.Format("<p>Hörmətli həmkarlar,</p>\r\n\r\n" +
+                                         $"\r\n<p>Nəzərinizə çatdırmaq istərdim ki, {userCFullname} artıq {companyName} şirkətində {positionName} olaraq fəaliyyətinə davam edəcəkdir. </p>" +
+                                         $"\r\n<p>{usrName} "+" "+$" {gender}" +
+                                         ", yeni pozisiyanızda Sizə uğurlar diləyirik!</p>")
             };
 
             emailMessage.Body = bodyBuilder.ToMessageBody();

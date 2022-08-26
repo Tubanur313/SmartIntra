@@ -6,7 +6,7 @@ namespace SmartIntranet.Business.Interfaces
     {
         void TicketSendEmail(int ticketId, TicketChangeType type, string userFullName);
         //Task TicketSendEmailAsync(int ticketId, string ticketMessage, List<string> ToEmail);
-        void ContactSendEmail(string userFullName,string company, string department, string position, string userProfile);
+        void ContractSendEmail(string userFullName,string company, string department, string position, string userProfile);
         void ContactChangeSendEmail(string userCFullname, string usrName,string gender, string companyName, string positionName);
     }
 }
