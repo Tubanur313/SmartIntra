@@ -1,5 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.IntraTicket;
+﻿using SmartIntranet.Entities.Concrete.IntraTicket;
 
 namespace SmartIntranet.DTO.DTOs.TicketCheckListDto
 {

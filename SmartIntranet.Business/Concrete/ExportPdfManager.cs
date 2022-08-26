@@ -3,9 +3,7 @@ using iTextSharp.text.pdf;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete

@@ -1,5 +1,4 @@
 ﻿using SmartIntranet.Core.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
 
 namespace SmartIntranet.Entities.Concrete.IntraTicket
 {

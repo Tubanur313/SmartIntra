@@ -2,7 +2,6 @@
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
 {

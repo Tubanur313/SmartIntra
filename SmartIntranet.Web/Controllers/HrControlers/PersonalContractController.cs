@@ -2,30 +2,24 @@
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.DTO.DTOs.ContractDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.PersonalContractDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
-using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HtmlConverter = iText.Html2pdf.HtmlConverter;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.Web.Controllers
 {
@@ -43,8 +37,12 @@ namespace SmartIntranet.Web.Controllers
         private readonly IPositionService _positionService;
         private readonly ICompanyService _companyService;
         private readonly IDepartmentService _departmentService;
-
-        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        private readonly INewsService _newsService;
+        private readonly ICategoryNewsService _categoryNewsService;
+        private readonly IEmailService _emailSender;
+        private readonly ICategoryService _categoryService;
+        private readonly INewsFileService _newsFileService;
+        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService, INewsService newsService, ICategoryNewsService categoryNewsService, IEmailService emailSender, ICategoryService categoryService, INewsFileService newsFileService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _db = db;
             _contractService = contractService;
@@ -58,6 +56,11 @@ namespace SmartIntranet.Web.Controllers
             _positionService = positionService;
             _companyService = companyService;
             _departmentService = departmentService;
+            _newsService = newsService;
+            _categoryNewsService = categoryNewsService;
+            _emailSender = emailSender;
+            _categoryService = categoryService;
+            _newsFileService = newsFileService;
         }
 
 
@@ -441,10 +444,51 @@ namespace SmartIntranet.Web.Controllers
                     file.CreatedDate = DateTime.Now;
                     await _contractFileService.AddAsync(file);
                 }
-                return RedirectToAction("List", "Contract", new
+
+                if (model.SendNews)
+                {   
+                    var userC = await _userService.FindByUserAllInc(model.UserId);
+                    var gender = userC.Gender == "MALE" ? "bəy" : "xanım";
+                    var news = new News
+                    {
+                        Title = "Vəzifə Dəyişikliyi",
+                        Description = "Hörmətli həmkarlar." +
+                                      $"\r\nNəzərinizə çatdırmaq istərdim ki, {userC.Fullname} artıq {userC.Company.Name} şirkətdə {userC.Position} olaraq fəaliyyətinə davam edəcəkdir. " +
+                                      $"\r\n{userC.Name}"+" "+ $"{gender}" +
+                                      ", yeni pozisiyanızda Sizə uğurlar diləyirik!",
+                        AppUserId = null,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
+                    };
+                    var newsResult = await _newsService.AddReturnEntityAsync(news);
+                    var newsCategoryId = await _categoryService
+                        .GetAsync(x => x.Name == "Məlumat"
+                                       || x.Name == "Melumat"
+                                       || x.Name == "Malumat");
+                    //var newsFile = new NewsFile
+                    //{
+                    //    Name = userC.Picture,
+                    //    NewsId = newsResult.Id,
+                    //    CreatedByUserId = current,
+                    //    CreatedDate = DateTime.Now
+                    //};
+                    var categoryNews = new CategoryNews
+                    {
+                        NewsId = newsResult.Id,
+                        CategoryId = newsCategoryId.Id,
+                        CreatedByUserId = current,
+                        CreatedDate = DateTime.Now
+                    };
+                    //await _newsFileService.AddAsync(newsFile);
+                    await _categoryNewsService.AddAsync(categoryNews);
+                };
+                if (model.SendMail)
                 {
-                    success = Messages.Add.Added
-                });
+                    var userC = await _userService.FindByUserAllInc(model.UserId);
+                    var gender = userC.Gender == "MALE" ? "bəy" : "xanım";
+                    _emailSender.ContactChangeSendEmail(userC.Fullname, usr.Name, gender, userC.Company.Name, usr.Position.Name);
+                }
+                return RedirectToAction("List", "Contract");
             }
         }
 

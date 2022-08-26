@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Collections.Generic;
 using System.Linq;

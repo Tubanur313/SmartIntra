@@ -1,9 +1,5 @@
 ﻿using FluentValidation;
 using SmartIntranet.DTO.DTOs.CategoryNewsDto;
-using SmartIntranet.DTO.DTOs.NewsDto;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {

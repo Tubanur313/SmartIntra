@@ -1,5 +1,4 @@
 ﻿using SmartIntranet.Core.Entities.Concrete;
-using SmartIntranet.Core.Entities.Enum;
 using System;
 
 namespace SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Enum;
-using SmartIntranet.DTO.DTOs.AppUserDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraTicket;
-using SmartIntranet.Entities.Concrete.Membership;
 
 namespace SmartIntranet.DTO.DTOs.TicketDto
 {

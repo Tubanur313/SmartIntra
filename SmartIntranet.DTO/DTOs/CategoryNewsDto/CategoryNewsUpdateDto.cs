@@ -1,8 +1,5 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Intranet;
-using System;
+﻿using SmartIntranet.Entities.Concrete.Intranet;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.CategoryNewsDto
 {

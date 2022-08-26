@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace SmartIntranet.DTO.DTOs.GradeDto
+﻿namespace SmartIntranet.DTO.DTOs.GradeDto
 {
     public class GradeAddDto
     {

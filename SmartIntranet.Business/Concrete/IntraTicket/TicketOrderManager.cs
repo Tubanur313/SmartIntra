@@ -2,9 +2,7 @@
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.DataAccess.Interfaces;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System;
 
 namespace SmartIntranet.Business.Concrete.IntraTicket
 {

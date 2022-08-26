@@ -1,9 +1,6 @@
-﻿using SmartIntranet.Entities;
-using SmartIntranet.Entities.Concrete.Membership;
+﻿using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Core.Entities.Concrete;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.Entities.Concrete

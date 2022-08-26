@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Inventary;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping

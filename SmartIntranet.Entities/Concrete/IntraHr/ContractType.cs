@@ -1,6 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete.Membership;
-using SmartIntranet.Core.Entities.Concrete;
-using System;
+﻿using SmartIntranet.Core.Entities.Concrete;
 using System.Collections.Generic;
 
 

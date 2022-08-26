@@ -70,7 +70,7 @@ namespace SmartIntranet.Web.Controllers
         protected Dictionary<string, string> PdfStaticKeys(Dictionary<string, string> formatKeys, IntranetUser usr, Company company, IntranetUser company_director)
         {
             var education = string.Empty;
-            var level = levels.FirstOrDefault(x => x.Id == usr.EducationLevel).Name;
+            var level = levels.FirstOrDefault(x => x.Id == usr.EducationLevel)?.Name;
             var profession = usr.Profession;
             var graduatedPlace = usr.GraduatedPlace;
             if (!string.IsNullOrEmpty(level))

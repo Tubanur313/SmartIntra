@@ -2,14 +2,9 @@
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DTO.DTOs;
-using SmartIntranet.DTO.DTOs.AppRoleDto;
-using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.DTO.DTOs.ContractDto;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.PersonalContractDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
-using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 
@@ -18,14 +13,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HtmlConverter = iText.Html2pdf.HtmlConverter;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 

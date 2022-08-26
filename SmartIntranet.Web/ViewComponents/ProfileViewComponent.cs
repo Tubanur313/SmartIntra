@@ -3,7 +3,6 @@ using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace SmartIntranet.Web.ViewComponents
 {

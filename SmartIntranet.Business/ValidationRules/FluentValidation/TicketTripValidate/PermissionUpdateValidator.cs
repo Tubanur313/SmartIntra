@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
-using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation.TicketTripValidate
 {

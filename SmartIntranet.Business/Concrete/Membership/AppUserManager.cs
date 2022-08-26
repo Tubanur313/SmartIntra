@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 
 namespace SmartIntranet.Business.Concrete

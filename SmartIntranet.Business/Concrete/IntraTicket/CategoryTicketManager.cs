@@ -1,7 +1,5 @@
-﻿using SmartIntranet.Business.Interfaces;
-using SmartIntranet.Business.Interfaces.IntraTicket;
+﻿using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Collections.Generic;
 using System.Threading.Tasks;

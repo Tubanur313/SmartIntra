@@ -4,9 +4,7 @@ using SixLabors.ImageSharp.Processing;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Core.Extensions;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete

@@ -2,9 +2,7 @@
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.DataAccess.Interfaces.Intranet.Archives;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete.Intranet.Archives
@@ -20,9 +18,10 @@ namespace SmartIntranet.Business.Concrete.Intranet.Archives
             _archiveDal = archiveDal;
         }
 
-        public Task<List<Archive>> GetAllIncAsync()
+
+        public Task<List<Archive>> GetAllIncAsync(int companyId)
         {
-            return _archiveDal.GetAllIncAsync();
+            return _archiveDal.GetAllIncAsync(companyId);
         }
     }
 }

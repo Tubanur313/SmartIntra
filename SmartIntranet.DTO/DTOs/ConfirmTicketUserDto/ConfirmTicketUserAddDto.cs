@@ -1,6 +1,4 @@
-﻿
-using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.IntraTicket;
+﻿using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 
 namespace SmartIntranet.DTO.DTOs.ConfirmTicketUserDto

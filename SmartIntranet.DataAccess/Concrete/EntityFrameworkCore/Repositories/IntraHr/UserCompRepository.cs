@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DataAccess.Interfaces.IntraHr;
 using SmartIntranet.Entities.Concrete.IntraHr;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.IntraHr

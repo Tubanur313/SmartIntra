@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartIntranet.Core.Extensions
+﻿namespace SmartIntranet.Core.Extensions
 {
     public static class NameOperation
     {

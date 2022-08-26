@@ -1,7 +1,6 @@
 ﻿using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.Entities.Concrete.IntraTicket;
-using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Concrete
 {

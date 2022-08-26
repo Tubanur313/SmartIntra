@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using SmartIntranet.Core.Entities.Concrete;
+﻿using SmartIntranet.Core.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 
 namespace SmartIntranet.Entities.Concrete.IntraTicket

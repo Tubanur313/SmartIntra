@@ -6,16 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
-using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.DTO.DTOs.CategoryDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.Entities.Concrete.Membership;
-using SmartIntranet.Web.Controllers;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 

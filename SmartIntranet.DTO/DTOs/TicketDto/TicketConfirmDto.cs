@@ -1,9 +1,5 @@
-﻿using SmartIntranet.Core.Entities.Enum;
-using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-using System;
+﻿using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.TicketDto
 {

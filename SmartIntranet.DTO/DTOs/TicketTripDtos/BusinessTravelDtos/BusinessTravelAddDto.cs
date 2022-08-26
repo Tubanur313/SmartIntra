@@ -1,8 +1,5 @@
 ﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.IntraTicket;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartIntranet.Core.Utilities.Messages
+﻿namespace SmartIntranet.Core.Utilities.Messages
 {
     public static class Messages
     {

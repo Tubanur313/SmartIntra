@@ -1,9 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartIntranet.DTO.DTOs
+﻿namespace SmartIntranet.DTO.DTOs
 {
     public class DayType
     {

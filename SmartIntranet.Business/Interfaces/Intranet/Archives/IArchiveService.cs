@@ -6,6 +6,6 @@ namespace SmartIntranet.Business.Interfaces.Intranet.Archives
 {
     public interface IArchiveService : IGenericService<Archive>
     {
-        Task<List<Archive>> GetAllIncAsync();
+        Task<List<Archive>> GetAllIncAsync(int companyId);
     }
 }

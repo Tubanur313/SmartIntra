@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using System;
 
 namespace SmartIntranet.Business.Provider
 {

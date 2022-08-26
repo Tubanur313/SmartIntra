@@ -1,8 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace SmartIntranet.DTO.DTOs.PersonalContractDto
 {

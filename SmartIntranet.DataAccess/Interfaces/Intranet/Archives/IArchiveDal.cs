@@ -6,6 +6,6 @@ namespace SmartIntranet.DataAccess.Interfaces.Intranet.Archives
 {
     public interface IArchiveDal : IGenericDal<Archive>
     {
-        Task<List<Archive>> GetAllIncAsync();
+        Task<List<Archive>> GetAllIncAsync(int companyId);
     }
 }

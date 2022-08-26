@@ -5,13 +5,10 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace SmartIntranet.Business.Concrete
 {
@@ -904,6 +901,53 @@ namespace SmartIntranet.Business.Concrete
             }
         }
 
+        public async void  ContactSendEmail(string userFullName, string company, string department, string position, string userProfile)
+        {
+            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.To.Add(MailboxAddress.Parse("ilkin.nazarli@srgroupco.com"));
 
+            emailMessage.Subject = "Yeni Əməkdaş";
+            var fullpath = string.Join("\\", System.IO.Path
+                .GetFullPath(userProfile).Split("\\").SkipLast(1).ToArray());
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("<p>Hörmətli əməkdaşlar,</p>\r\n\r\n" +
+                                         "<p>SR komandasına yeni işçi qatılır!</p>" +
+                                         $" <img height=\"240\" width=\"240\" src=\"{fullpath + @"\wwwroot\profile\" + userProfile}\" alt=\"img-edit\">" +
+                                         $"\r\n\r\n<p><strong>{userFullName}</strong></p>" +
+                                         $"\r\n\r\n<p>{company} ({department}/{position})</p>" +
+                                        "\r\n\r\n<p>İş yeri ilə tanış olmasına,\r\n\r\n" +
+                                        "ona şirkətimizin xoş atmosferinə mümkün qədər" +
+                                        "\r\n\r\n tez uyğunlaşmasına  kömək edəcəyinizə inanırıq və \r\n\r\n" +
+                                        "əməkdaşımıza uğurlar arzu edirik!</p>\r\n\r\n")
+            };
+
+            emailMessage.Body = bodyBuilder.ToMessageBody();
+
+            Send(emailMessage);
+        }
+
+        public async void ContactChangeSendEmail(string userCFullname, string usrName, string gender, string companyName, string positionName)
+        {
+            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.To.Add(MailboxAddress.Parse("ilkin.nazarli@srgroupco.com"));
+
+            emailMessage.Subject = "Vəzifə Dəyişikliyi";
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = string.Format("Hörmətli həmkarlar." +
+                                         $"\r\nNəzərinizə çatdırmaq istərdim ki, {userCFullname} artıq {companyName} şirkətində {positionName} olaraq fəaliyyətinə davam edəcəkdir. " +
+                                         $"\r\n{usrName}" + " " + $"{gender}" +
+                                         ", yeni pozisiyanızda Sizə uğurlar diləyirik!")
+            };
+
+            emailMessage.Body = bodyBuilder.ToMessageBody();
+
+            Send(emailMessage);
+        }
     }
 }

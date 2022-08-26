@@ -24393,4 +24393,16 @@ div.dataTables_wrapper div.dataTables_paginate {
 .table.dataTable thead tr th {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
-/*# sourceMappingURL=style.css.map */
+
+.modal-dialog.modal-lg.ui-draggable {
+    position: relative !important;
+}
+
+.modal-dialog.modal-lg {
+    position: relative !important;
+}
+
+.modal-dialog {
+    position: relative !important;
+}
+

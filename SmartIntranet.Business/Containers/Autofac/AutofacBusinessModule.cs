@@ -5,10 +5,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories;
 using SmartIntranet.DataAccess.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using Module = Autofac.Module;
 
 namespace SmartIntranet.Business.Containers.Autofac

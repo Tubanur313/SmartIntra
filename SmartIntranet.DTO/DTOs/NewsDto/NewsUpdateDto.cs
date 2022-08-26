@@ -1,5 +1,4 @@
 ﻿using SmartIntranet.Entities.Concrete.Intranet;
-using SmartIntranet.Entities.Concrete.Membership;
 using System.Collections.Generic;
 
 namespace SmartIntranet.DTO.DTOs.NewsDto

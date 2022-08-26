@@ -1,9 +1,7 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
+﻿using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartIntranet.Business.Interfaces

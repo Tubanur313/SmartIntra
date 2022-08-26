@@ -1,5 +1,4 @@
-﻿using SmartIntranet.Core.Entities.Concrete;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 
 namespace SmartIntranet.Entities.Concrete.Membership

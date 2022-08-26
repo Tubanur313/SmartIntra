@@ -1,5 +1,4 @@
-﻿using SmartIntranet.Business.Interfaces;
-using SmartIntranet.Business.Interfaces.IntraTicket;
+﻿using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.Entities.Concrete.IntraTicket;

@@ -1,17 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.DTO.DTOs.DiscussionDto;
-using SmartIntranet.DTO.DTOs.OrderDto;
-using SmartIntranet.DTO.DTOs.TicketDto;
-using SmartIntranet.DTO.DTOs.TicketOrderDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

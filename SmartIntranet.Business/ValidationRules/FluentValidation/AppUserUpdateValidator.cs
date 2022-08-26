@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
 using SmartIntranet.DTO.DTOs.AppUserDto;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation

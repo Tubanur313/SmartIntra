@@ -274,6 +274,30 @@
                     </select>
                     <span asp-validation-for="WorkGraphicId" class="text-danger"></span>
                 </div>
+                <div class="col-sm-6">
+                    <div class="form-group row has-success">
+                        <div class="col-sm-12 mt-2">
+                            <div class="checkbox-fade fade-in-primary">
+                                <label>
+                                    <input type="checkbox" asp-for="SendMail" class="input-danger">
+                                    <span class="cr">
+                                        <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                    </span>
+                                    <span>Mail göndər</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-fade fade-in-primary">
+                                <label>
+                                    <input type="checkbox" asp-for="SendNews">
+                                    <span class="cr">
+                                        <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+                                    </span>
+                                    <span>Xəbər əlavə et</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
