@@ -34,7 +34,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
 
     public class AccountController : BaseIdentityController
@@ -167,16 +167,13 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> List()
         {
             var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
-
+            ViewBag.CompId = userComp.CompanyId;
             if (userComp is null)
             {
                 return View(new List<AppUserListDto>());
             }
-            else
-            {
-                var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
-                return View(_map.Map<ICollection<AppUserListDto>>(model));
-            }
+            var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
+            return View(_map.Map<List<AppUserListDto>>(model));
 
         }
         [HttpPost]
@@ -184,7 +181,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> List(int CompId, int DepartId, int PositId)
         {
             var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
-            return View(_map.Map<ICollection<AppUserListDto>>(model));
+            return View(_map.Map<List<AppUserListDto>>(model));
         }
         [HttpGet]
         [Authorize(Policy = "account.permission")]

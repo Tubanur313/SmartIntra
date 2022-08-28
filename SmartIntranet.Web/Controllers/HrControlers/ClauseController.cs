@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class ClauseController : BaseIdentityController
     {

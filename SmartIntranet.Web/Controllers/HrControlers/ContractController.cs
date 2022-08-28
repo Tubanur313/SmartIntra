@@ -22,7 +22,7 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
 
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class ContractController : BaseIdentityController
     {
@@ -86,6 +86,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
+            ViewBag.CompId = userComp.CompanyId;
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync());
 

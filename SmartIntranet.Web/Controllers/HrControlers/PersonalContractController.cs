@@ -21,7 +21,7 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class PersonalContractController : BaseIdentityController
     {

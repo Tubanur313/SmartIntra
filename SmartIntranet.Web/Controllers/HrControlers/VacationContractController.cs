@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class VacationContractController : BaseIdentityController
     {
