@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.AppRoleDto;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.ArchiveDto;
@@ -213,6 +214,10 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<SMTPEmailSetting, EmailListDto>();
             #endregion
 
+            #region Email <-> EmailDto
+            CreateMap<SettingsDto, Settings>();
+            CreateMap<Settings, SettingsDto>();
+            #endregion
             #region Discussion <-> DiscussionDto
             CreateMap<DiscussionAddDto, Discussion>();
             CreateMap<Discussion, DiscussionAddDto>();

@@ -238,7 +238,15 @@
                                     <span class="pcoded-mtext">SMTP Mail Server</span>
                                 </a>
                             </li>
-                        }
+                        }                       
+@*                        @if (User.HasAccess("settings.index"))
+                        {
+                            <li class="">
+                                <a asp-controller="Settings" asp-action="index">
+                                    <span class="pcoded-mtext">Mail Server</span>
+                                </a>
+                            </li>
+                        }*@
                         @* @if (User.HasAccess("order.list"))
                     {
                     <li class="">
