@@ -20,6 +20,7 @@ using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
+using NPOI.SS.Formula.Functions;
 
 
 namespace SmartIntranet.Web.Controllers.HrControlers
@@ -154,17 +155,20 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 result_list.Add(el);
             }
 
-            if (userComp is null)
+            if (userComp.CompanyId.Equals(null))
             {
                 return View(new List<ContractListDto>());
             }
-            if (result_list.Any())
+
+            if (!result_list.Any()) return View(new List<ContractListDto>());
             {
                 TempData["success"] = success;
                 TempData["error"] = error;
-                return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
+                return View(result_list.Where(x=> x.User.CompanyId == userComp.CompanyId)
+                    .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate
+                    ).ToList());
             }
-            return View(new List<ContractListDto>());
         }
 
         [HttpPost]
