@@ -3,8 +3,6 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DTO.DTOs.ClauseDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
-
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

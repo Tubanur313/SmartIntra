@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.Business.Interfaces.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -34,6 +35,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly IPlaceService _placeService;
         private readonly IntranetContext _db;
         private readonly IAppUserService _appUserService;
+        private readonly IUserCompService _userCompService;
         public BusinessTripController(UserManager<IntranetUser> userManager,
             IHttpContextAccessor httpContextAccessor,
             SignInManager<IntranetUser> signInManager,
@@ -41,7 +43,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             ICompanyService companyService, ICauseService causeService,
             IAppUserService userService, IClauseService clauseService,
             IBusinessTripFileService businessTripFileService, IPlaceService placeService,
-            IntranetContext db, IAppUserService appUserService) 
+            IntranetContext db, IAppUserService appUserService, IUserCompService userCompService) 
             : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _businessTripService = businessTripService;
@@ -53,13 +55,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _placeService = placeService;
             _db = db;
             _appUserService = appUserService;
+            _userCompService = userCompService;
         }
 
         [HttpGet]
         [Authorize(Policy = "businessTrip.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             ViewBag.causes = _map.Map<ICollection<CauseListDto>>(await _causeService.GetAllAsync(x => !x.IsDeleted));
             return View();
         }

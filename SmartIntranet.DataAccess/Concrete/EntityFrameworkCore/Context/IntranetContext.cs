@@ -127,6 +127,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Faq> Faqs { get; set; }
         public DbSet<Archive> Archives { get; set; }
+        public DbSet<Settings> Settings { get; set; }
         #endregion
 
 

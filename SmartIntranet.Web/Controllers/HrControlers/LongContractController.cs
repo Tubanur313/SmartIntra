@@ -10,8 +10,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Core.Utilities.Messages;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
@@ -22,15 +24,17 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly ILongContractFileService _contractFileService;
         private readonly IAppUserService _userService;
         private readonly ICompanyService _companyService;
+        private readonly IUserCompService _userCompService;
         private readonly IClauseService _clauseService;
 
-        public LongContractController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ILongContractService contractService, ILongContractFileService contractFileService, IClauseService clauseService,IAppUserService userService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public LongContractController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ILongContractService contractService, ILongContractFileService contractFileService, IClauseService clauseService,IAppUserService userService, ICompanyService companyService, IUserCompService userCompService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _contractService = contractService;
             _contractFileService = contractFileService;
             _userService = userService;
             _clauseService = clauseService;
             _companyService = companyService;
+            _userCompService = userCompService;
         }
 
 
@@ -38,7 +42,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "longContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             return View();
         }

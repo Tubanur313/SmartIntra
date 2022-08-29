@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Entities.Concrete.Intranet;
+using SmartIntranet.Business.Interfaces.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -41,8 +42,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly ICategoryNewsService _categoryNewsService;
         private readonly IEmailService _emailSender;
         private readonly ICategoryService _categoryService;
-        private readonly INewsFileService _newsFileService;
-        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService, INewsService newsService, ICategoryNewsService categoryNewsService, IEmailService emailSender, ICategoryService categoryService, INewsFileService newsFileService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        private readonly IUserCompService _userCompService;
+        public PersonalContractController(UserManager<IntranetUser> userManager, IntranetContext db, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IUserVacationRemainService userVacationRemains, IMapper mapper, IPersonalContractService contractService, IVacationContractService vacationContractService, IPersonalContractFileService contractFileService, IClauseService clauseService, IContractTypeService contractTypeService, IAppUserService userService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IDepartmentService departmentService, INewsService newsService, ICategoryNewsService categoryNewsService, IEmailService emailSender, ICategoryService categoryService, INewsFileService newsFileService, IUserCompService userCompService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _db = db;
             _contractService = contractService;
@@ -60,7 +61,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _categoryNewsService = categoryNewsService;
             _emailSender = emailSender;
             _categoryService = categoryService;
-            _newsFileService = newsFileService;
+            _userCompService = userCompService;
         }
 
 
@@ -68,7 +69,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "personalContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);

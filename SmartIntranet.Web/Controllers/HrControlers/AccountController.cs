@@ -168,7 +168,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
             ViewBag.CompId = userComp.CompanyId;
-            if (userComp is null)
+            if (userComp.CompanyId.Equals(null))
             {
                 return View(new List<AppUserListDto>());
             }

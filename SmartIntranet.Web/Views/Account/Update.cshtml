@@ -906,7 +906,7 @@
         });
     @* $('a[href="#home3"]').on('click', function(event) { *@
             $.ajax({
-                url: `@Url.Action("GetCompanyTree","Account")`,
+                url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
                 type: "Get",
                 data: "",
                 dataType: "json",
@@ -1097,7 +1097,7 @@
                 }
             });
         $.ajax({
-            url: `@Url.Action("GetCompanyTree","Account")`,
+            url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
             type: "Get",
             data: "",
             dataType: "json",

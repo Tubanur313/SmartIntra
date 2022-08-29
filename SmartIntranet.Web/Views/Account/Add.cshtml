@@ -738,14 +738,14 @@
 
     @* $('a[href="#home3"]').on('click', function(event){ *@
             $.ajax({
-                url: `@Url.Action("GetCompanyTree","Account")`,
+                url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
                 type: "Get",
                 data: "",
                 dataType: "json",
                 cache: false,
                 success: function(data) {
                     $.ajax({
-                        url: `@Url.Action("GetDepartmentTree","Account")`,
+                        url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
                         type: "Get",
                         data: {
                             companyId: $('#CompanyId').val(),

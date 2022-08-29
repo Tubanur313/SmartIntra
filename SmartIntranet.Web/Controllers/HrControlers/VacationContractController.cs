@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.Business.Interfaces.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -39,7 +40,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly IPositionService _positionService;
         private readonly ICompanyService _companyService;
         private readonly IntranetContext _db;
-        public VacationContractController(IntranetContext db, UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IVacationContractService contractService, IVacationContractFileService contractFileService, INonWOrkingYearService nonWorkingYearService, INonWorkingDayService nonWorkingDayService, IPersonalContractService personalContractService, IClauseService clauseService, IContractTypeService contractTypeService, IUserVacationRemainService userVacationRemainService, IAppUserService userService, IVacationTypeService vacationTypeService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        private readonly IUserCompService _userCompService;
+        public VacationContractController(IntranetContext db, UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IVacationContractService contractService, IVacationContractFileService contractFileService, INonWOrkingYearService nonWorkingYearService, INonWorkingDayService nonWorkingDayService, IPersonalContractService personalContractService, IClauseService clauseService, IContractTypeService contractTypeService, IUserVacationRemainService userVacationRemainService, IAppUserService userService, IVacationTypeService vacationTypeService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IUserCompService userCompService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _db = db;
             _contractService = contractService;
@@ -55,6 +57,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _vacationTypeService = vacationTypeService;
             _positionService = positionService;
             _companyService = companyService;
+            _userCompService = userCompService;
         }
 
 
@@ -62,7 +65,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "vacationContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.vacationTypes = await _vacationTypeService.GetAllAsync(x => !x.IsDeleted);
 
