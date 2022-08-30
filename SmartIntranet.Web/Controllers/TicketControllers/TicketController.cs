@@ -52,7 +52,6 @@ namespace SmartIntranet.Web.Controllers
         private readonly ITicketOrderService _ticketOrderService;
         private readonly ITicketCheckListService _ticketCheckListService;
         private readonly IConfirmTicketUserService _confirmTicketUserService;
-        private readonly ISmtpEmailService _emailService;
         private readonly IFileService _upload;
         private readonly IDiscussionService _discuss;
         private readonly IPhotoService _photo;
@@ -82,7 +81,6 @@ namespace SmartIntranet.Web.Controllers
             ITicketCheckListService ticketCheckListService,
             IConfirmTicketUserService confirmTicketUserService,
             ITicketOrderService ticketOrderService,
-            ISmtpEmailService emailService,
             IPhotoService photo,
             IDiscussionService discuss,
             ICompanyService companyService,
@@ -98,7 +96,6 @@ namespace SmartIntranet.Web.Controllers
             ) : base(userManager, httpContextAccessor, signInManager, map)
         {
             _emailSender = emailSender;
-            _emailService = emailService;
             _exportPdfService = exportPdf;
             _ticketService = ticketService;
             _checkListService = checkListService;

@@ -15,7 +15,6 @@ using SmartIntranet.DTO.DTOs.ConfirmTicketUserDto;
 using SmartIntranet.DTO.DTOs.ContractDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.DiscussionDto;
-using SmartIntranet.DTO.DTOs.EmailDto;
 using SmartIntranet.DTO.DTOs.EntranceDto;
 using SmartIntranet.DTO.DTOs.FaqDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
@@ -209,12 +208,7 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<Department, DepartmentUpdateDto>();
             #endregion
 
-            #region Email <-> EmailDto
-            CreateMap<EmailListDto, SMTPEmailSetting>();
-            CreateMap<SMTPEmailSetting, EmailListDto>();
-            #endregion
-
-            #region Email <-> EmailDto
+            #region Settings <-> SettingsDto
             CreateMap<SettingsDto, Settings>();
             CreateMap<Settings, SettingsDto>();
             #endregion

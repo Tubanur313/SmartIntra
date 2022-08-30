@@ -39,6 +39,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
     public class AccountController : BaseIdentityController
     {
+        private readonly ISettingsService _settingsService;
         private readonly IUserCompService _userCompService;
         private readonly IConfiguration _configuration;
         private readonly GoogleConfigModel _googleConfig;
@@ -61,7 +62,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
-            IPositionService positionService, IOptions<GoogleConfigModel> googleConfig) : base(userManager, httpContextAccessor, signInManager, mapper)
+            IPositionService positionService, IOptions<GoogleConfigModel> googleConfig, ISettingsService settingsService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _userCompService = userCompService;
             _appRoleService = appRoleService;
@@ -81,6 +82,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _companyService = companyService;
             _departmentService = departmentService;
             _positionService = positionService;
+            _settingsService = settingsService;
         }
 
         [AllowAnonymous]

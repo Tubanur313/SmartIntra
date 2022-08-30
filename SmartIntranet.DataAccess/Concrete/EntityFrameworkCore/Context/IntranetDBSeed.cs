@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
@@ -16,7 +16,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
     public static class IntranetDBSeed
     {
         public static string path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/clauseDocs/");
-        static public IApplicationBuilder SeedTicketSystem(this IApplicationBuilder app)
+      public  static  IApplicationBuilder SeedTicketSystem(this IApplicationBuilder app)
         {
 
             using (var scope = app.ApplicationServices.CreateScope())
@@ -24,16 +24,26 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                 var db = scope.ServiceProvider.GetRequiredService<IntranetContext>();
                 var hasroleAdminAndUser = db.Roles.Where(r => r.Name.Contains("SuperAdmin") ||
                 r.Name.Contains("User")).Any();
-                if (!db.SMTPEmailSettings.Any())
+                if (!db.Settings.Any())
                 {
-                    db.SMTPEmailSettings.Add(new SMTPEmailSetting
+                    db.Settings.Add(new Settings
                     {
                         UserName = "admin@srgroupco.com",
-                        Password = "T!cket2021",
-                        Host = "smtp.office365.com",
-                        Port = 587,
-                        FromEmail = "ticket@srgroupco.com",
-                        BaseUrl="demoticket.srgroupco.com"
+
+                        TicketPassword = "T!cket2021",
+                        TicketHost = "smtp.office365.com",
+                        TicketPort = 587,
+                        TicketMail = "ticket@srgroupco.com",  
+                        
+                        HrPassword = "IL234$#@il",
+                        HrHost = "smtp.office365.com",
+                        HrPort = 587,
+                        HrMail = "hr@srgroupco.com",
+
+                        BaseUrl="demoticket.srgroupco.com",
+                        CompanyLogo = "logoDefault.png",
+                        CompanyName = "SR Group Co.",
+                        CompanyAddress = "Babek Plaza, A-block, 3th floor A.Quliyev st. 1131, Baku, Azerbaijan"
                     });
 
                     db.SaveChangesAsync().GetAwaiter().GetResult();

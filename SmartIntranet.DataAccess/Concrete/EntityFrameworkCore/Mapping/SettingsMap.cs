@@ -1,24 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {
-    public class EmailMap : IEntityTypeConfiguration<SMTPEmailSetting>
+    public class SettingsMap : IEntityTypeConfiguration<Settings>
     {
-        public void Configure(EntityTypeBuilder<SMTPEmailSetting> builder)
+        public void Configure(EntityTypeBuilder<Settings> builder)
         {
             builder.HasKey(I => I.Id);
             builder.Property(I => I.Id).UseIdentityColumn();
             builder.Property(I => I.UserName).IsRequired();
-            builder.Property(I => I.Password).IsRequired();
-            builder.Property(I => I.Host).IsRequired();
-            builder.Property(I => I.Port).IsRequired();
-            builder.Property(I => I.FromEmail).IsRequired();
+            //Ticket
+            builder.Property(I => I.TicketPassword).IsRequired();
+            builder.Property(I => I.TicketHost).IsRequired();
+            builder.Property(I => I.TicketPort).IsRequired();
+            builder.Property(I => I.TicketMail).IsRequired(); 
+            //Hr
+            builder.Property(I => I.HrPassword).IsRequired();
+            builder.Property(I => I.HrHost).IsRequired();
+            builder.Property(I => I.HrPort).IsRequired();
+            builder.Property(I => I.HrMail).IsRequired();
+
             builder.Property(I => I.BaseUrl).IsRequired();
 
-            builder.Property(I => I.IsSSL).HasDefaultValue(false);
-            builder.Property(I => I.IsDefault).HasDefaultValue(false);
             builder.Property(I => I.IsDeleted);
 
             builder.Property(I => I.CreatedDate).HasDefaultValue(null);

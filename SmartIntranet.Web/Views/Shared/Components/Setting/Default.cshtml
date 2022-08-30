@@ -1,0 +1,14 @@
+﻿@model SettingsDto
+
+<div class="navbar-logo">
+    <a class="mobile-menu " id="mobile-collapse" href="#!">
+        <i class="feather icon-menu"></i>
+    </a>
+    <a asp-controller="news" asp-action="info" class="d-flex justify-content-center">
+        <img class="ml-1 img-fluid" src="~/logo/@Model.CompanyLogo" alt="Theme-Logo" style="opacity: .8; background-color: #c2c7d0; border-radius: 50%;width:30px;" />
+        <strong class="ml-2 mt-2">@Model.CompanyName</strong>
+    </a>
+    <a class="mobile-options">
+        <i class="feather icon-more-horizontal"></i>
+    </a>
+</div>

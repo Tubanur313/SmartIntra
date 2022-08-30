@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    partial class IntranetContextModelSnapshot : ModelSnapshot
+    [Migration("20220830071514_deleteSmtp")]
+    partial class deleteSmtp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2102,6 +2104,9 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<string>("CompanyAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CompanyEmail")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CompanyLogo")
                         .HasColumnType("nvarchar(max)");
 
@@ -2109,9 +2114,6 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanySite")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CreatedByUserId")
@@ -2265,7 +2267,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 8, 30, 14, 56, 3, 423, DateTimeKind.Local).AddTicks(393));
+                        .HasDefaultValue(new DateTime(2022, 8, 30, 11, 15, 13, 508, DateTimeKind.Local).AddTicks(4313));
 
                     b.Property<string>("Title")
                         .IsRequired()

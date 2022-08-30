@@ -107,7 +107,6 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<BusinessTripUser> BusinessTripUsers { get; set; }
         public DbSet<BusinessTripFile> BusinessTripFiles { get; set; }
         public DbSet<CategoryTicket> CategoryTickets { get; set; }
-        public DbSet<SMTPEmailSetting> SMTPEmailSettings { get; set; }
         public DbSet<CheckList> CheckLists { get; set; }
         public DbSet<ConfirmTicketUser> ConfirmTicketUsers { get; set; }
         public DbSet<Discussion> Discussions { get; set; }
