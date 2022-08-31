@@ -31,23 +31,32 @@
                     <input type="text" class="form-control" id="CompId" name="CompId" value="@ViewBag.CompId" style="width:100%">
                 </div>
             </div>
-@*            <div class="col-sm-4">
-                <label class="floatLabel">  Şöbə: </label>
-                <div style="margin-bottom:20px">
-                    <input type="text" class="form-control" id="DepartId" name="DepartId" style="width:100%">
-                </div>
+            @*            <div class="col-sm-4">
+            <label class="floatLabel">  Şöbə: </label>
+            <div style="margin-bottom:20px">
+            <input type="text" class="form-control" id="DepartId" name="DepartId" value="@ViewBag.DepartId" style="width:100%">
+            </div>
             </div>
             <div class="col-sm-4">
-                <label class="floatLabel">  Vəzifə: </label>
-                <div style="margin-bottom:20px">
-                    <input type="text" class="form-control" id="PositId" name="PositId" style="width:100%">
-                </div>
+            <label class="floatLabel">  Vəzifə: </label>
+            <div style="margin-bottom:20px">
+            <input type="text" class="form-control" id="PositId" name="PositId" value="@ViewBag.PositId" style="width:100%">
+            </div>
             </div>*@
             <div class="col-sm-3">
                 <div class="form-group">
                     <label class="floatLabel">Sənəd növü: </label>
                     <select id="DocumentType" name="DocumentType" class="form-control">
                         <option value="" selected disabled hidden>Seçim edin</option>
+@*                        @if (ViewBag.docType == "")
+                        {
+                            <option value="@ViewBag.contractTypes" selected disabled hidden>Seçim edin</option>
+                        }
+                        else
+                        {
+                            <option value="" selected disabled hidden>@ViewBag.docType</option>
+                        }
+*@
                         @foreach (var item in ViewBag.contractTypes)
                         {
                             <option value="@item.Key">@item.Name</option>
@@ -58,7 +67,7 @@
             <div class="col-sm-3">
                 <label class="floatLabel">  Tarix aralığı: </label>
                 <div class="form-group">
-                    <input type="text" id="Interval" name="Interval" class="form-control" value="" />
+                    <input type="text" id="Interval" name="Interval" value="@ViewBag.interval" class="form-control" value="" />
                 </div>
             </div>
             <div class="col-sm-3 mt-4">
@@ -98,14 +107,14 @@
     <!-- Date-range picker js -->
     <script type="text/javascript" src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script class="removable" type="text/javascript">
-        $(document).ready(function($) {
+        $(document).ready(function ($) {
             $.ajax({
                 url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
                 type: "Get",
                 data: "",
                 dataType: "json",
                 cache: false,
-                success: function(data) {
+                success: function (data) {
                     var tree = $('#DepartId').combotree({
                         prompt: 'Seçim edin'
                     });
@@ -117,7 +126,7 @@
                     $('#CompId').combotree({
                         data: data,
                         prompt: 'Seçim edin',
-                        onClick: function(node) {
+                        onClick: function (node) {
                             $('.CompId').text($('#CompId').data("val-required")).addClass("d-none")
                             var _id = node.id;
                             $.ajax({
@@ -128,7 +137,7 @@
                                 },
                                 dataType: "json",
                                 cache: false,
-                                success: function(data) {
+                                success: function (data) {
                                     if (data.length > 0) {
                                         $('#DepartId').combotree({
                                             data: data,
@@ -141,7 +150,7 @@
                                         $('#DepartId').combotree({
                                             data: data,
                                             prompt: 'Seçim edin',
-                                            onClick: function(node) {
+                                            onClick: function (node) {
                                                 $('.DepartId').text($('#DepartId').data("val-required")).addClass("d-none")
                                                 var _id = node.id;
                                                 $.ajax({
@@ -152,7 +161,7 @@
                                                     },
                                                     dataType: "json",
                                                     cache: false,
-                                                    success: function(data) {
+                                                    success: function (data) {
                                                         if (data.length > 0) {
                                                             $('#PositId').combotree({
                                                                 data: data,
@@ -166,7 +175,7 @@
                                                             tree.combotree('disable')
                                                         }
                                                     },
-                                                    error: function(data) {
+                                                    error: function (data) {
                                                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                                     }
                                                 })
@@ -184,14 +193,14 @@
                                         tre.combotree('disable')
                                     }
                                 },
-                                error: function(data) {
+                                error: function (data) {
                                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                                 }
                             })
                         }
                     })
                 },
-                error: function(data) {
+                error: function (data) {
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
             });
@@ -215,10 +224,10 @@
                     cancelLabel: 'Clear'
                 }
             });
-            $('input[name="Interval"]').on('apply.daterangepicker', function(ev, picker) {
+            $('input[name="Interval"]').on('apply.daterangepicker', function (ev, picker) {
                 $(this).val(picker.startDate.format('DD.MM.YYYY') + '-' + picker.endDate.format('DD.MM.YYYY'));
             });
-            $('input[name="Interval"]').on('cancel.daterangepicker', function(ev, picker) {
+            $('input[name="Interval"]').on('cancel.daterangepicker', function (ev, picker) {
                 $(this).val('');
             });
         });
