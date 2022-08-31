@@ -21,6 +21,7 @@ using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
 using NPOI.SS.Formula.Functions;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 
 namespace SmartIntranet.Web.Controllers.HrControlers
@@ -121,19 +122,40 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
-            var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
-            var business_trip = "BUSINESS_TRIP";
-            var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
-            foreach (var el in business_trips)
+            if (userComp.CompanyId > 0)
             {
-                int id = el.BusinessTripUsers.FirstOrDefault().UserId;
-                IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
-                el.ContractKey = business_trip;
-                el.ContractName = el_business_trip;
-                result_list.Add(el);
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted && x.CompanyId == userComp.CompanyId);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
             }
+            else
+            {
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
+            }
+
+
 
             var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
             var termination_chg = "TERMINATION";
@@ -160,12 +182,28 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 return View(new List<ContractListDto>());
             }
 
+
+
+
+
             if (!result_list.Any()) return View(new List<ContractListDto>());
             {
+                List<ContractListDto> model_result_list = new List<ContractListDto>();
+                var multi = result_list.Where(x => x.FullName == "Multi").ToList();
+                var contract = result_list.Where(x => x.FullName != "Multi"
+                                                      && x.User.CompanyId == userComp.CompanyId).ToList();
                 TempData["success"] = success;
                 TempData["error"] = error;
+                if (multi.Count > 0)
+                {
+                    multi.ForEach(x => model_result_list.Add(x));
+                }
 
-                return View(result_list.Where(x=> x.User.CompanyId == userComp.CompanyId)
+                if (contract.Count > 0)
+                {
+                    contract.ForEach(x => model_result_list.Add(x));
+                }
+                return View(model_result_list
                     .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate
                     ).ToList());
             }
@@ -223,19 +261,40 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
-            var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
-            var business_trip = "BUSINESS_TRIP";
-            var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
-            foreach (var el in business_trips)
+            if (CompId>0)
             {
-                int id = el.BusinessTripUsers.FirstOrDefault().UserId;
-                IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
-                el.ContractKey = business_trip;
-                el.ContractName = el_business_trip;
-                result_list.Add(el);
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted && x.CompanyId==CompId);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
             }
+            else
+            {
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
+            }
+
+
 
             var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService
                 .GetAllIncCompAsync(x => !x.IsDeleted
@@ -267,75 +326,142 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 result_list.Add(el);
             }
 
-            result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            var multi = result_list.Where(x => x.FullName == "Multi").ToList();
+            result_list = result_list
+                    .Where(x => x.FullName != "Multi").ToList();
+
 
             if (Interval is null && DocumentType != null)
             {
                 if (CompId > 0 && PositId == 0 && DepartId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId &&
+                                                         s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId
-                    && s.User.PositionId == PositId
-                    && s.ContractKey == DocumentType
-                    ).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId
+                                                         && s.User.PositionId == PositId
+                                                         && s.ContractKey == DocumentType
+                    ).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
                 }
                 else
                 {
-                    return View(result_list.Where(s => s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
             }
             else if (Interval != null && DocumentType != null)
             {
                 if (CompId > 0 && PositId == 0 && DepartId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r=>r.ContractKey== DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                    && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId
-                    && s.User.PositionId == PositId
-                    && s.ContractKey == DocumentType
-                    ).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                          && s.User.DepartmentId == DepartId
+                                                          && s.User.PositionId == PositId
+                                                          && s.ContractKey == DocumentType
+                    ).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else
                 {
-                    return View(result_list.Where(s => s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
             }
             else
             {
                 if (CompId > 0 && PositId == 0 && DepartId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId
-                    && s.User.PositionId == PositId
-                    ).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId
+                                                         && s.User.PositionId == PositId
+                    ).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else
                 {
@@ -535,7 +661,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 };
                 if (model.SendMail)
                 {
-                    _emailSender.ContractSendEmail( usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
+                    _emailSender.ContractSendEmail(usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
                 }
                 return RedirectToAction("List", new
                 {
