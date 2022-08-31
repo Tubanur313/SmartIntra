@@ -203,6 +203,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     contract.ForEach(x => model_result_list.Add(x));
                 }
+
+                ViewBag.docType = null;
                 return View(model_result_list
                     .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate
                     ).ToList());
