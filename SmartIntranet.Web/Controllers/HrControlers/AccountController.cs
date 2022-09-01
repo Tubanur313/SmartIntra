@@ -428,7 +428,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 });
             }
         }
-        [Authorize(Policy = "account.getCompanyTreeBySignInUser")]
         public async Task<IActionResult> GetCompanyTreeBySignInUser()
         {
             var userComps = await _userCompService.GetAllIncAsync(GetSignInUserId());
@@ -441,14 +440,12 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 .GetAllAsync(x => !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
-        [Authorize(Policy = "account.getDepartmentTree")]
         public async Task<IActionResult> GetDepartmentTree(int companyId)
         {
             var tree = (await _departmentService
                 .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
-        [Authorize(Policy = "account.getPositionTree")]
         public async Task<IActionResult> GetPositionTree(int departmentId)
         {
             var tree = (await _positionService
