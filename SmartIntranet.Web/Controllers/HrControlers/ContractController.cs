@@ -615,7 +615,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             else
             {
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_map.Map<Contract>(model)).Result;
+                var add = _map.Map<Contract>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                var result_model = _contractService.AddReturnEntityAsync(add).Result;
 
                 // Keys formats
                 var usr = await _appUserService.FindByUserAllInc(result_model.UserId);
@@ -824,7 +827,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var data = await _contractService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
                 var update = _map.Map<Contract>(model);
-                update.UpdateByUserId = GetSignInUserId();
+                update.UpdateByUserId = current;
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
@@ -918,9 +921,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task Delete(int id)
         {
             var transactionModel = await _contractService.FindByIdAsync(id);
-            var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.Now;
-            transactionModel.DeleteByUserId = current;
+            transactionModel.DeleteByUserId = GetSignInUserId();
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<Contract>(transactionModel));
         }
