@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
@@ -25,7 +26,7 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public IntranetUser Employee { get; set; }
         public int? SupporterId { get; set; }
         public IntranetUser Supporter { get; set; }
-        public BusinessTravel BusinessTravel { get; set; }
+        public List<BusinessTravel> BusinessTravels { get; set; }
         public VacationLeave VacationLeave { get; set; }
         public Permission Permission { get; set; }
     }

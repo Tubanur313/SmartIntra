@@ -13,7 +13,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
     {
         public async Task<List<Ticket>> GetListedBySignInUserIdAsync(int userId)
         {
-            using var context = new IntranetContext();
+           await using var context = new IntranetContext();
             if (userId != 0)
             {
                 return await context.Tickets
@@ -24,7 +24,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+               .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                .OrderByDescending(x => x.Id).ToListAsync();
             }
             else
@@ -37,7 +37,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Positions)
                .Include(z => z.Supporter)
                .Include(z => z.CategoryTicket)
-               .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+               .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                .OrderByDescending(x => x.Id).ToListAsync();
             }
 
@@ -166,7 +166,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
         }
         public async Task<Ticket> FindAllIncludeForInfoAsync(int id)
         {
-            using var context = new IntranetContext();
+            await using var context = new IntranetContext();
             return await context.Tickets
                 .Where(z => z.Id == id && !z.IsDeleted)
                 .Include(z => z.Employee)
@@ -177,6 +177,8 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .Include(z => z.CategoryTicket)
                 .Include(z => z.TicketOrders)
                 .ThenInclude(z => z.Order)
+                .Include(z => z.BusinessTravels)
+                .ThenInclude(x=>x.Place)
                 .FirstOrDefaultAsync();
         }
 
@@ -229,7 +231,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.CategoryTicket)
-                .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                 .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetNonRedirectedAsync(int CategoryTicketId, StatusType statusType, int companyId)
@@ -253,7 +255,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
@@ -271,7 +273,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
@@ -289,7 +291,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
@@ -306,7 +308,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
@@ -327,7 +329,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
@@ -344,7 +346,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
@@ -361,7 +363,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
@@ -377,7 +379,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
@@ -431,7 +433,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.CategoryTicket)
-                .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                 .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetForAdminAsync(int CategoryTicketId, StatusType statusType, int companyId)
@@ -455,7 +457,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
@@ -473,7 +475,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
@@ -491,7 +493,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
@@ -508,7 +510,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
@@ -529,7 +531,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId != 0 && statusType == 0)
@@ -546,7 +548,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else if (CategoryTicketId == 0 && statusType != 0)
@@ -563,7 +565,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
                 else
@@ -579,7 +581,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                     .ThenInclude(z => z.Departments)
                     .ThenInclude(z => z.Positions)
                     .Include(z => z.CategoryTicket)
-                    .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                    .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                     .OrderByDescending(x => x.Id).ToListAsync();
                 }
             }
@@ -610,7 +612,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                 .ThenInclude(z => z.Departments)
                 .ThenInclude(z => z.Positions)
                 .Include(z => z.CategoryTicket)
-                .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+                .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                 .OrderByDescending(x => x.Id).ToListAsync();
         }
         public async Task<List<Ticket>> GetByUserDepartmentAllIncAsync(int departId, int categoryId, StatusType statusType)
@@ -633,7 +635,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .ThenInclude(z => z.Departments)
            .ThenInclude(z => z.Positions)
            .Include(z => z.CategoryTicket)
-           .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+           .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
            .OrderByDescending(x => x.Id).ToListAsync();
             }
             else if (categoryId > 0 && statusType == 0)
@@ -651,7 +653,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .ThenInclude(z => z.Departments)
            .ThenInclude(z => z.Positions)
            .Include(z => z.CategoryTicket)
-           .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+           .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
            .OrderByDescending(x => x.Id).ToListAsync();
             }
             else if (categoryId == 0 && statusType != 0)
@@ -669,7 +671,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
            .ThenInclude(z => z.Departments)
            .ThenInclude(z => z.Positions)
            .Include(z => z.CategoryTicket)
-           .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+           .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
            .OrderByDescending(x => x.Id).ToListAsync();
             }
             else
@@ -685,7 +687,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
                .ThenInclude(z => z.Departments)
                .ThenInclude(z => z.Positions)
                .Include(z => z.CategoryTicket)
-               .Include(z => z.BusinessTravel).Include(z => z.VacationLeave).Include(z => z.Permission)
+               .Include(z => z.BusinessTravels).Include(z => z.VacationLeave).Include(z => z.Permission)
                .OrderByDescending(x => x.Id).ToListAsync();
             }
         }

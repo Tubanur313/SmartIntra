@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    partial class IntranetContextModelSnapshot : ModelSnapshot
+    [Migration("20220831103010_multiplaceBusnessTripTicket")]
+    partial class multiplaceBusnessTripTicket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1321,7 +1323,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int?>("PlaceId")
+                    b.Property<int>("PlaceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -2264,7 +2266,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 9, 1, 11, 17, 7, 373, DateTimeKind.Local).AddTicks(7566));
+                        .HasDefaultValue(new DateTime(2022, 8, 31, 14, 30, 9, 136, DateTimeKind.Local).AddTicks(4339));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -4312,7 +4314,9 @@ namespace SmartIntranet.DataAccess.Migrations
 
                     b.HasOne("SmartIntranet.Entities.Concrete.Place", "Place")
                         .WithMany()
-                        .HasForeignKey("PlaceId");
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SmartIntranet.Entities.Concrete.IntraTicket.Ticket", "Ticket")
                         .WithMany("BusinessTravels")

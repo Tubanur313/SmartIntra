@@ -281,14 +281,15 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="floatLabel">Ezamiyyət Yeri: </label>
-                                            <select disabled asp-for="BusinessTravelAddDto.PlaceId" class="form-control">
-                                                <option value="" selected disabled hidden>Seçim edin</option>
+                                            <select disabled name="select" asp-for="BusinessTravelPlaceId" name="BusinessTravelPlaceId" data-placeholder="    Seçim edin" class="form-control js-example-basic-single col-sm-12"
+                                                    multiple="multiple">
                                                 @foreach (var item in ViewBag.places)
                                                 {
                                                     <option value="@item.Id">@item.Name</option>
                                                 }
                                             </select>
-                                            <span asp-validation-for="BusinessTravelAddDto.PlaceId" class="text-danger"></span>
+                                            <span asp-validation-for="BusinessTravelPlaceId" class="text-danger"></span>
+                                            <span class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">

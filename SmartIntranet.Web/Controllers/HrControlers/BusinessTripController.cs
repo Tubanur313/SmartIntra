@@ -179,9 +179,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var data = await _businessTripService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
                 var update = _map.Map<BusinessTrip>(model);
-                update.UpdateByUserId = GetSignInUserId();
+                update.UpdateByUserId = current;
                 update.CreatedByUserId = data.CreatedByUserId;
-                update.DeleteByUserId = data.DeleteByUserId;
+                update.DeleteByUserId = null;
                 update.CreatedDate = data.CreatedDate;
                 update.UpdateDate = DateTime.Now;
                 update.DeleteDate = data.DeleteDate;

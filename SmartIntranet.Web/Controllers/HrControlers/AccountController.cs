@@ -428,29 +428,31 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 });
             }
         }
-
+        [Authorize(Policy = "account.getCompanyTreeBySignInUser")]
         public async Task<IActionResult> GetCompanyTreeBySignInUser()
         {
             var userComps = await _userCompService.GetAllIncAsync(GetSignInUserId());
-            var tree = DropDownTreeExtensions.BuildTrees(userComps.Select(x => x.Company).ToList());
+            var tree = userComps.Select(x => x.Company).ToList().BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetCompanyTree()
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _companyService
-                .GetAllAsync(x => !x.IsDeleted));
+            var tree = (await _companyService
+                .GetAllAsync(x => !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
+        [Authorize(Policy = "account.getDepartmentTree")]
         public async Task<IActionResult> GetDepartmentTree(int companyId)
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _departmentService
-                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted));
+            var tree = (await _departmentService
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
+        [Authorize(Policy = "account.getPositionTree")]
         public async Task<IActionResult> GetPositionTree(int departmentId)
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _positionService
-                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted));
+            var tree = (await _positionService
+                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
         [HttpGet]

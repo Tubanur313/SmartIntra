@@ -69,16 +69,34 @@ namespace SmartIntranet.Business.Extension
         }
         private static IList<TreeDto> BuildTrees(int? pid, List<TreeDto> candicates)
         {
-            var subs = candicates.Where(c => c.ParentId == pid).ToList();
-            if (subs.Count() == 0)
+            if (candicates.Any(c => c.ParentId == null))
             {
-                return new List<TreeDto>();
+                var subs = candicates.Where(c => c.ParentId == pid).ToList();
+                if (subs.Count == 0)
+                {
+                    return new List<TreeDto>();
+                }
+                foreach (var i in subs)
+                {
+                    i.Children = BuildTrees(i.Id, candicates);
+                }
+                return subs;
             }
-            foreach (var i in subs)
+            else
             {
-                i.Children = BuildTrees(i.Id, candicates);
+                var subs = candicates.Where(c => c.ParentId > 0).ToList();
+                if (subs.Count == 0)
+                {
+                    return new List<TreeDto>();
+                }
+                foreach (var i in subs)
+                {
+                    i.ParentId = pid;
+                    i.Children = BuildTrees(i.Id, candicates);
+                }
+                return subs;
             }
-            return subs;
+
         }
     }
 }

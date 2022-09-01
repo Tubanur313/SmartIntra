@@ -272,7 +272,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (User.HasAccess("ticket.busnesstravelupdate") && ticket.StatusType == StatusType.Open && ticket.BusinessTravel != null)
+                                                @if (User.HasAccess("ticket.busnesstravelupdate") && ticket.StatusType == StatusType.Open && ticket.BusinessTravels.Count > 0)
                                                 {
                                                     <li>
                                                         <button onclick="showInPopupLg('@Url.Action("BusnessTravelUpdate","Ticket",new {id=ticket.Id},Context.Request.Scheme)','Ezamiyyət')"

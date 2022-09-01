@@ -16,6 +16,7 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public List<int> CheckListId { get; set; }
         public List<int> AppUserWatcherId { get; set; }
         public List<int> ConfirmTicketUserId { get; set; }
+        public List<int> BusinessTravelPlaceId { get; set; }
         public string OrderIds { get; set; }
         public string GrandTotal { get; set; }
         public int TicketCategoryId { get; set; }

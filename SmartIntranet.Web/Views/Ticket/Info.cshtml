@@ -4,6 +4,12 @@
 }
 
 <head>
+    <!-- Select 2 css -->
+    <link rel="stylesheet" href="~/files/bower_components2/select2/dist/css/select2.min.css" />
+    <!-- Multi Select css -->
+    <link rel="stylesheet" type="text/css"
+          href="~/files/bower_components2/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="~/files/bower_components2/multiselect/css/multi-select.css" />
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="~/files/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="~/files/assets/css/jquery.mCustomScrollbar.css">
@@ -41,6 +47,15 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#order" role="tab">
                         <i class="icofont icofont-table"></i>&nbsp; Sifariş
+                    </a>
+                    <div class="slide"></div>
+                </li>
+            }
+            @if (Model.CategoryTicket.TicketType == TicketType.BusinessTrip)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#business" role="tab">
+                        <i class="icofont icofont-travelling"></i>&nbsp; Ezamiyyət
                     </a>
                     <div class="slide"></div>
                 </li>
@@ -98,7 +113,7 @@
                                 <div>
                                     <label class="font-weight-bold f-14-5">Son dəyişiklik Tarixi:</label>
                                     <p>
-                                        @(Model.UpdateDate == null ? "Yenilənməyib":Model.UpdateDate.Value.ToString("dd.MM.yyyy hh:mm"))
+                                        @(Model.UpdateDate == null ? "Yenilənməyib" : Model.UpdateDate.Value.ToString("dd.MM.yyyy hh:mm"))
                                     </p>
                                 </div>
                             </li>
@@ -109,7 +124,7 @@
                                 <div>
                                     <label class="font-weight-bold f-14-5">Deadline Tarixi:</label>
                                     <p>
-                                        @( Model.DeadLineEnd ==null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(Model.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : Model.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
+                                        @(Model.DeadLineEnd == null ? "Təyin Olunmayıb" : Convert.ToDateTime("0001-01-01") == Convert.ToDateTime(Model.DeadLineEnd.ToString()) ? "Təyin Olunmayıb" : Model.DeadLineEnd.Value.ToString("dd/MM/yyyy"))
                                     </p>
                                 </div>
                             </li>
@@ -149,7 +164,7 @@
                                 <div>
                                     <label class="font-weight-bold f-14-5">Yaradılma Tarixi:</label>
                                     <p>
-                                        @(Model.OpenDate!=null?Model.OpenDate.Value.ToString("dd.MM.yyyy hh:mm"):"Təyin edilməyib")
+                                        @(Model.OpenDate != null ? Model.OpenDate.Value.ToString("dd.MM.yyyy hh:mm") : "Təyin edilməyib")
                                     </p>
                                 </div>
                             </li>
@@ -161,7 +176,7 @@
                                 <div>
                                     <label class="font-weight-bold f-14-5">Dəstək:</label>
                                     <p>
-                                        @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.Name+Model.Supporter.Surname} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}" )
+                                        @(Model.Supporter == null ? "Təyin edilməyib" : $"{Model.Supporter.Name + Model.Supporter.Surname} / {Model.Supporter.Company?.Name}/ {Model.Supporter.Department?.Name}/ {Model.Supporter.Position?.Name}")
                                     </p>
                                 </div>
                             </li>
@@ -172,7 +187,7 @@
                                 <div>
                                     <label class="font-weight-bold f-14-5">Ticket əlavə edən:</label>
                                     <p>
-                                        @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.Name+Model.Employee.Surname} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}" )
+                                        @(Model.Employee == null ? "Təyin edilməyib" : $"{Model.Employee.Name + Model.Employee.Surname} / {Model.Employee.Company?.Name}/ {Model.Employee.Department?.Name}/ {Model.Employee.Position?.Name}")
                                     </p>
                                 </div>
                             </li>
@@ -185,7 +200,7 @@
                             @*<span asp-validation-for="Description" class="text-danger"></span>*@
                             <label class="font-weight-bold f-14-5" style="letter-spacing: 1px;">  Ətraflı: </label>
                             <hr />
-                            <p>@(Html.Raw(Model.Description!=null?Model.Description:"Ətraflı məlumat yoxdur"))</p>
+                            <p>@(Html.Raw(Model.Description != null ? Model.Description : "Ətraflı məlumat yoxdur"))</p>
                             <span class="messages"></span>
                         </div>
                     </div>
@@ -295,7 +310,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="tab-pane" id="order" role="tabpanel">
                 <div class="page-body">
                     <div class="row">
@@ -356,9 +370,105 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane" id="business" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-12 col-xl-12">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="row">
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="floatLabel">Ezamiyyət Yeri: </label>
+
+                                                <ul class="">
+
+                                                    @foreach (var item in Model.BusinessTravels)
+                                                    {
+                                                        <li class="d-flex justify-content-between mb-2">
+                                                            <span> @item.Place.Name </span>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="floatLabel">Ezamiyyət Əsası: </label>
+                                                <select disabled asp-for="BusinessTravels.FirstOrDefault().CauseId" class="form-control">
+                                                    <option value="" selected disabled hidden>Seçim edin</option>
+                                                    @foreach (var item in ViewBag.cause)
+                                                    {
+                                                        <option value="@item.Id">@item.Name</option>
+                                                    }
+                                                </select>
+                                                <span asp-validation-for="BusinessTravels.FirstOrDefault().CauseId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="floatLabel">  Başlama Tarixi: </label>
+                                                <input disabled type="date" class="form-control" asp-for="BusinessTravels.FirstOrDefault().StartDate" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="floatLabel">  Bitmə Tarixi: </label>
+                                                <input disabled type="date" class="form-control" asp-for="BusinessTravels.FirstOrDefault().EndDate" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3 ">
+                                            <label>  Yerləşmə: </label>
+                                            <div class="checkbox disabled" style="pointer-events: none; opacity: 0.4;cursor: no-drop;">
+                                                <input disabled asp-for="BusinessTravels.FirstOrDefault().Accommodation" type="checkbox" class="check_switch" data-size="small">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>  Nəqliyyat: </label>
+                                            <div class="checkbox disabled" style="pointer-events: none; opacity: 0.4;cursor: no-drop;">
+                                                <input disabled asp-for="BusinessTravels.FirstOrDefault().Transport" type="checkbox" class="check_switch" data-size="small">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 offset-3 mt-2">
+                                            <div class="form-group" style="pointer-events: none; opacity: 0.4;cursor: no-drop;">
+                                                <label class="floatLabel">Qalacağ müddət: </label>
+                                                <input type="number" class="form-control " max="365" asp-for="BusinessTravels.FirstOrDefault().Staylength" autocomplete="off">
+                                                <span class="messages"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<!-- Select 2 js -->
+<script type="text/javascript" src="~/files/bower_components2/select2/dist/js/select2.full.min.js">
+</script>
+<!-- Multiselect js -->
+<script type="text/javascript" src="~/files/bower_components2/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="~/files/bower_components2/multiselect/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="~/files/assets/js/jquery.quicksearch.js"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="~/files/assets/pages/advance-elements/select2-custom.js"></script>
+
 <!-- slick js -->
 <script type="text/javascript" src="~/files/lib/slick-carousel/slick.min.js"></script>
 <!-- jquery slimscroll js -->
@@ -372,12 +482,12 @@
 <!-- ckeditor js -->
 <script type="text/javascript" src="~/files/lib/ckeditor/ckeditor.js"></script>
 <script class="removable">
-    $(document).ready(function() {
-        $(".get-count-discuss").click(function() {
-            $("#countId").html(`Müzakirələr (@(ViewBag.DiscCount>0 ? ViewBag.DiscCount:0))`);
+    $(document).ready(function () {
+        $(".get-count-discuss").click(function () {
+            $("#countId").html(`Müzakirələr (@(ViewBag.DiscCount > 0 ? ViewBag.DiscCount : 0))`);
         });
-        $("#countId").click(function() {
-            $("#discussing").toggle(function() {
+        $("#countId").click(function () {
+            $("#discussing").toggle(function () {
                 if ($(this).css('display') != 'none') {
                     $.ajax({
                         url: `@Url.Action("GetDiscuss","Discuss")`,
@@ -385,32 +495,32 @@
                         dataType: "html",
                         data: ({
                             ticketId: @Model.Id
-                                        }),
-                        success: function(response) {
+                                                        }),
+                        success: function (response) {
                             $("#discussing").html(response)
                         },
-                        error: function(response) {
+                        error: function (response) {
                         }
                     });
                 }
                 else {
                     $("#discussing").html(`
-                                            <div class="loader animation-start">
-                                                <span class="circle delay-1 size-2"></span>
-                                                <span class="circle delay-2 size-4"></span>
-                                                <span class="circle delay-3 size-6"></span>
-                                                <span class="circle delay-4 size-7"></span>
-                                                <span class="circle delay-5 size-7"></span>
-                                                <span class="circle delay-6 size-6"></span>
-                                                <span class="circle delay-7 size-4"></span>
-                                                <span class="circle delay-8 size-2"></span>
-                                            </div>`)
+                                                            <div class="loader animation-start">
+                                                                <span class="circle delay-1 size-2"></span>
+                                                                <span class="circle delay-2 size-4"></span>
+                                                                <span class="circle delay-3 size-6"></span>
+                                                                <span class="circle delay-4 size-7"></span>
+                                                                <span class="circle delay-5 size-7"></span>
+                                                                <span class="circle delay-6 size-6"></span>
+                                                                <span class="circle delay-7 size-4"></span>
+                                                                <span class="circle delay-8 size-2"></span>
+                                                            </div>`)
                 }
             });
         });
-        $("#fayl-photos").click(function() {
+        $("#fayl-photos").click(function () {
             $(this).text("Bağla");
-            $("#photo").toggle(function() {
+            $("#photo").toggle(function () {
                 if ($(this).css('display') != 'none') {
                     $.ajax({
                         url: `@Url.Action("GetPhoto","Photo")`,
@@ -418,28 +528,28 @@
                         dataType: "html",
                         data: ({
                             ticketId: @Model.Id
-                                            }),
-                        success: function(response) {
+                                                            }),
+                        success: function (response) {
                             $("#photo").html(response)
                         },
-                        error: function(response) {
+                        error: function (response) {
                         }
                     });
                 }
                 else {
                     $("#fayl-photos").text("Göstər");
                     $("#photo").html(`
-                                                         <div class="col-md-12" >
-                                                             <div class="cell preloader5 loader-block" >
-                                                                 <div class="circle-5 l"></div>
-                                                                 <div class="circle-5 m"></div>
-                                                                 <div class="circle-5 r"></div>
-                                                             </div>
-                                                         </div>`)
+                                                                         <div class="col-md-12" >
+                                                                             <div class="cell preloader5 loader-block" >
+                                                                                 <div class="circle-5 l"></div>
+                                                                                 <div class="circle-5 m"></div>
+                                                                                 <div class="circle-5 r"></div>
+                                                                             </div>
+                                                                         </div>`)
                 }
             });
         });
-        $("#custom-button").click(function() {
+        $("#custom-button").click(function () {
         });
         CKEDITOR.replace('comments');
         $('.ticket-slide').slick({
@@ -451,7 +561,7 @@
             prevArrow: false,
             nextArrow: false
         });
-        $('#send').on("click", function() {
+        $('#send').on("click", function () {
 
             let comment = CKEDITOR.instances['comments'].getData();
             let id = $("#comments").data("id");
@@ -470,43 +580,43 @@
                 type: "get",
                 data: formData,
                 async: false,
-                success: function(response) {
+                success: function (response) {
                     var html = ` <div class="media">
-                                        <div class="media-body b-b-theme social-client-description">
-                                        <div class="chat-header text-success">
-                                         ${[response.fulname]}
-                                                  <span class="text-muted">
-                                                     ${[response.date]}
-                                                  </span>
-                                              </div>
-                                              <p class="text-muted">
-                                                ${[response.comment]}
-                                              </p>
-                                          </div>
-                                      </div>`
+                                                        <div class="media-body b-b-theme social-client-description">
+                                                        <div class="chat-header text-success">
+                                                         ${[response.fulname]}
+                                                                  <span class="text-muted">
+                                                                     ${[response.date]}
+                                                                  </span>
+                                                              </div>
+                                                              <p class="text-muted">
+                                                                ${[response.comment]}
+                                                              </p>
+                                                          </div>
+                                                      </div>`
                     $("#discussing").prepend(html);
                     $("#countId").text(`Müzakirələr (${[response.count]})`);
                     CKEDITOR.instances['comments'].setData('');
                 },
-                error: function(response) {
+                error: function (response) {
                 }
             });
         });
-        $(document).on("click", "#custom-button", function() {
+        $(document).on("click", "#custom-button", function () {
             $("#sub-btn").removeClass("disable");
             $("#photo").hide("slow");
             $("#fayl-photos").text("Göstər");
             $("#photo").html(`
-                                          <div class="col-md-12" >
-                                              <div class="cell preloader5 loader-block">
-                                                  <div class="circle-5 l"></div>
-                                                  <div class="circle-5 m"></div>
-                                                  <div class="circle-5 r"></div>
-                                              </div>
-                                          </div>
-                                          `)
+                                                          <div class="col-md-12" >
+                                                              <div class="cell preloader5 loader-block">
+                                                                  <div class="circle-5 l"></div>
+                                                                  <div class="circle-5 m"></div>
+                                                                  <div class="circle-5 r"></div>
+                                                              </div>
+                                                          </div>
+                                                          `)
         });
-        $(document).on("click", "#sub-btn", function() {
+        $(document).on("click", "#sub-btn", function () {
             let id = $("#Id").val();
             let file = $("input[name='files']")[0];
             let data = new FormData();
@@ -524,18 +634,18 @@
                 cache: false,
                 processData: false,
                 contentType: false,
-                beforeSend: function() {
+                beforeSend: function () {
                     $("#loadspin").removeClass("d-none");
                 },
-                success: function(res) {
+                success: function (res) {
                     $("#sub-btn").addClass("disable");
-                    setTimeout(function() { $("#loadspin").addClass("d-none"); }, 9000);
+                    setTimeout(function () { $("#loadspin").addClass("d-none"); }, 9000);
                     $("#image_preview").html("");
                 },
-                error: function(error) {
+                error: function (error) {
                     $("#loadspin").addClass("d-none");
                 },
-                complete: function() {
+                complete: function () {
                     $("#sub-btn").addClass("disable");
                     $("#image_preview").html("");
                     swal("UĞUR!", "Fayllar uğurla yükləndi !", "success");

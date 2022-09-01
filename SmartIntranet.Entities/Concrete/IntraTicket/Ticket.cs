@@ -36,7 +36,7 @@ namespace SmartIntranet.Entities.Concrete.IntraTicket
         public virtual ICollection<TicketOrder> TicketOrders { get; set; }
         public virtual ICollection<TicketCheckList> TicketCheckLists { get; set; }
         public virtual ICollection<ConfirmTicketUser> ConfirmTicketUsers { get; set; }
-        public BusinessTravel BusinessTravel { get; set; }
+        public virtual ICollection<BusinessTravel>  BusinessTravels { get; set; }
         public VacationLeave VacationLeave { get; set; }
         public Permission Permission { get; set; }
     }

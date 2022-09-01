@@ -130,9 +130,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
                 foreach (var el in business_trips)
                 {
-                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
-                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.FullName = "Multi";
                     el.ContractKey = business_trip;
                     el.ContractName = el_business_trip;
                     result_list.Add(el);
@@ -271,9 +269,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
                 foreach (var el in business_trips)
                 {
-                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
-                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.FullName = "Multi";
                     el.ContractKey = business_trip;
                     el.ContractName = el_business_trip;
                     result_list.Add(el);

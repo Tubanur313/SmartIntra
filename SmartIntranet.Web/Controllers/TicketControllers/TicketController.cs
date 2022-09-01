@@ -28,6 +28,7 @@ using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.DTO.DTOs.WatcherDto;
+using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Membership;
@@ -414,14 +415,18 @@ namespace SmartIntranet.Web.Controllers
                 add.CreatedDate = DateTime.Now;
                 add.OpenDate = DateTime.Now;
                 var result = await _ticketService.AddReturnEntityAsync(add);
-
-                if (model.BusinessTravelAddDto != null && model.BusinessTravelAddDto.ConfirmSend)
+                if (model.BusinessTravelAddDto != null && model.BusinessTravelAddDto.ConfirmSend && model.BusinessTravelPlaceId != null)
                 {
-                    var addBusnessTravel = _map.Map<BusinessTravel>(model.BusinessTravelAddDto);
-                    addBusnessTravel.CreatedByUserId = GetUserId;
-                    addBusnessTravel.CreatedDate = DateTime.Now;
-                    addBusnessTravel.TicketId = result.Id;
-                    await _businessTravelService.AddAsync(addBusnessTravel);
+                    foreach (var placeId in model.BusinessTravelPlaceId)
+                    {
+                        var addBusnessTravel = _map.Map<BusinessTravel>(model.BusinessTravelAddDto);
+                        addBusnessTravel.PlaceId = placeId;
+                        addBusnessTravel.CreatedByUserId = GetUserId;
+                        addBusnessTravel.CreatedDate = DateTime.Now;
+                        addBusnessTravel.TicketId = result.Id;
+                        await _businessTravelService.AddAsync(addBusnessTravel);
+                    }
+
                 }
                 if (model.VacationLeaveAddDto != null && model.VacationLeaveAddDto.ConfirmSend)
                 {
@@ -602,6 +607,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 TempData["error"] = Messages.Error.notFound;
             }
+            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
             ViewBag.GrandTotal = _ticketService.GetAsync(x => x.Id == id).Result.GrandTotal;
             ViewBag.DiscCount = _discussionService.GetAllAsync(x => x.TicketId == id).Result.Count;
             return View(data);
@@ -987,15 +993,11 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.busnesstravelupdate")]
         public async Task<IActionResult> BusnessTravelUpdate(int id)
         {
-            BusinessTravelUpdateDto data = _map
+            var data = _map
                 .Map<BusinessTravelUpdateDto>(await _businessTravelService
-                .GetAsync(x => x.TicketId == id));
-            if (data is null)
-            {
-                TempData["error"] = Messages.Error.notFound;
-                ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
-                ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
-            }
+                .FindByTicketIdInclAsync(id));
+            var business = await _businessTravelService.FindByTicketIdIncludeAsync(id);
+            data.BusinessTravels = business;
             ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
             ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
             return View(data);
@@ -1007,17 +1009,44 @@ namespace SmartIntranet.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var data = await _businessTravelService.GetAsync(x => x.TicketId == model.TicketId);
+                var current = GetSignInUserId();
+                var data = await _businessTravelService.FindByTicketIdIncludeAsync(model.TicketId);
                 var update = _map.Map<BusinessTravel>(model);
-                update.Id = data.Id;
-                update.UpdateByUserId = GetSignInUserId();
-                update.CreatedByUserId = data.CreatedByUserId;
-                update.DeleteByUserId = data.DeleteByUserId;
-                update.CreatedDate = data.CreatedDate;
-                update.UpdateDate = DateTime.Now;
-                update.DeleteDate = data.DeleteDate;
+                if (model.BusinessTravelPlaceId.Count > 0)
+                {
+                    foreach (var id in model.BusinessTravelPlaceId)
+                    {
+                        var resultBool = _businessTravelService
+                            .GetAllAsync(x => x.TicketId == model.TicketId).Result
+                            .Find(x=>x.PlaceId==id);
+                        
+                        if (resultBool is null)
+                        {
+                            var addBusnessTravel = _map.Map<BusinessTravel>(model);
+                            addBusnessTravel.PlaceId = id;
+                            addBusnessTravel.CreatedByUserId = current;
+                            addBusnessTravel.CreatedDate = DateTime.Now;
+                            addBusnessTravel.TicketId =model.TicketId;
+                            await _businessTravelService.AddAsync(addBusnessTravel);
+                        }
+                        else
+                        {
+                            var bData = data.Find(x => x.PlaceId == id);
 
-                await _businessTravelService.UpdateAsync(update);
+                            if (bData != null)
+                            {
+                                update.Id = bData.Id;
+                                update.PlaceId = bData.PlaceId;
+                                update.UpdateByUserId = current;
+                                update.CreatedByUserId = bData.CreatedByUserId;
+                                update.CreatedDate = bData.CreatedDate;
+                            }
+
+                            update.UpdateDate = DateTime.Now;
+                            await _businessTravelService.UpdateAsync(update);
+                        }
+                    }
+                }
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
