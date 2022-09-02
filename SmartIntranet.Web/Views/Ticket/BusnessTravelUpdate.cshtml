@@ -20,12 +20,12 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="floatLabel">  Ezamiyyət Yeri: </label>
+                                    <label class="floatLabel"> Ezamiyyət Yeri: </label>
                                     <select name="select" asp-for="BusinessTravelPlaceId" name="BusinessTravelPlaceId" data-placeholder="    Seçim edin" class="form-control js-example-basic-single col-sm-12"
                                             multiple="multiple">
                                         @foreach (var item in Model.BusinessTravels)
                                         {
-                                            <option selected  value="@item.Place.Id">@item.Place.Name</option>
+                                            <option selected value="@item.Place.Id">@item.Place.Name</option>
                                         }
                                         @foreach (var item in ViewBag.places)
                                         {
@@ -33,6 +33,8 @@
                                         }
 
                                     </select>
+                                    <span asp-validation-for="BusinessTravelPlaceId" class="text-danger"></span>
+
                                     <span class="text-danger"></span>
                                 </div>
                             </div>
@@ -138,6 +140,34 @@
                 $('#Staylength').parent().addClass('d-none')
                 $('#Staylength').prop('disabled', true);
             }
-        })
+        });
+        
+        
+    
+        $('#BusinessTravelPlaceId').on('select2:unselecting', function (e) {
+            var dataId = e.params.args.data.id;
+            $.ajax({
+                type: 'get',
+                url: '@Url.Action($"BusinessTravelDelete",$"Ticket")',
+                datatype: 'json',
+                data: {
+                    id: dataId,
+                    ticketId :@Model.TicketId
+                },
+                success: function (response) {
+                    //sorgu ugurla neticelenende
+                    if (response.error == true) {
+
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                },
+                error: function (response) {
+                    //sorgu ugursuz neticelenende
+
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        });
     })
 </script>

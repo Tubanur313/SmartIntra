@@ -910,6 +910,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
 
                 }
+                //ViewBag.CompId = 
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated

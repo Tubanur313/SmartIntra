@@ -602,7 +602,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.info")]
         public async Task<IActionResult> Info(int id)
         {
-            TicketInfoDto data = _map.Map<TicketInfoDto>(await _ticketService.FindAllIncludeForInfoAsync(id));
+            var data = _map.Map<TicketInfoDto>(await _ticketService.FindAllIncludeForInfoAsync(id));
             if (data is null)
             {
                 TempData["error"] = Messages.Error.notFound;
@@ -610,6 +610,8 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
             ViewBag.GrandTotal = _ticketService.GetAsync(x => x.Id == id).Result.GrandTotal;
             ViewBag.DiscCount = _discussionService.GetAllAsync(x => x.TicketId == id).Result.Count;
+            data.VacationLeave = await _vacationLeaveService.GetAsync(x => x.TicketId == id);
+            data.Permission = await _permissionService.GetAsync(x => x.TicketId == id);
             return View(data);
         }
 
@@ -621,6 +623,12 @@ namespace SmartIntranet.Web.Controllers
             delete.DeleteDate = DateTime.Now;
             delete.IsDeleted = true;
             await _ticketService.UpdateAsync(delete);
+        }        
+
+        public async Task BusinessTravelDelete(int id,int ticketId)
+        {
+            var delete = await _businessTravelService.GetAsync(x=>x.TicketId== ticketId&& x.PlaceId==id);
+            await _businessTravelService.DeleteByIdAsync(delete.Id);
         }
         #endregion
         #region Ticket Modals 

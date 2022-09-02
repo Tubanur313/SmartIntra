@@ -365,7 +365,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
 
                 var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
-                IntranetUser appUser = new IntranetUser
+                var appUser = new IntranetUser
                 {
                     UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." + user.Fathername),
                     Name = user.Name,
@@ -679,7 +679,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsEditable).ToListAsync();
 
                         List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
-                        if (model.UserVacationRemains != null && model.UserVacationRemains.Count() > 0)
+                        if (model.UserVacationRemains != null && model.UserVacationRemains.Count > 0)
                         {
                             foreach (var el in model.UserVacationRemains)
                             {

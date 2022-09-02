@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
+using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Membership;
@@ -29,6 +31,8 @@ namespace SmartIntranet.DTO.DTOs.TicketDto
         public IntranetUser Supporter { get; set; }
         public int? EmployeeId { get; set; }
         public IntranetUser Employee { get; set; }
+        public VacationLeave VacationLeave { get; set; }
+        public Permission Permission { get; set; }
         public PriorityType PriorityType { get; set; }
         public StatusType StatusType { get; set; }
         public ICollection<BusinessTravelUpdateDto> BusinessTravels { get; set; }
