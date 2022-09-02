@@ -25,6 +25,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Int
            .Where(x => x.UserId == signInUserId && !x.IsDeleted)
            .Include(x => x.Company)
            .Include(x => x.User)
+           .AsNoTracking()
            .ToListAsync();
         }
     }
