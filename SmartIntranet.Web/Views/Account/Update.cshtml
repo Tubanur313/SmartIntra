@@ -540,7 +540,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label class="floatLabel">  Qalıq gün: </label>
-                                            <input type="text" class="form-control" asp-for="UserVacationRemains[i].RemainCount" autocomplete="off">
+                                            <input type="text" class="form-control remain-count-number" asp-for="UserVacationRemains[i].RemainCount" autocomplete="off">
 
                                             <span class="messages"></span>
                                         </div>
@@ -619,6 +619,10 @@
                 format: "dd.mm.yyyy"
             })
         })
+
+         $('.remain-count-number').each(function() {
+            $(this).rules("remove", "number");
+         })
 
         function getTotalCount() {
             $('.remain-count').change(function () {
@@ -834,7 +838,27 @@
             let rowCount = parseInt($("#rowCount").val());
             rowCount++;
             $("#rowCount").val(rowCount);
-            let html = `<div class="row"> <div class="col-sm-6"> <div class="form-group"> <label class="floatLabel"> Yer: </label> <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> <span class="messages"></span> </div> </div><div class="col-sm-6" > <div class="form-group"> <label class="floatLabel"> Tarix: </label> <div class="input-group input-daterange mb-0"> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history experienceStart-${rowCount - 1}" autocomplete="off"> <div class="input-group-addon">to</div> <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history experienceEnd-${rowCount - 1}" autocomplete="off"> </div> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceStart" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceStart-error" class=""></span></span></span> <span class="text-danger field-validation-error" data-valmsg-for="UserExperiences[${rowCount - 1}].ExperienceEnd" data-valmsg-replace="true"><span id="UserExperiences[${rowCount - 1}].ExperienceEnd-error" class=""></span></span> <span class="messages"></span> </div> </div> </div>`
+            let html = `<div class="row"> 
+                            <div class="col-sm-5"> 
+                                <div class="form-group"> 
+                                    <label class="floatLabel"> Yer: </label> 
+                                    <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> 
+                                </div> 
+                            </div>
+                            <div class="col-sm-5" > 
+                                <div class="form-group"> 
+                                    <label class="floatLabel"> Tarix: </label> 
+                                    <div class="input-group input-daterange mb-0"> 
+                                        <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history experienceStart-${rowCount - 1}" autocomplete="off"> 
+                                        <div class="input-group-addon">to</div> 
+                                        <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history experienceEnd-${rowCount - 1}" autocomplete="off"> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                            <div class="col-sm-2 text-right">
+                                Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
+                            </div>
+                        </div>`
             $('#row-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -845,6 +869,7 @@
             $('.input-daterange').change(function () {
                 getUserVacationDay();
             });
+            removeExp();
         });
 
         $("#addVacDay").click(function (e) {
@@ -890,7 +915,13 @@
             })
         }
 
-        $("#Profile").change(function (e) {
+        function removeExp() {
+            $('.removeExp').click(function() {
+                $(this).parent().parent().remove();
+            })
+        }
+
+        $("#Profile").change(function(e) {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
         });
