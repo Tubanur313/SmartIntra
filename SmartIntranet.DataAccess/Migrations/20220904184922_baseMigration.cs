@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
-    public partial class CreatDb : Migration
+    public partial class baseMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -263,7 +263,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SMTPEmailSettings",
+                name: "Settings",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -276,17 +276,24 @@ namespace SmartIntranet.DataAccess.Migrations
                     DeleteByUserId = table.Column<int>(nullable: true),
                     DeleteDate = table.Column<DateTime>(nullable: true),
                     UserName = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false),
-                    Host = table.Column<string>(nullable: false),
-                    Port = table.Column<int>(nullable: false),
-                    IsSSL = table.Column<bool>(nullable: false, defaultValue: false),
-                    FromEmail = table.Column<string>(nullable: false),
+                    TicketMail = table.Column<string>(nullable: false),
+                    TicketPassword = table.Column<string>(nullable: false),
+                    TicketHost = table.Column<string>(nullable: false),
+                    TicketPort = table.Column<int>(nullable: false),
+                    HrMail = table.Column<string>(nullable: false),
+                    HrPassword = table.Column<string>(nullable: false),
+                    HrHost = table.Column<string>(nullable: false),
+                    HrPort = table.Column<int>(nullable: false),
                     BaseUrl = table.Column<string>(nullable: false),
-                    IsDefault = table.Column<bool>(nullable: false, defaultValue: false)
+                    CompanyLogo = table.Column<string>(nullable: true),
+                    CompanyName = table.Column<string>(nullable: true),
+                    CompanySite = table.Column<string>(nullable: true),
+                    CompanyAddress = table.Column<string>(nullable: true),
+                    CompanyPhone = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SMTPEmailSettings", x => x.Id);
+                    table.PrimaryKey("PK_Settings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -658,7 +665,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     TicketId = table.Column<int>(nullable: false),
-                    PlaceId = table.Column<int>(nullable: false),
+                    PlaceId = table.Column<int>(nullable: true),
                     CauseId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -675,7 +682,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         column: x => x.PlaceId,
                         principalTable: "Places",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_BusinessTravels_Tickets_TicketId",
                         column: x => x.TicketId,
@@ -884,7 +891,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     DeleteDate = table.Column<DateTime>(nullable: true),
                     ContractFileType = table.Column<string>(nullable: true),
                     ContractStart = table.Column<DateTime>(nullable: false),
-                    ContractEnd = table.Column<DateTime>(nullable: false),
+                    ContractEnd = table.Column<DateTime>(nullable: true),
                     CommandDate = table.Column<DateTime>(nullable: false),
                     ContractNumber = table.Column<string>(nullable: false),
                     CommandNumber = table.Column<string>(nullable: true),
@@ -1249,6 +1256,27 @@ namespace SmartIntranet.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserComps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    CreatedByUserId = table.Column<int>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    UpdateByUserId = table.Column<int>(nullable: true),
+                    UpdateDate = table.Column<DateTime>(nullable: true),
+                    DeleteByUserId = table.Column<int>(nullable: true),
+                    DeleteDate = table.Column<DateTime>(nullable: true),
+                    UserId = table.Column<int>(nullable: false),
+                    CompanyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserComps", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vacancies",
                 columns: table => new
                 {
@@ -1267,7 +1295,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     Salary = table.Column<string>(maxLength: 100, nullable: false),
                     Occupations = table.Column<string>(maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(maxLength: 300, nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 7, 26, 10, 15, 16, 295, DateTimeKind.Local).AddTicks(6001)),
+                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 9, 4, 22, 49, 22, 595, DateTimeKind.Local).AddTicks(8774)),
                     EndDate = table.Column<DateTime>(nullable: false),
                     City = table.Column<string>(maxLength: 100, nullable: true),
                     Address = table.Column<string>(maxLength: 200, nullable: true),
@@ -2039,8 +2067,7 @@ namespace SmartIntranet.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessTravels_TicketId",
                 table: "BusinessTravels",
-                column: "TicketId",
-                unique: true);
+                column: "TicketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessTripFiles_BusinessTripId",
@@ -2343,6 +2370,16 @@ namespace SmartIntranet.DataAccess.Migrations
                 name: "IX_Tickets_SupporterId",
                 table: "Tickets",
                 column: "SupporterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserComps_CompanyId",
+                table: "UserComps",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserComps_UserId",
+                table: "UserComps",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserContractFiles_AppUserId",
@@ -2673,6 +2710,23 @@ namespace SmartIntranet.DataAccess.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_UserComps_Users_UserId",
+                table: "UserComps",
+                column: "UserId",
+                principalSchema: "Membership",
+                principalTable: "Users",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserComps_Companies_CompanyId",
+                table: "UserComps",
+                column: "CompanyId",
+                principalTable: "Companies",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Vacancies_Companies_CompanyId",
                 table: "Vacancies",
                 column: "CompanyId",
@@ -2748,7 +2802,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 name: "ReportEmployees");
 
             migrationBuilder.DropTable(
-                name: "SMTPEmailSettings");
+                name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "StockDiscusses");
@@ -2764,6 +2818,9 @@ namespace SmartIntranet.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "TicketOrders");
+
+            migrationBuilder.DropTable(
+                name: "UserComps");
 
             migrationBuilder.DropTable(
                 name: "UserContractFiles");

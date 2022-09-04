@@ -2264,7 +2264,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 9, 1, 11, 17, 7, 373, DateTimeKind.Local).AddTicks(7566));
+                        .HasDefaultValue(new DateTime(2022, 9, 4, 22, 49, 22, 595, DateTimeKind.Local).AddTicks(8774));
 
                     b.Property<string>("Title")
                         .IsRequired()
