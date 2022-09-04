@@ -391,17 +391,10 @@
                             </select>
                             <span asp-validation-for="WorkGraphicId" class="text-danger"></span>
                         </div>
-
                     </div>
                 </div>
 
-
                 <div class="tab-pane" id="home4" role="tabpanel">
-
-                    <div id="row-box">
-                        <input id="rowCount" type="hidden" value="0" />
-                    </div>
-
                     <div id="row-box">
                         <input id="rowCount" type="hidden" value="@Model.UserExperiences.Count" />
                         @for (var i = 0; i < Model.UserExperiences.Count; i++)
@@ -911,12 +904,18 @@
 
         function removeDay() {
             $('.removeVacDay').click(function() {
+                let rowCount = parseInt($("#vacCount").val());
+                rowCount--;
+                $("#vacCount").val(rowCount);
                 $(this).parent().parent().remove();
             })
         }
 
         function removeExp() {
             $('.removeExp').click(function() {
+                let rowCount = parseInt($("#rowCount").val());
+                rowCount--;
+                $("#rowCount").val(rowCount);
                 $(this).parent().parent().remove();
             })
         }
