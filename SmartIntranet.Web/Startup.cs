@@ -75,15 +75,16 @@ namespace SmartTicket.Web
             //IntranetDBSeed.SeedTerminationItem(app);
             //IntranetDBSeed.SeedContractType(app);
             app.UseMiddleware<SecurityHeadersMiddleware>();
+            
+            var cultureInfo = new CultureInfo("az-AZ");
             var supportedCultures = new[]
             {
-               new CultureInfo("az-AZ"),
-
+               cultureInfo
             };
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("ru-RU"),
+                DefaultRequestCulture = new RequestCulture("az-AZ"),
                 SupportedCultures=supportedCultures,
                 SupportedUICultures=supportedCultures
             });
