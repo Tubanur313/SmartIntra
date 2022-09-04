@@ -8,7 +8,6 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation.ArchiveValidat
         public ArchiveAddValidator()
         {
             RuleFor(I => I.Name).NotNull().WithMessage("Ad boş ola bilməz");
-            RuleFor(I => I.AddedByUserId).NotNull().WithMessage("İstifadəçi boş ola bilməz");
             RuleFor(I => I.CompanyId).NotNull().WithMessage("Şirkət boş ola bilməz");
             RuleFor(I => I.DepartmentId).NotNull().WithMessage("Şöbə boş ola bilməz");
         }

@@ -16,7 +16,7 @@ using SmartIntranet.Business.Extension;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class CompanyController : BaseIdentityController
     {

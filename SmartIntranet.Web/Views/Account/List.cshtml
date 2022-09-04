@@ -22,7 +22,7 @@
                 <div class="col-sm-3">
                     <label class="floatLabel">   Şirkət: </label>
                     <div style="margin-bottom:20px">
-                        <input type="text" class="form-control" id="CompId" name="CompId" style="width:100%">
+                        <input type="text" class="form-control" id="CompId" name="CompId" value="@ViewBag.CompId" style="width:100%">
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -57,8 +57,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
-                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
-                    <i class="icofont icofont-ui-close mr-0"></i>
+                <button id="closeBtn" type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger btn-outline-danger btn-icon">
+                    <strong id="closeBtnX">x</strong>
                 </button>
             </div>
             <div class="modal-body">

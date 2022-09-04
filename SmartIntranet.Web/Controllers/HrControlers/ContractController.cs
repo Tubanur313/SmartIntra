@@ -20,9 +20,11 @@ using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
+using NPOI.SS.Formula.Functions;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class ContractController : BaseIdentityController
     {
@@ -86,6 +88,7 @@ namespace SmartIntranet.Web.Controllers
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
+            ViewBag.CompId = userComp.CompanyId;
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync());
 
@@ -119,19 +122,38 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
-            var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
-            var business_trip = "BUSINESS_TRIP";
-            var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
-            foreach (var el in business_trips)
+            if (userComp.CompanyId > 0)
             {
-                int id = el.BusinessTripUsers.FirstOrDefault().UserId;
-                IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
-                el.ContractKey = business_trip;
-                el.ContractName = el_business_trip;
-                result_list.Add(el);
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted && x.CompanyId == userComp.CompanyId);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    el.FullName = "Multi";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
             }
+            else
+            {
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
+            }
+
+
 
             var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService.GetAllIncCompAsync(x => !x.IsDeleted));
             var termination_chg = "TERMINATION";
@@ -153,17 +175,38 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            if (userComp is null)
+            if (userComp.CompanyId.Equals(null))
             {
                 return View(new List<ContractListDto>());
             }
-            if (result_list.Any())
+
+
+
+
+
+            if (!result_list.Any()) return View(new List<ContractListDto>());
             {
+                List<ContractListDto> model_result_list = new List<ContractListDto>();
+                var multi = result_list.Where(x => x.FullName == "Multi").ToList();
+                var contract = result_list.Where(x => x.FullName != "Multi"
+                                                      && x.User.CompanyId == userComp.CompanyId).ToList();
                 TempData["success"] = success;
                 TempData["error"] = error;
-                return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                if (multi.Count > 0)
+                {
+                    multi.ForEach(x => model_result_list.Add(x));
+                }
+
+                if (contract.Count > 0)
+                {
+                    contract.ForEach(x => model_result_list.Add(x));
+                }
+
+                ViewBag.docType = null;
+                return View(model_result_list
+                    .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate
+                    ).ToList());
             }
-            return View(new List<ContractListDto>());
         }
 
         [HttpPost]
@@ -218,19 +261,38 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
-            var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
-            var business_trip = "BUSINESS_TRIP";
-            var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
-            foreach (var el in business_trips)
+            if (CompId>0)
             {
-                int id = el.BusinessTripUsers.FirstOrDefault().UserId;
-                IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
-                el.ContractKey = business_trip;
-                el.ContractName = el_business_trip;
-                result_list.Add(el);
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted && x.CompanyId==CompId);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    el.FullName = "Multi";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
             }
+            else
+            {
+                var business_trips_org = await _businessTripService.GetAllIncAsync(x => !x.IsDeleted);
+                var business_trips = _map.Map<List<ContractListDto>>(business_trips_org);
+                var business_trip = "BUSINESS_TRIP";
+                var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
+                foreach (var el in business_trips)
+                {
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.ContractKey = business_trip;
+                    el.ContractName = el_business_trip;
+                    result_list.Add(el);
+                }
+            }
+
+
 
             var termination_contracts = _map.Map<List<ContractListDto>>(await _terminationContractService
                 .GetAllIncCompAsync(x => !x.IsDeleted
@@ -262,78 +324,259 @@ namespace SmartIntranet.Web.Controllers
                 result_list.Add(el);
             }
 
-            result_list = result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList();
+            var multi = result_list.Where(x => x.FullName == "Multi").ToList();
+            result_list = result_list
+                    .Where(x => x.FullName != "Multi").ToList();
+
 
             if (Interval is null && DocumentType != null)
             {
                 if (CompId > 0 && PositId == 0 && DepartId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId &&
+                                                         s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId
-                    && s.User.PositionId == PositId
-                    && s.ContractKey == DocumentType
-                    ).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId
+                                                         && s.User.PositionId == PositId
+                                                         && s.ContractKey == DocumentType
+                    ).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
                 }
                 else
                 {
-                    return View(result_list.Where(s => s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
             }
             else if (Interval != null && DocumentType != null)
             {
                 if (CompId > 0 && PositId == 0 && DepartId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r=>r.ContractKey== DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                    && s.User.DepartmentId == DepartId && s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId
-                    && s.User.PositionId == PositId
-                    && s.ContractKey == DocumentType
-                    ).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                          && s.User.DepartmentId == DepartId
+                                                          && s.User.PositionId == PositId
+                                                          && s.ContractKey == DocumentType
+                    ).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else
                 {
-                    return View(result_list.Where(s => s.ContractKey == DocumentType).ToList());
+                    result_list = result_list.Where(s => s.ContractKey == DocumentType).ToList();
+                    if (multi.Count > 0 && multi.Any(r => r.ContractKey == DocumentType))
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    ViewBag.docType = DocumentType;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
+                }
+            } 
+            else if (Interval != null && DocumentType is null)
+            {
+                if (CompId > 0 && PositId == 0 && DepartId == 0)
+                {
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
+                }
+                else if (CompId > 0 && DepartId > 0 && PositId == 0)
+                {
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                    && s.User.DepartmentId == DepartId).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
+                }
+                else if (CompId > 0 && DepartId > 0 && PositId > 0)
+                {
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                          && s.User.DepartmentId == DepartId
+                                                          && s.User.PositionId == PositId
+                    ).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
+                }
+                else
+                {
+                    if (multi.Count > 0 )
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+                    ViewBag.interval = Interval;
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
             }
             else
             {
                 if (CompId > 0 && PositId == 0 && DepartId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
-                    return View(result_list.Where(s => s.User.CompanyId == CompId
-                    && s.User.DepartmentId == DepartId
-                    && s.User.PositionId == PositId
-                    ).ToList());
+                    result_list = result_list.Where(s => s.User.CompanyId == CompId
+                                                         && s.User.DepartmentId == DepartId
+                                                         && s.User.PositionId == PositId
+                    ).ToList();
+                    if (multi.Count > 0)
+                    {
+                        multi.ForEach(x => result_list.Add(x));
+                    }
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+
+                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+
                 }
                 else
                 {
+                    ViewBag.CompId = CompId;
+                    ViewBag.PositId = PositId;
+                    ViewBag.DepartId = DepartId;
+
                     return View(new List<ContractListDto>());
                 }
             }
@@ -350,7 +593,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "contract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => !x.IsDeleted));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
@@ -372,7 +615,10 @@ namespace SmartIntranet.Web.Controllers
             else
             {
                 var current = GetSignInUserId();
-                var result_model = _contractService.AddReturnEntityAsync(_map.Map<Contract>(model)).Result;
+                var add = _map.Map<Contract>(model);
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
+                var result_model = _contractService.AddReturnEntityAsync(add).Result;
 
                 // Keys formats
                 var usr = await _appUserService.FindByUserAllInc(result_model.UserId);
@@ -530,7 +776,7 @@ namespace SmartIntranet.Web.Controllers
                 };
                 if (model.SendMail)
                 {
-                    _emailSender.ContactSendEmail( usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
+                    _emailSender.ContractSendEmail(usr.Fullname, usr.Company.Name, usr.Department.Name, usr.Position.Name, usr.Picture);
                 }
                 return RedirectToAction("List", new
                 {
@@ -581,7 +827,7 @@ namespace SmartIntranet.Web.Controllers
                 var data = await _contractService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
                 var update = _map.Map<Contract>(model);
-                update.UpdateByUserId = GetSignInUserId();
+                update.UpdateByUserId = current;
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;
                 update.CreatedDate = data.CreatedDate;
@@ -664,6 +910,7 @@ namespace SmartIntranet.Web.Controllers
 
 
                 }
+                //ViewBag.CompId = 
                 return RedirectToAction("List", new
                 {
                     success = Messages.Update.updated
@@ -675,9 +922,8 @@ namespace SmartIntranet.Web.Controllers
         public async Task Delete(int id)
         {
             var transactionModel = await _contractService.FindByIdAsync(id);
-            var current = GetSignInUserId();
             transactionModel.DeleteDate = DateTime.Now;
-            transactionModel.DeleteByUserId = current;
+            transactionModel.DeleteByUserId = GetSignInUserId();
             transactionModel.IsDeleted = true;
             await _contractService.UpdateAsync(_map.Map<Contract>(transactionModel));
         }

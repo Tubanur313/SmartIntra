@@ -20,77 +20,77 @@
                                     <th class="text-center">
                                         @if (User.HasAccess("archive.add"))
                                         {
-                                            <button onclick="showInPopup('@Url.Action("Add","Archive",null,Context.Request.Scheme)','Arxiv əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
+                                            <button onclick="showInPopup('@Url.Action($"Add",$"Archive",null,Context.Request.Scheme)','Arxiv əlavə et')" type="button" class="btn btn-outline-success rounded-circle"><i class="icofont icofont-plus m-0"></i></button>
                                         }
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var archive in Model)
-                                {
+                            @foreach (var archive in Model)
+                            {
 
-                                    <tr>
-                                        <td>
-                                             #@archive.Id
-                                        </td>
-                                        <td>@archive.Name</td>
-                                        <td>
-                                            @(archive.CompanyId!=null?archive.Company.Name:"Təyin edilməyib")|
-                                            @(archive.DepartmentId!=null?archive.Department.Name:"Təyin edilməyib")
-                                        </td>
-                                        <td>@(archive.AddedByUserId!=null?archive.AddedByUser.Fullname:"Təyin edilməyib")</td>
-                                        <td>
-                                            @if (!archive.IsDeleted)
-                                            {
-                                                <a class="pl-4" target="_blank" href="~/archive/@archive.File" download>
-                                                    <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
-                                                </a>
-                                            }
-                                            else
-                                            {
-                                                <a class="pl-4 disable">
-                                                    <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
-                                                </a>
-                                            }
-                                        </td>
-                                        <td class="dropdown text-center">
-                                            <button type="button"
+                                <tr>
+                                    <td>
+                                        #@archive.Id
+                                    </td>
+                                    <td>@archive.Name</td>
+                                    <td>
+                                        @(archive.CompanyId != null ? archive.Company.Name : "Təyin edilməyib")|
+                                        @(archive.DepartmentId != null ? archive.Department.Name : "Təyin edilməyib")
+                                    </td>
+                                    <td>@(archive.AddedByUserId != null ? archive.AddedByUser.Fullname : "Təyin edilməyib")</td>
+                                    <td>
+                                        @if (!archive.IsDeleted)
+                                        {
+                                            <a class="pl-4" target="_blank" href="~/archive/@archive.File" download>
+                                                <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="pl-4 disable">
+                                                <i class="fa fa-download" aria-hidden="true" style="color: #404E67"></i>
+                                            </a>
+                                        }
+                                    </td>
+                                    <td class="dropdown text-center">
+                                        <button type="button"
                                                 class="btn
                                                 btn-outline-info
                                                 @*dropdown-toggle*@"
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false">
-                                                <i class="fa fa-list-ul"></i>
-                                            </button>
-                                            <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
-                                                @if (User.HasAccess("archive.update"))
-                                                {
-                                                    <li>
-                                                        <button onclick="showInPopup('@Url.Action("Update","Archive",new {id=archive.Id},Context.Request.Scheme)','Yenilə')"
-                                                        class="btn  btn-default waves-effect md-trigger text-warning">
-                                                            <i class="icofont  icofont-edit text-warning  p-r-15"></i>
-                                                            Yenilə
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (User.HasAccess("archive.delete"))
-                                                {
-                                                    <li>
-                                                        <button onclick="removeItemWithoutReloud(@archive.Id,`@archive.Name`,`@Url.Action("Delete","Archive").ToString()`,this)"
-                                                        class="btn btn-default waves-effect md-trigger  text-danger">
-                                                            <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
-                                                            Sil
-                                                        </button>
-                                                    </li>
-                                                }
+                                            <i class="fa fa-list-ul"></i>
+                                        </button>
+                                        <ul class="dropdown-menu   dropdown-menu-right  b-none   contact-menu ">
+                                            @if (User.HasAccess("archive.update"))
+                                            {
+                                                <li>
+                                                    <button onclick="showInPopup('@Url.Action("Update", "Archive", new {id = archive.Id}, Context.Request.Scheme)','Yenilə')"
+                                                            class="btn  btn-default waves-effect md-trigger text-warning">
+                                                        <i class="icofont  icofont-edit text-warning  p-r-15"></i>
+                                                        Yenilə
+                                                    </button>
+                                                </li>
+                                            }
+                                            @if (User.HasAccess("archive.delete"))
+                                            {
+                                                <li>
+                                                    <button onclick="removeItemWithoutReloud(@archive.Id,`@archive.Name`,`@Url.Action("Delete", "Archive").ToString()`,this)"
+                                                            class="btn btn-default waves-effect md-trigger  text-danger">
+                                                        <i class="icofont icofont-ui-delete text-danger p-r-15"></i>
+                                                        Sil
+                                                    </button>
+                                                </li>
+                                            }
 
-                                            </ul>
-                                        </td>
+                                        </ul>
+                                    </td>
 
-                                    </tr>
+                                </tr>
 
-                                }
+                            }
                             </tbody>
                           
                         </table>

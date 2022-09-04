@@ -12,7 +12,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Int
     {
         public async Task<UserComp> FirstOrDefault(int signInUserId)
         {
-            using var context = new IntranetContext();
+            await using var context = new IntranetContext();
             return await context.UserComps
            .Where(x => x.UserId == signInUserId && !x.IsDeleted)
            .FirstOrDefaultAsync();
@@ -20,11 +20,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Int
 
         public async Task<List<UserComp>> GetAllIncAsync(int signInUserId)
         {
-            using var context = new IntranetContext();
+            await using var context = new IntranetContext();
             return await context.UserComps
            .Where(x => x.UserId == signInUserId && !x.IsDeleted)
            .Include(x => x.Company)
            .Include(x => x.User)
+           .AsNoTracking()
            .ToListAsync();
         }
     }

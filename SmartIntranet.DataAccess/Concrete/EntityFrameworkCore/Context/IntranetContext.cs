@@ -18,12 +18,12 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //Xadica's local connection string
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranetSmart2;Trusted_Connection=False;MultipleActiveResultSets=true");
+            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=RealIntranetSmart2;Trusted_Connection=False;MultipleActiveResultSets=true");
 
-            //optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet6;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer(@"Server=178.63.85.231;Initial Catalog=DemoIntranet7;User Id=mahir;Password=p8Mfs4&6;MultipleActiveResultSets=true");
 
             //Ilkin's local connection string
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmartTesting;Trusted_Connection=False;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=IntranetSmartTesting;Trusted_Connection=False;MultipleActiveResultSets=true");
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -107,7 +107,6 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<BusinessTripUser> BusinessTripUsers { get; set; }
         public DbSet<BusinessTripFile> BusinessTripFiles { get; set; }
         public DbSet<CategoryTicket> CategoryTickets { get; set; }
-        public DbSet<SMTPEmailSetting> SMTPEmailSettings { get; set; }
         public DbSet<CheckList> CheckLists { get; set; }
         public DbSet<ConfirmTicketUser> ConfirmTicketUsers { get; set; }
         public DbSet<Discussion> Discussions { get; set; }
@@ -127,6 +126,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Faq> Faqs { get; set; }
         public DbSet<Archive> Archives { get; set; }
+        public DbSet<Settings> Settings { get; set; }
         #endregion
 
 

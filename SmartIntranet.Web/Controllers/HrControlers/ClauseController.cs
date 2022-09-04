@@ -3,8 +3,6 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DTO.DTOs.ClauseDto;
 using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
-
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +14,7 @@ using System.Threading.Tasks;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class ClauseController : BaseIdentityController
     {

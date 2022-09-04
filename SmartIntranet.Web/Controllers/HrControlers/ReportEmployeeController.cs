@@ -19,7 +19,7 @@ using System.Linq;
 using SmartIntranet.DTO.DTOs;
 using SmartIntranet.Core.Utilities.Messages;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class ReportEmployeeController : BaseIdentityController
     {

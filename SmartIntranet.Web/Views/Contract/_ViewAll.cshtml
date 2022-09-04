@@ -136,7 +136,7 @@
                                         }
                                     </td>
 
-                                    @if (contract.DeleteByUserId == null)
+                                    @if (!contract.IsDeleted)
                                     {
                                     <td class="dropdown text-center">
                                         <button type="button"

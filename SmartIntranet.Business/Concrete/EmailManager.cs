@@ -5,6 +5,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,13 +15,13 @@ namespace SmartIntranet.Business.Concrete
 {
     public class EmailManager : IEmailService
     {
-        private readonly ISmtpEmailService _emailService;
+        private readonly ISettingsService _settingsService;
         private readonly ITicketService _ticketService;
 
-        public EmailManager(ISmtpEmailService emailService, ITicketService ticketService)
+        public EmailManager( ITicketService ticketService, ISettingsService settingsService)
         {
-            _emailService = emailService;
             _ticketService = ticketService;
+            _settingsService = settingsService;
         }
 
         public async void TicketSendEmail(int ticketId, TicketChangeType type, string UserFullName)
@@ -91,7 +92,8 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketOrderFileUpdateMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            //var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -136,7 +138,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -155,7 +157,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketOrderUpdateMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -199,7 +201,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -215,9 +217,10 @@ namespace SmartIntranet.Business.Concrete
             emailMessage.Body = bodyBuilder.ToMessageBody();
             return emailMessage;
         }
+        
         private async Task<MimeMessage> TicketAddEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -255,7 +258,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -274,7 +277,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketUpdateEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -304,7 +307,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -323,7 +326,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketStatusEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -367,7 +370,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -386,7 +389,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketCategoryEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -416,7 +419,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -435,7 +438,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketChecklistEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -465,7 +468,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -484,7 +487,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketPriorityEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -514,7 +517,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -533,7 +536,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketDiscussEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -563,7 +566,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -582,7 +585,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketImageEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -612,7 +615,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -631,7 +634,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketWatcherEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -661,7 +664,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -680,7 +683,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketConfirmUserEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -710,7 +713,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -729,7 +732,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketConfirmAddEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -759,7 +762,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -778,7 +781,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketConfirmEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -808,7 +811,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -827,7 +830,7 @@ namespace SmartIntranet.Business.Concrete
 
         private async Task<MimeMessage> TicketRedirectEmailMessage(int ticketId, string UserFullName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var ticket = await _ticketService.GetIncludeMail(ticketId);
             string callBackUrl = smtpSettings.BaseUrl + "/Ticket/Get/" + ticketId;
 
@@ -857,7 +860,7 @@ namespace SmartIntranet.Business.Concrete
             }
 
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.TicketMail));
             foreach (var item in toEmail)
             {
                 emailMessage.To.Add(MailboxAddress.Parse(item));
@@ -877,35 +880,47 @@ namespace SmartIntranet.Business.Concrete
         private async void Send(MimeMessage mailMessage)
         {
 
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
-            using (var client = new SmtpClient())
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
+            using var client = new SmtpClient();
+            try
             {
-                try
-                {
-                    await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, SecureSocketOptions.StartTls);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    await client.AuthenticateAsync(smtpSettings.FromEmail, smtpSettings.Password);
+                await client.ConnectAsync(smtpSettings.TicketHost, smtpSettings.TicketPort, SecureSocketOptions.StartTls);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.AuthenticateAsync(smtpSettings.TicketMail, smtpSettings.TicketPassword);
 
-                    await client.SendAsync(mailMessage);
-                }
-                catch
-                {
-                    //log an error message or throw an exception, or both.
-                    throw;
-                }
-                finally
-                {
-                    await client.DisconnectAsync(true);
-                    client.Dispose();
-                }
+                await client.SendAsync(mailMessage);
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
+                client.Dispose();
+            }
+        }        
+        private async void HrSend(MimeMessage mailMessage)
+        {
+
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
+            using var client = new SmtpClient();
+            try
+            {
+                await client.ConnectAsync(smtpSettings.HrHost, smtpSettings.HrPort, SecureSocketOptions.StartTls);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.AuthenticateAsync(smtpSettings.HrMail, smtpSettings.HrPassword);
+
+                await client.SendAsync(mailMessage);
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
+                client.Dispose();
             }
         }
 
-        public async void  ContactSendEmail(string userFullName, string company, string department, string position, string userProfile)
+        public async void  ContractSendEmail(string userFullName, string company, string department, string position, string userProfile)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.HrMail));
             emailMessage.To.Add(MailboxAddress.Parse("ilkin.nazarli@srgroupco.com"));
 
             emailMessage.Subject = "Yeni Əməkdaş";
@@ -915,7 +930,7 @@ namespace SmartIntranet.Business.Concrete
             {
                 HtmlBody = string.Format("<p>Hörmətli əməkdaşlar,</p>\r\n\r\n" +
                                          "<p>SR komandasına yeni işçi qatılır!</p>" +
-                                         $" <img height=\"240\" width=\"240\" src=\"{fullpath + @"\wwwroot\profile\" + userProfile}\" alt=\"img-edit\">" +
+                                         $" <img height=\"240\" width=\"260\" src=\"{fullpath + @"\wwwroot\profile\" + userProfile}\" alt=\"img-edit\">" +
                                          $"\r\n\r\n<p><strong>{userFullName}</strong></p>" +
                                          $"\r\n\r\n<p>{company} ({department}/{position})</p>" +
                                         "\r\n\r\n<p>İş yeri ilə tanış olmasına,\r\n\r\n" +
@@ -926,28 +941,28 @@ namespace SmartIntranet.Business.Concrete
 
             emailMessage.Body = bodyBuilder.ToMessageBody();
 
-            Send(emailMessage);
+            HrSend(emailMessage);
         }
 
         public async void ContactChangeSendEmail(string userCFullname, string usrName, string gender, string companyName, string positionName)
         {
-            var smtpSettings = await _emailService.GetAsync(z => z.Id == 1);
+            var smtpSettings = await _settingsService.GetAsync(z => z.Id == 1);
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.FromEmail));
+            emailMessage.From.Add(new MailboxAddress("No-Reply", smtpSettings.HrMail));
             emailMessage.To.Add(MailboxAddress.Parse("ilkin.nazarli@srgroupco.com"));
 
             emailMessage.Subject = "Vəzifə Dəyişikliyi";
             var bodyBuilder = new BodyBuilder
             {
-                HtmlBody = string.Format("Hörmətli həmkarlar." +
-                                         $"\r\nNəzərinizə çatdırmaq istərdim ki, {userCFullname} artıq {companyName} şirkətində {positionName} olaraq fəaliyyətinə davam edəcəkdir. " +
-                                         $"\r\n{usrName}" + " " + $"{gender}" +
-                                         ", yeni pozisiyanızda Sizə uğurlar diləyirik!")
+                HtmlBody = string.Format("<p>Hörmətli həmkarlar,</p>\r\n\r\n" +
+                                         $"\r\n<p>Nəzərinizə çatdırmaq istərdim ki, {userCFullname} artıq {companyName} şirkətində {positionName} olaraq fəaliyyətinə davam edəcəkdir. </p>" +
+                                         $"\r\n<p>{usrName} "+" "+$" {gender}" +
+                                         ", yeni pozisiyanızda Sizə uğurlar diləyirik!</p>")
             };
 
             emailMessage.Body = bodyBuilder.ToMessageBody();
 
-            Send(emailMessage);
+            HrSend(emailMessage);
         }
     }
 }

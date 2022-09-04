@@ -231,14 +231,8 @@
                                 </a>
                             </li>
                         }
-                        @if (User.HasAccess("smtp.index"))
-                        {
-                            <li class="">
-                                <a asp-controller="SmtpEmail" asp-action="index">
-                                    <span class="pcoded-mtext">SMTP Mail Server</span>
-                                </a>
-                            </li>
-                        }
+                      
+
                         @* @if (User.HasAccess("order.list"))
                     {
                     <li class="">
@@ -368,6 +362,28 @@
                                 <span class="pcoded-mtext">Arxiv siyahı</span>
                             </a>
                         </li>
+                    </ul>
+                </li>
+
+            }
+            @if (User.HasAccess("settings.index"))
+            {
+                <li class="pcoded-hasmenu">
+                    <a href="javascript:void(0)">
+                        <span class="pcoded-micon">
+                            <i class="icofont icofont-settings-alt"></i>
+                        </span>
+                        <span class="pcoded-mtext">Ayarlar</span>
+                    </a>
+                    <ul class="pcoded-submenu">
+                        @if (User.HasAccess("settings.index"))
+                        {
+                            <li class="">
+                                <a asp-controller="Settings" asp-action="index">
+                                    <span class="pcoded-mtext">Sistem Ayarları</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </li>
 

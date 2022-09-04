@@ -34,11 +34,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
 
     public class AccountController : BaseIdentityController
     {
+        private readonly ISettingsService _settingsService;
         private readonly IUserCompService _userCompService;
         private readonly IConfiguration _configuration;
         private readonly GoogleConfigModel _googleConfig;
@@ -61,7 +62,7 @@ namespace SmartIntranet.Web.Controllers
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
             IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
-            IPositionService positionService, IOptions<GoogleConfigModel> googleConfig) : base(userManager, httpContextAccessor, signInManager, mapper)
+            IPositionService positionService, IOptions<GoogleConfigModel> googleConfig, ISettingsService settingsService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _userCompService = userCompService;
             _appRoleService = appRoleService;
@@ -81,6 +82,7 @@ namespace SmartIntranet.Web.Controllers
             _companyService = companyService;
             _departmentService = departmentService;
             _positionService = positionService;
+            _settingsService = settingsService;
         }
 
         [AllowAnonymous]
@@ -167,16 +169,13 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> List()
         {
             var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
-
-            if (userComp is null)
+            ViewBag.CompId = userComp.CompanyId;
+            if (userComp.CompanyId.Equals(null))
             {
                 return View(new List<AppUserListDto>());
             }
-            else
-            {
-                var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
-                return View(_map.Map<ICollection<AppUserListDto>>(model));
-            }
+            var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
+            return View(_map.Map<List<AppUserListDto>>(model));
 
         }
         [HttpPost]
@@ -184,7 +183,7 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> List(int CompId, int DepartId, int PositId)
         {
             var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
-            return View(_map.Map<ICollection<AppUserListDto>>(model));
+            return View(_map.Map<List<AppUserListDto>>(model));
         }
         [HttpGet]
         [Authorize(Policy = "account.permission")]
@@ -366,7 +365,7 @@ namespace SmartIntranet.Web.Controllers
 
 
                 var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
-                IntranetUser appUser = new IntranetUser
+                var appUser = new IntranetUser
                 {
                     UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." + user.Fathername),
                     Name = user.Name,
@@ -429,29 +428,28 @@ namespace SmartIntranet.Web.Controllers
                 });
             }
         }
-
         public async Task<IActionResult> GetCompanyTreeBySignInUser()
         {
             var userComps = await _userCompService.GetAllIncAsync(GetSignInUserId());
-            var tree = DropDownTreeExtensions.BuildTrees(userComps.Select(x => x.Company).ToList());
+            var tree = userComps.Select(x => x.Company).ToList().BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetCompanyTree()
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _companyService
-                .GetAllAsync(x => !x.IsDeleted));
+            var tree = (await _companyService
+                .GetAllAsync(x => !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetDepartmentTree(int companyId)
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _departmentService
-                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted));
+            var tree = (await _departmentService
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetPositionTree(int departmentId)
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _positionService
-                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted));
+            var tree = (await _positionService
+                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted)).BuildTrees();
             return new JsonResult(tree);
         }
         [HttpGet]
@@ -681,7 +679,7 @@ namespace SmartIntranet.Web.Controllers
                         List<UserVacationRemain> userVacRemainsDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsEditable).ToListAsync();
 
                         List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
-                        if (model.UserVacationRemains != null && model.UserVacationRemains.Count() > 0)
+                        if (model.UserVacationRemains != null && model.UserVacationRemains.Count > 0)
                         {
                             foreach (var el in model.UserVacationRemains)
                             {

@@ -49,8 +49,8 @@ namespace SmartIntranet.Business.Containers.MicrosoftIoC
             services.AddScoped<ICategoryTicketService, CategoryTicketManager>();
             services.AddScoped<ICategoryTicketDal, EfCategoryTicketRepository>();
 
-            services.AddScoped<ISmtpEmailService, SmtpEmailManager>();
-            services.AddScoped<ISmtpEmailDal, EfSmtpEmailRepository>();
+            services.AddScoped<ISettingsService, SettingsManager>();
+            services.AddScoped<SettingsRepository, SettingsRepository>();
 
             services.AddScoped<IAppUserService, AppUserManager>(); 
             services.AddScoped<IAppUserDal, EfAppUserRepository>();

@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Utilities.Messages;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class PlaceController : BaseIdentityController
     {

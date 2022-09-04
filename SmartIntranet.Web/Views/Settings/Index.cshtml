@@ -1,0 +1,216 @@
+﻿@model SettingsDto
+@{
+    Layout = $"~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <div class="card card-block">
+            <form asp-action="Index" enctype="multipart/form-data">
+                <div class="tab-pane active" id="home1" role="tabpanel">
+                    <div class="row">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Şirkət Adı: </label>
+                                <input type="text" class="form-control" asp-for="CompanyName" autocomplete="off">
+                                <span asp-validation-for="CompanyName" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="file-name mb-3 col-md-12">
+                                    <label for="Logo" class="btn btn-mat btn-primary"><i class="icofont icofont-cloud-upload"></i> Logo Yüklə</label>
+                                    <input type="file" style="display:none;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
+                                </div>
+                                <div class="col-md-6  col-lg-6 col-sm-6">
+                                    @if (Model.CompanyLogo != "logoDefault.png")
+                                    {
+                                        <div class="border text-center pt-2">
+                                            <div class="pt-0">
+                                                <label class="floatLabel">Mövcud Logo:</label>
+                                                <img src="~/logo/@Model.CompanyLogo" class="pb-2" style="width: 150px; height: 150px;" alt="@Model.CompanyName" />
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="border text-center pt-2">
+                                            <div class="pt-0">
+                                                <label class="floatLabel">Mövcud Logo:</label>
+                                                <img src="~/uploads/logoDefault.png" class="pb-2 " style="width: 150px; height: 150px;" alt="Default Logo" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="col-md-6 col-lg-6 col-sm-6">
+                                    <div id="lview" style="display:none!important;">
+                                        <div class="border text-center pt-2">
+                                            <div class="pt-0">
+                                                <label class="floatLabel">Yeni logo:</label>
+                                                <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" alt=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkət Sayt: </label>
+                                <input type="text" class="form-control" asp-for="CompanySite" autocomplete="off">
+                                <span asp-validation-for="CompanySite" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkət Unvan: </label>
+                                <input type="text" class="form-control" asp-for="CompanyAddress" autocomplete="off">
+                                <span asp-validation-for="CompanyAddress" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  Şirkət Telefon: </label>
+                                <input type="text" class="form-control" asp-for="CompanyPhone" autocomplete="off">
+                                <span asp-validation-for="CompanyPhone" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> BaseUrl: </label>
+                                <input type="text" class="form-control" asp-for="BaseUrl" autocomplete="off">
+                                <span asp-validation-for="BaseUrl" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  İstifadəçi: </label>
+                                <input type="text" class="form-control" asp-for="UserName" autocomplete="off">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Ticket Host: </label>
+                                <input type="text" class="form-control" asp-for="TicketHost" autocomplete="off">
+                                <span asp-validation-for="TicketHost" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Ticket Port: </label>
+                                <input type="number" class="form-control" asp-for="TicketPort" autocomplete="off">
+                                <span asp-validation-for="TicketPort" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Ticket Email: </label>
+                                <input type="text" class="form-control" asp-for="TicketMail" autocomplete="off">
+                                <span asp-validation-for="TicketMail" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Ticket Şifrə: </label>
+                                <input type="text" class="form-control" asp-for="TicketPassword" autocomplete="off">
+                                <span asp-validation-for="TicketPassword" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Hr Host: </label>
+                                <input type="text" class="form-control" asp-for="HrHost" autocomplete="off">
+                                <span asp-validation-for="HrHost" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Hr Port: </label>
+                                <input type="number" class="form-control" asp-for="HrPort" autocomplete="off">
+                                <span asp-validation-for="HrPort" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Hr Email: </label>
+                                <input type="text" class="form-control" asp-for="HrMail" autocomplete="off">
+                                <span asp-validation-for="HrMail" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Hr Şifrə: </label>
+                                <input type="text" class="form-control" asp-for="HrPassword" autocomplete="off">
+                                <span asp-validation-for="HrPassword" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-sm-12 d-flex justify-content-between">
+                        <button id="sending" type="submit" class="btn btn-dark-blue m-b-0 btn-block">
+                            Təsdiqlə
+                        </button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+@section CrudJs{
+    <script src="~/files/lib/cust_ajax/cust-validation.js"></script>
+    <!-- delete_ajax-->
+    <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script class="removable" type="text/javascript">
+        $(document).ready(function ($) {
+            $("#Logo").change(function (e) {
+                if ($('.file-name').isImage()) {
+                    $("#lview").show();
+                    $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+                    console.log($(this))
+                }
+                else {
+                    toastr.error("Diqqət", "Daxil edilən fayllar " +
+                        " image, png və ya gif formatında olmalıdır !");
+                }
+            });
+        })
+    </script>
+}

@@ -19,8 +19,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.Business.Interfaces.IntraHr;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class TerminationContractController : BaseIdentityController
     {
@@ -38,8 +39,9 @@ namespace SmartIntranet.Web.Controllers
         private readonly IPersonalContractService _personalContractService;
         private readonly IPositionService _positionService;
         private readonly ICompanyService _companyService;
+        private readonly IUserCompService _userCompService;
 
-        public TerminationContractController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ITerminationContractService contractService, ITerminationContractFileService contractFileService, ITerminationItemService terminationItemService, INonWOrkingYearService nonWorkingYearService, INonWorkingDayService nonWorkingDayService, IPersonalContractService personalContractService, IClauseService clauseService, IContractTypeService contractTypeService, IUserVacationRemainService userVacationRemainService, IAppUserService userService, IVacationTypeService vacationTypeService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        public TerminationContractController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, ITerminationContractService contractService, ITerminationContractFileService contractFileService, ITerminationItemService terminationItemService, INonWOrkingYearService nonWorkingYearService, INonWorkingDayService nonWorkingDayService, IPersonalContractService personalContractService, IClauseService clauseService, IContractTypeService contractTypeService, IUserVacationRemainService userVacationRemainService, IAppUserService userService, IVacationTypeService vacationTypeService, IWorkGraphicService workGraphicService, IPositionService positionService, ICompanyService companyService, IUserCompService userCompService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _contractService = contractService;
             _contractTypeService = contractTypeService;
@@ -55,6 +57,7 @@ namespace SmartIntranet.Web.Controllers
             _vacationTypeService = vacationTypeService;
             _positionService = positionService;
             _companyService = companyService;
+            _userCompService = userCompService;
         }
 
 
@@ -62,7 +65,7 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "terminationContract.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(await _companyService.GetAllAsync(x => x.IsDeleted  == false));
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.terminationItems = await _terminationItemService.GetAllAsync(x => !x.IsDeleted);
             return View();

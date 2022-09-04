@@ -52,11 +52,11 @@
                                     <div id="faqCollapse-@faq.Id"
                                      aria-labelledby="faqHeading-@faq.Id"
                                      data-parent="#accordion"
-                                     class="accordion-collapse collapse @*show*@"
+                                     class="accordion-collapse collapse"
                                      style="">
                                         <div class="accordion-body"> 
                                             <p style="padding-left:15px">
-                                                @faq.Answer
+                                                @Html.Raw(faq.Answer)
                                             </p>
                                             @if (faq.File != null)
                                             {
