@@ -170,7 +170,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
             ViewBag.CompId = userComp.CompanyId;
-            if (userComp.CompanyId.Equals(null))
+            if (userComp.CompanyId==0)
             {
                 return View(new List<AppUserListDto>());
             }
@@ -182,6 +182,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List(int CompId, int DepartId, int PositId)
         {
+            ViewBag.CompId = CompId;
+            ViewBag.DepartId = DepartId;
+            ViewBag.PositId = PositId;
             var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
             return View(_map.Map<List<AppUserListDto>>(model));
         }
