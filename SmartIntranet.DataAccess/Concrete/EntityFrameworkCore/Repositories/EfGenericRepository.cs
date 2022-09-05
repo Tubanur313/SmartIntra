@@ -40,26 +40,34 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             return await context.FindAsync<TEntity>(id);
         }
 
-        public async Task<List<TEntity>> GetAllAsync()
+        public async Task<List<TEntity>> GetAllAsync(bool asnotrack = false)
         {
             await using var context = new IntranetContext();
-            return await context.Set<TEntity>().ToListAsync();
+            if (!asnotrack)
+                return await context.Set<TEntity>().ToListAsync();
+            return await context.Set<TEntity>().AsNoTracking().ToListAsync();
         }
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter)
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter, bool asnotrack = false)
         {
             await using var context = new IntranetContext();
-            return await context.Set<TEntity>().Where(filter).ToListAsync();
+            if (!asnotrack)
+                return await context.Set<TEntity>().Where(filter).ToListAsync();
+            return await context.Set<TEntity>().Where(filter).AsNoTracking().ToListAsync();
         }
-        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TKey>> keySelector)
+        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TKey>> keySelector, bool asnotrack = false)
         {
             await using var context = new IntranetContext();
-            return await context.Set<TEntity>().Where(filter).OrderByDescending(keySelector).ToListAsync();
+            if (!asnotrack)
+                return await context.Set<TEntity>().Where(filter).OrderByDescending(keySelector).ToListAsync();
+            return await context.Set<TEntity>().Where(filter).OrderByDescending(keySelector).AsNoTracking().ToListAsync();
         }
 
-        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, TKey>> keySelector)
+        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, TKey>> keySelector, bool asnotrack = false)
         {
             await using var context = new IntranetContext();
-            return await context.Set<TEntity>().OrderByDescending(keySelector).ToListAsync();
+            if (!asnotrack)
+                return await context.Set<TEntity>().OrderByDescending(keySelector).ToListAsync();
+            return await context.Set<TEntity>().OrderByDescending(keySelector).AsNoTracking().ToListAsync();
         }
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter)
         {
@@ -101,6 +109,6 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
             await using var context = new IntranetContext();
             return await context.Set<TEntity>().AnyAsync(filter);
         }
-        
+
     }
 }

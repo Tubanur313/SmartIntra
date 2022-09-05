@@ -43,23 +43,23 @@ namespace SmartIntranet.Business.Concrete
 
        
 
-        public async Task<List<TEntity>> GetAllAsync()
+        public async Task<List<TEntity>> GetAllAsync(bool asnotrack = false)
         {
-            return await _dal.GetAllAsync();
+            return await _dal.GetAllAsync(asnotrack);
         }
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter)
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter, bool asnotrack = false)
         {
-            return await _dal.GetAllAsync(filter);
+            return await _dal.GetAllAsync(filter, asnotrack);
         }        
 
-        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TKey>> keySelector)
+        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TKey>> keySelector, bool asnotrack = false)
         {
-            return await _dal.GetAllAsync(filter,keySelector);
+            return await _dal.GetAllAsync(filter,keySelector, asnotrack);
         }
 
-        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, TKey>> keySelector)
+        public async Task<List<TEntity>> GetAllAsync<TKey>(Expression<Func<TEntity, TKey>> keySelector, bool asnotrack = false)
         {
-            return await _dal.GetAllAsync(keySelector);
+            return await _dal.GetAllAsync(keySelector, asnotrack);
         }
 
        
