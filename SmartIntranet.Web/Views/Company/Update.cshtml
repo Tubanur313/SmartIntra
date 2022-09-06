@@ -228,6 +228,10 @@
             toastr.error("Diqqət","Daxil edilən fayllar image, png və ya gif formatında olmalıdır !");
         }
         });
+        var defOpt = {
+            id: '',
+            text: 'Yoxdur'
+        };
         $.ajax({
             url: `@Url.Action("GetCompanyTree","Company")`,
             type: "Get",
@@ -236,7 +240,7 @@
             cache: false,
             success: function (data) {
                 $('#ParentId').combotree({
-                    data:data,
+                    data: [defOpt, ...data],
                     prompt:'Seçim edin'
                 });
                 if($('[name="ParentId"]').val()===""){

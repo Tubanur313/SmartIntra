@@ -63,7 +63,11 @@
 <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
 
 <script class="removable">
-    $( document ).ready(function() {
+    $(document).ready(function () {
+        var defOpt = {
+            id: '',
+            text: 'Yoxdur'
+        };
         $.ajax({
             url: `@Url.Action("GetCompanyTree","Position")`,
             type: "Get",
@@ -71,108 +75,108 @@
             dataType: "json",
             cache: false,
             success: function (data) {
-              var tree = $('#DepartmentId').combotree({
-                 prompt:'Seçim edin'
-              });
-              tree.combotree('disable')
-              var tre = $('#ParentId').combotree({
-                 prompt:'Seçim edin'
-              });
-              tre.combotree('disable')
-              $('#CompanyId').combotree({
-                data:data,
-                prompt:'Seçim edin',
-                onClick:function(node){
-                    $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
-                    var _id = node.id;
-                    $.ajax({
-                        url: `@Url.Action("GetDepartmentTree","Position")`,
-                        type: "Get",
-                        data: {
-                            companyId: _id,
-                        },
-                        dataType: "json",
-                        cache: false,
-                        success: function (data) {
-                            if(data.length > 0){
-                            $('#DepartmentId').combotree({
-                                 data:data,
-                                 prompt:'Seçim edin'
-                            });
-                            var tree = $('#ParentId').combotree({
-                               prompt:'Seçim edin'
-                            });
-                            tree.combotree('disable')
-                            $('#DepartmentId').combotree({
-                            data:data,
-                            prompt:'Seçim edin',
-                            onClick:function(node) {
-                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
-                                var _id = node.id;
-                                $.ajax({
-                                    url: `@Url.Action("GetPositionTree","Position")`,
-                                    type: "Get",
-                                    data: {
-                                        departmentId: _id,
-                                    },
-                                    dataType: "json",
-                                    cache: false,
-                                    success: function (data) {
-                                        if(data.length > 0){
-                                          $('#ParentId').combotree({
-                                             data:data,
-                                             prompt:'Seçim edin'
-                                         });
+                var tree = $('#DepartmentId').combotree({
+                    prompt: 'Seçim edin'
+                });
+                tree.combotree('disable')
+                var tre = $('#ParentId').combotree({
+                    prompt: 'Seçim edin'
+                });
+                tre.combotree('disable')
+                $('#CompanyId').combotree({
+                    data: [defOpt, ...data],
+                    prompt: 'Seçim edin',
+                    onClick: function (node) {
+                        $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                        var _id = node.id;
+                        $.ajax({
+                            url: `@Url.Action("GetDepartmentTree","Position")`,
+                            type: "Get",
+                            data: {
+                                companyId: _id,
+                            },
+                            dataType: "json",
+                            cache: false,
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $('#DepartmentId').combotree({
+                                        data: [defOpt, ...data],
+                                        prompt: 'Seçim edin'
+                                    });
+                                    var tree = $('#ParentId').combotree({
+                                        prompt: 'Seçim edin'
+                                    });
+                                    tree.combotree('disable')
+                                    $('#DepartmentId').combotree({
+                                        data: [defOpt, ...data],
+                                        prompt: 'Seçim edin',
+                                        onClick: function (node) {
+                                            $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                            var _id = node.id;
+                                            $.ajax({
+                                                url: `@Url.Action("GetPositionTree","Position")`,
+                                                type: "Get",
+                                                data: {
+                                                    departmentId: _id,
+                                                },
+                                                dataType: "json",
+                                                cache: false,
+                                                success: function (data) {
+                                                    if (data.length > 0) {
+                                                        $('#ParentId').combotree({
+                                                            data: [defOpt, ...data],
+                                                            prompt: 'Seçim edin'
+                                                        });
+                                                    }
+                                                    else {
+                                                        var tree = $('#ParentId').combotree({
+                                                            prompt: 'Yoxdur !'
+                                                        });
+                                                        tree.combotree('disable')
+                                                    }
+                                                },
+                                                error: function (data) {
+                                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                                }
+                                            })
                                         }
-                                        else{
-                                           var tree = $('#ParentId').combotree({
-                                              prompt:'Yoxdur !'
-                                              });
-                                           tree.combotree('disable')
-                                        }
-                                    },
-                                    error: function (data) {
-                                            toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                                    }
-                                })
-                             }
-                            })
-                            }
-                            else{
-                             var tree = $('#DepartmentId').combotree({
-                                 prompt:'Yoxdur !',
-                             });
-                             tree.combotree('disable')
-                             var tre = $('#ParentId').combotree({
-                                 prompt:'Yoxdur !',
-                             });
-                             tre.combotree('disable')
-                            }
-                        },
-                        error: function (data) {
+                                    })
+                                }
+                                else {
+                                    var tree = $('#DepartmentId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    tree.combotree('disable')
+                                    var tre = $('#ParentId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    tre.combotree('disable')
+                                }
+                            },
+                            error: function (data) {
                                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                        }
-                    })
-                 }
-              })
+                            }
+                        })
+                    }
+                })
             },
             error: function (data) {
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
-        $("form").submit(function (e){
+        $("form").submit(function (e) {
             //e.preventDefault();
             var CompanyId = $('#CompanyId').combotree('getValue');
             var DepartmentId = $('#DepartmentId').combotree('getValue');
 
-            if(CompanyId === ""){
-               $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
-              e.preventDefault(); 
+            if (CompanyId === "") {
+                $('.CompanyId').text($('#CompanyId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
             }
-            if(DepartmentId === ""){
-               $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
-               e.preventDefault();
-             }
+            if (DepartmentId === "") {
+                $('.DepartmentId').text($('#DepartmentId').data("val-required")).removeClass("d-none");
+                e.preventDefault();
+            }
         });
     });
 </script>

@@ -66,6 +66,10 @@
 
 <script class="removable">
     $(document).ready(function () {
+        var defOpt = {
+            id: '',
+            text: 'Yoxdur'
+        };
         $.ajax({
             url: `@Url.Action("GetCompanyTree","Position")`,
             type: "Get",
@@ -84,10 +88,10 @@
                     success: function (data) {
                         if (data.length > 0) {
                             var tree = $('#DepartmentId').combotree({
-                                data: data,
+                                data: [defOpt, ...data],
                                 prompt: 'Seçim edin'
                             });
-                            tree.combotree('disable')
+                            //tree.combotree('disable')
                         }
                         else {
                             var tree = $('#DepartmentId').combotree({
@@ -112,10 +116,10 @@
                     success: function (data) {
                         if (data.length > 0) {
                             var tre = $('#ParentId').combotree({
-                                data: data,
+                                data: [defOpt, ...data],
                                 prompt: 'Seçim edin'
                             });
-                            tre.combotree('disable')
+                            //tre.combotree('disable')
                         }
                         else {
                             var tree = $('#ParentId').combotree({
@@ -130,7 +134,7 @@
                 })
 
                 $('#CompanyId').combotree({
-                    data: data,
+                    data: [defOpt, ...data],
                     prompt: 'Seçim edin',
                     onClick: function (node) {
                         $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
@@ -145,7 +149,7 @@
                             success: function (data) {
                                 if (data.length > 0) {
                                     var tre = $('#DepartmentId').combotree({
-                                        data: data,
+                                        data: [defOpt, ...data],
                                         prompt: 'Seçim edin'
                                     });
 
@@ -154,7 +158,7 @@
                                     });
                                     tree.combotree('disable')
                                     $('#DepartmentId').combotree({
-                                        data: data,
+                                        data: [defOpt, ...data],
                                         prompt: 'Seçim edin',
                                         onLoadSuccess: function () {
                                             $('#DepartmentId').combotree('setValue', '');
@@ -172,7 +176,7 @@
                                                 success: function (data) {
                                                     if (data.length > 0) {
                                                         var tree = $('#ParentId').combotree({
-                                                            data: data,
+                                                            data: [defOpt, ...data],
                                                             prompt: 'Seçim edin'
                                                         });
                                                         tree.combotree('enable')

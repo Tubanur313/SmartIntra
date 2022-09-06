@@ -60,6 +60,10 @@
 
 <script class="removable">
     $(document).ready(function () {
+        var defOpt = {
+            id: '',
+            text: 'Yoxdur'
+        };
         $.ajax({
             url: `@Url.Action("GetCompanyTree","Department")`,
             type: "Get",
@@ -81,7 +85,7 @@
                     success: function (data) {
                         if (data.length > 0) {
                             $('#ParentId').combotree({
-                                data: data,
+                                data: [defOpt, ...data],
                                 prompt: 'Seçim edin'
                             });
                         }
@@ -99,7 +103,7 @@
                 })
                 //tree.combotree('disable')
                 $('#CompanyId').combotree({
-                    data: data,
+                    data: [defOpt, ...data],
                     prompt: 'Seçim edin',
                     onClick: function () {
                         $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
@@ -115,7 +119,7 @@
                             success: function (data) {
                                 if (data.length > 0) {
                                     $('#ParentId').combotree({
-                                        data: data,
+                                        data: [defOpt, ...data],
                                         prompt: 'Seçim edin',
                                         onLoadSuccess: function () {
                                             $('#ParentId').combotree('setValue', '');
