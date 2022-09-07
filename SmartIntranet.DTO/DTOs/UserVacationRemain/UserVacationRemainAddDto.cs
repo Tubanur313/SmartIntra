@@ -1,7 +1,7 @@
-﻿using SmartIntranet.Entities.Concrete.Membership;
-using System;
+﻿using System;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.DTO.DTOs.ClauseDto
+namespace SmartIntranet.DTO.DTOs.UserVacationRemain
 {
     public class UserVacationRemainAddDto
     {

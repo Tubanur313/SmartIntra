@@ -5,11 +5,9 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static iTextSharp.text.pdf.AcroFields;
 
 namespace SmartIntranet.Business.Concrete
 {

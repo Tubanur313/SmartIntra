@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.DTO.DTOs.TerminationContractDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 
 
@@ -20,6 +17,9 @@ using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Business.Interfaces.IntraHr;
+using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.DTO.DTOs.ContractDto;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {

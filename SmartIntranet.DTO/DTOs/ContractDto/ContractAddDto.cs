@@ -1,6 +1,6 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
+﻿using SmartIntranet.Entities.Concrete.Membership;
 using System;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.DTO.DTOs.ContractDto
 {

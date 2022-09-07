@@ -1,6 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Intranet;
-using System;
+﻿using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.DTO.DTOs.PositionDto
 {

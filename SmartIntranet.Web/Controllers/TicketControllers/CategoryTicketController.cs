@@ -1,22 +1,21 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Extension;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.IntraTicket;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CategoryTicketDto;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.TicketControllers
 { 
     [Authorize]
     public class CategoryTicketController : BaseIdentityController
@@ -148,8 +147,8 @@ namespace SmartIntranet.Web.Controllers
         }
         public async Task<IActionResult> GetCategoryTicketTree()
         {
-            var tree = DropDownTreeExtensions.BuildTrees(await _categoryTicketService
-                .GetAllAsync(x => !x.IsDeleted));
+            var tree = (await _categoryTicketService
+                .GetAllAsync(x => !x.IsDeleted,true)).BuildTrees();
             return new JsonResult(tree);
         }
     }

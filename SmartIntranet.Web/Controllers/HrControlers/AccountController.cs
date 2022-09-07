@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,14 +16,12 @@ using SmartIntranet.Business.Provider;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Web.GoogleRecaptcha;
@@ -34,6 +31,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SmartIntranet.DTO.DTOs.ContractDto;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {

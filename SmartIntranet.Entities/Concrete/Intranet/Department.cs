@@ -1,10 +1,9 @@
-﻿using SmartIntranet.Entities.Concrete.Membership;
+﻿using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Concrete;
-using System.Collections.Generic;
-using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.Entities.Concrete
+namespace SmartIntranet.Entities.Concrete.Intranet
 {
     public class Department : BaseEntity
     {

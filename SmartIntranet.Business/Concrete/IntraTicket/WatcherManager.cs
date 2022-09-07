@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Business.Interfaces.IntraTicket;
+using SmartIntranet.DataAccess.Interfaces.IntraTicket;
 
 namespace SmartIntranet.Business.Concrete.IntraTicket
 {

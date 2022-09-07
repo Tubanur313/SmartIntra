@@ -1,4 +1,4 @@
-﻿namespace SmartIntranet.Business.Extension
+﻿namespace SmartIntranet.Core.Extensions
 {
   public  static class UpperCase
     {

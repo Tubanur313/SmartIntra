@@ -1,20 +1,19 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.VacancyControllers
 {
     public class VacancyController : BaseIdentityController
     {

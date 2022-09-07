@@ -1,9 +1,9 @@
-﻿using SmartIntranet.Core.Entities.Enum;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.Core.Entities.Enum;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 
-namespace SmartIntranet.DataAccess.Interfaces
+namespace SmartIntranet.DataAccess.Interfaces.IntraTicket
 {
     public interface IWatcherDal : IGenericDal<Watcher>
     {

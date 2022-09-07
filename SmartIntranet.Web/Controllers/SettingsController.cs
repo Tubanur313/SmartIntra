@@ -10,7 +10,6 @@ using System;
 using System.Threading.Tasks;
 using SmartIntranet.DTO.DTOs;
 using SmartIntranet.Entities.Concrete.Intranet;
-using NPOI.SS.Formula.Functions;
 using SmartIntranet.Core.Extensions;
 
 namespace SmartIntranet.Web.Controllers

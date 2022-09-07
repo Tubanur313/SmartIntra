@@ -1,10 +1,11 @@
-﻿using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete.Membership;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.IntraHr;
+using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.Membership;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.Business.Concrete
+namespace SmartIntranet.Business.Concrete.IntraHr
 {
     public class UserContractManager : GenericManager<UserContractFile>, IUserContractService
     {

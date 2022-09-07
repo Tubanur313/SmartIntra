@@ -1,6 +1,6 @@
-﻿using SmartIntranet.Entities.Concrete;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
 {

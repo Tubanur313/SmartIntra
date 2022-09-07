@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SmartIntranet.Core.Entities.Concrete;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using SmartIntranet.Core.Entities.Concrete;
 
 namespace SmartIntranet.Entities.Concrete.Intranet
 {

@@ -174,7 +174,7 @@
                         @if (User.HasAccess("ticket.admin"))
                         {
                             <li class="@ViewData["admin"]">
-                                <a asp-controller="ticket" asp-action="admin">
+                                <a asp-controller="Ticket" asp-action="admin">
                                     <span class="pcoded-mtext">Ticketlər</span>
                                 </a>
                             </li>
@@ -182,20 +182,20 @@
                         @if (User.HasAccess("ticket.DepartmentTickets"))
                         {
                             <li class="">
-                                <a asp-controller="ticket" asp-action="DepartmentTickets">
+                                <a asp-controller="Ticket" asp-action="DepartmentTickets">
                                     <span class="pcoded-mtext">Şöbələrin Ticket Siyahısı</span>
                                 </a>
                             </li>
                         }
                         <li class="">
-                            <a asp-controller="ticket" asp-action="NonRedirect">
+                            <a asp-controller="Ticket" asp-action="NonRedirect">
                                 <span class="pcoded-mtext">Yönlənməyən Ticket Siyahısı</span>
                             </a>
                         </li>
                         @if (User.HasAccess("ticket.list"))
                         {
                             <li class="">
-                                <a asp-controller="ticket" asp-action="list">
+                                <a asp-controller="Ticket" asp-action="list">
                                     <span class="pcoded-mtext">Ticket Siyahısı</span>
                                 </a>
                             </li>
@@ -203,7 +203,7 @@
                         @if (User.HasAccess("ticket.watched"))
                         {
                             <li class="">
-                                <a asp-controller="ticket" asp-action="watched">
+                                <a asp-controller="Ticket" asp-action="watched">
                                     <span class="pcoded-mtext">Nəzarət Ticket Siyahısı</span>
                                 </a>
                             </li>
@@ -211,7 +211,7 @@
                         @if (User.HasAccess("ticket.confirmed"))
                         {
                             <li class="">
-                                <a asp-controller="ticket" asp-action="confirmed">
+                                <a asp-controller="Ticket" asp-action="confirmed">
                                     <span class="pcoded-mtext">Təsdiq Ticket siyahısı</span>
                                 </a>
                             </li>
@@ -226,7 +226,7 @@
                         @if (User.HasAccess("ticket.checklist"))
                         {
                             <li class="">
-                                <a asp-controller="checklist" asp-action="list">
+                                <a asp-controller="CheckList" asp-action="list">
                                     <span class="pcoded-mtext">Checklist</span>
                                 </a>
                             </li>
@@ -284,12 +284,12 @@
                     </a>
                     <ul class="pcoded-submenu">
                         <li class="">
-                            <a asp-controller="vacancy" asp-action="List">
+                            <a asp-controller="Vacancy" asp-action="List">
                                 <span class="pcoded-mtext">Vakansiya Siyahısı</span>
                             </a>
                         </li>
                         <li class="">
-                            <a asp-controller="vacancy" asp-action="info">
+                            <a asp-controller="Vacancy" asp-action="info">
                                 <span class="pcoded-mtext">Vakansiyalar</span>
                             </a>
                         </li>

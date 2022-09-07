@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DTO.DTOs.TerminationItemDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 
 
@@ -14,6 +12,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SmartIntranet.Core.Utilities.Messages;
 using System.Linq;
+using SmartIntranet.Business.Interfaces.IntraHr;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Core.Entities.Enum;
@@ -15,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.Membership;
 
 namespace SmartIntranet.Web.Controllers
 {

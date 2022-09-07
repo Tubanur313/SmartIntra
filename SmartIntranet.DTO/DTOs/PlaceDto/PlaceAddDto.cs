@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SmartIntranet.DTO.DTOs.PlaceDto
+﻿namespace SmartIntranet.DTO.DTOs.PlaceDto
 {
     public class PlaceAddDto
     {

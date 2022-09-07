@@ -1,5 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Intranet;
+﻿using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
@@ -49,6 +48,6 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public decimal VacationTotal { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }
-        public virtual List<UserVacationRemain> UserVacationRemains { get; set; }
+        public virtual List<Entities.Concrete.Membership.UserVacationRemain> UserVacationRemains { get; set; }
     }
 }

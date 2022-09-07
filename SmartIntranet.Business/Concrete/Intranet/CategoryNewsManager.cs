@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.Business.Concrete.Intranet

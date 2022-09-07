@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;

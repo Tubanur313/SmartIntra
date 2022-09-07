@@ -1,12 +1,13 @@
-﻿using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete.Intranet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.Intranet;
+using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.Business.Concrete
+namespace SmartIntranet.Business.Concrete.Intranet
 {
     public class CompanyManager : GenericManager<Company>, ICompanyService
     {

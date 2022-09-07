@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.Membership;
 using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.Business.Concrete
+namespace SmartIntranet.Business.Concrete.Membership
 {
     public class AppUserManager : GenericManager<IntranetUser>, IAppUserService
     {
@@ -34,31 +35,31 @@ namespace SmartIntranet.Business.Concrete
             return await _userDal.FindUserPosWithId(id);
         }
 
-        public async Task<List<IntranetUser>> GetAllIncludeAsync()
+        public async Task<List<IntranetUser>> GetAllIncludeAsync(bool asnotrack = false)
         {
 
-            return await _userDal.GetAllIncludeAsync();
+            return await _userDal.GetAllIncludeAsync(asnotrack);
         }
 
-        public async Task<List<IntranetUser>> GetAllIncludeAsync(Expression<Func<IntranetUser, bool>> filter)
+        public async Task<List<IntranetUser>> GetAllIncludeAsync(Expression<Func<IntranetUser, bool>> filter, bool asnotrack = false)
         {
-            return await _userDal.GetAllIncludeAsync(filter);
+            return await _userDal.GetAllIncludeAsync(filter, asnotrack);
         }
 
-        public async Task<List<IntranetUser>> GetAllIncUserAsync(int? userCompId)
+        public async Task<List<IntranetUser>> GetAllIncUserAsync(int? userCompId, bool asnotrack = false)
         {
-            return await _userDal.GetAllIncUserAsync(userCompId);
+            return await _userDal.GetAllIncUserAsync(userCompId, asnotrack);
 
         }
 
-        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int compId, int departId, int positId)
+        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int compId, int departId, int positId, bool asnotrack = false)
         {
             return await _userDal.GetAllIncUserWithFilterAsync(compId, departId, positId);
         }
 
-        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int? userCompId)
+        public async Task<List<IntranetUser>> GetAllIncUserWithFilterAsync(int? userCompId, bool asnotrack = false)
         {
-            return await _userDal.GetAllIncUserWithFilterAsync(userCompId);
+            return await _userDal.GetAllIncUserWithFilterAsync(userCompId, asnotrack);
         }
 
         public async Task<bool> IsExistEmail(string email)

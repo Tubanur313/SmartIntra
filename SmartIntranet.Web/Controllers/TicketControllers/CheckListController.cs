@@ -1,19 +1,18 @@
-﻿using SmartIntranet.Business.Interfaces.IntraTicket;
-using SmartIntranet.Core.Utilities.Messages;
-using SmartIntranet.DTO.DTOs.CheckListDto;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-using SmartIntranet.Entities.Concrete.Membership;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.IntraTicket;
+using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.DTO.DTOs.CheckListDto;
+using SmartIntranet.Entities.Concrete.IntraTicket;
+using SmartIntranet.Entities.Concrete.Membership;
 
-
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.TicketControllers
 {
     [Authorize]
     public class CheckListController : BaseIdentityController

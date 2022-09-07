@@ -1,5 +1,4 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Intranet;
+﻿using SmartIntranet.Entities.Concrete.Intranet;
 using System;
 
 namespace SmartIntranet.DTO.DTOs.DepartmentDto

@@ -42,6 +42,8 @@ using SmartIntranet.DTO.DTOs.WorkGraphicDto;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.IO.Compression;
+using SmartIntranet.DTO.DTOs.NonWorkingDayDto;
+using SmartIntranet.DTO.DTOs.NonWorkingYearDto;
 
 namespace SmartIntranet.Business.Extension
 {

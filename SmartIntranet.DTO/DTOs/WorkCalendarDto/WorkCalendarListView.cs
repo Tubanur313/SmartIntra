@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SmartIntranet.DTO.DTOs.DepartmentDto
+namespace SmartIntranet.DTO.DTOs.WorkCalendarDto
 {
     public class WorkCalendarListView
     {

@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Core.Entities.Concrete;
-using System;
+﻿using System;
+using SmartIntranet.Core.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.Entities.Concrete
+namespace SmartIntranet.Entities.Concrete.IntraHr
 {
     public class ReportEmployee : BaseEntity
     {

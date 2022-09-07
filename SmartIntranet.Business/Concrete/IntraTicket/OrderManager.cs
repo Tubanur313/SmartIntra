@@ -1,5 +1,6 @@
 ﻿using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 
 namespace SmartIntranet.Business.Concrete.IntraTicket

@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DTO.DTOs.CompanyDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,10 +12,14 @@ using SmartIntranet.DTO.DTOs.ReportEmployeeDto;
 using System.IO;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
 using System.Linq;
-using SmartIntranet.DTO.DTOs;
+using SmartIntranet.Business.Interfaces.IntraHr;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Utilities.Messages;
+using SmartIntranet.DTO.DTOs.ContractDto;
+using SmartIntranet.DTO.DTOs.WorkCalendarDto;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -136,7 +138,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             else
             {
                 var data = await _reportService.FindByIdAsync(model.Id);
-                var current = GetSignInUserId();
                 var update = _map.Map<ReportEmployee>(model);
                 update.UpdateByUserId = GetSignInUserId();
                 update.CreatedByUserId = data.CreatedByUserId;
@@ -350,7 +351,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 foreach (var item in users)
                 {
                     ExcellTemplateModel mod = new ExcellTemplateModel();
-                    mod.DayList = new List<DTO.DTOs.DayItem>();
+                    mod.DayList = new List<DayItem>();
                     mod.FullName = item.Fullname;
                     mod.Position = item.Position.Name;
                     var graph_id = (int)item.WorkGraphicId;
