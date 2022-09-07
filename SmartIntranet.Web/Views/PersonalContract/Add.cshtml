@@ -385,8 +385,6 @@
 
     $(document).on('change', '#UserId', function () {
         var _id = $(this).val();
-        getPos(_id);
-
         $.ajax({
             type: 'Get',
             url: '@Url.ActionLink("GetUserVacationDay", "Account")',
@@ -420,9 +418,9 @@
     function getPos(_id) {
         $.ajax({
             type: 'Get',
-            url: '@Url.ActionLink("GetPositionWithUser", "Account")',
+             url: '@Url.ActionLink("GetPositionWithDepartment", "Account")',
             data: {
-                userId: _id,
+                departmentId: _id,
             },
             success: function (response) {
                 if (response.error == true) {
