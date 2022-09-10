@@ -136,6 +136,22 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     add.LastWorkGraphicId = (int)usr2.WorkGraphicId;
                 }
+                else if(add.Type == PersonalContractConst.POSITION)
+                {
+                    add.LastPositionId = usr2.PositionId;
+                    add.LastDepartmentId = usr2.DepartmentId;
+                }
+                else if (add.Type == PersonalContractConst.SALARY)
+                {
+                    add.LastSalary = usr2.Salary;
+                }
+                else if (add.Type == PersonalContractConst.SALARY_POSITION)
+                {
+                    add.LastPositionId = usr2.PositionId;
+                    add.LastDepartmentId = usr2.DepartmentId;
+                    add.LastSalary = usr2.Salary;
+                }
+               
 
                 // Emek muqavile senedi
                 var current = GetSignInUserId();
@@ -575,10 +591,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                     }
                 }
-                else if (update.Type == PersonalContractConst.WORK_GRAPHIC)
-                {
-                    update.LastWorkGraphicId = (int)usr2.WorkGraphicId;
-                }
+                //else if (update.Type == PersonalContractConst.WORK_GRAPHIC)
+                //{
+                //    update.LastWorkGraphicId = (int)usr2.WorkGraphicId;
+                //}
 
 
                 await _contractService.UpdateAsync(update);
@@ -767,11 +783,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var transactionModel = _contractService.FindByIdAsync(id).Result;
             var current = GetSignInUserId();
+            var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
 
             if (transactionModel.Type == "VACATION")
             {
-                var usr2 = await _userManager.FindByIdAsync(transactionModel.UserId.ToString());
-
+              
                 usr2.VacationMainDay = (int)transactionModel.LastMainVacationDay;
                 if (!transactionModel.IsMainVacation)
                 {
@@ -878,11 +894,32 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             }
             else
             {
+                 if (transactionModel.Type == PersonalContractConst.POSITION)
+                {
+                    usr2.PositionId = transactionModel.LastPositionId;
+                    usr2.DepartmentId = transactionModel.LastDepartmentId;
+                }
+                else if (transactionModel.Type == PersonalContractConst.SALARY)
+                {
+                    usr2.Salary = transactionModel.LastSalary;
+                }
+                else if (transactionModel.Type == PersonalContractConst.SALARY_POSITION)
+                {
+                    usr2.PositionId = transactionModel.LastPositionId;
+                    usr2.DepartmentId = transactionModel.LastDepartmentId;
+                    usr2.Salary = transactionModel.LastSalary;
+                }
+                else if (transactionModel.Type == PersonalContractConst.WORK_GRAPHIC)
+                {
+                    usr2.WorkGraphicId = transactionModel.LastWorkGraphicId;
+                }
+                await _userManager.UpdateAsync(usr2);
+
                 transactionModel.DeleteDate = DateTime.Now;
                 transactionModel.DeleteByUserId = current;
                 transactionModel.IsDeleted = true;
                 await _contractService.UpdateAsync(_map.Map<PersonalContract>(transactionModel));
-            }
+            }  
         }
     }
 }

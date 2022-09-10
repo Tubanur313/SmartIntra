@@ -24,6 +24,10 @@ namespace SmartIntranet.Entities.Concrete.IntraHr
         public int? ClauseId { get; set; }
         public bool IsMainVacation { get; set; }
         public int VacationExtraType { get; set; }
+        public int? LastDepartmentId { get; set; }
+        public int? LastPositionId { get; set; }
+        public double LastSalary { get; set; }
+        public bool? LastIsMainPlace { get; set; }
         public Clause Clause { get; set; }
         public IntranetUser User { get; set; }
 
