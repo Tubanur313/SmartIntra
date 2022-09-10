@@ -1,4 +1,4 @@
-﻿namespace SmartIntranet.DTO.DTOs
+﻿namespace SmartIntranet.DTO.DTOs.WorkCalendarDto
 {
     public class DayType
     {

@@ -1,8 +1,7 @@
-﻿using SmartIntranet.Core.Entities.Concrete;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SmartIntranet.Core.Entities.Concrete;
 
-
-namespace SmartIntranet.Entities.Concrete
+namespace SmartIntranet.Entities.Concrete.IntraHr
 {
     public class NonWorkingYear : BaseEntity
     {

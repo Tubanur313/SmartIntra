@@ -1,14 +1,14 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
-namespace SmartIntranet.DataAccess.Interfaces
+namespace SmartIntranet.DataAccess.Interfaces.IntraHr
 {
     public interface IPlaceDal : IGenericDal<Place>
     {
         Task<List<Place>> GetAllIncAsync(); 
-        Task<List<Place>> GetAllIncAsync(Expression<Func<Place, bool>> filter); 
+        Task<List<Place>> GetAllIncAsync(Expression<Func<Place, bool>> filter, bool asnotrack = false); 
     }
 }

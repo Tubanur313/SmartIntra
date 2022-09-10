@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.Membership;
 
 namespace SmartIntranet.Web.ViewComponents
 {

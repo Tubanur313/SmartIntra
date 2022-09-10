@@ -4,16 +4,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Extension;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 
 namespace SmartIntranet.Web.Controllers.HrControlers

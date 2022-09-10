@@ -1,11 +1,10 @@
-﻿using SmartIntranet.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using SmartIntranet.Entities.Concrete.IntraHr;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.DTO.DTOs.PersonalContractDto
+namespace SmartIntranet.DTO.DTOs.LongContractDto
 {
     public class LongContractUpdateDto
     {

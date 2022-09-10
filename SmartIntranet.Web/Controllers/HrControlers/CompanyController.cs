@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Business.Extension;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 

@@ -1,13 +1,19 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SmartIntranet.Business.Interfaces;
+using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Business.Interfaces.IntraTicket.TicketTripServices;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
@@ -28,17 +34,11 @@ using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.DTO.DTOs.WatcherDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.TicketControllers
 {
     public class TicketController : BaseIdentityController
     {
@@ -49,7 +49,6 @@ namespace SmartIntranet.Web.Controllers
         private readonly ICategoryTicketService _categoryTicketService;
         private readonly IAppUserService _userService;
         private readonly IWatcherService _watcherService;
-        private readonly IOrderService _orderService;
         private readonly ITicketOrderService _ticketOrderService;
         private readonly ITicketCheckListService _ticketCheckListService;
         private readonly IConfirmTicketUserService _confirmTicketUserService;
@@ -72,7 +71,7 @@ namespace SmartIntranet.Web.Controllers
             IExportPdfService exportPdf,
             ITicketService ticketService,
             ICheckListService checkListService,
-            ICategoryTicketService CategoryTicketService,
+            ICategoryTicketService categoryTicketService,
             IAppUserService userService,
             IOrderService orderService,
             UserManager<IntranetUser> userManager,
@@ -100,9 +99,8 @@ namespace SmartIntranet.Web.Controllers
             _exportPdfService = exportPdf;
             _ticketService = ticketService;
             _checkListService = checkListService;
-            _categoryTicketService = CategoryTicketService;
+            _categoryTicketService = categoryTicketService;
             _userService = userService;
-            _orderService = orderService;
             _watcherService = watcherService;
             _ticketCheckListService = ticketCheckListService;
             _confirmTicketUserService = confirmTicketUserService;
@@ -130,14 +128,14 @@ namespace SmartIntranet.Web.Controllers
              .GetForAdminAsync());
             if (model is null)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
                 ViewData["active"] = "active";
                 return View(new List<TicketListDto>());
 
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
             ViewData["active"] = "active";
             return View(model);
         }
@@ -146,15 +144,15 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> Admin(int CategoryTicketId, StatusType statusType, int companyId)
         {
             var model = _map.Map<List<TicketListDto>>(await _ticketService.GetForAdminAsync(CategoryTicketId, statusType, companyId));
-            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
             if (model.Count > 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
                 return View(_map.Map<List<TicketListDto>>(model));
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
             return View(new List<TicketListDto>());
         }
         [HttpGet]
@@ -167,13 +165,13 @@ namespace SmartIntranet.Web.Controllers
 
             if (model is null)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(new List<TicketListDto>());
 
             }
             TempData["success"] = success;
             TempData["error"] = error;
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             return View(model);
         }
         [HttpPost]
@@ -190,10 +188,10 @@ namespace SmartIntranet.Web.Controllers
 
             if (model.Count > 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(_map.Map<List<TicketListDto>>(model));
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
 
             return View(new List<TicketListDto>());
         }
@@ -217,13 +215,13 @@ namespace SmartIntranet.Web.Controllers
              .GetNonRedirectedAsync());
             if (model is null)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
                 return View(new List<TicketListDto>());
 
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
             return View(model);
         }
         [HttpPost]
@@ -231,15 +229,15 @@ namespace SmartIntranet.Web.Controllers
         public async Task<IActionResult> NonRedirect(int CategoryTicketId, StatusType statusType, int companyId)
         {
             var model = _map.Map<List<TicketListDto>>(await _ticketService.GetNonRedirectedAsync(CategoryTicketId, statusType, companyId));
-            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
             if (model.Count > 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+                ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
                 return View(_map.Map<List<TicketListDto>>(model));
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+            ViewBag.company = _map.Map<List<CompanyListDto>>(await _companyService.GetAllAsync(true));
             return View(new List<TicketListDto>());
         }
         [HttpGet]
@@ -254,13 +252,13 @@ namespace SmartIntranet.Web.Controllers
                 tickets.Add(_map.Map<TicketListDto>(wTickets.Ticket));
             }
 
-            if (tickets is null)
+            if (tickets.Count == 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(new List<TicketListDto>());
 
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             return View(tickets);
         }
         [HttpPost]
@@ -277,11 +275,11 @@ namespace SmartIntranet.Web.Controllers
             }
             if (tickets.Count > 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 var result = _map.Map<List<TicketListDto>>(tickets);
                 return View(result);
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             return View(new List<TicketListDto>());
         }
         [Authorize(Policy = "ticket.confirmNotify")]
@@ -311,12 +309,12 @@ namespace SmartIntranet.Web.Controllers
             {
                 tickets.Add(_map.Map<TicketListDto>(cTickets.Ticket));
             }
-            if (tickets is null)
+            if (tickets.Count==0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(new List<TicketListDto>());
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             return View(tickets);
         }
         [HttpPost]
@@ -336,12 +334,12 @@ namespace SmartIntranet.Web.Controllers
             }
             if (tickets.Count > 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 var result = _map.Map<List<TicketListDto>>(tickets);
 
                 return View(result);
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             return View(new List<TicketListDto>());
         }
         [HttpGet]
@@ -351,17 +349,17 @@ namespace SmartIntranet.Web.Controllers
             var user = await _userService.GetAsync(x => x.Id == GetSignInUserId());
             if (user.DepartmentId is null)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(new List<TicketListDto>());
             }
             List<TicketListDto> model = _map.Map<List<TicketListDto>>(await _ticketService
                .GetByUserDepartmentAllIncAsync((int)user.DepartmentId));
             if (model is null)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(new List<TicketListDto>());
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             return View(model);
         }
         [HttpPost]
@@ -377,10 +375,10 @@ namespace SmartIntranet.Web.Controllers
             );
             if (model.Count > 0)
             {
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
                 return View(_map.Map<List<TicketListDto>>(model));
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
 
             return View(new List<TicketListDto>());
         }
@@ -390,11 +388,11 @@ namespace SmartIntranet.Web.Controllers
         [Authorize(Policy = "ticket.add")]
         public async Task<IActionResult> Add()
         {
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
-            ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted));
-            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
-            ViewBag.cheklist = _map.Map<List<CheckListListDto>>(await _checkListService.GetAllAsync());
-            ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
+            ViewBag.places = _map.Map<List<PlaceListDto>>(await _placeService.GetAllIncAsync(x => !x.IsDeleted,true));
+            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted,true));
+            ViewBag.cheklist = _map.Map<List<CheckListListDto>>(await _checkListService.GetAllAsync(true));
+            ViewBag.users = _map.Map<List<AppUserDetailsDto>>(await _userService.GetAllIncludeAsync(true));
             return View();
         }
         [HttpPost]
@@ -607,7 +605,7 @@ namespace SmartIntranet.Web.Controllers
             {
                 TempData["error"] = Messages.Error.notFound;
             }
-            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted));
+            ViewBag.cause = _map.Map<List<CauseListDto>>(await _causeService.GetAllIncAsync(x => !x.IsDeleted,true));
             ViewBag.GrandTotal = _ticketService.GetAsync(x => x.Id == id).Result.GrandTotal;
             ViewBag.DiscCount = _discussionService.GetAllAsync(x => x.TicketId == id).Result.Count;
             data.VacationLeave = await _vacationLeaveService.GetAsync(x => x.TicketId == id);
@@ -646,12 +644,12 @@ namespace SmartIntranet.Web.Controllers
                 orders.Add(_map.Map<OrderListDto>(order.Order));
             }
 
-            if (orders is null)
+            if (orders.Count ==0)
             {
                 TempData["error"] = Messages.Error.notFound;
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             ViewBag.ticketId = id;
             ViewBag.GrandTotal = _ticketService.GetAsync(x => x.Id == id).Result.GrandTotal;
             //var ticket = await _ticketService.FindByIdAsync(id);
@@ -692,9 +690,9 @@ namespace SmartIntranet.Web.Controllers
             if (data is null)
             {
                 TempData["error"] = Messages.Error.notFound;
-                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+                ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
             }
-            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync());
+            ViewBag.categories = _map.Map<List<CategoryTicketListDto>>(await _categoryTicketService.GetAllIncludeAsync(true));
 
             return View(data);
         }

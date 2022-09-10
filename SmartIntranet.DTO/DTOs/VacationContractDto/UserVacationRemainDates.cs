@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartIntranet.DTO.DTOs.PersonalContractDto
+namespace SmartIntranet.DTO.DTOs.VacationContractDto
 {
     public class UserVacationRemainDates
     {

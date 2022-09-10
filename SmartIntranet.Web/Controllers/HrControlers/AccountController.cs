@@ -16,14 +16,12 @@ using SmartIntranet.Business.Provider;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.GradeDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.DTO.DTOs.UserContractDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Membership;
 using SmartIntranet.Web.GoogleRecaptcha;
@@ -33,6 +31,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SmartIntranet.DTO.DTOs.ContractDto;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -168,20 +167,28 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List()
         {
-            var userComp =await _userCompService.FirstOrDefault(GetSignInUserId());
-            ViewBag.CompId = userComp.CompanyId;
-            if (userComp.CompanyId.Equals(null))
+            var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
+
+            if (userComp is null)
             {
                 return View(new List<AppUserListDto>());
             }
-            var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
-            return View(_map.Map<List<AppUserListDto>>(model));
+            else
+            {
+                ViewBag.CompId = userComp.CompanyId;
+                var model = await _appUserService.GetAllIncUserWithFilterAsync(userComp.CompanyId);
+                return View(_map.Map<List<AppUserListDto>>(model));
+            }
+
 
         }
         [HttpPost]
         [Authorize(Policy = "account.list")]
         public async Task<IActionResult> List(int CompId, int DepartId, int PositId)
         {
+            ViewBag.CompId = CompId;
+            ViewBag.DepartId = DepartId;
+            ViewBag.PositId = PositId;
             var model = await _appUserService.GetAllIncUserWithFilterAsync(CompId, DepartId, PositId);
             return View(_map.Map<List<AppUserListDto>>(model));
         }
@@ -421,7 +428,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             }
             else
             {
-                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted  == false));
+                ViewBag.grades = _map.Map<ICollection<GradeListDto>>(await _gradeService.GetAllAsync(x => x.IsDeleted == false));
                 return RedirectToAction("List", new
                 {
                     error = Messages.Error.notComplete
@@ -437,19 +444,19 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> GetCompanyTree()
         {
             var tree = (await _companyService
-                .GetAllAsync(x => !x.IsDeleted)).BuildTrees();
+                .GetAllAsync(x => !x.IsDeleted,true)).BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetDepartmentTree(int companyId)
         {
             var tree = (await _departmentService
-                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted)).BuildTrees();
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted,true)).BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetPositionTree(int departmentId)
         {
             var tree = (await _positionService
-                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted)).BuildTrees();
+                .GetAllAsync(x => x.DepartmentId == departmentId && !x.IsDeleted, true)).BuildTrees();
             return new JsonResult(tree);
         }
         [HttpGet]

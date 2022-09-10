@@ -1,11 +1,9 @@
-﻿using SmartIntranet.Core.Entities.Concrete;
-using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using SmartIntranet.Core.Entities.Concrete;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.Entities.Concrete
+namespace SmartIntranet.Entities.Concrete.IntraHr
 {
     public class BusinessTripUser: BaseEntity
     {

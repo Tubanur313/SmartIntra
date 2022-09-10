@@ -1,5 +1,6 @@
 ﻿using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.Membership;
 using SmartIntranet.Entities.Concrete.Membership;
 
 namespace SmartIntranet.Business.Concrete.Membership

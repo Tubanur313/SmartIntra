@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Intranet;
 
 

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SmartIntranet.DTO.DTOs.DepartmentDto;
+using SmartIntranet.DTO.DTOs.WorkCalendarDto;
 
 namespace SmartIntranet.Business.ValidationRules.FluentValidation
 {

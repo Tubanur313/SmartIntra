@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SmartIntranet.Business.Containers.Autofac;
 using SmartIntranet.Business.Provider;
-using SmartTicket.Web;
 using System;
 using System.Linq;
 using System.Reflection;

@@ -1,10 +1,10 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.Business.Interfaces
+namespace SmartIntranet.Business.Interfaces.Membership
 {
     public interface IUserVacationRemainService : IGenericService<UserVacationRemain>
     {

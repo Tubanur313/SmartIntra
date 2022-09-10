@@ -1,12 +1,12 @@
-﻿using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DataAccess.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SmartIntranet.Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
+using SmartIntranet.DataAccess.Interfaces.Intranet;
+using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
+namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Intranet
 {
     public class EfPositionRepository : EfGenericRepository<Position>, IPositionDal
     {

@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete.IntraTicket;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
+using SmartIntranet.DataAccess.Interfaces.IntraTicket;
+using SmartIntranet.Entities.Concrete.IntraTicket;
 
-namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
+namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.IntraTicket
 {
     public class EfDiscussionRepository : EfGenericRepository<Discussion>, IDiscussionDal
     {

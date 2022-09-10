@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.DTO.DTOs.DiscussionDto;
 using SmartIntranet.Entities.Concrete.Membership;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.TicketControllers
 {
     public class DiscussController : BaseIdentityController
     {

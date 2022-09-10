@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 
-namespace SmartIntranet.DataAccess.Interfaces
+namespace SmartIntranet.DataAccess.Interfaces.IntraTicket
 {
     public interface IConfirmTicketUserDal : IGenericDal<ConfirmTicketUser>
     {

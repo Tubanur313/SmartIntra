@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Entities.Concrete.Membership;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.Business.Interfaces
+namespace SmartIntranet.Business.Interfaces.IntraHr
 {
     public interface IUserContractService : IGenericService<UserContractFile>
     {

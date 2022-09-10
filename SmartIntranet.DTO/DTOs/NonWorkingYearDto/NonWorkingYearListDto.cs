@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SmartIntranet.DTO.DTOs.DepartmentDto
+namespace SmartIntranet.DTO.DTOs.NonWorkingYearDto
 {
     public class NonWorkingYearListDto
     {

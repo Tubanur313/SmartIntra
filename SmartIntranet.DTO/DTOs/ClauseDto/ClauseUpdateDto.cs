@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SmartIntranet.DTO.DTOs.ClauseDto
+﻿namespace SmartIntranet.DTO.DTOs.ClauseDto
 {
     public class ClauseUpdateDto
     {

@@ -1,10 +1,10 @@
-﻿using SmartIntranet.Entities.Concrete.Intranet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.Business.Interfaces
+namespace SmartIntranet.Business.Interfaces.Intranet
 {
     public interface ICompanyService : IGenericService<Company>
     {

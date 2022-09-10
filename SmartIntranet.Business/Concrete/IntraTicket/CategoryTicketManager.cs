@@ -3,6 +3,7 @@ using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.DataAccess.Interfaces.IntraTicket;
 
 namespace SmartIntranet.Business.Concrete.IntraTicket
 {
@@ -22,9 +23,9 @@ namespace SmartIntranet.Business.Concrete.IntraTicket
             return await _categoryDal.GetIncludeAsync(id);
         }
 
-        public async Task<List<CategoryTicket>> GetAllIncludeAsync()
+        public async Task<List<CategoryTicket>> GetAllIncludeAsync(bool asnotrack = false)
         {
-            return await _categoryDal.GetAllIncludeAsync();
+            return await _categoryDal.GetAllIncludeAsync(asnotrack);
         }
     }
 }

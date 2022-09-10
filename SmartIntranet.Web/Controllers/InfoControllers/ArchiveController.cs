@@ -9,14 +9,13 @@ using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Intranet.Archives;
 using SmartIntranet.Core.Utilities.Messages;
-using SmartIntranet.DTO.DTOs.AppUserDto;
 using SmartIntranet.DTO.DTOs.ArchiveDto;
-using SmartIntranet.DTO.DTOs.PlaceDto;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.Membership;
 
 namespace SmartIntranet.Web.Controllers.InfoControllers
 {

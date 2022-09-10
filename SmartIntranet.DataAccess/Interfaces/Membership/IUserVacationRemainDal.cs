@@ -1,10 +1,10 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Membership;
 
-namespace SmartIntranet.DataAccess.Interfaces
+namespace SmartIntranet.DataAccess.Interfaces.Membership
 {
     public interface IUserVacationRemainDal : IGenericDal<UserVacationRemain>
     {

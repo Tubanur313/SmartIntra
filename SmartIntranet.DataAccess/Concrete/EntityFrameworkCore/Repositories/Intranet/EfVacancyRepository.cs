@@ -1,14 +1,14 @@
-﻿using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DataAccess.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions; 
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
+using SmartIntranet.DataAccess.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories
+namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Intranet
 {
     public class EfVacancyRepository : EfGenericRepository<Vacancy>, IVacancyDal
     {

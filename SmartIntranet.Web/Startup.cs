@@ -1,3 +1,4 @@
+using System.Globalization;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -14,9 +15,8 @@ using SmartIntranet.Business.Extension;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 using SmartIntranet.Web.GoogleRecaptcha;
-using System.Globalization;
 
-namespace SmartTicket.Web
+namespace SmartIntranet.Web
 {
     public class Startup
     {

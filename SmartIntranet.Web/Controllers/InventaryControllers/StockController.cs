@@ -19,6 +19,8 @@ using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.Intranet;
+using SmartIntranet.Business.Interfaces.Membership;
 
 namespace SmartIntranet.Web.Controllers.InventaryControllers
 {

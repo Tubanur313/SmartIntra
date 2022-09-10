@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using SmartIntranet.Core.Entities.Enum;
 using SmartIntranet.DTO.DTOs.TicketTripDtos.BusinessTravelDtos;
-using SmartIntranet.DTO.DTOs.TicketTripDtos.PermissionDtos;
-using SmartIntranet.DTO.DTOs.TicketTripDtos.VacationLeaveDtos;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.IntraTicket.TicketTripEnts;
 using SmartIntranet.Entities.Concrete.Membership;

@@ -1,4 +1,4 @@
-﻿namespace SmartIntranet.DTO.DTOs
+﻿namespace SmartIntranet.DTO.DTOs.ReportEmployeeDto
 {
     public class DayItem
     {

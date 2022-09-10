@@ -1,10 +1,10 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
-namespace SmartIntranet.DataAccess.Interfaces
+namespace SmartIntranet.DataAccess.Interfaces.IntraHr
 {
     public interface INonWorkingDayDal : IGenericDal<NonWorkingDay>
     {

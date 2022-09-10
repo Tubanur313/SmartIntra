@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Entities.Concrete;
+﻿using System;
+using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
 
-namespace SmartIntranet.DTO.DTOs.PersonalContractDto
+namespace SmartIntranet.DTO.DTOs.VacationContractDto
 {
     public class VacationContractListDto
     {

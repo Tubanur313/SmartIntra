@@ -1,4 +1,4 @@
-﻿namespace SmartIntranet.DTO.DTOs
+﻿namespace SmartIntranet.DTO.DTOs.ContractDto
 {
     public static class FileType
     {

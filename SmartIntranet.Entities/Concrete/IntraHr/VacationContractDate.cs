@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Core.Entities.Concrete;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using SmartIntranet.Core.Entities.Concrete;
 
-namespace SmartIntranet.Entities.Concrete
+namespace SmartIntranet.Entities.Concrete.IntraHr
 {
     public class VacationContractDate : BaseEntity
     {

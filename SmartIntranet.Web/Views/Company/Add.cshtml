@@ -53,9 +53,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label class="floatLabel">   Üst Şirkət: </label>
-                                <div style="margin-bottom:20px">
-                                     <input type="text" class="form-control"  asp-for="ParentId" name="ParentId" style="width:100%" >
-                                </div>
+                            <div style="margin-bottom:20px">
+                                <input type="text" class="form-control" placeholder="Seçim edin" value="" asp-for="ParentId" name="ParentId" style="width:100%">
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -102,7 +102,7 @@
                             </div>
                         </div>
                     </div>
-                     <div class="row">
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Bankın adı: </label>
@@ -143,7 +143,7 @@
                     <div class="row form-group">
                         <div class="file-name mb-3 col-md-12">
                             <label for="Logo" class="btn btn-mat btn-primary"><i class="icofont icofont-cloud-upload"></i> Logo Yüklə</label>
-                          <input type="file" style="display:none;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
+                            <input type="file" style="display:none;" class="form-control-file pb-3 mt-3" name="logo" id="Logo" />
                         </div>
                         <div class="col-md-6  col-lg-6 col-sm-6">
                             <div class="border text-center pt-2">
@@ -159,7 +159,7 @@
                                 <div class="border text-center pt-2">
                                     <div class="pt-0">
                                         <label class="floatLabel">Yeni logo:</label>
-                                        <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" alt=""/>
+                                        <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -189,17 +189,19 @@
 <script class="removable" type="text/javascript">
     $(document).ready(function ($) {
         $("#Logo").change(function (e) {
-        if($('.file-name').isImage())
-        {
-            $("#lview").show();
-            $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
-        }
-        else
-        {
-            toastr.error("Diqqət","Daxil edilən fayllar "+
-            " image, png və ya gif formatında olmalıdır !");
-        }
+            if ($('.file-name').isImage()) {
+                $("#lview").show();
+                $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
+            }
+            else {
+                toastr.error("Diqqət", "Daxil edilən fayllar " +
+                    " image, png və ya gif formatında olmalıdır !");
+            }
         });
+        var defOpt = {
+            id: '',
+            text: 'Yoxdur'
+        };
         $.ajax({
             url: `@Url.Action("GetCompanyTree","Company")`,
             type: "Get",
@@ -208,16 +210,16 @@
             cache: false,
             success: function (data) {
                 $('#ParentId').combotree({
-                    data:data,
-                    prompt:'Seçim edin'
+                    data: [defOpt, ...data],
+                    prompt: 'Seçim edin'
                 });
             },
             error: function (data) {
             }
         });
-        $("form").submit(function (e){
+        $("form").submit(function (e) {
             var val = $('#ParentId')
-               .combotree('getValue');
+                .combotree('getValue');
             $('#ParentId').val($('[name="ParentId"]').val());
         });
     });

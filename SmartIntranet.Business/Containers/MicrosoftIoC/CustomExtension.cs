@@ -3,6 +3,7 @@ using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories;
 using SmartIntranet.DataAccess.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using SmartIntranet.Business.Concrete.IntraHr;
 using SmartIntranet.Business.Concrete.IntraTicket;
 using SmartIntranet.Business.Concrete.Intranet;
 using SmartIntranet.Business.Interfaces.Intranet;
@@ -10,9 +11,18 @@ using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Business.Concrete.Membership;
 using SmartIntranet.Business.Interfaces.IntraTicket;
 using SmartIntranet.Business.Concrete.Inventary;
+using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Inventary;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.IntraHr;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Intranet;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.IntraTicket;
 using SmartIntranet.DataAccess.Interfaces.Inventary;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Inventary;
+using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Membership;
+using SmartIntranet.DataAccess.Interfaces.IntraHr;
+using SmartIntranet.DataAccess.Interfaces.Intranet;
+using SmartIntranet.DataAccess.Interfaces.IntraTicket;
+using SmartIntranet.DataAccess.Interfaces.Membership;
 
 namespace SmartIntranet.Business.Containers.MicrosoftIoC
 {

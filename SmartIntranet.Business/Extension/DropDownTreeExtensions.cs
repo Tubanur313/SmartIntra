@@ -1,5 +1,4 @@
 ﻿using SmartIntranet.DTO.DTOs.CommonUseDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using System.Collections.Generic;

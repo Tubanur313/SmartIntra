@@ -7,13 +7,12 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.PositionDto;
 using SmartIntranet.Entities.Concrete.Membership;
-using SmartIntranet.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SmartIntranet.Business.Interfaces;
 using SmartIntranet.Business.Extension;
+using SmartIntranet.Entities.Concrete.Intranet;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {

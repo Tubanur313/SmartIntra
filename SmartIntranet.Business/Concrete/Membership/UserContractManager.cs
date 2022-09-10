@@ -3,6 +3,7 @@ using SmartIntranet.DataAccess.Interfaces;
 using SmartIntranet.Entities.Concrete.Membership;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.DataAccess.Interfaces.Membership;
 
 namespace SmartIntranet.Business.Concrete.Membership
 {

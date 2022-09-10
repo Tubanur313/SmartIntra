@@ -1,12 +1,13 @@
-﻿using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DataAccess.Interfaces;
-using SmartIntranet.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SmartIntranet.Business.Interfaces.IntraHr;
+using SmartIntranet.DataAccess.Interfaces;
+using SmartIntranet.DataAccess.Interfaces.IntraHr;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
-namespace SmartIntranet.Business.Concrete
+namespace SmartIntranet.Business.Concrete.IntraHr
 {
     public class PlaceManager : GenericManager<Place>, IPlaceService
     {
@@ -29,9 +30,9 @@ namespace SmartIntranet.Business.Concrete
             return _placeDal.GetAllIncAsync();
         }
 
-        public Task<List<Place>> GetAllIncAsync(Expression<Func<Place, bool>> filter)
+        public Task<List<Place>> GetAllIncAsync(Expression<Func<Place, bool>> filter,bool asnotrack = false)
         {
-            return _placeDal.GetAllIncAsync(filter);
+            return _placeDal.GetAllIncAsync(filter,asnotrack);
         }
     }
 }

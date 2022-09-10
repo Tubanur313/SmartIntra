@@ -6,7 +6,7 @@ namespace SmartIntranet.Business.Interfaces.IntraTicket
 {
     public interface ICategoryTicketService : IGenericService<CategoryTicket>
     {
-        Task<List<CategoryTicket>> GetAllIncludeAsync();
+        Task<List<CategoryTicket>> GetAllIncludeAsync(bool asnotrack=false);
         Task<CategoryTicket> GetIncludeAsync(int id);
     }
 }

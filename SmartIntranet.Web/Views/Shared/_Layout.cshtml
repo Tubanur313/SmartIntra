@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <partial name="_HeadLinks" />
-    @RenderSection("CustomCss", required: false)
+    @await RenderSectionAsync("CustomCss", required: false)
 </head>
 <body>
     <partial name="_Loader" />
@@ -20,7 +20,7 @@
                             <!-- Main-body start -->
                             <div class="main-body">
                                 <div class="page-wrapper">
-                                     @Html.AntiForgeryToken()
+                                    @Html.AntiForgeryToken()
                                     @RenderBody()
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                             </div>
 
                             @*<div class="loaderbody" id="loaderbody">
-                                <div class="loader"></div>
+                            <div class="loader"></div>
                             </div>*@
                         </div>
                     </div>
@@ -51,62 +51,77 @@
         </div>
     </div>
     <partial name="_FootScripts" />
-    @RenderSection("ProfileJs", required: false)
-    @RenderSection("CrudJs", required: false)
-@*  <script>
-      $.ajaxSetup({
-          statusCode:{
-              200:function(response){
-                  if(response.error == false &&response.message.length>0){
-                      toastr.success(response.message,'Ugurludur!');
-                  }
-              },
-              400:function(response){
-                  console.log('Xetali Sorgu','Xeta!');
-                  
-              },
-              401:function(response){
-                  console.log('Evvelce Sisteme daxil olmalisiniz','Diqqet!');
-              },
-              403:function(response){
-                  console.log('Bu Emeliyyat ucun Selahiyyetiniz yoxdur','Diqqet!');
-              },
-              404:function(response){
-                  console.log('Melumat Tapilmadi','Diqqet!');
-              },
-              500:function(response){
-                  console.log('Server Xetasi','Xeta!');
-              }
-          }
-      });
-  </script>*@
-<script class="removable">
-    $(".removable").remove();
-    $("#searchId").on("click",function(e){
-          var input =  document.querySelector("#search").value.trim();
+    @await RenderSectionAsync("ProfileJs", required: false)
+    @await RenderSectionAsync("CrudJs", required: false)
 
-    if (input != null && input!=''){
-                $.ajax({
-                type: 'post',
-                url: `@Url.Action("Search","Ticket")`,
-                datatype: 'json',
-                data: { id:input },
-                success: function (response) {
-                    if (response.error == true) {
-
-                        toastr.error(response.message, "Xəta baş verdi!");
-                        return;
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "#closeBtn", function (e) {
+                $(".modal").each(function () {
+                    if ($(this).hasClass("show")) {
+                        $(".panel").addClass("d-none")
+                    } else {
+                        $(".panel-htop").addClass("d-none")
+                        $(".select2-dropdown").addClass("d-none")
                     }
-                },
-                error: function (response) {
- 
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
+                });
             });
-          }
-    })
+        });
+    </script>
+    @*  <script>
+    $.ajaxSetup({
+    statusCode:{
+    200:function(response){
+    if(response.error == false &&response.message.length>0){
+    toastr.success(response.message,'Ugurludur!');
+    }
+    },
+    400:function(response){
+    console.log('Xetali Sorgu','Xeta!');
 
-</script>
+    },
+    401:function(response){
+    console.log('Evvelce Sisteme daxil olmalisiniz','Diqqet!');
+    },
+    403:function(response){
+    console.log('Bu Emeliyyat ucun Selahiyyetiniz yoxdur','Diqqet!');
+    },
+    404:function(response){
+    console.log('Melumat Tapilmadi','Diqqet!');
+    },
+    500:function(response){
+    console.log('Server Xetasi','Xeta!');
+    }
+    }
+    });
+    </script>*@
+    <script class="removable">
+        $(".removable").remove();
+        $("#searchId").on("click", function (e) {
+            var input = document.querySelector("#search").value.trim();
+
+            if (input != null && input != '') {
+                $.ajax({
+                    type: 'post',
+                    url: `@Url.Action("Search","Ticket")`,
+                    datatype: 'json',
+                    data: { id: input },
+                    success: function (response) {
+                        if (response.error == true) {
+
+                            toastr.error(response.message, "Xəta baş verdi!");
+                            return;
+                        }
+                    },
+                    error: function (response) {
+
+                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                    }
+                });
+            }
+        })
+
+    </script>
 </body>
 </html>
 

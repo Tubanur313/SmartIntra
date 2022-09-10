@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Core.Entities.Concrete;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using SmartIntranet.Core.Entities.Concrete;
 
-namespace SmartIntranet.Entities.Concrete
+namespace SmartIntranet.Entities.Concrete.IntraHr
 {
     public class BusinessTrip: BaseEntity
     {

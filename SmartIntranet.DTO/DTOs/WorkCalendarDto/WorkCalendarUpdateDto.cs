@@ -1,7 +1,6 @@
-﻿using SmartIntranet.Entities.Concrete;
-using System;
+﻿using SmartIntranet.Entities.Concrete.IntraHr;
 
-namespace SmartIntranet.DTO.DTOs.DepartmentDto
+namespace SmartIntranet.DTO.DTOs.WorkCalendarDto
 {
     public class WorkCalendarUpdateDto
     {

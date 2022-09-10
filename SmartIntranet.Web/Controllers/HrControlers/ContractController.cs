@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using SmartIntranet.Business.Interfaces;
-using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.ContractDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +18,7 @@ using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet;
-using NPOI.SS.Formula.Functions;
+using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Entities.Concrete.IntraHr;
 
 

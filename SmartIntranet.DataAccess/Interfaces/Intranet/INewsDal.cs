@@ -1,8 +1,8 @@
-﻿using SmartIntranet.Entities.Concrete.Intranet;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SmartIntranet.Entities.Concrete.Intranet;
 
-namespace SmartIntranet.DataAccess.Interfaces
+namespace SmartIntranet.DataAccess.Interfaces.Intranet
 {
     public interface INewsDal : IGenericDal<News>
     {

@@ -1,4 +1,5 @@
-﻿@model List<ContractListDto>
+﻿@using SmartIntranet.Entities.Concrete.IntraHr
+@model List<ContractListDto>
 @{
     ViewData["Title"] = "Müqavilə Siyahısı";
     Layout = $"~/Views/Shared/_Layout.cshtml";
@@ -51,7 +52,7 @@
                           var cntr =  ViewBag.contractTypes as List<ContractType>;
                            string key = ViewBag.docType;
                         }
-
+                        <option value="" >Hamısı</option>
                         @if (ViewBag.docType == null)
                         {
                             <option value="" selected disabled hidden>Seçim edin</option>

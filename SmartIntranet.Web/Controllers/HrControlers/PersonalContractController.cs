@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using SmartIntranet.Business.Interfaces;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
-using SmartIntranet.DTO.DTOs;
 using SmartIntranet.DTO.DTOs.CompanyDto;
 using SmartIntranet.DTO.DTOs.DepartmentDto;
 using SmartIntranet.DTO.DTOs.PersonalContractDto;
 using SmartIntranet.DTO.DTOs.PositionDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.Membership;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +19,9 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Business.Interfaces.IntraHr;
+using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.DTO.DTOs.ContractDto;
+using SmartIntranet.Entities.Concrete.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {

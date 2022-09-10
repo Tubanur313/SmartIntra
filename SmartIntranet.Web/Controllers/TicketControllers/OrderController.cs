@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,11 +11,8 @@ using SmartIntranet.DTO.DTOs.OrderDto;
 using SmartIntranet.DTO.DTOs.TicketOrderDto;
 using SmartIntranet.Entities.Concrete.IntraTicket;
 using SmartIntranet.Entities.Concrete.Membership;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace SmartIntranet.Web.Controllers
+namespace SmartIntranet.Web.Controllers.TicketControllers
 {
     public class OrderController : BaseIdentityController
     {

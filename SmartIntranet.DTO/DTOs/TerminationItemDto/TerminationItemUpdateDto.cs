@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SmartIntranet.DTO.DTOs.TerminationItemDto
+﻿namespace SmartIntranet.DTO.DTOs.TerminationItemDto
 {
     public class TerminationItemUpdateDto
     {

@@ -43,7 +43,6 @@ using SmartIntranet.DTO.DTOs.UserContractDto;
 using SmartIntranet.DTO.DTOs.VacancyDto;
 using SmartIntranet.DTO.DTOs.WatcherDto;
 using SmartIntranet.DTO.DTOs.WorkGraphicDto;
-using SmartIntranet.Entities.Concrete;
 using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.Entities.Concrete.Intranet;
 using SmartIntranet.Entities.Concrete.Intranet.Archives;
@@ -54,6 +53,12 @@ using SmartIntranet.Entities.Concrete.Inventary;
 using SmartIntranet.Entities.Concrete.Membership;
 using System;
 using System.Linq;
+using SmartIntranet.DTO.DTOs.LongContractDto;
+using SmartIntranet.DTO.DTOs.NonWorkingDayDto;
+using SmartIntranet.DTO.DTOs.NonWorkingYearDto;
+using SmartIntranet.DTO.DTOs.UserVacationRemain;
+using SmartIntranet.DTO.DTOs.VacationContractDto;
+using SmartIntranet.DTO.DTOs.WorkCalendarDto;
 
 namespace SmartIntranet.Business.DependencyResolvers.Automapper
 {
