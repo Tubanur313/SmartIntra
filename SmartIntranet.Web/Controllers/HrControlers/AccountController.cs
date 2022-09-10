@@ -404,6 +404,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     Pin = user.Pin,
                     StartWorkDate = user.StartWorkDate,
                     Birthday = user.Birthday,
+                    SsnCode = user.SsnCode,
                     PhoneNumber = user.PhoneNumber,
                     Address = user.Address,
                     Picture = user.Picture,
@@ -741,6 +742,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         updateUser.VacationExtraChild = model.VacationExtraChild;
                         updateUser.VacationExtraExperience = model.VacationExtraExperience;
                         updateUser.VacationExtraNature = model.VacationExtraNature;
+                        updateUser.SsnCode = model.SsnCode;
                         updateUser.IdCardType = model.IdCardType;
                         updateUser.Citizenship = model.Citizenship;
                         updateUser.Salary = model.Salary;

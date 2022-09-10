@@ -46,6 +46,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public int? PositionId { get; set; }
         public Position Position { get; set; }
         public decimal VacationTotal { get; set; }
+        public string SsnCode { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }
         public virtual List<Entities.Concrete.Membership.UserVacationRemain> UserVacationRemains { get; set; }

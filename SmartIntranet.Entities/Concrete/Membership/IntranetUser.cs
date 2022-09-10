@@ -54,6 +54,7 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public DateTime? DeleteDate { get; set; }
         public bool IsDeleted { get; set; }
         public decimal VacationTotal { get; set; }
+        public string SsnCode { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
         public virtual ICollection<UserComp> UserComps { get; set; }
         public virtual ICollection<UserExperience> UserExperiences { get; set; }
