@@ -247,7 +247,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Əmək Haqqı: </label>
-                                <input type="number" class="form-control" asp-for="Salary" autocomplete="off">
+                                <input class="form-control" asp-for="Salary" autocomplete="off">
                                 <span asp-validation-for="Salary" class="text-danger"></span>
                             </div>
 
@@ -611,6 +611,8 @@
 <script type="text/javascript">
     $.validator.setDefaults({ ignore: '' });
     $(document).ready(function () {
+
+        $('#Salary').rules("remove", "number");
 
         let dateArray = [];
 

@@ -258,6 +258,8 @@
 
      $(document).ready(function () {
 
+         $('#Salary').rules("remove", "number");
+
          $('.custom-date').each(function() {
             $(this).datepicker({
                 format: "dd.mm.yyyy"
