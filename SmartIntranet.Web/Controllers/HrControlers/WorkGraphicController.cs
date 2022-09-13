@@ -121,7 +121,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var data = await _workGraphicService.FindByIdAsync(model.Id);
                 var current = GetSignInUserId();
                 var update = _map.Map<WorkGraphic>(model);
-                model.Key = data.Key;
+                update.Key = data.Key;
                 update.UpdateByUserId = GetSignInUserId();
                 update.CreatedByUserId = data.CreatedByUserId;
                 update.DeleteByUserId = data.DeleteByUserId;

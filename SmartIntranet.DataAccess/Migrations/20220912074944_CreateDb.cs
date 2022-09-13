@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
-    public partial class baseMigration : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1012,7 +1012,11 @@ namespace SmartIntranet.DataAccess.Migrations
                     VacationDay = table.Column<int>(nullable: false),
                     ClauseId = table.Column<int>(nullable: true),
                     IsMainVacation = table.Column<bool>(nullable: false),
-                    VacationExtraType = table.Column<int>(nullable: false)
+                    VacationExtraType = table.Column<int>(nullable: false),
+                    LastDepartmentId = table.Column<int>(nullable: true),
+                    LastPositionId = table.Column<int>(nullable: true),
+                    LastSalary = table.Column<double>(nullable: false),
+                    LastIsMainPlace = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1111,7 +1115,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "1000, 1"),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
@@ -1198,7 +1202,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "1000, 1"),
                     IsDeleted = table.Column<bool>(nullable: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
@@ -1295,7 +1299,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     Salary = table.Column<string>(maxLength: 100, nullable: false),
                     Occupations = table.Column<string>(maxLength: 100, nullable: false),
                     ImagePath = table.Column<string>(maxLength: 300, nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 9, 4, 22, 49, 22, 595, DateTimeKind.Local).AddTicks(8774)),
+                    StartDate = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2022, 9, 12, 11, 49, 44, 513, DateTimeKind.Local).AddTicks(4560)),
                     EndDate = table.Column<DateTime>(nullable: false),
                     City = table.Column<string>(maxLength: 100, nullable: true),
                     Address = table.Column<string>(maxLength: 200, nullable: true),
@@ -1365,7 +1369,8 @@ namespace SmartIntranet.DataAccess.Migrations
                     DeleteByUserId = table.Column<int>(nullable: true),
                     DeleteDate = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
-                    VacationTotal = table.Column<decimal>(nullable: false)
+                    VacationTotal = table.Column<decimal>(nullable: false),
+                    SsnCode = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1437,7 +1442,7 @@ namespace SmartIntranet.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("SqlServer:Identity", "1000, 1"),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatedByUserId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
