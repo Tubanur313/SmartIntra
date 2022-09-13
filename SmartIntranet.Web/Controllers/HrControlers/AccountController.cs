@@ -356,7 +356,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 var current = GetSignInUserId();
                 List<UserVacationRemain> UserVacationRemainsNew = new List<UserVacationRemain>();
-                if (user.UserVacationRemains != null && user.UserVacationRemains.Count() > 0)
+                if (user.UserVacationRemains != null && user.UserVacationRemains.Count > 0)
                 {
                     foreach (var el in user.UserVacationRemains)
                     {

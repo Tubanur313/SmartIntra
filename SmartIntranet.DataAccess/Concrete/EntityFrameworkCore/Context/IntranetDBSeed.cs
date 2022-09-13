@@ -722,7 +722,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                         Wednesday = 8,
                         Thursday = 8,
                         Friday = 8,
-                        Saturday = 8,
+                        Saturday = 0,
                         Sunday = 0,
                         WorkStart = DateTime.ParseExact("09:00", "HH:mm", null),
                         WorkEnd = DateTime.ParseExact("18:00", "HH:mm", null),
