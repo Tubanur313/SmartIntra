@@ -445,13 +445,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> GetCompanyTree()
         {
             var tree = (await _companyService
-                .GetAllAsync(x => !x.IsDeleted,true)).BuildTrees();
+                .GetAllAsync(x => !x.IsDeleted, true)).BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetDepartmentTree(int companyId)
         {
             var tree = (await _departmentService
-                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted,true)).BuildTrees();
+                .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted, true)).BuildTrees();
             return new JsonResult(tree);
         }
         public async Task<IActionResult> GetPositionTree(int departmentId)
@@ -466,7 +466,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         {
             var usrs = _map.Map<ICollection<AppUserListDto>>(
                 await _appUserService.GetAllIncludeAsync(x => !x.IsDeleted && x.CompanyId == companyId))
-                .Select(x => new { x.Id, Name = x.Name + " " + x.Surname + "/" + x.Company.Name + "/" + x.Department.Name + "/" + x.Position.Name });
+                .Select(x => new
+                {
+                    x.Id,
+                    Startdate = x.StartWorkDate.ToString("dd.MM.yyyy"),
+                    Name = x.Name + " " + x.Surname + "/" + x.Company.Name + "/" + x.Department.Name + "/" + x.Position.Name
+                }
+
+                );
             return Ok(usrs);
         }
 

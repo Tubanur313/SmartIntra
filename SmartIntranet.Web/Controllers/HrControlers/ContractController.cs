@@ -128,7 +128,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
                 foreach (var el in business_trips)
                 {
-                    el.FullName = "Multi";
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count == 1 ?  $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}":"Əməkdaşların Ezamiyyəti";
                     el.ContractKey = business_trip;
                     el.ContractName = el_business_trip;
                     result_list.Add(el);
@@ -144,7 +146,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     int id = el.BusinessTripUsers.FirstOrDefault().UserId;
                     IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Əməkdaşların Ezamiyyəti" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
                     el.ContractKey = business_trip;
                     el.ContractName = el_business_trip;
                     result_list.Add(el);
@@ -185,8 +187,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             if (!result_list.Any()) return View(new List<ContractListDto>());
             {
                 List<ContractListDto> model_result_list = new List<ContractListDto>();
-                var multi = result_list.Where(x => x.FullName == "Multi").ToList();
-                var contract = result_list.Where(x => x.FullName != "Multi"
+                var multi = result_list.Where(x => x.User == null).ToList();
+                var contract = result_list.Where(x => x.User != null
                                                       && x.User.CompanyId == userComp.CompanyId).ToList();
                 TempData["success"] = success;
                 TempData["error"] = error;
@@ -267,7 +269,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var el_business_trip = _contractTypeService.GetAllIncCompAsync(x => !x.IsDeleted && x.Key == business_trip).Result[0].Name;
                 foreach (var el in business_trips)
                 {
-                    el.FullName = "Multi";
+                    int id = el.BusinessTripUsers.FirstOrDefault().UserId;
+                    IntranetUser user = await _appUserService.FindByUserAllInc(id);
+                    el.FullName = el.BusinessTripUsers.Count == 1 ? $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}" : "Əməkdaşların Ezamiyyəti";
                     el.ContractKey = business_trip;
                     el.ContractName = el_business_trip;
                     result_list.Add(el);
@@ -283,7 +287,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 {
                     int id = el.BusinessTripUsers.FirstOrDefault().UserId;
                     IntranetUser user = await _appUserService.FindByUserAllInc(id);
-                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Multi" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
+                    el.FullName = el.BusinessTripUsers.Count > 1 ? "Əməkdaşların Ezamiyyəti" : $"{user.Name} {user.Surname} / {user.Position.Company.Name} / {user.Position.Department.Name} / {user.Position.Name}";
                     el.ContractKey = business_trip;
                     el.ContractName = el_business_trip;
                     result_list.Add(el);
@@ -322,9 +326,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 result_list.Add(el);
             }
 
-            var multi = result_list.Where(x => x.FullName == "Multi").ToList();
+            var multi = result_list.Where(x => x.User == null).ToList();
             result_list = result_list
-                    .Where(x => x.FullName != "Multi").ToList();
+                    .Where(x => x.User != null).ToList();
 
 
             if (Interval is null && DocumentType != null)

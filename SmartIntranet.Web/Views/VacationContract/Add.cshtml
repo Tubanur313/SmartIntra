@@ -272,6 +272,8 @@
          }
 
            $("#addDateRange").click(function (e) {
+            var date = $("#UserId").find(':selected').data('date');
+
                 if(!checkDate() || checkRemainCount(e))
                 {
                     return;
@@ -284,7 +286,7 @@
                                 <div class="form-group">
                                     <label class="floatLabel"> Tarix: </label>
                                     <div class="input-group input-daterange mb-0">
-                                        <input type="text" maxlength=10 name="VacationContractDates[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
+                                                <input type="text" maxlength=10 name="VacationContractDates[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off" value="${date}">
                                     <div class="input-group-addon">to</div>
                                         <input type="text" maxlength=10 name="VacationContractDates[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
                                     </div>
@@ -462,14 +464,14 @@
                 var html = "";
 
                 for (var i in response) {
-                    html += `<option value="${[response[i].id]}">
+                    html += `<option data-date="${[response[i].startdate]}" value="${[response[i].id]}">
                     ${[response[i].name]}</option>`
                 }
 
                 if(response.length>0)
                 {
                     $("#UserId").prop('disabled', false);
-                    $("#UserId").html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
+                    $("#UserId").html(`<option value=""  disabled selected hidden>Seçim edin</option>`+ html);
                 }
                 else{
                     $("#UserId").prop('disabled', false);

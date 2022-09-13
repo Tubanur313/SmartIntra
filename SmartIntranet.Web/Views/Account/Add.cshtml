@@ -153,11 +153,11 @@
                             <div class="form-group">
                                 <label class="floatLabel">  SSN kod: </label>
                                 <input type="text" maxlength="13" class="form-control" asp-for="SsnCode" autocomplete="off">
-                              
+
                             </div>
 
                         </div>
-                     
+
                     </div>
 
 
@@ -420,6 +420,9 @@
                         <input id="rowCount" type="hidden" value="0" />
                     </div>
                     <div class="row">
+@*                        <div class="col-6 text-left">
+                            Ümumi staj <p class="text-primary">0</p>
+                        </div>*@
                         <div class="col-12 text-right">
                             İş stajı: <button type="button" id="addRow" class="btn btn-outline-success " data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-plus m-0"></i></button>
                         </div>
@@ -566,7 +569,7 @@
 
         function checkRemainCount(e) {
             let isEmpty = false;
-            $(".remain-count").each(function(i, el) {
+            $(".remain-count").each(function (i, el) {
                 $(this).rules("remove", "number");
                 let val = $(el).val();
                 if (!val) {
@@ -616,7 +619,7 @@
                 let dateEnd = new Date(endEl.split('.')[2], endEl.split('.')[1] - 1, endEl.split('.')[0]);
                 //let dateEnd = new Date(endEl);
                 totalDays += Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24));
-                console.log(Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24)));
+                //console.log(Math.ceil((dateEnd.getTime() - dateStart.getTime()) / (1000 * 3600 * 24)));
             }
             totalDays += Math.ceil((new Date().getTime() - startWorkDate.getTime()) / (1000 * 3600 * 24));
             let experienceYears = totalDays / 365;
@@ -689,7 +692,7 @@
             return valid;
         }
 
-        $("#addRow").click(function () {
+        $(document).on("click", "#addRow", function () {
             let rowCount = parseInt($("#rowCount").val());
             rowCount++;
             $("#rowCount").val(rowCount);
@@ -704,8 +707,33 @@
             $('.input-daterange').change(function () {
                 getUserVacationDay();
             });
-        });
 
+        });
+        //$(document).on("change", $(`input[name*='UserExperiences[${rowCount - 1}].ExperienceEnd']`), function () {
+        //    let row = parseInt($("#rowCount").val());
+        //    var start_date = "" + $(`input[name*='UserExperiences[${row - 1}].ExperienceStart']`).val();
+        //    var end_date = "" + $(`input[name*='UserExperiences[${row - 1}].ExperienceEnd']`).val();
+        //    var new_start_date = start_date.toString().split(".");
+        //    var new_end_date = end_date.toString().split('.');
+        //    a = calcDate(new Date(new_end_date[2], new_end_date[1]-1, new_end_date[0]), new Date(new_start_date[2], new_start_date[1]-1, new_start_date[0]))
+        //    console.log(a)
+        //});
+        //function calcDate(date1, date2) {
+        //    var diff = Math.floor(date1.getTime() - date2.getTime());
+        //    var day = 1000 * 60 * 60 * 24;
+
+        //    var days = Math.floor(diff / day);
+        //    var months = Math.floor(days / 31);
+        //    var years = Math.floor(months / 12);
+
+        //    var message = date2.toDateString();
+        //    message += " was "
+        //    message += days + " days "
+        //    message += months + " months "
+        //    message += years + " years ago \n"
+
+        //    return message
+        //}
         $("#addVacDay").click(function (e) {
             if (!checkDate() || checkRemainCount(e)) {
                 return;
@@ -808,7 +836,7 @@
                                                             var tree = $('#PositionId').combotree({
                                                                 data: data,
                                                                 prompt: 'Seçim edin',
-                                                                onClick:()=>{
+                                                                onClick: () => {
                                                                     $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
                                                                 }
                                                             });
