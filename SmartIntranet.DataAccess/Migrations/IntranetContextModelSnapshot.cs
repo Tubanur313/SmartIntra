@@ -2644,7 +2644,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
@@ -2742,7 +2742,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CompanyId")
@@ -3291,7 +3291,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 9, 10, 21, 0, 1, 64, DateTimeKind.Local).AddTicks(4358));
+                        .HasDefaultValue(new DateTime(2022, 9, 12, 11, 49, 44, 513, DateTimeKind.Local).AddTicks(4560));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -3321,7 +3321,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("BuyDate")

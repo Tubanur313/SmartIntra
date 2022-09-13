@@ -10,8 +10,8 @@ using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    [Migration("20220910164028_SsnCode")]
-    partial class SsnCode
+    [Migration("20220912074944_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -724,11 +724,23 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<bool>("IsMainVacation")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LastDepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("LastFullVacationDay")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("LastIsMainPlace")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("LastMainVacationDay")
                         .HasColumnType("int");
+
+                    b.Property<int?>("LastPositionId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("LastSalary")
+                        .HasColumnType("float");
 
                     b.Property<int>("LastWorkGraphicId")
                         .HasColumnType("int");
@@ -2634,7 +2646,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
@@ -2732,7 +2744,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CompanyId")
@@ -3281,7 +3293,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 9, 10, 20, 40, 27, 575, DateTimeKind.Local).AddTicks(6756));
+                        .HasDefaultValue(new DateTime(2022, 9, 12, 11, 49, 44, 513, DateTimeKind.Local).AddTicks(4560));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -3311,7 +3323,7 @@ namespace SmartIntranet.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("BuyDate")
