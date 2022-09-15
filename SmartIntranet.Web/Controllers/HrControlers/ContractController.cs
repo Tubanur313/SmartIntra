@@ -204,8 +204,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                 ViewBag.docType = null;
                 return View(model_result_list
-                    .OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate
-                    ).ToList());
+                    //.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate)
+                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart)
+                    .ToList());
             }
         }
 
@@ -345,7 +346,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list
+                                            .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
                 {
@@ -360,7 +362,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
                 {
@@ -377,7 +379,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
                 }
                 else
                 {
@@ -390,7 +392,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
             }
@@ -409,7 +411,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
@@ -425,7 +427,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
@@ -444,7 +446,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else
@@ -459,7 +461,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
                     ViewBag.docType = DocumentType;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
             } 
@@ -476,7 +478,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
@@ -491,7 +493,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
@@ -508,7 +510,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else
@@ -521,7 +523,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
                     ViewBag.interval = Interval;
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
             }
@@ -538,7 +540,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
 
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId == 0)
@@ -553,7 +555,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
 
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else if (CompId > 0 && DepartId > 0 && PositId > 0)
@@ -570,7 +572,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     ViewBag.PositId = PositId;
                     ViewBag.DepartId = DepartId;
 
-                    return View(result_list.OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                    return View(result_list                    .OrderByDescending(x=>x.ContractStart is null ?x.CommandDate: x.ContractStart).ToList());
 
                 }
                 else
