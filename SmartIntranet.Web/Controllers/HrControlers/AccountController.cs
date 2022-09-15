@@ -165,8 +165,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
         [HttpGet]
         [Authorize(Policy = "account.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
+            TempData["success"] = success;
+            TempData["error"] = error;
             var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
 
             if (userComp is null)
