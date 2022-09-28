@@ -13,15 +13,18 @@ using SmartIntranet.Business.Interfaces.IntraHr;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Entities.Concrete.IntraHr;
+using SmartIntranet.DTO.DTOs.CompanyDto;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
     public class ClauseController : BaseIdentityController
     {
         private readonly IClauseService _clauseService;
-        public ClauseController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IClauseService clauseService) : base(userManager, httpContextAccessor, signInManager, mapper)
+        private readonly IUserCompService _userCompService;
+        public ClauseController(UserManager<IntranetUser> userManager, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager, IMapper mapper, IClauseService clauseService, IUserCompService userCompService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _clauseService = clauseService;
+            _userCompService = userCompService;
         }
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List(string success, string error)
@@ -40,6 +43,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "clause.add")]
         public IActionResult Add()
         {
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             return View();
         }
 
@@ -88,6 +92,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "clause.update")]
         public async Task<IActionResult> Update(int id)
         {
+            //ViewBag.company = await _companyService.FindByIdAsync((int)usr.CompanyId);
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
             var listModel = _map.Map<ClauseUpdateDto>(await _clauseService.FindByIdAsync(id));
             if (listModel == null)
             {
