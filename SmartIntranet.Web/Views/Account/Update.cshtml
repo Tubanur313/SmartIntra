@@ -101,13 +101,13 @@
                             </div>
                         </div>
                     </div>
-
+ 
 
                     <div class="row">
 
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="floatLabel">  Tel: </label>
+                                <label class="floatLabel">Korporativ nömrə </label>
                                 <input type="text" class="form-control" asp-for="PhoneNumber" autocomplete="off">
                                 <span asp-validation-for="PhoneNumber" placeholder="+994 __-___-__-__" class="text-danger"></span>
                                 <span class="messages"></span>
@@ -116,6 +116,42 @@
                         </div>
 
                         <div class="col-sm-6">
+                            <label class="floatLabel">  Doğum Tarixi: </label>
+                            <div class="form-group">
+                                <input asp-for="Birthday" type="text" maxlength="10" class="form-control custom-date">
+                                @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Ev nömrə </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="HomePhoneNumber" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Şəxsi nömrə </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PersonalPhoneNumber" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Qeydiyyat Ünvanı: </label>
+                                <input type="text" class="form-control" asp-for="RegisterAdress" autocomplete="off">
+                                <span asp-validation-for="RegisterAdress" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Yaşadığı Ünvan: </label>
                                 <input type="text" class="form-control" asp-for="Address" autocomplete="off">
@@ -123,9 +159,7 @@
                             </div>
 
                         </div>
-
                     </div>
-
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -138,11 +172,11 @@
 
                         </div>
 
-                         <div class="col-sm-6">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  SSN kod: </label>
                                 <input type="text" maxlength="13" class="form-control" asp-for="SsnCode" autocomplete="off">
-                              
+
                             </div>
 
                         </div>
@@ -204,7 +238,7 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Qüvvədə Olma Tarixi: </label>
                                 <input type="text" maxlength="10" class="form-control custom-date" asp-for="IdCardExpireDate" autocomplete="off">
-                                <span asp-validation-for="IdCardExpireDate" class="text-danger"></span>
+                                @*<span asp-validation-for="IdCardExpireDate" class="text-danger"></span>*@
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -253,26 +287,6 @@
 
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Qeydiyyat Ünvanı: </label>
-                                <input type="text" class="form-control" asp-for="RegisterAdress" autocomplete="off">
-                                <span asp-validation-for="RegisterAdress" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="floatLabel">  Doğum Tarixi: </label>
-                            <div class="form-group">
-                                <input asp-for="Birthday" type="text" maxlength="10" class="form-control custom-date">
-                                @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-sm-6">
                             <label class="floatLabel">   Şirkət: </label>
@@ -316,6 +330,15 @@
                     </div>
 
                     <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
+                                <input type="number" class="form-control" asp-for="VacationMainDay" autocomplete="off">
+                                <span asp-validation-for="VacationMainDay" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Təhsilin növü: </label>
@@ -330,6 +353,18 @@
                                 <span asp-validation-for="EducationLevel" class="text-danger"></span>
                             </div>
                         </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əmək Stajına görə: </label>
+                                <input type="number" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
+
+                            </div>
+                        </div>
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Bitirdiyi Təhsil Müəssisəsinin adı: </label>
@@ -340,28 +375,8 @@
                         </div>
 
                     </div>
-                    <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
-                                <input type="number" class="form-control" asp-for="VacationMainDay" autocomplete="off">
-                                <span asp-validation-for="VacationMainDay" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Məzuniyyət Əmək Stajına görə: </label>
-                                <input type="number" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
-
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row">
-
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət Əmək Şəraitinin Xarakterinə görə: </label>
@@ -369,17 +384,6 @@
 
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Məzuniyyət 14 Yaş. İki. Çox Uşağı..: </label>
-                                <input type="number" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Bitirdiyi İxtisasın adı: </label>
@@ -387,6 +391,17 @@
                                 <span class="messages"></span>
                             </div>
 
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət 14 Yaş. İki. Çox Uşağı..: </label>
+                                <input type="number" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
+
+                            </div>
                         </div>
                         <div class="col-sm-6" id="graphic_div">
                             <label class="floatLabel">  İş qrafiki: </label>
@@ -623,9 +638,9 @@
             })
         })
 
-         $('.remain-count-number').each(function() {
+        $('.remain-count-number').each(function () {
             $(this).rules("remove", "number");
-         })
+        })
 
         function getTotalCount() {
             $('.remain-count').change(function () {
@@ -841,27 +856,27 @@
             let rowCount = parseInt($("#rowCount").val());
             rowCount++;
             $("#rowCount").val(rowCount);
-            let html = `<div class="row"> 
-                            <div class="col-sm-5"> 
-                                <div class="form-group"> 
-                                    <label class="floatLabel"> Yer: </label> 
-                                    <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off"> 
-                                </div> 
-                            </div>
-                            <div class="col-sm-5" > 
-                                <div class="form-group"> 
-                                    <label class="floatLabel"> Tarix: </label> 
-                                    <div class="input-group input-daterange mb-0"> 
-                                        <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history experienceStart-${rowCount - 1}" autocomplete="off"> 
-                                        <div class="input-group-addon">to</div> 
-                                        <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history experienceEnd-${rowCount - 1}" autocomplete="off"> 
-                                    </div> 
-                                </div> 
-                            </div> 
-                            <div class="col-sm-2 text-right">
-                                Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
-                            </div>
-                        </div>`
+            let html = `<div class="row">
+                                                    <div class="col-sm-5">
+                                                        <div class="form-group">
+                                                            <label class="floatLabel"> Yer: </label>
+                                                            <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-5" >
+                                                        <div class="form-group">
+                                                            <label class="floatLabel"> Tarix: </label>
+                                                            <div class="input-group input-daterange mb-0">
+                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history experienceStart-${rowCount - 1}" autocomplete="off">
+                                                                <div class="input-group-addon">to</div>
+                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2 text-right">
+                                                        Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
+                                                    </div>
+                                                </div>`
             $('#row-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -883,26 +898,26 @@
             rowCount++;
             $("#vacCount").val(rowCount);
             let html = `<div class="row">
-                                            <div class="col-sm-5" >
-                                                <div class="form-group">
-                                                    <label class="floatLabel"> Tarix: </label>
-                                                    <div class="input-group input-daterange mb-0">
-                                                        <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
-                                                        <div class="input-group-addon">to</div>
-                                                        <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-5">
-                                                <div class="form-group">
-                                                    <label class="floatLabel"> Qalıq gün: </label>
-                                                    <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
-                                                </div>
-                                            </div>
-                                             <div class="col-sm-2 text-right">
-                                                 Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
-                                            </div>
-                                        </div>`
+                                                                    <div class="col-sm-5" >
+                                                                        <div class="form-group">
+                                                                            <label class="floatLabel"> Tarix: </label>
+                                                                            <div class="input-group input-daterange mb-0">
+                                                                                <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
+                                                                                <div class="input-group-addon">to</div>
+                                                                                <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-5">
+                                                                        <div class="form-group">
+                                                                            <label class="floatLabel"> Qalıq gün: </label>
+                                                                            <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
+                                                                        </div>
+                                                                    </div>
+                                                                     <div class="col-sm-2 text-right">
+                                                                         Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
+                                                                    </div>
+                                                                </div>`
             $('#vac-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -913,7 +928,7 @@
         });
 
         function removeDay() {
-            $('.removeVacDay').click(function() {
+            $('.removeVacDay').click(function () {
                 let rowCount = parseInt($("#vacCount").val());
                 rowCount--;
                 $("#vacCount").val(rowCount);
@@ -922,7 +937,7 @@
         }
 
         function removeExp() {
-            $('.removeExp').click(function() {
+            $('.removeExp').click(function () {
                 let rowCount = parseInt($("#rowCount").val());
                 rowCount--;
                 $("#rowCount").val(rowCount);
@@ -930,7 +945,7 @@
             })
         }
 
-        $("#Profile").change(function(e) {
+        $("#Profile").change(function (e) {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
         });
@@ -943,6 +958,12 @@
         $.mask.definitions['_'] = '[0-9]';
         $("#PhoneNumber").on("focus", function () {
             $("#PhoneNumber").mask("+___ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+___ __-___-__-__" });
+        });
+        $("#HomePhoneNumber").on("focus", function () {
+            $("#HomePhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
+        });
+        $("#PersonalPhoneNumber").on("focus", function () {
+            $("#PersonalPhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
         });
     @* $('a[href="#home3"]').on('click', function(event) { *@
             $.ajax({
@@ -1098,7 +1119,7 @@
                         }
                     })
 
-                   
+
                 },
                 error: function (data) {
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");

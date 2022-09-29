@@ -12,7 +12,7 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation
             RuleFor(I => I.Surname).NotNull().WithMessage("Soyad boş ola bilməz");
             RuleFor(I => I.Email).NotNull().WithMessage("Email boş ola bilməz");
             RuleFor(I => I.Email).EmailAddress().WithMessage("Email doğru deyil");
-            RuleFor(I => I.IdCardExpireDate).NotNull().WithMessage("Vəsiqənin qüvvədə olma tarixi boş ola bilməz");
+            //RuleFor(I => I.IdCardExpireDate).NotNull().WithMessage("Vəsiqənin qüvvədə olma tarixi boş ola bilməz");
             RuleFor(I => I.StartWorkDate).NotNull().WithMessage("İşə başlama tarixi boş ola bilməz");
             RuleFor(I => I.CompanyId).NotNull().WithMessage("Şirkət boş ola bilməz");
             RuleFor(I => I.DepartmentId).NotNull().WithMessage("Şöbə boş ola bilməz");

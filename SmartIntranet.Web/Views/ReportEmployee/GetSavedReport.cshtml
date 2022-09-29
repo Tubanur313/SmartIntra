@@ -1,0 +1,366 @@
+﻿@model List<WorkTimesheet>
+@{
+    var counter = 0;
+}
+<div class="page-body">
+    <div class="row">
+        @Html.AntiForgeryToken()
+        <!-- Left column start -->
+        <div class="col-lg-12 col-xl-12">
+            <!-- Job description card start -->
+            <div class="card">
+                <div class="card-block contact-details">
+                    <div style="padding-bottom: 25px; font-weight: bold;">
+                        <div class="row">
+                            <input type="hidden" asp-for="FirstOrDefault().ReportId" />
+                            <input type="text" hidden id="reportString" value="" />
+                            @if (Model.Count > 0)
+                            {
+                                <div class="col-lg-12">
+                                    <button id="saveReport" class="btn btn-success float-lg-right">Yadda Saxla</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="repTable" class="table table-bordered nowrap" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <td colspan="40">
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                                <div class="d-flex" style="border: 1px solid #dee2e6 !important; align-items: center;">
+                                                    <div style="padding: 0.2rem 0.75rem;">
+                                                        <p style="margin-bottom: 0 !important">Ay:</p>
+                                                    </div>
+                                                    <div style="padding: 0.2rem 0.75rem;">
+                                                        <p style="margin-bottom: 0 !important">@Model.FirstOrDefault()?.ReportCreateDate.ToString("MMMM yyyy")</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="d-flex" style="border: 1px solid #dee2e6 !important">
+                                                    <div style="padding: 0.2rem 0.75rem;">
+                                                        <p style="margin-bottom: 0 !important">Şirkət:</p>
+                                                    </div>
+                                                    <div style="padding: 0.2rem 0.75rem;">
+                                                        <p style="margin-bottom: 0 !important">@Model.FirstOrDefault(x => x.CompanyName != "")?.CompanyName</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="d-flex" style="border: 1px solid #dee2e6 !important">
+                                                    <div style="padding: 0.2rem 0.75rem;">
+                                                        <p style="margin-bottom: 0 !important">Tarix:</p>
+                                                    </div>
+                                                    <div style="padding: 0.2rem 0.75rem;">
+                                                        <input type="date" asp-for="@Model.FirstOrDefault().ReportUpdateDate" style="margin-bottom: 0 !important" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </td>
+
+
+
+
+                                </tr>
+                                <tr>
+                                    <td rowspan="2" style="font-weight: bold;">№</td>
+                                    <td rowspan="2" style="font-weight: bold;">Əməkdaş</td>
+                                    <td rowspan="2" style="font-weight: bold;">Vəzifə</td>
+                                    <td colspan="31">
+                                        <button class="btn btn-default waves-effect md-trigger c-btn-focus" style="font-weight: bold; width: 100%; letter-spacing: 20px;"> Ayın Günləri</button>
+                                    </td>
+                                    <td rowspan="2" style='width: 500px; font-weight: bold; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;'>
+
+                                        Ay üzrə iş günlərinin sayı
+
+                                    </td>
+                                    <td rowspan="2" style="font-weight: bold; white-space: pre-wrap">Əməkdaşın faktiki iş günləri</td>
+                                    <td rowspan="2" style="font-weight: bold; white-space: pre-wrap">İş saatlarının sayı</td>
+                                    <td rowspan="2" style="font-weight: bold; white-space: pre-wrap">Məzuniyyət günlərinin sayı</td>
+                                    <td rowspan="2" style="font-weight: bold; white-space: pre-wrap">Əlavə iş saatı</td>
+                                    <td rowspan="2" style="font-weight: bold; white-space: pre-wrap">Xəstə olduğu günlər</td>
+                                </tr>
+
+                                <tr>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                    <th>8</th>
+                                    <th>9</th>
+                                    <th>10</th>
+                                    <th>11</th>
+                                    <th>12</th>
+                                    <th>13</th>
+                                    <th>14</th>
+                                    <th>15</th>
+                                    <th>16</th>
+                                    <th>17</th>
+                                    <th>18</th>
+                                    <th>19</th>
+                                    <th>20</th>
+                                    <th>21</th>
+                                    <th>22</th>
+                                    <th>23</th>
+                                    <th>24</th>
+                                    <th>25</th>
+                                    <th>26</th>
+                                    <th>27</th>
+                                    <th>28</th>
+                                    <th>29</th>
+                                    <th>30</th>
+                                    <th>31</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.TotalDay != 0)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(++counter)
+                                            </td>
+
+                                            <td>
+                                                @item.FullName
+                                            </td>
+                                            <td>
+                                                @item.Position
+                                            </td>
+                                            @foreach (var day in item.DayList)
+                                            {
+                                                <td contenteditable='true' class="dayType">
+                                                    @day.Type
+                                                </td>
+                                            }
+                                            <td>@item.TotalDay</td>
+                                            <td data-exactDay="@item.WorkedTotalDay" class="exacyDay"></td>
+                                            <td class="exactHours">@item.TotalHour</td>
+                                            <td class="vacationsday">@item.VacDay</td>
+                                            <td class="extraHours" contenteditable='true'>@item.ExtraHours</td>
+                                            <td class="sick">@item.Sickdays</td>
+                                        </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> <!-- Job description card end -->
+        </div>
+    </div>
+
+</div>
+@section CrudJs{
+    <script>
+        $(document).ready(function () {
+
+            var table = $('#repTable').DataTable({
+                paging: false,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        title: '@Model.FirstOrDefault().CompanyName',
+                        messageTop: '@Model.FirstOrDefault().ReportCreateMonth aralığı işçilərin davamiyyət cədvəli'
+                    }
+                ]
+            });
+            $(document).on("click", '#saveReport', function (e) {
+                table.rows().every(function () {
+                    const node = this.node();
+                    var dayType = $(node).find('.dayType');
+                    dayType.each(function () {
+                        var cell = table.cell(this);
+                        cell.data($.trim(cell.node().textContent));
+                    })
+                    table.cell($(this.node()).find('.exacyDay')[0]).data($(this.node()).find('.exacyDay').text());
+                    table.cell($(this.node()).find('.exactHours')[0]).data($(this.node()).find('.exactHours').text());
+                    table.cell($(this.node()).find('.vacationsday')[0]).data($(this.node()).find('.vacationsday').text());
+                    table.cell($(this.node()).find('.extraHours')[0]).data($(this.node()).find('.extraHours').text());
+                    table.cell($(this.node()).find('.sick')[0]).data($(this.node()).find('.sick').text());
+                });
+
+                var _reportId = $("#ReportId").val();
+                $("#reportString").val($("#repTable").html());
+                var _report = JSON.stringify(table.data().toArray());
+
+                $.ajax({
+                    type: 'Post',
+                    url: `@Url.ActionLink("UpdateReport", "ReportEmployee")`,
+                    dataType: "json",
+                    data: {
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val(),
+                        "report": _report,
+                        "reportId": _reportId,
+                        "updatedate": $("#ReportUpdateDate").val()
+                    },
+                    complete: function (response) {
+
+                        if (response.status == 200) {
+                            toastr.success(response.responseText, "Uğur!");
+                        }
+                        else {
+                            toastr.error(response.responseText, "Xəta!");
+                        }
+                    }
+                });
+
+            });
+            table.rows().every(function () {
+                const node = this.node();
+                var sick = $(node).find('.sick');
+                var exacyDay = $(node).find('.exacyDay');
+                var dayType = $(node).find('.dayType');
+                var rowTotal = 0;
+                var countX = 0;
+                var countY = 0;
+                var exactHours = $(node).find('.exactHours');
+                $(node).find('.extraHours').css("cursor", "cell");
+                exacyDay.each(function () {
+                    exacyDay.text(this.getAttribute('data-exactDay'));
+                });
+                dayType.each(function () {
+                    var cell = table.cell(this);
+                    cell.data($.trim(cell.node().textContent));
+
+                    $(this).css("cursor", "cell");
+                    var exactday = $(this).parent("tr").find('.exacyDay');
+                    var exactHours = $(this).parent("tr").find('.exactHours');
+                    if ($.trim($(this).text()) === "X") {
+                        if ($.trim($(this).text()) === "X") { $(this).addClass("bg-warning"); }
+                        if ($(this).hasClass('bg-danger')) { $(this).removeClass('bg-danger'); }
+
+                        var sick = $(this).parent("tr").find('.sick');
+                        ++countX;
+                        sick.text(countX)
+
+                        exactday.text(parseInt(exactday.attr("data-exactDay")) - parseInt(countX))
+
+                    }
+                    else if ($.trim($(this).text()) !== "X") {
+
+                        if ($(this).hasClass('bg-warning')) { $(this).removeClass('bg-warning'); }
+
+                        var sick = $(this).parent("tr").find('.sick');
+                        sick.text(countX)
+
+                        exactday.text(parseInt(exactday.attr("data-exactDay")) - parseInt(countX))
+                    }
+
+                    if (!$.isNumeric($.trim($(this).text()))) {
+                        if ($.trim($(this).text()) === "X") { $(this).addClass("bg-warning"); }
+                        if ($.trim($(this).text()) === "Y") { $(this).addClass("bg-danger"); }
+                        if ($.trim($(this).text()) === "I") { $(this).css("background-color", "yellow"); }
+                        if ($.trim($(this).text()) === "M") { $(this).css("background-color", "cadetblue"); }
+                        if ($.trim($(this).text()) === "E") { $(this).css("background-color", "rosybrown"); }
+                        if ($.trim($(this).text()) === "") {
+                            $(this).css({
+                                'background-color': 'gray',
+                                'pointer-events': 'none'
+                            }).attr('contenteditable', 'false');
+                        }
+                        if ($.trim($(this).text()) === "Y") {
+                            if ($.trim($(this).text()) === "Y") { $(this).addClass("bg-danger"); }
+                            ++countY;
+                            exactday.text(parseInt(exactday.text()) - parseInt(countY))
+                        }
+                        else if ($.trim($(this).text()) !== "Y") {
+
+                            if ($(this).hasClass('bg-danger')) { $(this).removeClass('bg-danger'); }
+
+                            exactday.text(parseInt(exactday.text()) - parseInt(countY))
+                        }
+                    }
+                    else {
+
+                        if ($.trim($(this).text()) !== "Y") {
+
+                            if ($(this).hasClass('bg-danger')) { $(this).removeClass('bg-danger'); }
+                            exactday.text(parseInt(exactday.text()) - parseInt(countY))
+                        }
+                        $(this).css("background-color", "white");
+                        rowTotal += parseInt($.trim($(this).text()));
+                        exactHours.text(rowTotal);
+
+                    }
+
+                });
+            });
+            $(document).on("mouseover keyup", '#repTable', function (e) {
+
+                table.rows().every(function () {
+                    const node = this.node();
+                    var countX = 0;
+                    var countY = 0;
+                    var rowTotal = 0;
+                    $(node).find('.dayType').each(function () {
+                        var exactday = $(this).parent("tr").find('.exacyDay');
+                        var exactHours = $(this).parent("tr").find('.exactHours');
+                        if ($.trim($(this).text()) === "X") {
+                            if ($.trim($(this).text()) === "X") { $(this).addClass("bg-warning"); }
+                            if ($(this).hasClass('bg-danger')) { $(this).removeClass('bg-danger'); }
+
+                            var sick = $(this).parent("tr").find('.sick');
+                            ++countX;
+                            sick.text(countX)
+
+                            exactday.text(parseInt(exactday.attr("data-exactDay")) - parseInt(countX))
+
+                        }
+                        else if ($.trim($(this).text()) !== "X") {
+
+                            if ($(this).hasClass('bg-warning')) { $(this).removeClass('bg-warning'); }
+
+                            var sick = $(this).parent("tr").find('.sick');
+                            sick.text(countX)
+
+                            exactday.text(parseInt(exactday.attr("data-exactDay")) - parseInt(countX))
+                        }
+
+                        if (!$.isNumeric($.trim($(this).text()))) {
+
+                            if ($.trim($(this).text()) === "Y") {
+                                if ($.trim($(this).text()) === "Y") { $(this).addClass("bg-danger"); }
+                                ++countY;
+                                exactday.text(parseInt(exactday.text()) - parseInt(countY))
+                            }
+                            else if ($.trim($(this).text()) !== "Y") {
+
+                                if ($(this).hasClass('bg-danger')) { $(this).removeClass('bg-danger'); }
+
+                                exactday.text(parseInt(exactday.text()) - parseInt(countY))
+                            }
+                        }
+                        else {
+
+                            if ($.trim($(this).text()) !== "Y") {
+
+                                if ($(this).hasClass('bg-danger')) { $(this).removeClass('bg-danger'); }
+                                exactday.text(parseInt(exactday.text()) - parseInt(countY))
+                            }
+                            rowTotal += parseInt($.trim($(this).text()));
+                            exactHours.text(rowTotal);
+
+                        }
+
+                    });
+
+                });
+
+            });
+        });
+    </script>
+}

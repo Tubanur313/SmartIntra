@@ -20,6 +20,7 @@ using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.DTO.DTOs.ContractDto;
 using SmartIntranet.DTO.DTOs.WorkCalendarDto;
 using SmartIntranet.Entities.Concrete.IntraHr;
+using Newtonsoft.Json;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -53,12 +54,20 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "reportEmployee.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var model = _map.Map<ICollection<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var model = await _reportService.GetAllIncCompAsync(x => !x.IsDeleted);
+            var modelDto = _map.Map<List<ReportEmployeeListDto>>(await _reportService.GetAllIncCompAsync(x => !x.IsDeleted));
             if (model.Any())
             {
                 TempData["success"] = success;
                 TempData["error"] = error;
-                return View(_map.Map<ICollection<ReportEmployeeListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
+                for (int i = 0; i < model.Count; i++)
+                {
+                    if (model[i].GeneratedReport == null)
+                    {
+                        modelDto[i].IsGenerated = true;
+                    }
+                }
+                return View(_map.Map<ICollection<ReportEmployeeListDto>>(modelDto).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
             }
             return View(new List<ReportEmployeeListDto>());
         }
@@ -67,11 +76,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "reportEmployee.add")]
         public IActionResult Add()
         {
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>( _companyService.GetAllAsync(x => x.IsDeleted  == false).Result);
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_companyService.GetAllAsync(x => x.IsDeleted == false).Result);
             return View();
         }
 
-      
+
 
         [HttpPost]
         [Authorize(Policy = "reportEmployee.add")]
@@ -93,7 +102,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 add.CreatedDate = DateTime.Now;
                 add.IsDeleted = false;
 
-                add.FilePath = Guid.NewGuid() +".xlsx";
+                add.FilePath = Guid.NewGuid() + ".xlsx";
                 ExcellGenerate(add);
 
                 if (await _reportService.AddReturnEntityAsync(add) is null)
@@ -119,7 +128,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             {
                 return NotFound();
             }
-            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_companyService.GetAllAsync(x => x.IsDeleted  == false).Result);
+            ViewBag.companies = _map.Map<ICollection<CompanyListDto>>(_companyService.GetAllAsync(x => x.IsDeleted == false).Result);
             return View(listModel);
         }
 
@@ -155,6 +164,266 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     success = Messages.Update.updated
                 });
             }
+        }
+
+        [Authorize(Policy = "reportEmployee.workTimesheet")]
+        public async Task<IActionResult> WorkTimesheet(ReportEmployeeDto model)
+        {
+            var countDayInMonth = DateTime.DaysInMonth(model.ReportDate.Year, model.ReportDate.Month);
+            var lastReportDay = new DateTime(model.ReportDate.Year, model.ReportDate.Month, countDayInMonth);
+            var users = await _appUserService.GetAllIncludeAsync(x => x.CompanyId == model.CompanyId
+            && x.StartWorkDate <= lastReportDay
+            && !x.IsDeleted && x.Email != "tahiroglumahir@gmail.com");
+
+
+            var yearId = _nonWorkingYearService.GetAllIncCompAsync(x => x.Year == model.ReportDate.Year.ToString()).Result[0].Id;
+            var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted, yearId).Result;
+            var nonWorkDaysToMonth = nonWorkDays.Where(x => x.StartDate.Month <= model.ReportDate.Month || x.EndDate.Month >= model.ReportDate.Month);
+            var modelResult = new List<WorkTimesheet>();
+            foreach (var item in users.OrderByDescending(x => x.Company.Id).ToList())
+            {
+                var mod = new WorkTimesheet
+                {
+                    ReportId = model.Id,
+                    DayList = new List<DayItem>(),
+                    FullName = item.Fullname,
+                    Position = item.PositionId > 0 ? item.Position.Name : "",
+                    ReportCreateDate = model.ReportDate,
+                    ReportCreateMonth = "01." + model.ReportDate.ToString("MM.yyyy")
+                                              + " -" + DateTime.DaysInMonth(model.ReportDate.Year, model.ReportDate.Month)
+                                              + "." + model.ReportDate.ToString("MM.yyyy"),
+                    CompanyName = item.CompanyId > 0 ? item.Company.Name : ""
+                };
+                var graphId = (int)item.WorkGraphicId;
+                var personContracts = _personContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == item.Id && x.Type == PersonalContractConst.WORK_GRAPHIC).Result.ToList().OrderBy(x => x.CommandDate);
+                var this_mn_pc = personContracts.Where(x => x.CommandDate.Year == model.ReportDate.Year && x.CommandDate.Month == model.ReportDate.Month).OrderBy(x => x.CommandDate);
+                if (personContracts.Any() && this_mn_pc.Any())
+                {
+
+                }
+                WorkGraphic graph = _workGraphicService.FindByIdAsync(graphId).Result;
+                var calendarList = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, yearId, graph.Id).Result);
+
+
+                int countSundays = 0;
+                int countHolySundays = 0;
+                for (int i = 0; i < countDayInMonth; i++)
+                {
+                    DateTime d = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i + 1);
+                    if (d.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        countSundays++;
+
+                    }
+                    foreach (var nw in nonWorkDays)
+                    {
+                        if (d >= nw.StartDate && d <= nw.EndDate && d.DayOfWeek != DayOfWeek.Sunday)
+                        {
+                            countHolySundays++;
+                        }
+                    }
+                }
+                int countSaturdays = 0;
+                int countHolySaturdays = 0;
+                for (int i = 0; i < countDayInMonth; i++)
+                {
+                    DateTime d = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i + 1);
+                    if (d.DayOfWeek == DayOfWeek.Saturday)
+                    {
+                        countSaturdays++;
+
+                    }
+                    foreach (var nw in nonWorkDays)
+                    {
+                        if (d >= nw.StartDate && d <= nw.EndDate && d.DayOfWeek != DayOfWeek.Saturday)
+                        {
+                            countHolySaturdays++;
+                        }
+                    }
+                }
+                if (graph.Saturday == 0 && graph.Saturday == 0)
+                {
+                    mod.TotalDay = Math.Abs(countDayInMonth - (countSundays + countSaturdays + countHolySaturdays));
+                }
+                else
+                {
+                    mod.TotalDay = Math.Abs(countDayInMonth - (countSundays + countHolySaturdays));
+                }
+                for (var i = 1; i <= 31; i++)
+                {
+                    var defaultCount = 0;
+                    var isActive = true;
+                    var isHoliday = false;
+                    var di = new DayItem();
+                    try
+                    {
+                        di.Type = ReportDayType.NORMAL;
+                        var day = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i);
+
+                        if (personContracts.Any() && this_mn_pc.Any())
+                        {
+                            foreach (var mn in this_mn_pc)
+                            {
+                                if (mn.CommandDate > day)
+                                {
+                                    graph = _workGraphicService.FindByIdAsync(mn.LastWorkGraphicId).Result;
+                                    calendarList = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, yearId, graph.Id).Result);
+                                    break;
+                                }
+                                else
+                                {
+                                    graph = _workGraphicService.FindByIdAsync(mn.WorkGraphicId).Result;
+                                    calendarList = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, yearId, graph.Id).Result);
+                                }
+                            }
+                        }
+
+                        isHoliday = nonWorkDaysToMonth.Any(x => x.StartDate <= day && day <= x.EndDate);
+                        switch (day.DayOfWeek)
+                        {
+                            case DayOfWeek.Sunday:
+                            case DayOfWeek.Saturday when graph.Key == "five_day":
+                                di.Type = ReportDayType.REST;
+                                break;
+                        }
+
+                        defaultCount = day.DayOfWeek switch
+                        {
+                            DayOfWeek.Monday => graph.Monday,
+                            DayOfWeek.Tuesday => graph.Tuesday,
+                            DayOfWeek.Wednesday => graph.Wednesday,
+                            DayOfWeek.Thursday => graph.Thursday,
+                            DayOfWeek.Friday => graph.Friday,
+                            DayOfWeek.Saturday => graph.Saturday,
+                            DayOfWeek.Sunday => graph.Sunday,
+                            _ => defaultCount
+                        };
+
+                        if (isHoliday)
+                        {
+                            di.Type = ReportDayType.HOLIDAY;
+                            defaultCount = 0;
+                        }
+
+                        if (item.StartWorkDate > day)
+                        {
+                            di.Type = ReportDayType.NON_DAY;
+                            defaultCount = 0;
+                        }
+
+                        var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result.Count();
+                        if (vacDay > 0)
+                        {
+                            di.Type = ReportDayType.VACATION;
+                            defaultCount = 0;
+                            mod.VacDay++;
+                        }
+
+                        var terDay = _terminationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.TerminationDate <= day).Result.Count();
+                        if (terDay > 0)
+                        {
+                            di.Type = ReportDayType.NON_DAY;
+                            defaultCount = 0;
+                        }
+
+                        if (_businessTripService.GetAllAsync(x => !x.IsDeleted).Result.Select(bt => bt.BusinessTripUsers.Where(x => !x.IsDeleted && x.UserId == item.Id && x.StartDate <= day && x.EndDate >= day).Count()).Any(business_trip_for_user => business_trip_for_user > 0))
+                        {
+                            di.Type = ReportDayType.BUSINESS_TRIP;
+                            defaultCount = 0;
+                        }
+
+                    }
+                    catch
+                    {
+                        isActive = false;
+                    }
+
+                    var el = calendarList.FirstOrDefault(x => x.Month == model.ReportDate.Month.ToString() && x.Day == i);
+                    if (el != null)
+                    {
+                        mod.DayList.Add(new DayItem() { Number = el.Number, Day = i, Type = di.Type });
+                        mod.TotalHour += el.Number;
+                        //mod.TotalDay++;
+                    }
+                    else
+                    {
+                        if (defaultCount != 0)
+                        {
+                            mod.TotalHour += defaultCount;
+                            //mod.TotalDay++;
+                        }
+                        mod.DayList.Add(new DayItem { Number = defaultCount, Day = i, Type = di.Type });
+                    }
+
+
+                }
+                modelResult.Add(mod);
+            }
+
+            return View(modelResult);
+        }
+
+
+        [HttpGet]
+        [Authorize(Policy = "reportEmployee.getsavedreport")]
+        public async Task<IActionResult> GetSavedReport(int id)
+        {
+            var model = await _reportService.FindByIdAsync(id);
+            if (model == null || !(model.CompanyId > 0) || model.GeneratedReport == null)
+            {
+                return View(new List<WorkTimesheet>());
+            }
+            var comp = await _companyService.FindByIdAsync(model.CompanyId);
+
+            var reports = JsonConvert.DeserializeObject<List<dynamic>>(model.GeneratedReport);
+            var listReport = new List<WorkTimesheet>();
+            for (var i = 0; i < reports.Count; i++)
+            {
+                var days = new List<DayItem>();
+                for (var j = 3; j < reports[i].Count - 6; j++)
+                {
+                    var day = new DayItem
+                    {
+                        Type = reports[i][j]
+                    };
+                    days.Add(day);
+                }
+                var report = new WorkTimesheet
+                {
+                    ReportCreateMonth = "01." + model.ReportDate.ToString("MM.yyyy")
+                                              + " -" + DateTime.DaysInMonth(model.ReportDate.Year, model.ReportDate.Month)
+                                              + "." + model.ReportDate.ToString("MM.yyyy"),
+                    ReportUpdateDate = model.UpdateDate.Value,
+                    ReportCreateDate = model.ReportDate,
+                    CompanyName = comp.Name,
+                    ReportId = id,
+                    FullName = reports[i][1],
+                    Position = reports[i][2],
+                    TotalDay = reports[i][34],
+                    WorkedTotalDay = reports[i][35],
+                    TotalHour = reports[i][36],
+                    VacDay = reports[i][37],
+                    ExtraHours = reports[i][38],
+                    Sickdays = reports[i][39],
+                    DayList = days
+                };
+                listReport.Add(report);
+
+            }
+
+            return View(listReport);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateReport(string report, int reportId, string updatedate)
+        {
+            var reports = await _reportService.FindByIdAsync(reportId);
+            reports.GeneratedReport = report;
+            reports.UpdateDate = updatedate != null ? DateTime.Parse(updatedate) : DateTime.Now;
+            reports.UpdateByUserId = GetSignInUserId();
+            var result = await _reportService.UpdateReturnEntityAsync(reports);
+            return result is null ? (IActionResult)BadRequest(Messages.Error.notFound) : Ok(Messages.Update.updated);
         }
 
         [Authorize(Policy = "reportEmployee.delete")]
@@ -362,7 +631,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                     }
                     var graph = _workGraphicService.FindByIdAsync(graph_id).Result;
-                    var calendar_list = _map.Map<ICollection<WorkCalendarListDto>>( _workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, year_id, graph.Id).Result);
+                    var calendar_list = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, year_id, graph.Id).Result);
 
                     for (int i = 1; i <= 31; i++)
                     {
@@ -400,7 +669,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             {
                                 di.Type = ReportDayType.REST;
                             }
-                            if(day.DayOfWeek == DayOfWeek.Saturday && graph.Key == "five_day")
+                            if (day.DayOfWeek == DayOfWeek.Saturday && graph.Key == "five_day")
                             {
                                 di.Type = ReportDayType.REST;
                             }

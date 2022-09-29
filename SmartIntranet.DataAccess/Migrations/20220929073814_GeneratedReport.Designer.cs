@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    partial class IntranetContextModelSnapshot : ModelSnapshot
+    [Migration("20220929073814_GeneratedReport")]
+    partial class GeneratedReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3310,7 +3312,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 9, 29, 15, 18, 29, 981, DateTimeKind.Local).AddTicks(1725));
+                        .HasDefaultValue(new DateTime(2022, 9, 29, 11, 38, 13, 841, DateTimeKind.Local).AddTicks(146));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -3746,11 +3748,6 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<string>("GraduatedPlace")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HomePhoneNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue(null);
-
                     b.Property<DateTime?>("IdCardExpireDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -3793,11 +3790,6 @@ namespace SmartIntranet.DataAccess.Migrations
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PersonalPhoneNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue(null);
 
                     b.Property<string>("PhoneNumber")
                         .ValueGeneratedOnAdd()

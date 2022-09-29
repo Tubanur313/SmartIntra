@@ -408,6 +408,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     Birthday = user.Birthday,
                     SsnCode = user.SsnCode,
                     PhoneNumber = user.PhoneNumber,
+                    HomePhoneNumber = user.HomePhoneNumber,
+                    PersonalPhoneNumber = user.PersonalPhoneNumber,
                     Address = user.Address,
                     Picture = user.Picture,
                     CreatedByUserId = current,
@@ -767,6 +769,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         updateUser.IsDeleted = model.IsDeleted;
                         updateUser.Birthday = model.Birthday;
                         updateUser.PhoneNumber = model.PhoneNumber;
+                        updateUser.HomePhoneNumber = model.HomePhoneNumber;
+                        updateUser.PersonalPhoneNumber = model.PersonalPhoneNumber;
                         updateUser.Address = model.Address;
                         updateUser.Picture = model.Picture;
                         updateUser.UpdateDate = DateTime.Now;

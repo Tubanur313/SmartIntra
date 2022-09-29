@@ -15,7 +15,7 @@ namespace SmartIntranet.DTO.DTOs.ReportEmployeeDto
         public int? DeleteByUserId { get; set; }
         public DateTime? DeleteDate { get; set; }
         public bool IsDeleted { get; set; }
-
+        public bool IsGenerated { get; set; }
         public string FilePath { get; set; }
         public DateTime ReportDate { get; set; }
         public int CompanyId { get; set; }

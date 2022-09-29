@@ -79,7 +79,23 @@
 
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <label class="floatLabel">  Doğum Tarixi: </label>
+                            <div class="form-group">
+                                <input asp-for="Birthday" type="text" maxlength="10" class="form-control custom-date">
+                                @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel">  SSN kod: </label>
+                                <input type="text" maxlength="13" class="form-control" asp-for="SsnCode" autocomplete="off">
 
+                            </div>
+
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Cinsi: </label>
@@ -102,12 +118,7 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
-
-
-
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -131,9 +142,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="floatLabel">  Tel: </label>
-                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PhoneNumber" autocomplete="off">
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <label class="floatLabel"> Qeydiyyat Ünvanı: </label>
+                                <input type="text" class="form-control" asp-for="RegisterAdress" autocomplete="off">
+                                <span asp-validation-for="RegisterAdress" class="text-danger"></span>
                                 <span class="messages"></span>
                             </div>
 
@@ -147,21 +158,32 @@
 
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="floatLabel">  SSN kod: </label>
-                                <input type="text" maxlength="13" class="form-control" asp-for="SsnCode" autocomplete="off">
-
+                                <label class="floatLabel"> Ev nömrə </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="HomePhoneNumber" autocomplete="off">
+                                <span class="messages"></span>
                             </div>
-
+                        </div>  
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Şəxsi nömrə </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PersonalPhoneNumber" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
                         </div>
-
+                    </div> 
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Korporativ nömrə </label>
+                                <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="PhoneNumber" autocomplete="off">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
                     </div>
-
-
-
                 </div>
 
                 <div class="tab-pane" id="home2" role="tabpanel">
@@ -215,7 +237,7 @@
                             <div class="form-group">
                                 <label class="floatLabel">  Vəsiqənin Qüvvədə Olma Tarixi: </label>
                                 <input type="text" maxlength="10" class="form-control custom-date" asp-for="IdCardExpireDate" autocomplete="off">
-                                <span asp-validation-for="IdCardExpireDate" class="text-danger"></span>
+                                @*<span asp-validation-for="IdCardExpireDate" class="text-danger"></span>*@
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -264,26 +286,6 @@
 
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Qeydiyyat Ünvanı: </label>
-                                <input type="text" class="form-control" asp-for="RegisterAdress" autocomplete="off">
-                                <span asp-validation-for="RegisterAdress" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="floatLabel">  Doğum Tarixi: </label>
-                            <div class="form-group">
-                                <input asp-for="Birthday" type="text" maxlength="10" class="form-control custom-date">
-                                @*<a href="#" id="buttonid" style="position: absolute;top: 7px;right: 25px;" class="ion-close-round">x</a>*@
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-sm-6">
                             <label class="floatLabel">   Şirkət: </label>
@@ -327,6 +329,55 @@
                     </div>
 
                     <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
+                                <input type="number" value="0" class="form-control" asp-for="VacationMainDay" autocomplete="off">
+                                <span asp-validation-for="VacationMainDay" class="text-danger"></span>
+                                <span class="messages"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Bitirdiyi Təhsil Müəssisəsinin adı: </label>
+                                <input type="text" class="form-control" asp-for="GraduatedPlace" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əmək Stajına görə: </label>
+                                <input type="number" value="0" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Bitirdiyi İxtisasın adı: </label>
+                                <input type="text" class="form-control" asp-for="Profession" autocomplete="off">
+                                <span class="messages"></span>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="floatLabel"> Məzuniyyət Əmək Şəraitinin Xarakterinə görə: </label>
+                                <input type="number" value="0" class="form-control" asp-for="VacationExtraNature" autocomplete="off">
+
+                            </div>
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Təhsilin növü: </label>
@@ -341,63 +392,16 @@
                                 <span asp-validation-for="EducationLevel" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Bitirdiyi Təhsil Müəssisəsinin adı: </label>
-                                <input type="text" class="form-control" asp-for="GraduatedPlace" autocomplete="off">
-                                <span class="messages"></span>
-                            </div>
 
-                        </div>
 
                     </div>
                     <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Məzuniyyət Əsas Gün Sayı: </label>
-                                <input type="number" value="0" class="form-control" asp-for="VacationMainDay" autocomplete="off">
-                                <span asp-validation-for="VacationMainDay" class="text-danger"></span>
-                                <span class="messages"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Məzuniyyət Əmək Stajına görə: </label>
-                                <input type="number" value="0" class="form-control" asp-for="VacationExtraExperience" autocomplete="off">
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Məzuniyyət Əmək Şəraitinin Xarakterinə görə: </label>
-                                <input type="number" value="0" class="form-control" asp-for="VacationExtraNature" autocomplete="off">
-
-                            </div>
-                        </div>
-
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Məzuniyyət 14 Yaş. İki. Çox Uşağı..: </label>
                                 <input type="number" value="0" class="form-control" asp-for="VacationExtraChild" autocomplete="off">
 
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel"> Bitirdiyi İxtisasın adı: </label>
-                                <input type="text" class="form-control" asp-for="Profession" autocomplete="off">
-                                <span class="messages"></span>
-                            </div>
-
                         </div>
                         <div class="col-sm-6" id="graphic_div">
                             <label class="floatLabel">  İş qrafiki: </label>
@@ -411,6 +415,7 @@
                             <span asp-validation-for="WorkGraphicId" class="text-danger"></span>
                         </div>
 
+
                     </div>
                 </div>
 
@@ -420,8 +425,8 @@
                         <input id="rowCount" type="hidden" value="0" />
                     </div>
                     <div class="row">
-@*                        <div class="col-6 text-left">
-                            Ümumi staj <p class="text-primary">0</p>
+                        @*                        <div class="col-6 text-left">
+                        Ümumi staj <p class="text-primary">0</p>
                         </div>*@
                         <div class="col-12 text-right">
                             İş stajı: <button type="button" id="addRow" class="btn btn-outline-success " data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-plus m-0"></i></button>
@@ -776,6 +781,12 @@
 
         $("#PhoneNumber").on("focus", function () {
             $("#PhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
+        });        
+        $("#HomePhoneNumber").on("focus", function () {
+            $("#HomePhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
+        });        
+        $("#PersonalPhoneNumber").on("focus", function () {
+            $("#PersonalPhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
         });
 
     @* $('a[href="#home3"]').on('click', function(event){ *@

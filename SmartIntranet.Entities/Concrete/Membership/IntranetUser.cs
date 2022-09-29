@@ -33,11 +33,13 @@ namespace SmartIntranet.Entities.Concrete.Membership
         public string IdCardNumber { get; set; } // serial + number
         public DateTime IdCardGiveDate { get; set; }
         public string IdCardGivePlace { get; set; } // veren qurum
-        public DateTime IdCardExpireDate { get; set; }
+        public DateTime? IdCardExpireDate { get; set; }
         public string RegisterAdress { get; set; }
         public string Picture { get; set; } = "default.png";
         public DateTime? Birthday { get; set; }
         public string Address { get; set; }
+        public string HomePhoneNumber { get; set; }
+        public string PersonalPhoneNumber { get; set; }
         public int? GradeId { get; set; }
         public Grade Grade { get; set; }
         public int? CompanyId { get; set; }

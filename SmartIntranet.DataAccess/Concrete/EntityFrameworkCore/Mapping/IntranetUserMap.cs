@@ -17,6 +17,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Mapping
             builder.Property(I => I.Birthday).HasDefaultValue(null);
             builder.Property(I => I.Address).HasColumnType("ntext").HasDefaultValue(null);
             builder.Property(I => I.PhoneNumber).HasDefaultValue(null);
+            builder.Property(I => I.HomePhoneNumber).HasDefaultValue(null);
+            builder.Property(I => I.PersonalPhoneNumber).HasDefaultValue(null);
+            builder.Property(I => I.IdCardExpireDate).HasDefaultValue(null);
             //builder.Property(I => I.Gender).IsRequired();
             //builder.Property(I => I.VacationDay).IsRequired();
             //builder.Property(I => I.EducationLevel).IsRequired();

@@ -29,7 +29,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public string IdCardNumber { get; set; } // serial + number
         public DateTime IdCardGiveDate { get; set; }
         public string IdCardGivePlace { get; set; } // veren qurum
-        public DateTime IdCardExpireDate { get; set; }
+        public DateTime? IdCardExpireDate { get; set; }
         public string RegisterAdress { get; set; }
         public string Picture { get; set; }
         public DateTime? Birthday { get; set; }
@@ -47,6 +47,8 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public Position Position { get; set; }
         public decimal VacationTotal { get; set; }
         public string SsnCode { get; set; }
+        public string HomePhoneNumber { get; set; }
+        public string PersonalPhoneNumber { get; set; }
         public virtual ICollection<UserContractFile> UserContractFiles { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }
         public virtual List<Entities.Concrete.Membership.UserVacationRemain> UserVacationRemains { get; set; }

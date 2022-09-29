@@ -35,7 +35,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public DateTime IdCardGiveDate { get; set; }
         public string IdCardGivePlace { get; set; } // veren qurum
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
-        public DateTime IdCardExpireDate { get; set; }
+        public DateTime? IdCardExpireDate { get; set; }
         public string RegisterAdress { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? Birthday { get; set; }
@@ -54,6 +54,8 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public bool IsDeleted { get; set; }
         public decimal VacationTotal { get; set; }
         public string SsnCode { get; set; }
+        public string HomePhoneNumber { get; set; }
+        public string PersonalPhoneNumber { get; set; }
         public virtual List<UserExperience> UserExperiences { get; set; }
         public virtual List<Entities.Concrete.Membership.UserVacationRemain> UserVacationRemains { get; set; }
     }
