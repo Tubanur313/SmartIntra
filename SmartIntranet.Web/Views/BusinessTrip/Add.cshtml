@@ -60,34 +60,36 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="checkbox-zoom zoom-primary">
-                            <label>
-                                <input type="checkbox" asp-for="IsTransportation">
-                                <span class="cr">
-                                    <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                </span>
-                                <span>Nəqliyyat vasitəsi</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <div class="checkbox-zoom zoom-primary">
-                            <label>
-                                <input type="checkbox" asp-for="IsHotelDemand">
-                                <span class="cr">
-                                    <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                </span>
-                                <span>Mehmanxana tələbi</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+            <input hidden type="checkbox" asp-for="IsTransportation">
+            <input hidden type="checkbox" asp-for="IsHotelDemand">
+            @*   <div class="row">
+            <div class="col-sm-6">
+            <div class="form-group">
+            <div class="checkbox-zoom zoom-primary">
+            <label>
+            <input type="checkbox" asp-for="IsTransportation">
+            <span class="cr">
+            <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+            </span>
+            <span>Nəqliyyat vasitəsi</span>
+            </label>
             </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="form-group">
+            <div class="checkbox-zoom zoom-primary">
+            <label>
+            <input type="checkbox" asp-for="IsHotelDemand">
+            <span class="cr">
+            <i class="cr-icon icofont icofont-ui-check txt-primary"></i>
+            </span>
+            <span>Mehmanxana tələbi</span>
+            </label>
+            </div>
+            </div>
+            </div>
+            </div>*@
             <div id="row-box">
                 <input id="rowCount" type="hidden" value="0" />
             </div>
@@ -111,148 +113,151 @@
 @await Html.PartialAsync("_ValidationScriptsPartial")
 
 <script>
-     $(document).ready(function () {
+    $(document).ready(function () {
 
-         $('.custom-date').each(function() {
+        $(document).submit(function (e) {
+            if (parseInt($("#rowCount").val()) === 0) {
+                e.preventDefault();
+                toastr.error("Əməkdaş əlavə edin", "Xəta!");
+            }
+        })
+
+        $('.custom-date').each(function () {
             $(this).datepicker({
                 format: "dd.mm.yyyy"
             })
         })
 
-          $("#addRow").click(function () {
-                let companyId = $("#CompanyId").val();
-                if(!companyId)
-                {
-                    toastr.error(" Şirkət boş ola bilməz !", "Xəta!");
-                    return;
-                }
-                let rowCount = parseInt($("#rowCount").val());
-                rowCount++;
-                $("#rowCount").val(rowCount);
-                let html = `
-                 <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Əməkdaş: </label>
-                                <select name="BusinessTripUsers[${rowCount - 1}].UserId" id="BusinessTripUsers[${rowCount - 1}].UserId" class="form-control user-${rowCount - 1}">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floatLabel">  Ezamiyyət yeri: </label>
-                                <select name="BusinessTripUsers[${rowCount - 1}].PlaceId" id="BusinessTripUsers[${rowCount - 1}].PlaceId" class="form-control place-${rowCount - 1}">
-                                    <option value="" disabled selected hidden>Seçim edin</option>
-                                </select>
-                            </div>
-                        </div>
-                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="floatLabel"> Tarix: </label>
-                            <div class="input-group input-daterange mb-0">
-                                <input type="text" name="BusinessTripUsers[${rowCount - 1}].StartDate" class="form-control" autocomplete="off">
-                                <div class="input-group-addon">to</div>
-                                <input type="text" name="BusinessTripUsers[${rowCount - 1}].EndDate" class="form-control" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>`
-                $('#row-box').append(html);
+        $("#addRow").click(function () {
+            let companyId = $("#CompanyId").val();
+            if (!companyId) {
+                toastr.error(" Şirkət boş ola bilməz !", "Xəta!");
+                return;
+            }
+            let rowCount = parseInt($("#rowCount").val());
+            rowCount++;
+            $("#rowCount").val(rowCount);
+            let html = `
+                             <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">  Əməkdaş: </label>
+                                            <select name="BusinessTripUsers[${rowCount - 1}].UserId" id="BusinessTripUsers[${rowCount - 1}].UserId" class="form-control user-${rowCount - 1}">
+                                                <option value="" disabled selected hidden>Seçim edin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="floatLabel">  Ezamiyyət yeri: </label>
+                                            <select name="BusinessTripUsers[${rowCount - 1}].PlaceId" id="BusinessTripUsers[${rowCount - 1}].PlaceId" class="form-control place-${rowCount - 1}">
+                                                <option value="" disabled selected hidden>Seçim edin</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                             </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="floatLabel"> Tarix: </label>
+                                        <div class="input-group input-daterange mb-0">
+                                            <input type="text" name="BusinessTripUsers[${rowCount - 1}].StartDate" class="form-control" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" name="BusinessTripUsers[${rowCount - 1}].EndDate" class="form-control" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>`
+            $('#row-box').append(html);
 
-                $('.input-daterange input').each(function () {
-                    $(this).datepicker({
-                        format: "dd.mm.yyyy"
-                    });
-                }).on('changeDate', function(ev) {
-                    console.log(ev)
-                 $('.input-daterange').change();
+            $('.input-daterange input').each(function () {
+                $(this).datepicker({
+                    format: "dd.mm.yyyy"
                 });
+            }).on('changeDate', function (ev) {
+                console.log(ev)
+                $('.input-daterange').change();
+            });
 
-                getCompanyUsers(companyId, rowCount);
-                getPlaces(rowCount);
-          });
+            getCompanyUsers(companyId, rowCount);
+            getPlaces(rowCount);
 
-          function getCompanyUsers(_id, rowCount)
-          {
-               $.ajax({
-                    type: 'Get',
-                    url: '@Url.ActionLink("GetCompanyUsers", "Account")',
-                    data: {
-                        companyId: _id,
-                    },
-                    success: function (response)
-                    {
-                        if (response.error == true)
-                        {
-                            toastr.error(response.message, "Xəta baş verdi!");
-                            return;
-                        }
-                        
 
-                        $(`.user-${rowCount - 1}`).empty();
-                        var html = "";
 
-                        for (var i in response) {
-                            html += `<option value="${[response[i].id]}">
-                            ${[response[i].name]}</option>`
-                        }
+        });
 
-                        if(response.length>0)
-                        {
-                            $(`.user-${rowCount - 1}`).prop('disabled', false);
-                            $(`.user-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                        }
-                        else{
-                            $(`.user-${rowCount - 1}`).prop('disabled', false);
-                            $(`.user-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                        }
-                    },
-                    error: function (response) {
-                        $("#overlay").fadeOut(300);
-                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+        function getCompanyUsers(_id, rowCount) {
+            $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetCompanyUsers", "Account")',
+                data: {
+                    companyId: _id,
+                },
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
                     }
-               });
-          }
 
-          function getPlaces(rowCount)
-          {
-               $.ajax({
-                    type: 'Get',
-                    url: '@Url.ActionLink("GetPlaces", "Place")',
-                    success: function (response)
-                    {
-                        if (response.error == true)
-                        {
-                            toastr.error(response.message, "Xəta baş verdi!");
-                            return;
-                        }
-                        
 
-                        $(`.place-${rowCount - 1}`).empty();
-                        var html = "";
+                    $(`.user-${rowCount - 1}`).empty();
+                    var html = "";
 
-                        for (var i in response) {
-                            html += `<option value="${[response[i].id]}">
-                            ${[response[i].name]}</option>`
-                        }
-
-                        if(response.length>0)
-                        {
-                            $(`.place-${rowCount - 1}`).prop('disabled', false);
-                            $(`.place-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Seçim edin</option>`+ html);
-                        }
-                        else{
-                            $(`.place-${rowCount - 1}`).prop('disabled', false);
-                            $(`.place-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
-                        }
-                    },
-                    error: function (response) {
-                        $("#overlay").fadeOut(300);
-                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                                        ${[response[i].name]}</option>`
                     }
-               });
-          }
+
+                    if (response.length > 0) {
+                        $(`.user-${rowCount - 1}`).prop('disabled', false);
+                        $(`.user-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
+                    }
+                    else {
+                        $(`.user-${rowCount - 1}`).prop('disabled', false);
+                        $(`.user-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        }
+
+        function getPlaces(rowCount) {
+            $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetPlaces", "Place")',
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+
+
+                    $(`.place-${rowCount - 1}`).empty();
+                    var html = "";
+
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                                        ${[response[i].name]}</option>`
+                    }
+
+                    if (response.length > 0) {
+                        $(`.place-${rowCount - 1}`).prop('disabled', false);
+                        $(`.place-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
+                    }
+                    else {
+                        $(`.place-${rowCount - 1}`).prop('disabled', false);
+                        $(`.place-${rowCount - 1}`).html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+                },
+                error: function (response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        }
+
+
     });
 </script>

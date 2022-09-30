@@ -74,7 +74,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <input hidden type="checkbox" asp-for="IsTransportation">
+                    <input hidden type="checkbox" asp-for="IsHotelDemand">
+@*                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <div class="checkbox-zoom zoom-primary">
@@ -101,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div id="row-box">
                         <input id="rowCount" type="hidden" value="@Model.BusinessTripUsers.Count" />
                         @for (var i = 0; i < Model.BusinessTripUsers.Count; i++)
