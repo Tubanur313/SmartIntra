@@ -15,11 +15,22 @@
     <div class="col-md-12">
         <form asp-action="Update" class="main-signin-form" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="FilePath"/>
-            <input type="hidden" asp-for="Key"/>
-            <input type="hidden" asp-for="IsBackground"/>
-            <input type="hidden" asp-for="IsDeletable"/>
+            <input type="hidden" asp-for="FilePath" />
+            <input type="hidden" asp-for="Key" />
+            <input type="hidden" asp-for="IsBackground" />
+            <input type="hidden" asp-for="IsDeletable" />
             <div class="row">
+                <div class="col-sm-6">
+                    <label class="floatLabel">  Şirkət: </label>
+                    <select asp-for="CompanyId" class="form-control">
+                        <option value="" disabled selected hidden>Seçim edin</option>
+                        @foreach (var item in ViewBag.companies)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Ad: </label>
