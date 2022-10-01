@@ -238,6 +238,28 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             }
 
                         }
+                        else
+                        {
+                            var week_day = next_date.DayOfWeek;
+                            if (graph.Key == "five_day")
+                            {
+                                if (week_day == DayOfWeek.Saturday)
+                                {
+                                    next_date = next_date.AddDays(2);
+                                }
+                                else if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+                            else if (graph.Key == "six_day")
+                            {
+                                if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+                        }
                       
                         var vcd = add.VacationContractDates.OrderBy(x => x.FromDate).ToList();
                         foreach (var el in vcd)
@@ -512,6 +534,28 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                 next_date = next_year_days.FirstOrDefault(x => x.StartDate <= next_date && next_date <= x.EndDate).EndDate.AddDays(1);
                             }
 
+                        }
+                        else
+                        {
+                            var week_day = next_date.DayOfWeek;
+                            if (graph.Key == "five_day")
+                            {
+                                if (week_day == DayOfWeek.Saturday)
+                                {
+                                    next_date = next_date.AddDays(2);
+                                }
+                                else if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
+                            else if (graph.Key == "six_day")
+                            {
+                                if (week_day == DayOfWeek.Sunday)
+                                {
+                                    next_date = next_date.AddDays(1);
+                                }
+                            }
                         }
 
                         var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == update.UserId);
