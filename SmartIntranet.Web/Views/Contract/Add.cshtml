@@ -36,8 +36,6 @@
                         <label class="floatLabel">  Əməkdaşlar: </label>
                         <select name="select" disabled asp-for="UserId" name="UserId" class="form-control">
                             <option value="" disabled selected hidden>Seçim edin</option>
-
-
                         </select>
                         <span asp-validation-for="UserId" class="text-danger"></span>
                     </div>
@@ -99,26 +97,20 @@
                 <div id="clause_new" class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Şablon: </label>
-                        <select name="select" asp-for="ClauseId" name="ClauseId" class="form-control">
-                            <option value="null" disabled selected hidden>Seçim edin</option>
-                            @foreach (var item in ViewBag.clauses)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-
+                        <select name="select" disabled asp-for="ClauseId" name="ClauseId" class="form-control">
+                            <option value="" disabled selected hidden>Seçim edin</option>
                         </select>
                         <span asp-validation-for="ClauseId" class="text-danger"></span>
                     </div>
-
                 </div>
                 <div id="clause_old" class="col-sm-6" style="display: none;">
                     <div class="form-group">
-                    <label class="floatLabel">  Hazır fayl: </label>
-                    <div class="file upload form-control mb-3" style="position: relative;overflow: hidden;">
-                        <i class="fas fa-cloud-upload-alt" style="color: #01a9ac"></i>
-                        <span id="pdfTxt"> Müqavilə Yüklə</span>
-                        <input id="ReadyDoc" type="file" name="readyDoc" accept=".docx, .pdf" style="cursor: pointer;position: absolute; font-size: 50px; opacity: 0; right: 0; top: 0;" />
-                    </div>
+                        <label class="floatLabel">  Hazır fayl: </label>
+                        <div class="file upload form-control mb-3" style="position: relative;overflow: hidden;">
+                            <i class="fas fa-cloud-upload-alt" style="color: #01a9ac"></i>
+                            <span id="pdfTxt"> Müqavilə Yüklə</span>
+                            <input id="ReadyDoc" type="file" name="readyDoc" accept=".docx, .pdf" style="cursor: pointer;position: absolute; font-size: 50px; opacity: 0; right: 0; top: 0;" />
+                        </div>
                     </div>
 
                 </div>
@@ -140,7 +132,7 @@
                                     <i class="helper"></i>Müddətli
                                 </label>
                             </div>
-                            <div class="radio radio-inline"  style="margin-left: 0.5rem;">
+                            <div class="radio radio-inline" style="margin-left: 0.5rem;">
                                 <label for="false">
                                     <input type="radio" id="false" value="false" asp-for="HasTerm">
                                     <i class="helper"></i>Müddətsiz
@@ -164,7 +156,7 @@
                                     <i class="helper"></i>Əsas
                                 </label>
                             </div>
-                            <div class="radio radio-inline"  style="margin-left: 0.5rem;">
+                            <div class="radio radio-inline" style="margin-left: 0.5rem;">
                                 <label for="IsMainPlaceFalse">
                                     <input type="radio" id="IsMainPlaceFalse" value="False" asp-for="IsMainPlace">
                                     <i class="helper"></i>Əlavə
@@ -222,7 +214,7 @@
                                     <i class="helper"></i>Növbəli
                                 </label>
                             </div>
-                            <div class="radio radio-inline"  style="margin-left: 0.5rem;">
+                            <div class="radio radio-inline" style="margin-left: 0.5rem;">
                                 <label for="IsAlternateFalse">
                                     <input type="radio" id="IsAlternateFalse" checked value="false" asp-for="IsAlternate">
                                     <i class="helper"></i>Növbəsiz
@@ -246,7 +238,7 @@
                                     <i class="helper"></i>Bəli
                                 </label>
                             </div>
-                            <div class="radio radio-inline"  style="margin-left: 0.5rem;">
+                            <div class="radio radio-inline" style="margin-left: 0.5rem;">
                                 <label for="ByTransportFalse">
                                     <input type="radio" id="ByTransportFalse" checked value="False" asp-for="ByTransport">
                                     <i class="helper"></i>Xeyr
@@ -409,8 +401,13 @@
 
         $(document).on('change', '#CompanyId', function() {
             var _id = $(this).val();
+            getUsersByCompany(_id);
+            getClausesByCompany(_id);
+        });
 
-            $.ajax({
+        function getUsersByCompany(_id)
+        {
+             $.ajax({
                 type: 'Get',
                 url: '@Url.ActionLink("GetCompanyUsers", "Account")',
                 data: {
@@ -444,10 +441,43 @@
                     toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
                 }
             });
-        });
+        };
 
+         function getClausesByCompany(_id)
+        {
+             $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetCompanyClauses", "Clause")',
+                data: {
+                    companyId: _id,
+                },
+                success: function(response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#ClauseId").empty();
+                    var html = "";
+
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                            ${[response[i].name]}</option>`
+                    }
+
+                    if (response.length > 0) {
+                        $("#ClauseId").prop('disabled', false);
+                        $("#ClauseId").html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
+                    }
+                    else {
+                        $("#ClauseId").prop('disabled', false);
+                        $("#ClauseId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+                },
+                error: function(response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        }
     });
-
-
-
 </script>

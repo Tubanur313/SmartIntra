@@ -151,5 +151,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);
             await _clauseService.UpdateAsync(_map.Map<Clause>(transactionModel));
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCompanyClauses(int companyId)
+        {
+            var clauses = _map.Map<ICollection<ClauseListDto>>(
+                await _clauseService.GetAllAsync(x => !x.IsDeleted && x.CompanyId == companyId));
+            return Ok(clauses);
+        }
     }
 }

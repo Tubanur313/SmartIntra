@@ -809,7 +809,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Id == usr.Id && x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
-            ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
+            ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground && x.CompanyId == usr.CompanyId);
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.ContractId == id && !x.IsDeleted);
             return View(listModel);
         }
