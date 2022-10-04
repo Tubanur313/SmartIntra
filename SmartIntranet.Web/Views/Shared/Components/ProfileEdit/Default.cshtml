@@ -1,30 +1,30 @@
-﻿ @model AppUserProfileDto
- @{
-    Layout = null; 
+﻿@model AppUserProfileDto
+@{
+    Layout = null;
 }
-<form asp-action="Profile"  method="post" class="is-readonly main-signin-form" enctype="multipart/form-data">
+<form asp-action="Profile" method="post" class="is-readonly main-signin-form" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
-  @*  <div class="row">
-        <div class="col-md-2">
-            <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
-                Şəkil Yüklə
-                <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
-            </div>
-        </div>
-        <div class="col-md-5  col-lg-5 col-sm-5">
-            <div class="pt-0">
-                <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
-            </div>
-        </div>
+    @*  <div class="row">
+    <div class="col-md-2">
+    <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
+    Şəkil Yüklə
+    <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
+    </div>
+    </div>
+    <div class="col-md-5  col-lg-5 col-sm-5">
+    <div class="pt-0">
+    <img src="~/profile/@Model.Picture" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+    </div>
+    </div>
 
-        <div class="col-md-5 col-lg-5 col-sm-5">
-            <div id="lview" style="display:none!important;">
-                <div class="pt-0">
-                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
-                </div>
-            </div>
+    <div class="col-md-5 col-lg-5 col-sm-5">
+    <div id="lview" style="display:none!important;">
+    <div class="pt-0">
+    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
+    </div>
+    </div>
 
-        </div>
+    </div>
 
 
 
@@ -49,9 +49,9 @@
 
         </div>
         <div class="col-sm-6">
-            <div class="form-group " >
+            <div class="form-group ">
                 <label class="floatLabel">  Email: </label>
-                <input type="email"  class="form-control is-disabled" asp-for="Email" autocomplete="off">
+                <input type="email" class="form-control is-disabled" asp-for="Email" autocomplete="off">
                 <span asp-validation-for="Email" class="text-danger"></span>
                 <span class="messages"></span>
             </div>
@@ -74,12 +74,28 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group ">
-                <label class="floatLabel">  Tel: </label>
-                <input type="text"  class="form-control" asp-for="PhoneNumber" autocomplete="off">
+                <label class="floatLabel">  Korporativ nömrə: </label>
+                <input type="text" class="form-control" asp-for="PhoneNumber" autocomplete="off">
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 <span class="messages"></span>
             </div>
 
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group ">
+                <label class="floatLabel">  Şəxsi nömrə: </label>
+                <input type="text" class="form-control" asp-for="PersonalPhoneNumber" autocomplete="off">
+                <span asp-validation-for="PersonalPhoneNumber" class="text-danger"></span>
+                <span class="messages"></span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group ">
+                <label class="floatLabel">  Ev nömrə: </label>
+                <input type="text" class="form-control" asp-for="HomePhoneNumber" autocomplete="off">
+                <span asp-validation-for="HomePhoneNumber" class="text-danger"></span>
+                <span class="messages"></span>
+            </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group is-disabled">
@@ -103,34 +119,77 @@
                 <span class="messages"></span>
             </div>
         </div>
-
-        @if (Model.UserContractFiles.Count>0)
-       {
-                   <div class="col-sm-6">
-            <div class="form-group">
-                <label class="">  Müqavilə: </label>
-                <div class="card">
-
-                    <ul class="basic-list list-icons">
-                        @foreach (var item in Model.UserContractFiles)
-                        {
-                            <li class="mt-1 ml-3">
-                                <i class="fa-solid fa-file-arrow-down text-primary" style="font-size: 22px;">
-                                    <a href="~/userContractDocs/@item.FilePath" download
-                                   style="padding-left: 16px;">
-
-                                        @item.CreatedDate.Value.ToString("yyyy-MM-dd-mm-ss")
-                                    </a>
-                                </i>
-                            </li>
-                        }
-
-                    </ul>
-
-                </div>
+        <div class="col-sm-6">
+            <div class="form-group is-disabled">
+                <label class="floatLabel">  SSN: </label>
+                <input type="text" class="form-control" asp-for="SsnCode" disabled autocomplete="off">
+                <span class="messages"></span>
             </div>
         </div>
-       }
+        <div class="col-sm-6 offset-6">
+            <div class="form-group is-disabled">
+                <label class="floatLabel">  Məzuniyyət günləri: </label>
+                <input type="text" class="form-control" asp-for="VacationMainDay" disabled autocomplete="off">
+                <span class="messages"></span>
+            </div>
+        </div>
+        @if (Model.UserVacationRemains.Count > 0)
+        {
+            @for (var i = 0; i < Model.UserVacationRemains.Count; i++)
+            {
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="floatLabel"> Tarix: </label>
+
+                        <div class="input-group input-daterange mb-0">
+                            <input disabled type="text" maxlength=10 asp-for="UserVacationRemains[i].FromDate" class="form-control vacation-remain start old" autocomplete="off">
+                            <span class="input-group-addon">to</span>
+                            <input disabled type="text" maxlength=10 asp-for="UserVacationRemains[i].ToDate" class="form-control vacation-remain end old" autocomplete="off">
+                        </div>
+
+                        <span asp-validation-for="UserVacationRemains[i].ToDate" class="text-danger"></span>
+                        <span asp-validation-for="UserVacationRemains[i].FromDate" class="text-danger"></span>
+                        <span class="messages"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group  is-disabled">
+                        <label class="floatLabel">  Qalıq gün: </label>
+                        <input disabled type="text" class="form-control remain-count-number" asp-for="UserVacationRemains[i].RemainCount" autocomplete="off">
+
+                        <span class="messages"></span>
+                    </div>
+                </div>
+            }
+        }
+        @if (Model.UserContractFiles.Count > 0)
+        {
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="">  Müqavilə: </label>
+                    <div class="card">
+
+                        <ul class="basic-list list-icons">
+                            @foreach (var item in Model.UserContractFiles)
+                            {
+                                <li class="mt-1 ml-3">
+                                    <i class="fa-solid fa-file-arrow-down text-primary" style="font-size: 22px;">
+                                        <a href="~/userContractDocs/@item.FilePath" download
+                                   style="padding-left: 16px;">
+
+                                            @item.CreatedDate.Value.ToString("yyyy-MM-dd-mm-ss")
+                                        </a>
+                                    </i>
+                                </li>
+                            }
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        }
 
     </div>
 

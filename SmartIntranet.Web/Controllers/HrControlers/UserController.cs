@@ -54,7 +54,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 AppUserPassDto = _map.Map<AppUserPassDto>(await _appUserService.FindByUserAllInc(id)),
                 AppUserProfileDto = _map.Map<AppUserProfileDto>(await _appUserService.FindByUserAllInc(id)),
                 AppUserImageDto = _map.Map<AppUserImageDto>(await _appUserService.FindByUserAllInc(id))
-
+                
             };
 
 
@@ -72,6 +72,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             if (updateUser != null)
             {
                 updateUser.PhoneNumber = model.PhoneNumber;
+                updateUser.HomePhoneNumber = model.HomePhoneNumber;
+                updateUser.PersonalPhoneNumber = model.PersonalPhoneNumber;
                 updateUser.Address = model.Address;
                 updateUser.UpdateByUserId = current;
 
@@ -232,6 +234,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         updateUser.DepartmentId = model.DepartmentId;
                         updateUser.PositionId = model.PositionId;
                         updateUser.PhoneNumber = model.PhoneNumber;
+                        updateUser.HomePhoneNumber = model.HomePhoneNumber;
+                        updateUser.PersonalPhoneNumber = model.PersonalPhoneNumber;
                         updateUser.Picture = model.Picture;
                         updateUser.UpdateByUserId = current;
 
