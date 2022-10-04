@@ -103,7 +103,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 add.IsDeleted = false;
 
                 add.FilePath = Guid.NewGuid() + ".xlsx";
-                ExcellGenerate(add);
+                //ExcellGenerate(add);
 
                 if (await _reportService.AddReturnEntityAsync(add) is null)
                 {
@@ -311,7 +311,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             defaultCount = 0;
                         }
 
-                        var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result.Count();
+                        var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.ToDate >= day && x.NextWorkDate > day).Result.Count();
                         if (vacDay > 0)
                         {
                             di.Type = ReportDayType.VACATION;

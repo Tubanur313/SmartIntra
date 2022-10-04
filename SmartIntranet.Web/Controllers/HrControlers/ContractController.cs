@@ -86,6 +86,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             ViewBag.contractTypes = await _contractTypeService.GetAllAsync(x => !x.IsDeleted);
             List<ContractListDto> result_list = new List<ContractListDto>();
             var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
+            if (userComp is null)
+            {
+                return View(new List<ContractListDto>());
+            }
             ViewBag.CompId = userComp.CompanyId;
             var contracts = _map.Map<List<ContractListDto>>(await _contractService
                 .GetAllIncCompAsync());
@@ -174,15 +178,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 el.ContractName = el_long_chg;
                 result_list.Add(el);
             }
-
-            if (userComp.CompanyId.Equals(null))
-            {
-                return View(new List<ContractListDto>());
-            }
-
-
-
-
 
             if (!result_list.Any()) return View(new List<ContractListDto>());
             {
