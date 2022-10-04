@@ -532,7 +532,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             ViewBag.users = _map.Map<ICollection<IntranetUser>>(await _userService.GetAllIncludeAsync(x => x.Email != "tahiroglumahir@gmail.com" && !x.IsDeleted));
             ViewBag.contractFiles = await _contractFileService.GetAllIncCompAsync(x => x.PersonalContractId == id && !x.IsDeleted);
             ViewBag.workGraphics = await _workGraphicService.GetAllAsync(x => !x.IsDeleted);
-            ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground);
+            ViewBag.clauses = await _clauseService.GetAllAsync(x => !x.IsDeleted && !x.IsBackground && x.CompanyId == usr.CompanyId);
             ViewBag.departments = _map.Map<ICollection<DepartmentListDto>>(
                 await _departmentService.GetAllAsync(x => x.IsDeleted  == false && x.CompanyId == usr.CompanyId));
             return View(listModel);

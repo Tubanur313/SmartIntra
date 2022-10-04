@@ -124,12 +124,8 @@
                 </div>
                 <div id="clause_div" class="col-sm-6">
                     <label class="floatLabel">  Şablon: </label>
-                    <select asp-for="ClauseId" class="form-control">
-                        <option value="null" disabled selected hidden>Seçim edin</option>
-                        @foreach (var item in ViewBag.clauses)
-                        {
-                            <option value="@item.Id">@item.Name</option>
-                        }
+                    <select asp-for="ClauseId" disabled class="form-control">
+                        <option value="" disabled selected hidden>Seçim edin</option>
                     </select>
                     <span asp-validation-for="ClauseId" class="text-danger"></span>
                 </div>
@@ -207,13 +203,13 @@
 
 
             @*<div class="row">
-            <div id="salary_pos_div" class="col-sm-6">
-            <div class="form-group">
-            <label class="floatLabel">  Maaş: </label>
-            <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
-            </div>
-            </div>
-            </div>*@
+                <div id="salary_pos_div" class="col-sm-6">
+                <div class="form-group">
+                <label class="floatLabel">  Maaş: </label>
+                <input type="text" class="form-control" asp-for="Salary" autocomplete="off">
+                </div>
+                </div>
+                </div>*@
 
             <div class="form-group row mt-3">
                 <div class="col-sm-12 d-flex justify-content-between">
@@ -347,8 +343,8 @@
             $("#vacation_extra_div").css('display', "none");
             if ($("#infomail").hasClass("d-none")) {
                 $("#infomail").removeClass("d-none");
-            } 
-            
+            }
+
         }
         else if (_id == "WORK_PLACE") {
             $("#salary_div").css('display', "none");
@@ -537,6 +533,12 @@
     $(document).on('change','#CompanyId', function(){
         var _id = $(this).val();
         getDep(_id);
+        getUsersByCompany(_id);
+        getClausesByCompany(_id);
+    });
+
+    function getUsersByCompany(_id)
+    {
         $.ajax({
             type: 'Get',
             url: '@Url.ActionLink("GetCompanyUsers", "Account")',
@@ -571,7 +573,44 @@
                 toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
             }
         });
-    });
+    }
+
+    function getClausesByCompany(_id)
+        {
+             $.ajax({
+                type: 'Get',
+                url: '@Url.ActionLink("GetCompanyClauses", "Clause")',
+                data: {
+                    companyId: _id,
+                },
+                success: function(response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Xəta baş verdi!");
+                        return;
+                    }
+                    $("#ClauseId").empty();
+                    var html = "";
+
+                    for (var i in response) {
+                        html += `<option value="${[response[i].id]}">
+                            ${[response[i].name]}</option>`
+                    }
+
+                    if (response.length > 0) {
+                        $("#ClauseId").prop('disabled', false);
+                        $("#ClauseId").html(`<option value="" disabled selected hidden>Seçim edin</option>` + html);
+                    }
+                    else {
+                        $("#ClauseId").prop('disabled', false);
+                        $("#ClauseId").html(`<option value="" disabled selected hidden>Yoxdur!</option>`);
+                    }
+                },
+                error: function(response) {
+                    $("#overlay").fadeOut(300);
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        }
 
      $(document).on('change','#DepartmentId', function(){
         var _id = $(this).val();

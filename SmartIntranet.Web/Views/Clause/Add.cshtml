@@ -16,6 +16,17 @@
         <form asp-action="Add" class="main-signin-form" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-sm-6">
+                    <label class="floatLabel">  Şirkət: </label>
+                    <select asp-for="CompanyId" class="form-control">
+                        <option value="" disabled selected hidden>Seçim edin</option>
+                        @foreach (var item in ViewBag.companies)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Ad: </label>
                         <input type="text" class="form-control" asp-for="Name" autocomplete="off">

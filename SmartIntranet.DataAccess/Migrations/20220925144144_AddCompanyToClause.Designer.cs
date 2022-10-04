@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context;
 
 namespace SmartIntranet.DataAccess.Migrations
 {
     [DbContext(typeof(IntranetContext))]
-    partial class IntranetContextModelSnapshot : ModelSnapshot
+    [Migration("20220925144144_AddCompanyToClause")]
+    partial class AddCompanyToClause
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -901,56 +903,37 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1000)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CreatedByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("DeleteByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GeneratedReport")
-                        .HasColumnType("ntext");
-
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("ReportDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("UpdateByUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -3315,7 +3298,7 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 9, 29, 15, 18, 29, 981, DateTimeKind.Local).AddTicks(1725));
+                        .HasDefaultValue(new DateTime(2022, 9, 25, 18, 41, 43, 896, DateTimeKind.Local).AddTicks(3868));
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -3751,15 +3734,8 @@ namespace SmartIntranet.DataAccess.Migrations
                     b.Property<string>("GraduatedPlace")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HomePhoneNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue(null);
-
-                    b.Property<DateTime?>("IdCardExpireDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(null);
+                    b.Property<DateTime>("IdCardExpireDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("IdCardGiveDate")
                         .HasColumnType("datetime2");
@@ -3798,11 +3774,6 @@ namespace SmartIntranet.DataAccess.Migrations
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PersonalPhoneNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue(null);
 
                     b.Property<string>("PhoneNumber")
                         .ValueGeneratedOnAdd()

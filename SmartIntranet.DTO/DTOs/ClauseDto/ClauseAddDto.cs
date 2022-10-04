@@ -1,4 +1,6 @@
-﻿namespace SmartIntranet.DTO.DTOs.ClauseDto
+﻿using SmartIntranet.Entities.Concrete.Intranet;
+
+namespace SmartIntranet.DTO.DTOs.ClauseDto
 {
     public class ClauseAddDto
     {
@@ -8,5 +10,7 @@
         public string Key { get; set; }
         public bool IsDeletable { get; set; } // seed de yaranma statusu
         public bool IsBackground { get; set; } // arxa planda isledilir
+        public int? CompanyId { get; set; }
+        public Company Company { get; set; }
     }
 }

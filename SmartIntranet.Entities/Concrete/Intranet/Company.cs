@@ -30,6 +30,7 @@ namespace SmartIntranet.Entities.Concrete.Intranet
         public virtual ICollection<Company> Children { get; set; }
         public virtual ICollection<UserComp> UserComps { get; set; }
         public virtual ICollection<Department> Departments { get; set; }
+        public virtual ICollection<Clause> Clauses { get; set; }
         public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<IntranetUser> IntranetUsers { get; set; }
         public virtual ICollection<Vacancy> Vacancies { get; set; }
