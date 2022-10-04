@@ -95,7 +95,6 @@
             </div>
             <div class="row">
                 <div class="col-12 text-right">
-                    @*İş stajı: *@
                     <button type="button" id="addRow" class="btn btn-outline-success " data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-plus m-0"></i></button>
                 </div>
             </div>
@@ -126,7 +125,26 @@
             $(this).datepicker({
                 format: "dd.mm.yyyy"
             })
-        })
+        });
+
+        $(document).on("click", ".deleteRow", function () {
+            $(this).closest(".added-rows").remove();
+            let rowCount = parseInt($("#rowCount").val());
+            rowCount--;
+            $("#rowCount").val(rowCount);
+        });
+
+        $(document).on("mousemove", 'body', function (e) {
+            $('.added-rows select').each(function () {
+
+                if ($(this).find(":selected").val() === "") {
+                    $(this).next().removeClass("d-none")
+                    e.preventDefault();
+                } else {
+                    $(this).next().addClass("d-none")
+                }
+            });
+        });
 
         $("#addRow").click(function () {
             let companyId = $("#CompanyId").val();
@@ -137,36 +155,42 @@
             let rowCount = parseInt($("#rowCount").val());
             rowCount++;
             $("#rowCount").val(rowCount);
-            let html = `
-                             <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="floatLabel">  Əməkdaş: </label>
-                                            <select name="BusinessTripUsers[${rowCount - 1}].UserId" id="BusinessTripUsers[${rowCount - 1}].UserId" class="form-control user-${rowCount - 1}">
-                                                <option value="" disabled selected hidden>Seçim edin</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label class="floatLabel">  Ezamiyyət yeri: </label>
-                                            <select name="BusinessTripUsers[${rowCount - 1}].PlaceId" id="BusinessTripUsers[${rowCount - 1}].PlaceId" class="form-control place-${rowCount - 1}">
-                                                <option value="" disabled selected hidden>Seçim edin</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                             </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="floatLabel"> Tarix: </label>
-                                        <div class="input-group input-daterange mb-0">
-                                            <input type="text" name="BusinessTripUsers[${rowCount - 1}].StartDate" class="form-control" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input type="text" name="BusinessTripUsers[${rowCount - 1}].EndDate" class="form-control" autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>`
+            let html = `     <div class="added-rows">
+                                             <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="floatLabel">  Əməkdaş: </label>
+                                                            <select name="BusinessTripUsers[${rowCount - 1}].UserId" id="BusinessTripUsers[${rowCount - 1}].UserId" class="user-select form-control user-${rowCount - 1}">
+                                                            <option value="" disabled selected hidden>Seçim edin</option>
+                                                        </select>
+                                                                <span class="user-error text-danger d-none">Əməkdaş xanası boş ola bilməz</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label class="floatLabel">  Ezamiyyət yeri: </label>
+                                                            <select name="BusinessTripUsers[${rowCount - 1}].PlaceId" id="BusinessTripUsers[${rowCount - 1}].PlaceId" class="place-select form-control place-${rowCount - 1}">
+                                                            <option value="" disabled selected hidden>Seçim edin</option>
+                                                        </select>
+                                                                 <span class="place-error text-danger d-none">Ezamiyyət yeri xanası boş ola bilməz</span>
+                                                    </div>
+                                                </div>
+                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="floatLabel"> Tarix: </label>
+                                                    <div class="input-group input-daterange mb-0">
+                                                        <input type="text" name="BusinessTripUsers[${rowCount - 1}].StartDate" class="start-input form-control" autocomplete="off">
+                                                        <div class="input-group-addon">to</div>
+                                                            <input type="text" name="BusinessTripUsers[${rowCount - 1}].EndDate" class="end-input form-control" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 text-right">
+                                               <button type="button" class="btn btn-outline-danger deleteRow" ><i class="icofont icofont-minus m-0"></i></button>
+                                            </div>
+                                 </div>`
             $('#row-box').append(html);
 
             $('.input-daterange input').each(function () {
@@ -174,15 +198,57 @@
                     format: "dd.mm.yyyy"
                 });
             }).on('changeDate', function (ev) {
-                console.log(ev)
+                $(this).css('border', '1px solid #ccc');
                 $('.input-daterange').change();
             });
 
             getCompanyUsers(companyId, rowCount);
             getPlaces(rowCount);
 
+            $('form').on("submit", function (e) {
+
+                $('.added-rows select').each(function () {
+
+                    if ($(this).find(":selected").val() === "") {
+                        $(this).next().removeClass("d-none");
+                        console.log(this)
+                        e.preventDefault();
+                    } 
+                    else {
+                        $(this).next().addClass("d-none");
+                    }
+                });
+
+                $('.user-select').each(function (index, element){
+                    element.setAttribute("id", 'BusinessTripUsers[' + index + '].UserId');
+                    element.setAttribute("name", 'BusinessTripUsers[' + index + '].UserId');
+                });
+                $('.place-select').each(function (index, element){
+                    element.setAttribute("id", 'BusinessTripUsers[' + index + '].PlaceId');
+                    element.setAttribute("name", 'BusinessTripUsers[' + index + '].PlaceId');
+                });
+                $('.start-input').each(function (index, element) {
+                    element.setAttribute("id", 'BusinessTripUsers[' + index + '].StartDate');
+                    element.setAttribute("name", 'BusinessTripUsers[' + index + '].StartDate');
+                });
+                $('.end-input').each(function (index, element) {
+                    element.setAttribute("id", 'BusinessTripUsers[' + index + '].EndDate');
+                    element.setAttribute("name", 'BusinessTripUsers[' + index + '].EndDate');
+                });
 
 
+                $('.input-daterange input').each(function () {
+                    if (!$(this).hasClass("valid")) {
+                        $(this).css('border', '1px solid red');
+                        e.preventDefault();
+                    } else {
+                        $(this).on('change', function (ev) {
+                            $(this).css('border', '1px solid #ccc');
+                        });
+
+                    }
+                });
+            });
         });
 
         function getCompanyUsers(_id, rowCount) {
@@ -204,7 +270,7 @@
 
                     for (var i in response) {
                         html += `<option value="${[response[i].id]}">
-                                        ${[response[i].name]}</option>`
+                                                    ${[response[i].name]}</option>`
                     }
 
                     if (response.length > 0) {
@@ -239,7 +305,7 @@
 
                     for (var i in response) {
                         html += `<option value="${[response[i].id]}">
-                                        ${[response[i].name]}</option>`
+                                                    ${[response[i].name]}</option>`
                     }
 
                     if (response.length > 0) {
