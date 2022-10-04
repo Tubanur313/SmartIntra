@@ -59,13 +59,15 @@
             $(document).on("click", "#closeBtn", function (e) {
                 $(".modal").each(function () {
                     if ($(this).hasClass("show")) {
-                        $(".panel").addClass("d-none")
+                        $(".panel").last().css('display', 'none');
+                        //$(".select2-dropdown").addClass("d-none")
                     } else {
-                        $(".panel-htop").addClass("d-none")
+                        $(".panel-htop").last().css('display', 'none');
                         $(".select2-dropdown").addClass("d-none")
                     }
                 });
             });
+
         });
     </script>
     @*  <script>
