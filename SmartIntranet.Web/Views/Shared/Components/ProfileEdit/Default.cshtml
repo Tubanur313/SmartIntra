@@ -121,34 +121,38 @@
         </div>
         <div class="col-sm-6">
             <div class="form-group is-disabled">
-                <label class="floatLabel">  SSN: </label>
+                <label class="floatLabel">  Sosial Sığorta nömrəsi: </label>
                 <input type="text" class="form-control" asp-for="SsnCode" disabled autocomplete="off">
                 <span class="messages"></span>
             </div>
         </div>
-        <div class="col-sm-6 offset-6">
+        <div class="col-sm-6">
             <div class="form-group is-disabled">
-                <label class="floatLabel">  Məzuniyyət günləri: </label>
-                <input type="text" class="form-control" asp-for="VacationMainDay" disabled autocomplete="off">
-                <span class="messages"></span>
-            </div>
+                <label class="floatLabel"> Əsas məzuniyyət günləri hüququ:</label>
+            </div>       
+        </div>        
+        <div class="col-sm-6">
+            <div class="form-group is-disabled">
+                <label class="floatLabel">@Model.VacationMainDay gün</label>
+            </div>       
         </div>
+        <div class="col-sm-12 mb-2">
+            <hr style="color: #e7e7e7;line-height: 1px;background-color: #e7e7e7;margin-top: -6px;margin-bottom: 20px;" />
+        </div>
+
         @if (Model.UserVacationRemains.Count > 0)
         {
-            @for (var i = 0; i < Model.UserVacationRemains.Count; i++)
+            @foreach (var item in Model.UserVacationRemains.Where(v => !v.IsDeleted).OrderBy(x => x.FromDate).ToList())
             {
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel"> Tarix: </label>
 
                         <div class="input-group input-daterange mb-0">
-                            <input disabled type="text" maxlength=10 asp-for="UserVacationRemains[i].FromDate" class="form-control vacation-remain start old" autocomplete="off">
-                            <span class="input-group-addon">to</span>
-                            <input disabled type="text" maxlength=10 asp-for="UserVacationRemains[i].ToDate" class="form-control vacation-remain end old" autocomplete="off">
+                            <input disabled type="text" maxlength=10 asp-for="@item.FromDate">
+                            :
+                            <input disabled type="text" maxlength=10 asp-for="@item.ToDate">
                         </div>
-
-                        <span asp-validation-for="UserVacationRemains[i].ToDate" class="text-danger"></span>
-                        <span asp-validation-for="UserVacationRemains[i].FromDate" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
                 </div>
@@ -156,11 +160,15 @@
                 <div class="col-sm-6">
                     <div class="form-group  is-disabled">
                         <label class="floatLabel">  Qalıq gün: </label>
-                        <input disabled type="text" class="form-control remain-count-number" asp-for="UserVacationRemains[i].RemainCount" autocomplete="off">
+                        <input disabled type="text" class="form-control remain-count-number" asp-for="@item.RemainCount">
 
                         <span class="messages"></span>
                     </div>
                 </div>
+            }
+            @for (var i = 0; i < Model.UserVacationRemains.Count; i++)
+            {
+
             }
         }
         @if (Model.UserContractFiles.Count > 0)
