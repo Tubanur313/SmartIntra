@@ -73,6 +73,37 @@
     <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
     <script class="removable" type="text/javascript">
         $(document).ready(function ($) {
+           var table = $('#usertable').DataTable({
+                "searching": true,
+                //dom: 'ilftp',
+                //"sDom": '<"top"i>rt<"bottom"flp><"clear">',
+                dom: 'lfrt<"toolbar">p',
+                "ordering": false,
+                paging: true,
+                //responsive:true,
+                "fnDrawCallback": function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
+            });
+            $('#usertable_length').css({
+                'position': 'relative',
+                'top': '30px',
+                'margin-left': '15px'
+            });
+            $('#usertable_filter').css({
+                'position': 'relative',
+                'margin-right': '15px',
+                'bottom': '15px'
+            });
+            $('.toolbar').css({
+                'position': 'relative',
+                'top': '30px',
+                'margin-left': '15px'
+            });
+            var count = table.rows().count();
+
+            $('div.toolbar').html(`<span>İşçilərin sayı: ${count}</span>`);
+
             $.ajax({
                 url: `@Url.Action("GetCompanyTreeBySignInUser", "Account")`,
                 type: "Get",
@@ -123,8 +154,8 @@
                                                             data: data,
                                                             prompt: 'Seçim edin'
                                                         });
-                                                            tree.combotree('disable');
-                                                
+                                                        tree.combotree('disable');
+
                                                     },
                                                     error: function (data) {
                                                         toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
@@ -132,8 +163,8 @@
                                                 });
                                             }
                                         })
-                                            tre.combotree('disable');
-                                  
+                                        tre.combotree('disable');
+
                                     }
                                     else {
                                         var tree = $('#DepartId').combotree({
@@ -169,7 +200,7 @@
                                 cache: false,
                                 success: function (data) {
                                     if (data.length > 0) {
-                                        
+
                                         var tree = $('#PositId').combotree({
                                             onLoadSuccess: function (node) {
                                                 $('#PositId').combotree('setValue', '');
