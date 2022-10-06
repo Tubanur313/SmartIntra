@@ -15,6 +15,14 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation
             RuleFor(I => I.PhoneNumber).MinimumLength(10).WithMessage("Telefon nömrəsi 10 simvoldan kiçik olmamalıdır!")
             .MaximumLength(19).WithMessage("Telefon nömrəsi 19 simvoldan yüksək olmamalıdır!")
              .Matches(new Regex(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$"))
+             .WithMessage("Telefon nömrəsi uyğun deyil yalnız rəqəm daxil edin !");            
+            RuleFor(I => I.PersonalPhoneNumber).MinimumLength(10).WithMessage("Telefon nömrəsi 10 simvoldan kiçik olmamalıdır!")
+            .MaximumLength(19).WithMessage("Telefon nömrəsi 19 simvoldan yüksək olmamalıdır!")
+             .Matches(new Regex(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$"))
+             .WithMessage("Telefon nömrəsi uyğun deyil yalnız rəqəm daxil edin !");
+            RuleFor(I => I.HomePhoneNumber).MinimumLength(10).WithMessage("Telefon nömrəsi 10 simvoldan kiçik olmamalıdır!")
+            .MaximumLength(19).WithMessage("Telefon nömrəsi 19 simvoldan yüksək olmamalıdır!")
+             .Matches(new Regex(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$"))
              .WithMessage("Telefon nömrəsi uyğun deyil yalnız rəqəm daxil edin !");
         }
     }
