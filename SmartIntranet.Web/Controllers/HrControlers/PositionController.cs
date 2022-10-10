@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SmartIntranet.Business.Extension;
 using SmartIntranet.Entities.Concrete.Intranet;
+using static SmartIntranet.Core.Utilities.Messages.Messages;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -36,11 +37,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
         [HttpGet]
         [Authorize(Policy = "position.list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string success, string error)
         {
             var model = (await _positionService.GetAllIncludeAsync()).Where(x => !x.IsDeleted).ToList();
             if (model.Count > 0)
             {
+                TempData["success"] = success;
+                TempData["error"] = error;
                 return View(_map.Map<List<PositionListDto>>(model));
             }
             return View(new List<PositionListDto>());
@@ -69,16 +72,22 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 //}
                 if (await _positionService.AddReturnEntityAsync(add) is null)
                 {
-                    TempData["error"] = Messages.Add.notAdded;
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new
+                    {
+                        error = Messages.Add.notAdded
+                    });
                 }
-                TempData["success"] = Messages.Add.Added;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    success = Messages.Add.Added
+                });
             }
             else
             {
-                TempData["error"] = Messages.Error.notComplete;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notComplete
+                });
             }
         }
         [HttpGet]
@@ -88,8 +97,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             var data = _map.Map<PositionUpdateDto>(await _positionService.FindByIdAsync(id));
             if (data is null)
             {
-                TempData["error"] = Messages.Error.notFound;
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    error = Messages.Error.notFound
+                });
             }
             return View(data);
         }
@@ -116,11 +127,16 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 //    });
                 //}
                 await _positionService.UpdateAsync(update);
-                TempData["success"] = "Yeniləndi";
-                return RedirectToAction("List");
+                return RedirectToAction("List", new
+                {
+                    succes = Messages.Update.updated
+                });
             }
-            TempData["error"] = Messages.Error.notComplete;
-            return RedirectToAction("List");
+            return RedirectToAction("List", new
+            {
+                error = Messages.Error.notFound
+            });
+
         }
         [Authorize(Policy = "position.delete")]
         public async Task Delete(int id)
@@ -142,7 +158,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             var tree = DropDownTreeExtensions.BuildTrees(await _departmentService
                 .GetAllAsync(x => x.CompanyId == companyId && !x.IsDeleted));
             return new JsonResult(tree);
-        }        
+        }
         public async Task<IActionResult> GetPositionTree(int departmentId)
         {
             var tree = DropDownTreeExtensions.BuildTrees(await _positionService
