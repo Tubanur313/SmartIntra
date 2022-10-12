@@ -443,19 +443,40 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 ///
 
                 
-                decimal this_year_remain = 0;
+                decimal old_year_remain = 0;
+                int ii = 0;
+                var this_year_model = new UserVacationRemain();
                 foreach (var el in remain_list)
                 {
+                    if (ii != remain_list.Count - 1)
+                    {
+                        //if (el.IsEditable)
+                        //{
+                            old_year_remain += el.RemainCount;
+                        //}
+                        //else
+                        //{
 
-                   this_year_remain += el.UsedCount;
-                    
+                        //}
+                      
+                    }
+                    else
+                    {
+                        this_year_model = el;
+
+                    }
+                 
+                    ii++;
+                  // this_year_remain += el.UsedCount;
+
                 }
 
-                var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate <= ter_date  && x.IsMainVacation).Result.OrderBy(x=>x.CommandDate);
+                var personal_contract_chgs = _personalContractService.GetAllIncCompAsync(x => !x.IsDeleted && x.UserId == user_id && x.Type == PersonalContractConst.VACATION && x.CommandDate <= ter_date  && 
+                  x.CommandDate >= this_year_model.FromDate && x.IsMainVacation).Result.OrderBy(x=>x.CommandDate);
 
                 if (personal_contract_chgs.Count() > 0)
                 {
-                    DateTime fromDateTmp = work_start_date;
+                    DateTime fromDateTmp = this_year_model.FromDate;
 
                     var main_day = 0;
                     foreach (var el in personal_contract_chgs)
@@ -476,12 +497,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 else
                 {
-                    double after_day_count = Math.Round((double)((ter_date - work_start_date).TotalDays) * usr.VacationMainDay) / 365;
-                    result_remain_day += (int)after_day_count;
+                    double after_day_count = Math.Round((double)((ter_date - this_year_model.FromDate).TotalDays) * usr.VacationMainDay) / 365;
+                    result_remain_day += (int)Math.Round(after_day_count);
                   
                 }
 
-                result_remain_day -= this_year_remain;
+                result_remain_day -= this_year_model.UsedCount;
+                result_remain_day += old_year_remain;
 
             }
 

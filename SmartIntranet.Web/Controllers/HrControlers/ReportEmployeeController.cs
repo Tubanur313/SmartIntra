@@ -311,10 +311,17 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             defaultCount = 0;
                         }
 
-                        var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.ToDate >= day && x.NextWorkDate > day).Result.Count();
-                        if (vacDay > 0)
+                        var vac = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result;
+                        var vacDay = vac.Count();
+                        if (!isHoliday && vacDay > 0)
                         {
-                            di.Type = ReportDayType.VACATION;
+                            var type_vac = vac.FirstOrDefault().VacationType.Key;
+
+                            di.Type = type_vac == VacationTypeConst.LABOR ? ReportDayType.MAIN_VACATION :
+                                (type_vac == VacationTypeConst.WITHOUT_PRICE ? ReportDayType.WITHOUT_PRICE_VACATION :
+                                 (type_vac == VacationTypeConst.PREGNANCY ? ReportDayType.MOTHER_VACATION :
+                                (type_vac == VacationTypeConst.SOCIAL ? ReportDayType.SOCIAL_VACATION :
+                                 (type_vac == VacationTypeConst.EDU ? ReportDayType.EDU_VACATION : ""))));
                             defaultCount = 0;
                             mod.VacDay++;
                         }
@@ -698,10 +705,17 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                 default_count = 0;
                             }
 
-                            var vacDay = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result.Count();
-                            if (vacDay > 0)
+                            var vac = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result;
+                            var vacDay = vac.Count();
+                            if (!isHoliday && vacDay > 0)
                             {
-                                di.Type = ReportDayType.VACATION;
+                                var type_vac = vac.FirstOrDefault().VacationType.Key;
+
+                                di.Type = type_vac==VacationTypeConst.LABOR ? ReportDayType.MAIN_VACATION :
+                                    (type_vac == VacationTypeConst.WITHOUT_PRICE ? ReportDayType.WITHOUT_PRICE_VACATION :
+                                     (type_vac == VacationTypeConst.PREGNANCY ? ReportDayType.MOTHER_VACATION :
+                                    (type_vac == VacationTypeConst.SOCIAL ? ReportDayType.SOCIAL_VACATION :
+                                     (type_vac == VacationTypeConst.EDU ? ReportDayType.EDU_VACATION: ""))));
                                 default_count = 0;
                                 mod.VacDay++;
                             }
@@ -777,9 +791,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         day_of_month.SetCellValue(dd.Type == ReportDayType.NORMAL ? dd.Number.ToString() :
                         (dd.Type == ReportDayType.REST ? "İ" :
                         (dd.Type == ReportDayType.HOLIDAY ? "B" :
-                        (dd.Type == ReportDayType.VACATION ? "M" :
+                        (dd.Type == ReportDayType.MAIN_VACATION ? "M" :
+                        (dd.Type == ReportDayType.WITHOUT_PRICE_VACATION ? "Ö/M" :
+                        (dd.Type == ReportDayType.MOTHER_VACATION ? "A/M" :
+                        (dd.Type == ReportDayType.EDU_VACATION ? "T/M" :
+                        (dd.Type == ReportDayType.SOCIAL_VACATION ? "S/M" :
                         (dd.Type == ReportDayType.BUSINESS_TRIP ? "E" : ""
-                        )))));
+                        )))))))));
                     }
 
                     var day_cell_34 = row.CreateCell(34, CellType.Numeric);
