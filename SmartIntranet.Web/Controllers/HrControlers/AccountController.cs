@@ -376,7 +376,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
                 var appUser = new IntranetUser
                 {
-                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." + user.Fathername),
+                    UserName = CreateUsername.FixUsername(user.Name + user.Surname + user.Fathername),
                     Name = user.Name,
                     Surname = user.Surname,
                     Fathername = user.Fathername,
@@ -737,7 +737,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             await DelUserInfos(updateUser.Id, PersonalContractConst.POSITION);
                         }
                         updateUser.IsDeleted = model.IsDeleted;
-                        updateUser.UserName = CreateUsername.FixUsername(model.Name + "." + model.Surname);
+                        updateUser.UserName = CreateUsername.FixUsername(model.Name + model.Surname + model.Fathername);
                         updateUser.Fathername = model.Fathername;
                         updateUser.Gender = model.Gender;
                         updateUser.Fullname = model.Name + " " + model.Surname + " " + model.Fathername + " " + gender;

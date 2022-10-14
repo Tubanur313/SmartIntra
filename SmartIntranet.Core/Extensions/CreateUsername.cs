@@ -29,6 +29,7 @@ namespace SmartIntranet.Core.Extensions
             username = username.Replace("Ə", "E");
             username = username.Replace("'", "");
             username = username.Replace("\"", "");
+            username = username.Replace(" ", "");
             char[] replacerList = @"$%#@!*?;:~`+=()[]{}|\'<>,/^""&".ToCharArray();
             for (int i = 0; i < replacerList.Length; i++)
             {
@@ -39,7 +40,7 @@ namespace SmartIntranet.Core.Extensions
                 }
             }
             Regex r = new Regex("[^a-zA-Z0-9_-]");
-            //username = r.Replace(username, "-");
+            username = r.Replace(username, ".");
             //while (username.IndexOf("--") > -1)
             //    username = username.Replace("--", "-");
             return username;
