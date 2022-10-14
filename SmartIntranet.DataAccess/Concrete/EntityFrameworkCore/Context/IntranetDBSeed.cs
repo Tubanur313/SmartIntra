@@ -30,7 +30,7 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Context
                     {
                         UserName = "admin@srgroupco.com",
 
-                        TicketPassword = "T!cket2021",
+                        TicketPassword = "SRTt1k3t#2222",
                         TicketHost = "smtp.office365.com",
                         TicketPort = 587,
                         TicketMail = "ticket@srgroupco.com",  
