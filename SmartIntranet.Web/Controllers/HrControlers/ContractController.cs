@@ -861,6 +861,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 formatKeys.Add("isAlternate", model.IsAlternate ? "növbəli" : "növbəsiz");
                 formatKeys.Add("byTransport", model.ByTransport ? "edilir" : "edilmir");
                 formatKeys.Add("hasTerm", model.HasTerm ? "li" : "siz");
+                formatKeys.Add("workPlace", model.IsMainPlace ? "Əsas" : "Əlavə");
 
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 //
