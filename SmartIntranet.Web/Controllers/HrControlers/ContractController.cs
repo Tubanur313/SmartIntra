@@ -637,7 +637,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 else
                 {
-                    formatKeys.Add("contractDateRange", " müddətsiz ");
+                    var range = result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən ";
+                    formatKeys.Add("contractDateRange", range);
                 }
                 formatKeys.Add("contractNumber", result_model.ContractNumber);
                 formatKeys.Add("commandNumber", model.CommandNumber);
@@ -853,7 +854,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 else
                 {
-                    formatKeys.Add("contractDateRange", " müddətsiz ");
+                    var range = model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən ";
+                    formatKeys.Add("contractDateRange", range);
                 }
 
                 formatKeys.Add("contractNumber", model.ContractNumber);
