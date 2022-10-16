@@ -637,7 +637,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 else
                 {
-                    formatKeys.Add("contractDateRange", " müddətsiz ");
+                    var range = result_model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən ";
+                    formatKeys.Add("contractDateRange", range);
                 }
                 formatKeys.Add("contractNumber", result_model.ContractNumber);
                 formatKeys.Add("commandNumber", model.CommandNumber);
@@ -645,6 +646,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 formatKeys.Add("isAlternate", result_model.IsAlternate ? "növbəli" : "növbəsiz");
                 formatKeys.Add("byTransport", result_model.ByTransport ? "edilir" : "edilmir");
                 formatKeys.Add("hasTerm", result_model.HasTerm ? "li" : "siz");
+                formatKeys.Add("workPlace", model.IsMainPlace ? "Əsas" : "Əlavə");
 
                 usr2.WorkGraphicId = model.WorkGraphicId;
                 await _userManager.UpdateAsync(usr2);
@@ -852,7 +854,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 else
                 {
-                    formatKeys.Add("contractDateRange", " müddətsiz ");
+                    var range = model.ContractStart.ToString("dd.MM.yyyy", new CultureInfo("az-Latn-AZ")) + " tarixindən ";
+                    formatKeys.Add("contractDateRange", range);
                 }
 
                 formatKeys.Add("contractNumber", model.ContractNumber);
@@ -861,6 +864,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 formatKeys.Add("isAlternate", model.IsAlternate ? "növbəli" : "növbəsiz");
                 formatKeys.Add("byTransport", model.ByTransport ? "edilir" : "edilmir");
                 formatKeys.Add("hasTerm", model.HasTerm ? "li" : "siz");
+                formatKeys.Add("workPlace", model.IsMainPlace ? "Əsas" : "Əlavə");
 
                 formatKeys = PdfStaticKeys(formatKeys, usr, company, company_director);
                 //
