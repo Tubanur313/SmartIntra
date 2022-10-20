@@ -32,6 +32,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SmartIntranet.DTO.DTOs.ContractDto;
+using NPOI.SS.Formula.Functions;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -57,9 +58,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly IDepartmentService _departmentService;
         private readonly IPositionService _positionService;
         private IPasswordHasher<IntranetUser> _passwordHasher;
+        private readonly IFileService _upload;
         public AccountController(IUserCompService userCompService, IPersonalContractService personalContractService, ITerminationContractService terminationContractService, IVacationContractService vacationContractService, IntranetContext db, IContractService contractService, IAppRoleService appRoleService, IUserVacationRemainService userVacationRemains, Business.Interfaces.Membership.IUserContractService userContractService, UserManager<IntranetUser> userManager,
             IGradeService gradeService, IWorkGraphicService workGraphicService, IHttpContextAccessor httpContextAccessor, SignInManager<IntranetUser> signInManager,
-            IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService,
+            IMapper mapper, IPasswordHasher<IntranetUser> passwordHasher, IAppUserService appUserService, IFileService upload,
             IConfiguration configuration, ICompanyService companyService, IDepartmentService departmentService,
             IPositionService positionService, IOptions<GoogleConfigModel> googleConfig, ISettingsService settingsService) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
@@ -76,6 +78,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             _passwordHasher = passwordHasher;
             _configuration = configuration;
             _appUserService = appUserService;
+            _upload = upload;
             _userContractService = userContractService;
             _gradeService = gradeService;
             _companyService = companyService;
@@ -339,7 +342,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
             }
 
-
             if (ModelState.IsValid)
             {
                 var sendUserEmailExist = await _appUserService.IsExistEmail(user.Email);
@@ -372,53 +374,12 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                 }
 
+                var add = _map.Map<IntranetUser>(user);
+                add.UserVacationRemains = UserVacationRemainsNew;
+                add.CreatedByUserId = current;
+                add.CreatedDate = DateTime.Now;
 
-                var gender = user.Gender == "MALE" ? " oğlu" : "qızı";
-                var appUser = new IntranetUser
-                {
-                    UserName = CreateUsername.FixUsername(user.Name + "." + user.Surname + "." + user.Fathername),
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Fathername = user.Fathername,
-                    Gender = user.Gender,
-                    Fullname = user.Name + " " + user.Surname + " " + user.Fathername + " " + gender,
-                    EducationLevel = user.EducationLevel,
-                    GraduatedPlace = user.GraduatedPlace,
-                    IdCardExpireDate = user.IdCardExpireDate,
-                    IdCardGiveDate = user.IdCardGiveDate,
-                    IdCardGivePlace = user.IdCardGivePlace,
-                    IdCardNumber = user.IdCardNumber,
-                    Profession = user.Profession,
-                    IdCardType = user.IdCardType,
-                    Citizenship = user.Citizenship,
-                    RegisterAdress = user.RegisterAdress,
-                    Salary = user.Salary,
-                    VacationMainDay = user.VacationMainDay,
-                    VacationExtraChild = user.VacationExtraChild,
-                    VacationExtraExperience = user.VacationExtraExperience,
-                    VacationExtraNature = user.VacationExtraNature,
-                    CompanyId = user.CompanyId,
-                    DepartmentId = user.DepartmentId,
-                    WorkGraphicId = user.WorkGraphicId,
-                    PositionId = user.PositionId,
-                    GradeId = user.GradeId,
-                    Email = user.Email,
-                    Pin = user.Pin,
-                    StartWorkDate = user.StartWorkDate,
-                    Birthday = user.Birthday,
-                    SsnCode = user.SsnCode,
-                    PhoneNumber = user.PhoneNumber,
-                    HomePhoneNumber = user.HomePhoneNumber,
-                    PersonalPhoneNumber = user.PersonalPhoneNumber,
-                    Address = user.Address,
-                    Picture = user.Picture,
-                    CreatedByUserId = current,
-                    CreatedDate = DateTime.Now,
-                    UserExperiences = user.UserExperiences,
-                    UserVacationRemains = UserVacationRemainsNew
-                };
-
-                var result = await _userManager.CreateAsync(appUser, user.Password);
+                var result = await _userManager.CreateAsync(add, user.Password);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("List", new
@@ -634,44 +595,25 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             ViewBag.userVacationDisable = await _db.UserVacationRemains.Where(x => x.AppUserId == model.Id && !x.IsDeleted && !x.IsDeleted && !x.IsEditable).ToListAsync();
             if (ModelState.IsValid)
             {
-                if (profile != null && profile.FileName != "default.png")
-                {
-                    if (!MimeTypeCheckExtension.İsImage(profile))
-                    {
-                        return RedirectToAction("List", new
-                        {
-                            error = Messages.Error.wrongFormat
-                        });
-                    }
+                var current = GetSignInUserId();
+                var updateUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == model.Id);
 
-                    // model.Picture = AddResizedImage("wwwroot/profile/", profile);
+                if (!(profile is null) && profile.FileName != "default.png")
+                {
+                    if (updateUser.Picture!="default.png")
+                    {
+                    _upload.Delete(updateUser.Picture, "wwwroot/profile/");
+                    }
+                    model.Picture = await _upload.UploadResizedImg(profile, "wwwroot/profile/");
                 }
-
-                else if (profile != null)
+                else if (profile is null)
                 {
-                    if (MimeTypeCheckExtension.İsImage(profile))
-                    {
-                        model.Picture = "logoDefault.png";
-
-                    }
-                    else
-                    {
-                        return RedirectToAction("List", new
-                        {
-                            error = Messages.Error.wrongFormat
-                        });
-                    }
+                    model.Picture = updateUser.Picture;
                 }
                 else
                 {
-                    var user = await _appUserService.FindByIdAsync(model.Id);
-                    model.Picture = user.Picture;
-
+                    model.Picture = "default.png";
                 }
-
-                var current = GetSignInUserId();
-                var updateUser = _userManager.Users.FirstOrDefault(I => I.Id == model.Id);
-                var oldFileImage = updateUser.Picture;
 
                 if (updateUser != null)
                 {
@@ -684,11 +626,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             error = Messages.Error.notComplete
                         });
 
-
-
                     if (!string.IsNullOrEmpty(model.Email))
                     {
-                        var gender = model.Gender == "MALE" ? " oğlu" : "qızı";
                         List<UserExperience> userExperiences = await _db.UserExperiences.Where(x => x.UserId == model.Id).ToListAsync();
                         _db.UserExperiences.RemoveRange(userExperiences);
 
@@ -728,7 +667,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         {
                             await DelUserInfos(updateUser.Id, PersonalContractConst.VACATION);
                         }
-                        else if (updateUser.Salary != model.Salary)
+                        else if (updateUser.Salary != Convert.ToDouble(model.Salary))
                         {
                             await DelUserInfos(updateUser.Id, PersonalContractConst.SALARY);
                         }
@@ -736,76 +675,32 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         {
                             await DelUserInfos(updateUser.Id, PersonalContractConst.POSITION);
                         }
-                        updateUser.IsDeleted = model.IsDeleted;
-                        updateUser.UserName = CreateUsername.FixUsername(model.Name + "." + model.Surname);
-                        updateUser.Fathername = model.Fathername;
-                        updateUser.Gender = model.Gender;
-                        updateUser.Fullname = model.Name + " " + model.Surname + " " + model.Fathername + " " + gender;
-                        updateUser.EducationLevel = model.EducationLevel;
-                        updateUser.GraduatedPlace = model.GraduatedPlace;
-                        updateUser.IdCardExpireDate = model.IdCardExpireDate;
-                        updateUser.IdCardGiveDate = model.IdCardGiveDate;
-                        updateUser.IdCardGivePlace = model.IdCardGivePlace;
-                        updateUser.IdCardNumber = model.IdCardNumber;
-                        updateUser.Profession = model.Profession;
-                        updateUser.RegisterAdress = model.RegisterAdress;
-                        updateUser.VacationMainDay = model.VacationMainDay;
-                        updateUser.VacationExtraChild = model.VacationExtraChild;
-                        updateUser.VacationExtraExperience = model.VacationExtraExperience;
-                        updateUser.VacationExtraNature = model.VacationExtraNature;
-                        updateUser.SsnCode = model.SsnCode;
-                        updateUser.IdCardType = model.IdCardType;
-                        updateUser.Citizenship = model.Citizenship;
-                        updateUser.Salary = model.Salary;
-                        updateUser.WorkGraphicId = model.WorkGraphicId;
-                        updateUser.CompanyId = model.CompanyId;
-                        updateUser.DepartmentId = model.DepartmentId;
-                        updateUser.PositionId = model.PositionId;
-                        updateUser.GradeId = model.GradeId;
-                        updateUser.Name = model.Name;
-                        updateUser.Surname = model.Surname;
-                        updateUser.Pin = model.Pin;
-                        updateUser.StartWorkDate = model.StartWorkDate;
-                        updateUser.IsDeleted = model.IsDeleted;
-                        updateUser.Birthday = model.Birthday;
-                        updateUser.PhoneNumber = model.PhoneNumber;
-                        updateUser.HomePhoneNumber = model.HomePhoneNumber;
-                        updateUser.PersonalPhoneNumber = model.PersonalPhoneNumber;
-                        updateUser.Address = model.Address;
-                        updateUser.Picture = model.Picture;
-                        updateUser.UpdateDate = DateTime.Now;
-                        updateUser.UpdateByUserId = current;
-                        updateUser.UserExperiences = model.UserExperiences;
-                        updateUser.UserVacationRemains = UserVacationRemainsNew;
 
-                        updateUser.VacationTotal = 0;
+                        IntranetUser update = _map.Map(model, updateUser);
+
                         foreach (var el in UserVacationRemainsNew)
                         {
-                            updateUser.VacationTotal += el.RemainCount;
+                            update.VacationTotal += el.RemainCount;
                         }
+                        update.UserVacationRemains = UserVacationRemainsNew;
+                        update.UpdateByUserId = current;
+                        update.UpdateDate = DateTime.Now;
+                        update.Picture = model.Picture;
 
-                        IdentityResult result = await _userManager.UpdateAsync(updateUser);
-                        if (result.Succeeded && oldFileImage != "default.png")
+                        IdentityResult result = await _userManager.UpdateAsync(update);
+                        if (result.Succeeded)
                         {
-                            TempData["error"] = DeleteFile("wwwroot/profile/", oldFileImage);
-                        }
-
-                        if (pdf != null && MimeTypeCheckExtension.İsDocument(pdf))
-                        {
-
-                            UserContractAddDto appContract = new UserContractAddDto
+                            if (pdf != null && MimeTypeCheckExtension.İsDocument(pdf))
                             {
-                                FilePath = await AddFile("wwwroot/userContractDocs/", pdf),
-                                AppUserId = model.Id,
-                                CreatedByUserId = current,
-                                CreatedDate = DateTime.Now
-                            };
-                            await _userContractService.AddAsync(_map.Map<UserContractFile>(appContract));
-                        }
-                        else
-                        {
-                            if (pdf == null)
-                            {
+
+                                UserContractAddDto appContract = new UserContractAddDto
+                                {
+                                    FilePath = await AddFile("wwwroot/userContractDocs/", pdf),
+                                    AppUserId = model.Id,
+                                    CreatedByUserId = current,
+                                    CreatedDate = DateTime.Now
+                                };
+                                await _userContractService.AddAsync(_map.Map<UserContractFile>(appContract));
                                 return RedirectToAction("List", new
                                 {
                                     success = Messages.Update.updated
@@ -813,25 +708,33 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             }
                             else
                             {
-                                if (MimeTypeCheckExtension.İsDocument(pdf))
+                                if (pdf == null)
                                 {
                                     return RedirectToAction("List", new
                                     {
-                                        error = Messages.Error.notComplete
+                                        success = Messages.Update.updated
                                     });
                                 }
                                 else
                                 {
-                                    return RedirectToAction("List", new
+                                    if (MimeTypeCheckExtension.İsDocument(pdf))
                                     {
-                                        error = Messages.Error.wrongFormatDoc
-                                    });
+                                        return RedirectToAction("List", new
+                                        {
+                                            error = Messages.Error.notComplete
+                                        });
+                                    }
+                                    else
+                                    {
+                                        return RedirectToAction("List", new
+                                        {
+                                            error = Messages.Error.wrongFormatDoc
+                                        });
+                                    }
+
                                 }
-                                return RedirectToAction("List", new
-                                {
-                                    success = Messages.Update.updated
-                                });
                             }
+
                         }
                     }
                 }

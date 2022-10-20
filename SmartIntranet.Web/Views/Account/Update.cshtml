@@ -281,7 +281,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel">  Əmək Haqqı: </label>
-                                <input class="form-control" asp-for="Salary" autocomplete="off">
+                                <input type="text" asp-for="Salary" placeholder="0,00" class="form-control autonumber" data-a-sep="" data-a-dec=",">
                                 <span asp-validation-for="Salary" class="text-danger"></span>
                             </div>
 
@@ -479,7 +479,7 @@
                                             <div class="border text-center pt-2">
                                                 <div class="pt-0">
                                                     <label class="floatLabel">Şəkil:</label>
-                                                    <img src="~/profile/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
+                                                    <img src="~/uploads/default.png" class="pb-2" style="width: 150px; height: 150px;" alt="Default Avatar" />
                                                 </div>
                                             </div>
                                         }
@@ -620,7 +620,11 @@
 
 <!-- Mask js -->
 <script type="text/javascript" src="~/files/lib/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-
+<!-- Masking js -->
+<script src="~/files/assets/pages/form-masking/inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
+<script src="~/files/assets/pages/form-masking/form-mask.js"></script>
 <!-- delete_ajax-->
 <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
 <script type="text/javascript">

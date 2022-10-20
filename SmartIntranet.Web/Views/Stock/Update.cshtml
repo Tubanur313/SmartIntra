@@ -81,7 +81,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Avadanlığın Alınma Tarixi: </label>
-                        <input type="date" class="form-control" asp-for="BuyDate" autocomplete="off">
+                        <input type="text" placeholder="gün/ay/il" class="form-control" asp-for="BuyDate" autocomplete="off">
                                              <span asp-validation-for="BuyDate" class="text-danger"></span> 
                         <span class="messages"></span>
                     </div>
@@ -116,5 +116,9 @@
 <script class="removable">
     $( document ).ready(function() {
         $("#MacAddress").inputmask({ mask: "9999:9999:9999:9999"});
+        $('#BuyDate')
+        .datepicker({ format: "dd/mm/yyyy"})
+        .datepicker("setDate", new Date("@Model.BuyDate.ToString("MM/dd/yyyy")"))
+        .inputmask("date", { mask: "99/99/9999" });
     });
 </script>

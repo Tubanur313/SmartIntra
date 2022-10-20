@@ -70,7 +70,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Avadanlığın Alınma Tarixi: </label>
-                        <input type="date" class="form-control" asp-for="BuyDate" autocomplete="off">
+                        <input type="text" placeholder="gün/ay/il" class="form-control" asp-for="BuyDate" autocomplete="off">
                         <span asp-validation-for="BuyDate" class="text-danger"></span>
 
                     </div>
@@ -122,7 +122,9 @@
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
 <script class="removable">
-    //$( document ).ready(function() {
-    //    $("#Price").maskMoney();
-    //});
+    $( document ).ready(function() {
+        $('#BuyDate').datepicker({
+            format: "dd/mm/yyyy",
+        }).inputmask("date", {mask: "99/99/9999"});
+    });
 </script>

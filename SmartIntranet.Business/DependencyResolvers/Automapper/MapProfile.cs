@@ -100,7 +100,14 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #endregion
 
             #region AppUser <-> AppUserDto
-            CreateMap<AppUserAddDto, IntranetUser>();
+            CreateMap<AppUserAddDto, IntranetUser>()
+                .ForMember(u => u.Gender,opt=>opt.MapFrom(src=>src.Gender== "MALE" ? "oğlu" : "qızı"))
+                .ForMember(u => u.Name,opt=>opt.MapFrom(src=>src.Name.Trim()))
+                .ForMember(u => u.Surname,opt=>opt.MapFrom(src=>src.Surname.Trim()))
+                .ForMember(u => u.Fathername,opt=>opt.MapFrom(src=>src.Fathername.Trim()))
+                .ForMember(u => u.UserName,opt=>opt.MapFrom(src=>src.Email))
+                .ForMember(u => u.Salary,opt => opt.MapFrom(src => Convert.ToString(src.Salary)))
+                .ForMember(u => u.Fullname,opt=>opt.MapFrom(src=> (src.Name.Trim() + " " + src.Surname.Trim() + " " + src.Fathername.Trim()) + (string.Equals(src.Gender, "MALE") ? " oğlu" : " qızı")));
             CreateMap<IntranetUser, AppUserAddDto>(); 
 
             CreateMap<AppUserListDto, IntranetUser>();
@@ -118,11 +125,17 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             CreateMap<AppUserProfileDto, IntranetUser>();
             CreateMap<IntranetUser, AppUserProfileDto>();
 
-            CreateMap<AppUserUpdateDto, IntranetUser>();
-            //.ForMember(u => u.FullName, opt => opt.MapFrom(src => src.Name + " " + src.Surname));
-            CreateMap<IntranetUser, AppUserUpdateDto>();
-            //.ForMember(u => u.Name, opt => opt.MapFrom(src => src.FullName.Split(' ', StringSplitOptions.None).FirstOrDefault()))
-            //.ForMember(u => u.Surname, opt => opt.MapFrom(src => src.FullName.Split(' ', StringSplitOptions.None).LastOrDefault()));
+            CreateMap<AppUserUpdateDto, IntranetUser>()
+                .ForMember(u => u.Gender, opt => opt.MapFrom(src => src.Gender == "MALE" ? "oğlu" : "qızı"))
+                .ForMember(u => u.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(u => u.Name, opt => opt.MapFrom(src => src.Name.Trim()))
+                .ForMember(u => u.Surname, opt => opt.MapFrom(src => src.Surname.Trim()))
+                .ForMember(u => u.Fathername, opt => opt.MapFrom(src => src.Fathername.Trim()))
+                .ForMember(u => u.Salary,opt => opt.MapFrom(src => Convert.ToString(src.Salary)))
+                .ForMember(u => u.UserName, opt => opt.MapFrom(src => src.Email))
+                .ForMember(u => u.Fullname, opt => opt.MapFrom(src => (src.Name.Trim() + " " + src.Surname.Trim() + " " + src.Fathername.Trim()) + (string.Equals(src.Gender, "MALE") ? " oğlu" : " qızı")));
+            CreateMap<IntranetUser, AppUserUpdateDto>()
+                .ForMember(dest => dest.Salary,opt => opt.MapFrom(src => Convert.ToDouble(src.Salary)));
 
             CreateMap<AppUserClaimsDto, IntranetUser>();
             CreateMap<IntranetUser, AppUserClaimsDto>();
