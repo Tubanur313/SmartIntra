@@ -441,8 +441,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                 ////
                 ///
-
-                
+               
                 decimal old_year_remain = 0;
                 int ii = 0;
                 var this_year_model = new UserVacationRemain();
@@ -502,7 +501,12 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                   
                 }
 
-                result_remain_day -= this_year_model.UsedCount;
+                var extra_vac_day = usr.VacationExtraChild + usr.VacationExtraExperience + usr.VacationExtraNature;
+                if(this_year_model.UsedCount>= extra_vac_day)
+                {
+                    result_remain_day -= this_year_model.UsedCount - extra_vac_day;
+                }
+              
                 result_remain_day += old_year_remain;
 
             }
