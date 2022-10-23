@@ -15,7 +15,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public string Fathername { get; set; }
         public string Gender { get; set; }
         public string Fullname { get; set; }
-        public double Salary { get; set; }
+        public string Salary { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime StartWorkDate { get; set; }
         public string Pin { get; set; }

@@ -582,13 +582,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         }
 
         [HttpGet]
-        [Authorize(Policy = "contract.detail")]
-        public async Task<IActionResult> Detail()
-        {
-            return View();
-        }
-
-        [HttpGet]
         [Authorize(Policy = "contract.add")]
         public async Task<IActionResult> Add()
         {

@@ -13,7 +13,7 @@ namespace SmartIntranet.DTO.DTOs.AppUserDto
         public string Fathername { get; set; }
         public string Gender { get; set; }
         public string Fullname { get; set; }
-        public double Salary { get; set; }
+        public string Salary { get; set; }
         public DateTime StartWorkDate { get; set; }
         public string Pin { get; set; }
         public int WorkGraphicId { get; set; }
