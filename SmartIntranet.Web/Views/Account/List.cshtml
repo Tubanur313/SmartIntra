@@ -73,6 +73,12 @@
     <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
     <script class="removable" type="text/javascript">
         $(document).ready(function ($) {
+
+            $("#closeBtn").click(function()
+            {
+                location.reload();
+            });
+
            var table = $('#usertable').DataTable({
                 "searching": true,
                 //dom: 'ilftp',
