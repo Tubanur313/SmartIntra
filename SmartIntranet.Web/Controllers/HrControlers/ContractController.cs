@@ -666,14 +666,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 if (contractFile.IsClause)
                 {
                     var filePath = _clauseService.FindByIdAsync((int)model.ClauseId).Result.FilePath;
-                    StringBuilder content = await GetDocxContent(filePath, formatKeys);
-                    contractFile.FilePath = await AddContractFile(filePath, PdfFormatKeys(formatKeys, content));
+                    StringBuilder content = await GetDocxContent(filePath, formatKeys, company.Id);
+                    contractFile.FilePath = await AddContractFile(filePath, PdfFormatKeys(formatKeys, content), company.Id);
                 }
                 else
                 {
                     if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                     {
-                        contractFile.ClauseId = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_labor_contract && !x.IsDeleted).Result[0].Id;
+                        contractFile.ClauseId = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_labor_contract && !x.IsDeleted && x.CompanyId == company.Id).Result[0].Id;
                         contractFile.FilePath = await AddFile("wwwroot/contractDocs/", readyDoc);
                         contractFile.CreatedDate = DateTime.Now;
                     }
@@ -687,11 +687,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     IsDeleted = false,
                     IsClause = true
                 };
-                var command_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_command && !x.IsDeleted).Result[0];
+                var command_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_command && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                 commandFile.ClauseId = command_clause.Id;
 
-                StringBuilder content1 = await GetDocxContent(command_clause.FilePath, formatKeys);
-                commandFile.FilePath = await AddContractFile(command_clause.FilePath, PdfFormatKeys(formatKeys, content1));
+                StringBuilder content1 = await GetDocxContent(command_clause.FilePath, formatKeys, company.Id);
+                commandFile.FilePath = await AddContractFile(command_clause.FilePath, PdfFormatKeys(formatKeys, content1), company.Id);
                 contractFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(commandFile);
                 // Mexfilik senedi
@@ -701,11 +701,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     IsDeleted = false,
                     IsClause = true
                 };
-                var privacy_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_privacy && !x.IsDeleted).Result[0];
+                var privacy_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_privacy && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                 privacyFile.ClauseId = privacy_clause.Id;
 
-                StringBuilder content2 = await GetDocxContent(privacy_clause.FilePath, formatKeys);
-                privacyFile.FilePath = await AddContractFile(privacy_clause.FilePath, PdfFormatKeys(formatKeys, content2));
+                StringBuilder content2 = await GetDocxContent(privacy_clause.FilePath, formatKeys, company.Id);
+                privacyFile.FilePath = await AddContractFile(privacy_clause.FilePath, PdfFormatKeys(formatKeys, content2), company.Id);
                 privacyFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(privacyFile);
                 // Maddi mesuliyyet senedi
@@ -715,11 +715,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     IsDeleted = false,
                     IsClause = true
                 };
-                var financial_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_financial_responsibility && !x.IsDeleted).Result[0];
+                var financial_clause = _clauseService.GetAllIncCompAsync(x => x.Key == ContractFileReadyConst.recruitment_financial_responsibility && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                 financialResponsibilityFile.ClauseId = financial_clause.Id;
 
-                StringBuilder content3 = await GetDocxContent(financial_clause.FilePath, formatKeys);
-                financialResponsibilityFile.FilePath = await AddContractFile(financial_clause.FilePath, PdfFormatKeys(formatKeys, content3));
+                StringBuilder content3 = await GetDocxContent(financial_clause.FilePath, formatKeys, company.Id);
+                financialResponsibilityFile.FilePath = await AddContractFile(financial_clause.FilePath, PdfFormatKeys(formatKeys, content3), company.Id);
                 financialResponsibilityFile.CreatedDate = DateTime.Now;
                 await _contractFileService.AddAsync(financialResponsibilityFile);
                 var category = await _categoryService
@@ -889,12 +889,12 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         }
                         else
                         {
-                            var clause = _clauseService.GetAllIncCompAsync(x => x.Id == update.ClauseId && !x.IsDeleted).Result[0];
+                            var clause = _clauseService.GetAllIncCompAsync(x => x.Id == update.ClauseId && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                             DeleteFile("wwwroot/contractDocs/", el.FilePath);
 
-                            StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys);
+                            StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys, company.Id);
                             var new_el = _contractFileService.FindByIdAsync(el.Id).Result;
-                            new_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content));
+                            new_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content), company.Id);
                             new_el.IsClause = true;
                             new_el.ClauseId = update.ClauseId;
                             await _contractFileService.UpdateAsync(new_el);
@@ -902,11 +902,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     }
                     else
                     {
-                        var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted).Result[0];
+                        var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                         DeleteFile("wwwroot/contractDocs/", el.FilePath);
 
-                        StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys);
-                        el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content));
+                        StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys, company.Id);
+                        el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content), company.Id);
                         el.IsClause = true;
                         await _contractFileService.UpdateAsync(el);
                     }

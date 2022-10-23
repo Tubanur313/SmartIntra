@@ -126,10 +126,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 file.BusinessTripId = result_model.Id;
                 file.IsDeleted = false;
                 file.CreatedDate = DateTime.Now;
-                var clause_result = (await _clauseService.GetAllIncCompAsync(x => x.Key == clause && !x.IsDeleted))[0];
+                var clause_result = (await _clauseService.GetAllIncCompAsync(x => x.Key == clause && !x.IsDeleted && x.CompanyId == company.Id))[0];
                 file.ClauseId = clause_result.Id;
-                StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys);
-                file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content, businessTripUsers.Count));
+                StringBuilder content = await GetDocxContent(clause_result.FilePath, formatKeys, company.Id);
+                file.FilePath = await AddContractFile(clause_result.FilePath, PdfFormatKeys(formatKeys, content, businessTripUsers.Count), company.Id);
                 file.CreatedDate= DateTime.Now;
                 if (await _businessTripFileService.AddReturnEntityAsync(file) is null)
                 {
@@ -222,10 +222,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var contract_files = await _businessTripFileService.GetAllIncAsync(x => x.BusinessTripId == update.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
-                    var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted).Result[0];
+                    var clause = _clauseService.GetAllIncCompAsync(x => x.Id == el.ClauseId && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                     DeleteFile("wwwroot/contractDocs/", el.FilePath);
-                    StringBuilder content = await GetDocxContent(el.Clause.FilePath, formatKeys);
-                    el.FilePath = await AddContractFile(el.Clause.FilePath, PdfFormatKeys(formatKeys, content, businessTripUsers.Count));
+                    StringBuilder content = await GetDocxContent(el.Clause.FilePath, formatKeys, company.Id);
+                    el.FilePath = await AddContractFile(el.Clause.FilePath, PdfFormatKeys(formatKeys, content, businessTripUsers.Count), company.Id);
                     await _businessTripFileService.UpdateAsync(el);
                 }
 

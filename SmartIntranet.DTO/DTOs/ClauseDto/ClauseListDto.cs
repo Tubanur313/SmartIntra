@@ -10,6 +10,7 @@ namespace SmartIntranet.DTO.DTOs.ClauseDto
         public string Key { get; set; }
         public bool IsDeletable { get; set; } // seed de yaranma statusu
         public bool IsBackground { get; set; } // arxa planda isledilir
+        public int? CompanyId { get; set; }
         public int? CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? UpdateByUserId { get; set; }

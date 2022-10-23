@@ -17,6 +17,8 @@ using SmartIntranet.Business.Interfaces.Intranet;
 using SmartIntranet.Business.Interfaces.Membership;
 using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
+using System.IO;
+using SmartIntranet.Business.Interfaces.IntraHr;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -25,6 +27,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         private readonly ICompanyService _companyService;
         private readonly IAppUserService _appUserService;
         private readonly IFileService _upload;
+        private readonly IClauseService _clauseService;
         public CompanyController(
             UserManager<IntranetUser> userManager,
             IAppUserService appUserService,
@@ -32,12 +35,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             SignInManager<IntranetUser> signInManager,
             IMapper mapper,
             IFileService upload,
-            ICompanyService companyService
+            ICompanyService companyService,
+            IClauseService clauseService
             ) : base(userManager, httpContextAccessor, signInManager, mapper)
         {
             _companyService = companyService;
             _appUserService = appUserService;
             _upload = upload;
+            _clauseService = clauseService;
         }
 
         [Authorize(Policy = "company.list")]
@@ -97,13 +102,27 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var add = _map.Map<Company>(model);
                 add.CreatedByUserId = GetSignInUserId();
                 add.CreatedDate = DateTime.Now;
-                if (await _companyService.AddReturnEntityAsync(add) is null)
+                var company = await _companyService.AddReturnEntityAsync(add);
+                if (company is null)
                 {
                     return RedirectToAction("List", new
                     {
                         error = Messages.Add.notAdded
                     });
                 }
+                var clauses = await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted && x.CompanyId == null);
+                foreach (var item in clauses)
+                {
+                    item.Id = 0;
+                    item.CreatedByUserId = GetSignInUserId();
+                    item.CreatedDate = DateTime.Now;
+                    item.UpdateByUserId = null;
+                    item.UpdateDate = null;
+                    item.CompanyId = company.Id;
+                    await _clauseService.AddAsync(item);
+                }
+                CopyFolder(Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/clauseDocs"), Path.Combine(Directory.GetCurrentDirectory() + $"/wwwroot/clauseDocs-{company.Id}"));
+
                 return RedirectToAction("List", new
                 {
                     success = Messages.Add.Added
@@ -221,5 +240,26 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             await _companyService.UpdateAsync(delete);
         }
 
+        void CopyFolder(string sourcePath, string targetPath)
+        {
+            //Now Create all of the directories
+            if (Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories).Any())
+            {
+                foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(targetPath);
+            }
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+            {
+                System.IO.File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+            }
+        }
     }
 }

@@ -139,9 +139,9 @@ namespace SmartIntranet.Web.Controllers
             return str;
         }
 
-        protected async Task<StringBuilder> GetDocxContent(string filePath, Dictionary<string, string> formatKeys)
+        protected async Task<StringBuilder> GetDocxContent(string filePath, Dictionary<string, string> formatKeys, int? companyId)
         {
-            filePath = "wwwroot/clauseDocs/" + filePath;
+            filePath = $"wwwroot/clauseDocs-{companyId}/" + filePath;
 
             byte[] byteArray = await System.IO.File.ReadAllBytesAsync(filePath);
             using (MemoryStream stream = new MemoryStream())
@@ -293,9 +293,9 @@ namespace SmartIntranet.Web.Controllers
             return imageName;
         }
 
-        protected async Task<string> AddContractFile(string filePath, StringBuilder content)
+        protected async Task<string> AddContractFile(string filePath, StringBuilder content, int? companyId)
         {
-            filePath = "wwwroot/clauseDocs/" + filePath;
+            filePath = $"wwwroot/clauseDocs-{companyId}/" + filePath;
             string fileName = Guid.NewGuid() + System.IO.Path.GetExtension(".docx");
             byte[] byteArray = await System.IO.File.ReadAllBytesAsync(filePath);
             using (MemoryStream stream = new MemoryStream())

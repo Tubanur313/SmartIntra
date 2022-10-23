@@ -151,10 +151,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 file_extra.TerminationContractId = result_model.Id;
                 file_extra.IsDeleted = false;
 
-                var clause_result_extra = (await _clauseService.GetAllIncCompAsync(x => x.Key == doc_key && !x.IsDeleted))[0];
+                var clause_result_extra = (await _clauseService.GetAllIncCompAsync(x => x.Key == doc_key && !x.IsDeleted && x.CompanyId == company.Id))[0];
                 file_extra.ClauseId = clause_result_extra.Id;
-                StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys);
-                file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra));
+                StringBuilder content_extra = await GetDocxContent(clause_result_extra.FilePath, formatKeys, company.Id);
+                file_extra.FilePath = await AddContractFile(clause_result_extra.FilePath, PdfFormatKeys(formatKeys, content_extra), company.Id);
                 await _contractFileService.AddAsync(file_extra);
 
                 return RedirectToAction("List", "Contract", new
@@ -278,12 +278,12 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var contract_files = await _contractFileService.GetAllIncCompAsync(x => x.TerminationContractId == update.Id && !x.IsDeleted);
                 foreach (var el in contract_files)
                 {
-                    var clause = _clauseService.GetAllIncCompAsync(x => x.Key == doc_key && !x.IsDeleted).Result[0];
+                    var clause = _clauseService.GetAllIncCompAsync(x => x.Key == doc_key && !x.IsDeleted && x.CompanyId == company.Id).Result[0];
                     var edit_el = _contractFileService.FindByIdAsync(el.Id).Result;
                     DeleteFile("wwwroot/contractDocs/", el.FilePath);
                     edit_el.ClauseId = clause.Id;
-                    StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys);
-                    edit_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content));
+                    StringBuilder content = await GetDocxContent(clause.FilePath, formatKeys, company.Id);
+                    edit_el.FilePath = await AddContractFile(clause.FilePath, PdfFormatKeys(formatKeys, content), company.Id);
                     await _contractFileService.UpdateAsync(edit_el);
                 }
                 return RedirectToAction("List", "Contract", new

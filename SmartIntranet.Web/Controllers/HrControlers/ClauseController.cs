@@ -29,7 +29,9 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var model = _map.Map<ICollection<ClauseListDto>>(await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted));
+            var companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
+            var data = (await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).Where(x => companies.Any(y => y.Id == x.CompanyId));
+            var model = _map.Map<ICollection<ClauseListDto>>(data);
             if (model.Any())
             {
                 TempData["success"] = success;
@@ -72,7 +74,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 add.IsBackground = false;
                 if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                 {
-                    add.FilePath = await AddFile("wwwroot/clauseDocs/", readyDoc);
+                    add.FilePath = await AddFile($"wwwroot/clauseDocs-{model.CompanyId}/", readyDoc);
                 }
                 if (await _clauseService.AddReturnEntityAsync(add) is null)
                 {
@@ -120,8 +122,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var data = await _clauseService.FindByIdAsync(model.Id);
                 if (readyDoc != null && MimeTypeCheckExtension.İsDocument(readyDoc))
                 {
-                    DeleteFile("wwwroot/clauseDocs/", model.FilePath);
-                    await AddFile("wwwroot/clauseDocs/", readyDoc, model.FilePath);
+                    DeleteFile($"wwwroot/clauseDocs-{model.CompanyId}/", model.FilePath);
+                    await AddFile($"wwwroot/clauseDocs-{model.CompanyId}/", readyDoc, model.FilePath);
                 }
 
                 var current = GetSignInUserId();
@@ -148,7 +150,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
             transactionModel.DeleteDate = DateTime.Now;
             transactionModel.DeleteByUserId = current;
             transactionModel.IsDeleted = true;
-            DeleteFile("wwwroot/clauseDocs/", transactionModel.FilePath);
+            DeleteFile($"wwwroot/clauseDocs-{transactionModel.CompanyId}/", transactionModel.FilePath);
             await _clauseService.UpdateAsync(_map.Map<Clause>(transactionModel));
         }
 
