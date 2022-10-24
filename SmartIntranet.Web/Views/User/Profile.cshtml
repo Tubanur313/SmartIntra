@@ -69,14 +69,14 @@
                                             </div>
                                             <div class="col-xl-9">
 
-                                                <h5 class="p-2" style="color:#fff">
+                                                <h5 class="p-2 mt-3" style="color:#fff">
                                                     @Model.AppUserProfileDto.Fullname
                                                 </h5>
                                                 <div>
                                                     <div class="row">
                                                         <div class="col-xl-6">
                                                             <div class="d-flex align-items-start flex-column" style="height: 120px;margin-top: 20px;">
-                                                                <div class="mb-auto p-2">
+                                                                <div class="mb-auto p-2 mt-3">
                                                                     <div class="d-flex">
                                                                         <h5 style="color:#fff"> Şirkət: @Model.AppUserProfileDto.Company?.Name</h5>
                                                                     </div>
@@ -90,7 +90,7 @@
                                                         </div>
                                                         <div class="col-xl-6">
                                                             <div class="d-flex align-items-start flex-column" style="height: 120px;margin-top: 20px;">
-                                                                <div class="mb-auto p-2">
+                                                                <div class="mb-auto p-2 mt-3">
                                                                     <div class="d-flex">
                                                                         <h5 style="color:#fff"> Şöbə: @Model.AppUserProfileDto.Department?.Name</h5>
                                                                     </div>
@@ -165,29 +165,29 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group is-disabled">
-                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
+                                                            <label class="floatLabel">  Əmək məzuniyyəti: </label>
                                                             <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationMainDay" disabled autocomplete="off">
                                                             <span class="messages"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group is-disabled">
-                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
-                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraNature" disabled autocomplete="off">
+                                                            <label class="floatLabel">  Əmək stajına görə: </label>
+                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraExperience" disabled autocomplete="off">
                                                             <span class="messages"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group is-disabled">
-                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
+                                                            <label class="floatLabel">  Uşaqlı valideynlərə: </label>
                                                             <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraChild" disabled autocomplete="off">
                                                             <span class="messages"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group is-disabled">
-                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
-                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraExperience" disabled autocomplete="off">
+                                                            <label class="floatLabel">  Əmək şəraitinin xarakterinə görə: </label>
+                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraNature" disabled autocomplete="off">
                                                             <span class="messages"></span>
                                                         </div>
                                                     </div>
@@ -209,26 +209,20 @@
 
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
-                                                                <label class="floatLabel"> İş illəri: </label>
+                                                                <span class="fw-bolder h5 bg-light border border-dark border-bottom-0 border-left-0 border-right-0"> İş illəri: </span>
                                                                 @foreach (var item in Model.AppUserProfileDto.UserVacationRemains.Where(v => !v.IsDeleted).OrderBy(x => x.FromDate).ToList())
                                                                 {
-                                                                    @*                                                                    <div class="input-group input-daterange mb-0">
-                                                            <input disabled type="text" maxlength=10 asp-for="@item.FromDate">
-                                                            :
-                                                            <input disabled type="text" maxlength=10 asp-for="@item.ToDate">
-
-                                                            </div>*@
-                                                                    <div class="input-daterange input-group" id="datepicker">
+                                                                    <div class="input-daterange input-group mt-3" id="datepicker">
                                                                         <input disabled type="text" class="input-sm form-control" value="@item.FromDate.ToString("dd.MM.yyyy")">
                                                                         <div class="input-group-append">
-                                                                            <span class="input-group-text"><i class='icofont icofont-ui-calendar'></i></span>
+                                                                            <span class="bg-light input-group-text"><i class='icofont icofont-ui-calendar'></i></span>
                                                                         </div>
                                                                         <div class="input-group-prepend">
-                                                                            <span class="input-group-text"> : </span>
+                                                                            <span class="bg-light border-light input-group-text"> - </span>
                                                                         </div>
                                                                         <input disabled type="text" class="input-sm form-control" value="@item.ToDate.ToString("dd.MM.yyyy")">
                                                                         <div class="input-group-append">
-                                                                            <span class="input-group-text"><i class='icofont icofont-ui-calendar'></i></span>
+                                                                            <span class="bg-light input-group-text"><i class='icofont icofont-ui-calendar'></i></span>
                                                                         </div>
                                                                     </div>
                                                                 }
@@ -237,10 +231,10 @@
 
                                                         <div class="col-sm-2">
                                                             <div class="form-group  is-disabled">
-                                                                <label class="floatLabel">  Qalıq gün sayı: </label>
+                                                                <span class="fw-bolder h5 bg-light border border-dark border-bottom-0 border-left-0 border-right-0">  Qalıq gün sayı: </span>
                                                                 @foreach (var item in Model.AppUserProfileDto.UserVacationRemains.Where(v => !v.IsDeleted).OrderBy(x => x.FromDate).ToList())
                                                                 {
-                                                                    <div class="input-daterange input-group" id="datepicker">
+                                                                    <div class="input-daterange input-group mt-3" id="datepicker">
                                                                         <input disabled type="text" class="form-control remain-count-number text-center" value="@item.RemainCount">
                                                                     </div>
                                                                 }

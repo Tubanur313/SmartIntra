@@ -5,39 +5,7 @@
 <form asp-action="Profile" method="post" class="is-readonly main-signin-form" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
     <div class="row">
-@*        <div class="col-sm-6">
-            <div class="form-group is-disabled">
-                <label class="floatLabel">  Ad: </label>
-                <input type="text" class="form-control" asp-for="Name" disabled autocomplete="off">
-                <span asp-validation-for="Name" class="text-danger"></span>
-                <span class="messages"></span>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group is-disabled">
-                <label class="floatLabel">  Soyad: </label>
-                <input type="text" class="form-control" asp-for="Surname" disabled autocomplete="off">
-                <span asp-validation-for="Surname" class="text-danger"></span>
-                <span class="messages"></span>
-            </div>
 
-        </div>
-        <div class="col-sm-6">
-            <div class="form-group ">
-                <label class="floatLabel">  Email: </label>
-                <input type="email" class="form-control is-disabled" asp-for="Email" autocomplete="off">
-                <span asp-validation-for="Email" class="text-danger"></span>
-                <span class="messages"></span>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="form-group is-disabled">
-                <label class="floatLabel">  Şirkət: </label>
-                <input type="text" class="form-control" asp-for="Company.Name" disabled autocomplete="off">
-                <span class="messages"></span>
-            </div>
-        </div>*@
         <div class="col-sm-6">
             <div class="form-group">
                 <label class="floatLabel"> Faktiki ünvan: </label>
@@ -79,30 +47,9 @@
                 <span class="messages"></span>
             </div>
         </div>
-@*        <div class="col-sm-6">
-            <div class="form-group is-disabled">
-                <label class="floatLabel">  Şöbə: </label>
-                <input type="text" class="form-control" asp-for="Department.Name" disabled autocomplete="off">
-                <span class="messages"></span>
-            </div>
 
-        </div>
         <div class="col-sm-6">
-            <div class="form-group is-disabled">
-                <label class="floatLabel">  Vəzifə: </label>
-                <input type="text" class="form-control" asp-for="Position.Name" disabled autocomplete="off">
-                <span class="messages"></span>
-            </div>
-        </div>*@
-@*        <div class="col-sm-6">
-            <div class="form-group">
-                <label class="floatLabel">  Doğum tarixi: </label>
-                <input type="date" class="form-control" asp-for="Birthday" disabled autocomplete="off">
-                <span class="messages"></span>
-            </div>
-        </div>*@
-        <div class="col-sm-6">
-            <div class="form-group is-disabled">
+            <div class="form-group border border-light">
                 <label class="floatLabel">  Sosial Sığorta nömrəsi: </label>
                 <input type="text" class="form-control" asp-for="SsnCode" disabled autocomplete="off">
                 <span class="messages"></span>
