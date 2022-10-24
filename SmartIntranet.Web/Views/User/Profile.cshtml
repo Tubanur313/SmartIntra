@@ -42,95 +42,108 @@
                  id="contacts"
                  role="tabpanel">
                 <div class="row">
-                    <div class="col-xl-3">
+                    <div class="col-xl-12">
                         <!-- user contact card left side start -->
-                        <div class="card">
-
+                        <div class="card" style="background: rgb(10,90,156);
+                            background: linear-gradient(180deg, rgba(10,90,156,1) 18%, rgba(26,107,173,1) 48%, rgba(49,133,222,1) 100%);">
                             <div class="card-block">
-
                                 <div class="row">
-                                    @*<div class="col-md-2">
-                                    <div class="file-name file upload btn btn-outline-primary btn-round mb-3" style="position: relative;overflow: hidden;">
-                                    Şəkil Yüklə
-                                    <input type="file" name="profile" id="Profile" style="position: absolute;font-size: 50px;opacity: 0;right: 0;top: 0;" />
-                                    </div>
-                                    </div>*@
                                     <div class="col-md-12  col-lg-12 col-sm-12">
-                                        @*    <div class="pt-0">
-                                        <img src="~/profile/@Model.AppUserImageDto.Picture" class="pb-2" style="width: 200px; height: 200px;" alt="Default Avatar" />
-                                        <div class="tower-file">
-                                        <input type="file" id="demoInput4" />
-                                        <label for="demoInput4" class="tower-file-button">
-                                        <span class="mdi mdi-upload"></span>Select a File
-                                        </label>
-                                        <button type="button" class="tower-file-clear tower-file-button">
-                                        Clear
-                                        </button>
-                                        </div>
-                                        </div>*@
-                                        <div class="pt-0">
-                                            <div class="tower-file">
-                                                <input type="file" id="demoInput4">
-                                                <label for="demoInput4" class="tower-file-button">
-                                                    <span class="mdi mdi-upload"><i class="fa-solid fa-camera"></i></span>
-                                                </label>
-                                                <div class="tower-file-details">
-                                                    <div class="tower-input-preview-container">
-                                                        <div class="tower-input-preview-wrapper">
-                                                            <img src="~/profile/@Model.AppUserImageDto.Picture" alt="Default Avatar" />
+                                        <div class="row">
+                                            <div class="col-xl-3">
+                                                <div class="pt-0">
+                                                    <div class="tower-file">
+                                                        <input type="file" id="demoInput4" style="display:none">
+                                                        <label for="demoInput4" class="tower-file-button" style="right:21rem !important">
+                                                            <span class="mdi mdi-upload"><i class="fa-solid fa-camera"></i></span>
+                                                        </label>
+                                                        <div class="tower-file-details">
+                                                            <div class="tower-input-preview-container" style="margin-left: 10px;border-radius: 50%">
+                                                                <div class="tower-input-preview-wrapper">
+                                                                    <img src="~/profile/@Model.AppUserImageDto.Picture" alt="Default Avatar" style="width: 170px;height: 170px;border-radius: 50%;" />
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-9">
+
+                                                <h5 class="p-2" style="color:#fff">
+                                                    @Model.AppUserProfileDto.Fullname
+                                                </h5>
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-xl-6">
+                                                            <div class="d-flex align-items-start flex-column" style="height: 120px;margin-top: 20px;">
+                                                                <div class="mb-auto p-2">
+                                                                    <div class="d-flex">
+                                                                        <h5 style="color:#fff"> Şirkət: @Model.AppUserProfileDto.Company?.Name</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="p-2">
+                                                                    <div class="d-flex">
+                                                                        <h5 style="color:#fff"> E-mail: @Model.AppUserProfileDto.Email</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <div class="d-flex align-items-start flex-column" style="height: 120px;margin-top: 20px;">
+                                                                <div class="mb-auto p-2">
+                                                                    <div class="d-flex">
+                                                                        <h5 style="color:#fff"> Şöbə: @Model.AppUserProfileDto.Department?.Name</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="p-2">
+                                                                    <div class="d-flex">
+                                                                        <h5 style="color:#fff"> Vəzifə:@Model.AppUserProfileDto.Position?.Name</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    @*<div class="col-md-5 col-lg-5 col-sm-5">
-                                    <div id="lview" style="display:none!important;">
-                                    <div class="pt-0">
-                                    <img id="logoview" src="" class="pb-2" style="width: 150px; height: 150px;" />
-                                    </div>
-                                    </div>
-                                    </div>*@
                                 </div>
-
                             </div>
                         </div>
+                    </div>
+                    <div class="col-xl-3">
                         <div class="card faq-card">
 
                             <div class="card-block">
                                 <div class="d-flex justify-content-between flex-column mb-2 mb-md-0">
                                     <ul class="nav-left nav flex-column nav-pills" role="tablist">
                                         <li class="nav-item" style="margin-bottom: 1rem;">
-                                            <a class="nav-link active" data-toggle="tab" href="#home5" role="tab" aria-selected="true">Şəxsi Məlumatlar</a>
+                                            <a class="nav-link active" data-toggle="tab" href="#home5" role="tab" aria-selected="true">Şəxsi məlumatlar</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#profile5" role="tab" aria-selected="false">Şifrə Yeniləmə</a>
+                                        <li class="nav-item" style="margin-bottom: 1rem;">
+                                            <a class="nav-link" data-toggle="tab" href="#profile4" role="tab" aria-selected="false">Məzuniyyət hüququ</a>
                                         </li>
-                                      
+                                        <li class="nav-item" style="margin-bottom: 1rem;">
+                                            <a class="nav-link" data-toggle="tab" href="#profile5" role="tab" aria-selected="false">Şifrə yeniləmə</a>
+                                        </li>
+                                        @if (Model.AppUserProfileDto.UserContractFiles.Count > 0)
+                                        {
+                                            <li class="nav-item" style="margin-bottom: 1rem;">
+                                                <a class="nav-link" data-toggle="tab" href="#profile6" role="tab" aria-selected="false">Fayllar</a>
+                                            </li>
+                                        }
                                     </ul>
                                 </div>
-                    
+
                             </div>
                         </div>
-
                     </div>
                     <div class="col-xl-9">
                         <div class="row">
                             <div class="col-sm-12">
                                 <!-- contact data table card start -->
                                 <div class="card">
-                                    <div class="card-header">
-                                        <div>
-                                            <h1 class="card-header-text" style=" color: #00cfe8 !important;">
-                                                Şəxsi Məlumatlar
-                                            </h1>
-                                        </div>
-                                        <div>
-                                            @*<button type="button" class="btn btn-default btn-edit js-edit">Edit</button>
-                                            <button type="button" class="btn btn-default btn-save js-save">Save</button>*@
-                                        </div>
-                                    </div>
                                     <div class="card-block">
                                         <div class="tab-content  pt-0">
                                             <div class="tab-pane active" id="home5"
@@ -138,11 +151,140 @@
                                                 @await Component.InvokeAsync("ProfileEdit")
                                                 @*@await Html.PartialAsync("Prof", Model.AppUserProfileDto)*@
                                             </div>
+                                            <div class="tab-pane pt-0" id="profile4" role="tabpanel">
+                                                <div class="row">
+                                                    <div class="card-header">
+                                                        <div>
+                                                            <h1 class="card-header-text" style=" color: #00cfe8 !important;">
+                                                                Məzuniyyət hüquqları
+                                                            </h1>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 mb-2">
+                                                        <hr style="color: #e7e7e7;line-height: 1px;background-color: #e7e7e7;margin-top: -6px;margin-bottom: 20px;" />
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group is-disabled">
+                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
+                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationMainDay" disabled autocomplete="off">
+                                                            <span class="messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group is-disabled">
+                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
+                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraNature" disabled autocomplete="off">
+                                                            <span class="messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group is-disabled">
+                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
+                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraChild" disabled autocomplete="off">
+                                                            <span class="messages"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group is-disabled">
+                                                            <label class="floatLabel">  Əsas məzuniyyət günləri hüququ: </label>
+                                                            <input type="text" class="form-control" asp-for="@Model.AppUserProfileDto.VacationExtraExperience" disabled autocomplete="off">
+                                                            <span class="messages"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="card-header">
+                                                        <div>
+                                                            <h1 class="card-header-text" style=" color: #00cfe8 !important;">
+                                                                Məzuniyyət qalıqları
+                                                            </h1>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 mb-2">
+                                                        <hr style="color: #e7e7e7;line-height: 1px;background-color: #e7e7e7;margin-top: -6px;margin-bottom: 20px;" />
+                                                    </div>
+
+                                                    @if (Model.AppUserProfileDto.UserVacationRemains.Count > 0)
+                                                    {
+
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label class="floatLabel"> İş illəri: </label>
+                                                                @foreach (var item in Model.AppUserProfileDto.UserVacationRemains.Where(v => !v.IsDeleted).OrderBy(x => x.FromDate).ToList())
+                                                                {
+                                                                    @*                                                                    <div class="input-group input-daterange mb-0">
+                                                            <input disabled type="text" maxlength=10 asp-for="@item.FromDate">
+                                                            :
+                                                            <input disabled type="text" maxlength=10 asp-for="@item.ToDate">
+
+                                                            </div>*@
+                                                                    <div class="input-daterange input-group" id="datepicker">
+                                                                        <input disabled type="text" class="input-sm form-control" value="@item.FromDate.ToString("dd.MM.yyyy")">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text"><i class='icofont icofont-ui-calendar'></i></span>
+                                                                        </div>
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text"> : </span>
+                                                                        </div>
+                                                                        <input disabled type="text" class="input-sm form-control" value="@item.ToDate.ToString("dd.MM.yyyy")">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text"><i class='icofont icofont-ui-calendar'></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group  is-disabled">
+                                                                <label class="floatLabel">  Qalıq gün sayı: </label>
+                                                                @foreach (var item in Model.AppUserProfileDto.UserVacationRemains.Where(v => !v.IsDeleted).OrderBy(x => x.FromDate).ToList())
+                                                                {
+                                                                    <div class="input-daterange input-group" id="datepicker">
+                                                                        <input disabled type="text" class="form-control remain-count-number text-center" value="@item.RemainCount">
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+
+                                                    }
+
+                                                </div>
+                                            </div>
                                             <div class="tab-pane pt-0" id="profile5" role="tabpanel">
 
                                                 @*@await Html.PartialAsync("Pass", Model.AppUserPassDto)*@
                                                 @await Component.InvokeAsync("ProfilePassEdit")
 
+                                            </div>
+                                            <div class="tab-pane pt-0" id="profile6" role="tabpanel">
+                                                @if (Model.AppUserProfileDto.UserContractFiles.Count > 0)
+                                                {
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label class="">  Müqavilə: </label>
+                                                            <div class="card">
+
+                                                                <ul class="basic-list list-icons">
+                                                                    @foreach (var item in Model.AppUserProfileDto.UserContractFiles)
+                                                                    {
+                                                                        <li class="mt-1 ml-3">
+                                                                            <i class="fa-solid fa-file-arrow-down text-primary" style="font-size: 22px;">
+                                                                                <a href="~/userContractDocs/@item.FilePath" download
+                                                                           style="padding-left: 16px;">
+
+                                                                                    @item.CreatedDate.Value.ToString("yyyy-MM-dd-mm-ss")
+                                                                                </a>
+                                                                            </i>
+                                                                        </li>
+                                                                    }
+
+                                                                </ul>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
 
                                         </div>
@@ -172,9 +314,9 @@
 <!-- Toastr js -->
 <script type="text/javascript" src="~/files/lib/toastr.js/toastr.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $("#Profile").change(function(e) {
+        $("#Profile").change(function (e) {
             $("#lview").show();
             $("#logoview").attr('src', URL.createObjectURL(e.target.files[0]));
         });
@@ -183,13 +325,11 @@
 
 </script>
 <script>
-    $(document).ready(function($) {
+    $(document).ready(function ($) {
         //phone number masking
         $.mask.definitions['9'] = '';
         $.mask.definitions['_'] = '[0-9]';
         $("#PhoneNumber").mask("+___ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+___ __-___-__-__" });
-        $("#HomePhoneNumber").mask("+___ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+___ __-___-__-__" });
-        $("#PersonalPhoneNumber").mask("+___ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+___ __-___-__-__" });
 
 
 
@@ -198,7 +338,7 @@
         });
 
 
-        $("#demoInput4").on('change', function(e) {
+        $("#demoInput4").on('change', function (e) {
             e.preventDefault();
             var formdata = new FormData();
             var _image = $('#demoInput4')[0].files[0];
@@ -223,7 +363,7 @@
                         cache: false,
                         contentType: false,
                         processData: false,
-                        success: function(response) {
+                        success: function (response) {
                             //sorgu ugurla neticelenende
                             if (response.error == true) {
 
@@ -232,11 +372,11 @@
                             }
 
                             toastr.success(response, "Uğur!");
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 window.location.reload();
                             }, 1000)
                         },
-                        error: function(response) {
+                        error: function (response) {
                             //sorgu ugursuz neticelenende
 
                             toastr.error(response, "Xəta!");
@@ -244,7 +384,7 @@
                     });
                 } else {
                     toastr.success('Əməliyat datandırıldı');
-                    setTimeout(function() {
+                    setTimeout(function () {
                         window.location.reload();
                     }, 1000)
                 }
@@ -253,7 +393,4 @@
         })
 
     });
-
-
-
 </script>

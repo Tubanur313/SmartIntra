@@ -44,7 +44,7 @@
     padding: .375rem; }
   .tower-file .tower-file-details img {
     max-width: 100%; }
-  .tower-file .tower-file-details:before, .tower-file .tower-file-details:after {
+/*  .tower-file .tower-file-details:before, .tower-file .tower-file-details:after {
     content: '';
     position: absolute;
     left: 2rem;
@@ -57,4 +57,4 @@
   .tower-file .tower-file-details:after {
     top: calc(-0.6rem + 1px);
     border: 5px solid transparent;
-    border-bottom-color: white; }
+    border-bottom-color: white; }*/
