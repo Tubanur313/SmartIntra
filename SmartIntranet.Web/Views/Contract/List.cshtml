@@ -112,6 +112,43 @@
     <script type="text/javascript" src="~/files/bower_components2/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script class="removable" type="text/javascript">
         $(document).ready(function ($) {
+            $('#contractTable').DataTable({
+                "ordering": false,
+                "searching": true,
+                paging: true,
+                "fnDrawCallback": function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                },
+                dom: 'Blfrtip',
+                buttons: [
+                    'excel'
+                ]
+            });
+            $('div.dt-buttons').css({
+                'position': 'relative',
+                'top': '30px',
+                'margin-left': '15px',
+                'z-index': '2147483647',
+            });
+            $('div.dt-buttons button').css({
+                'background-image': 'linear-gradient(to bottom, #28c76f 0%,#28c76f 100%)',
+                'border': '1px solid #28c76f',
+                'background-color': '#28c76f',
+                'font-size': '12px'
+            });
+            $('#contractTable_length').css({
+                'position': 'relative',
+                'top': '30px',
+                'margin-left': '15px',
+                'z-index': '2147483647',
+                'display': "inline-block"
+            });
+            $('#contractTable_filter').css({
+                'position': 'relative',
+                'margin-right': '15px',
+                'bottom': '15px'
+            });
+
             $.ajax({
                 url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
                 type: "Get",
