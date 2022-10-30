@@ -279,13 +279,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         }
 
                         isHoliday = nonWorkDaysToMonth.Any(x => x.StartDate <= day && day <= x.EndDate);
-                        switch (day.DayOfWeek)
-                        {
-                            case DayOfWeek.Sunday:
-                            case DayOfWeek.Saturday when graph.Key == "five_day":
-                                di.Type = ReportDayType.REST;
-                                break;
-                        }
+                      
 
                         defaultCount = day.DayOfWeek switch
                         {
@@ -337,6 +331,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         {
                             di.Type = ReportDayType.BUSINESS_TRIP;
                             defaultCount = 0;
+                        }
+
+                        switch (day.DayOfWeek)
+                        {
+                            case DayOfWeek.Sunday:
+                            case DayOfWeek.Saturday when graph.Key == "five_day":
+                                di.Type = ReportDayType.REST;
+                                break;
                         }
 
                     }
@@ -672,15 +674,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             }
 
                             isHoliday = nonWorkDaysToMonth.Any(x => x.StartDate <= day && day <= x.EndDate);
-                            if (day.DayOfWeek == DayOfWeek.Sunday)
-                            {
-                                di.Type = ReportDayType.REST;
-                            }
-                            if (day.DayOfWeek == DayOfWeek.Saturday && graph.Key == "five_day")
-                            {
-                                di.Type = ReportDayType.REST;
-                            }
-
+                           
 
                             switch (day.DayOfWeek)
                             {
@@ -737,6 +731,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                     break;
                                 }
 
+                            }
+                            if (day.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                di.Type = ReportDayType.REST;
+                            }
+                            if (day.DayOfWeek == DayOfWeek.Saturday && graph.Key == "five_day")
+                            {
+                                di.Type = ReportDayType.REST;
                             }
 
 
