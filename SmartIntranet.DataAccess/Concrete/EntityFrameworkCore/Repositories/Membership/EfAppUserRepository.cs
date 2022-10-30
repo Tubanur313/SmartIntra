@@ -15,7 +15,9 @@ namespace SmartIntranet.DataAccess.Concrete.EntityFrameworkCore.Repositories.Mem
         public async Task<IntranetUser> FindByUserAllInc(int id)
         {
             await using var context = new IntranetContext();
-            return await context.Users.Include(x => x.Company).Include(y => y.Department)
+            return await context.Users
+            .Include(x => x.Company)
+            .Include(y => y.Department)
             .Include(y => y.UserContractFiles)
             .Include(y => y.UserExperiences)
             .Include(y => y.UserVacationRemains)

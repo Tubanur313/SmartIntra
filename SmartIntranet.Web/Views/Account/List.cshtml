@@ -81,20 +81,36 @@
 
            var table = $('#usertable').DataTable({
                 "searching": true,
-                //dom: 'ilftp',
                 //"sDom": '<"top"i>rt<"bottom"flp><"clear">',
-                dom: 'lfrt<"toolbar">p',
+                dom: 'Blfrt<"toolbar">p',
                 "ordering": false,
                 paging: true,
+                    buttons: [
+                        'excel'
+                    ],
                 //responsive:true,
                 "fnDrawCallback": function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 }
             });
+            $('div.dt-buttons').css({
+                'position': 'relative',
+                'top': '30px',
+                'margin-left': '15px',
+                'z-index': '2147483647',
+            });
+            $('div.dt-buttons button').css({
+                'background-image': 'linear-gradient(to bottom, #28c76f 0%,#28c76f 100%)',
+                'border': '1px solid #28c76f',
+                'background-color': '#28c76f',
+                'font-size': '12px'
+            });
             $('#usertable_length').css({
                 'position': 'relative',
                 'top': '30px',
-                'margin-left': '15px'
+                'margin-left': '15px',
+                'z-index': '2147483647',
+                'display': "inline-block"
             });
             $('#usertable_filter').css({
                 'position': 'relative',
