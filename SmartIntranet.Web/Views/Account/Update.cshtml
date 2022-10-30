@@ -422,7 +422,7 @@
                         <input id="rowCount" type="hidden" value="@Model.UserExperiences.Count" />
                         @for (var i = 0; i < Model.UserExperiences.Count; i++)
                         {
-                            <div class="row">
+                            <div class="row user-experiences-old" data-index="@i">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="floatLabel"> Yer: </label>
@@ -864,16 +864,16 @@
                                                     <div class="col-sm-5">
                                                         <div class="form-group">
                                                             <label class="floatLabel"> Yer: </label>
-                                                            <input type="text" class="form-control" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
+                                                            <input type="text" class="form-control user-experience-place" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-5" >
                                                         <div class="form-group">
                                                             <label class="floatLabel"> Tarix: </label>
                                                             <div class="input-group input-daterange mb-0">
-                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control experience-history experienceStart-${rowCount - 1}" autocomplete="off">
+                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control user-experience-start experience-history experienceStart-${rowCount - 1}" autocomplete="off">
                                                                 <div class="input-group-addon">to</div>
-                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
+                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control user-experience-end experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -892,6 +892,7 @@
                 getUserVacationDay();
             });
             removeExp();
+            setNames();
         });
 
         $("#addVacDay").click(function (e) {
@@ -945,8 +946,41 @@
                 let rowCount = parseInt($("#rowCount").val());
                 rowCount--;
                 $("#rowCount").val(rowCount);
+                console.log(rowCount)
                 $(this).parent().parent().remove();
+                setNames();
             })
+        }
+
+        function setNames() {
+            
+             var seen = {};
+             $('.user-experiences-old').each(function() {
+                var name = $(this).attr('data-index');
+                if (seen[name])
+                    $(this).remove();
+                else
+                    seen[name] = true;
+             });
+
+             var countPlace = $('.user-experiences-old').length - 1;
+             var countStart = $('.user-experiences-old').length - 1;;
+             var countEnd = $('.user-experiences-old').length - 1;;
+
+             $('.user-experience-place').each(function () {
+                 countPlace++;
+                 $(this).attr("name", `UserExperiences[${countPlace}].Place`)
+             });
+
+             $('.user-experience-start').each(function () {
+                 countStart++;
+                 $(this).attr("name", `UserExperiences[${countStart}].ExperienceStart`)
+             })
+
+             $('.user-experience-end').each(function () {
+                 countEnd++;
+                 $(this).attr("name", `UserExperiences[${countEnd}].ExperienceEnd`)
+             })
         }
 
         $("#Profile").change(function (e) {
