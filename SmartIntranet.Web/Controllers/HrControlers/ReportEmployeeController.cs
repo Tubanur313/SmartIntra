@@ -21,6 +21,7 @@ using SmartIntranet.DTO.DTOs.ContractDto;
 using SmartIntranet.DTO.DTOs.WorkCalendarDto;
 using SmartIntranet.Entities.Concrete.IntraHr;
 using Newtonsoft.Json;
+using Microsoft.Data.SqlClient.DataClassification;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -170,18 +171,24 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         public async Task<IActionResult> WorkTimesheet(ReportEmployeeDto model)
         {
             var countDayInMonth = DateTime.DaysInMonth(model.ReportDate.Year, model.ReportDate.Month);
+            var firstReportDay = new DateTime(model.ReportDate.Year, model.ReportDate.Month, 1);
             var lastReportDay = new DateTime(model.ReportDate.Year, model.ReportDate.Month, countDayInMonth);
+            var userTerminated = await _terminationContractService.GetAllAsync();
             var users = await _appUserService.GetAllIncludeAsync(x => x.CompanyId == model.CompanyId
             && x.StartWorkDate <= lastReportDay
             && !x.IsDeleted && x.Email != "tahiroglumahir@gmail.com");
-
 
             var yearId = _nonWorkingYearService.GetAllIncCompAsync(x => x.Year == model.ReportDate.Year.ToString()).Result[0].Id;
             var nonWorkDays = _nonWorkingDayService.GetAllIncCompAsync(x => !x.IsDeleted, yearId).Result;
             var nonWorkDaysToMonth = nonWorkDays.Where(x => x.StartDate.Month <= model.ReportDate.Month || x.EndDate.Month >= model.ReportDate.Month);
             var modelResult = new List<WorkTimesheet>();
-            foreach (var item in users.OrderByDescending(x => x.Company.Id).ToList())
+            foreach (var item in users
+                .OrderByDescending(x => x.Company.Id).ToList())
             {
+                if (userTerminated.Any(x => x.UserId == item.Id && x.TerminationDate <= firstReportDay))
+                {
+                    goto Label1;
+                }
                 var mod = new WorkTimesheet
                 {
                     ReportId = model.Id,
@@ -190,8 +197,8 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     Position = item.PositionId > 0 ? item.Position.Name : "",
                     ReportCreateDate = model.ReportDate,
                     ReportCreateMonth = "01." + model.ReportDate.ToString("MM.yyyy")
-                                              + " -" + DateTime.DaysInMonth(model.ReportDate.Year, model.ReportDate.Month)
-                                              + "." + model.ReportDate.ToString("MM.yyyy"),
+                                                  + " -" + DateTime.DaysInMonth(model.ReportDate.Year, model.ReportDate.Month)
+                                                  + "." + model.ReportDate.ToString("MM.yyyy"),
                     CompanyName = item.CompanyId > 0 ? item.Company.Name : ""
                 };
                 var graphId = (int)item.WorkGraphicId;
@@ -199,17 +206,17 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 var this_mn_pc = personContracts.Where(x => x.CommandDate.Year == model.ReportDate.Year && x.CommandDate.Month == model.ReportDate.Month).OrderBy(x => x.CommandDate);
                 if (personContracts.Any() && this_mn_pc.Any())
                 {
-
                 }
+
                 WorkGraphic graph = _workGraphicService.FindByIdAsync(graphId).Result;
                 var calendarList = _map.Map<ICollection<WorkCalendarListDto>>(_workCalendarService.GetAllIncCompAsync(x => !x.IsDeleted, yearId, graph.Id).Result);
 
 
                 int countSundays = 0;
                 int countHolySundays = 0;
-                for (int i = 0; i < countDayInMonth; i++)
+                for (int i = 1; i < countDayInMonth; i++)
                 {
-                    DateTime d = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i + 1);
+                    DateTime d = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i);
                     if (d.DayOfWeek == DayOfWeek.Sunday)
                     {
                         countSundays++;
@@ -241,7 +248,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         }
                     }
                 }
-                if (graph.Saturday == 0 && graph.Saturday == 0)
+                if (graph.Sunday == 0 && graph.Saturday == 0)
                 {
                     mod.TotalDay = Math.Abs(countDayInMonth - (countSundays + countSaturdays + countHolySaturdays));
                 }
@@ -251,15 +258,16 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 for (var i = 1; i <= 31; i++)
                 {
+                    DateTime exactday = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i);
                     var defaultCount = 0;
                     var isActive = true;
                     var isHoliday = false;
+                    int holidayCount = 0;
                     var di = new DayItem();
                     try
                     {
                         di.Type = ReportDayType.NORMAL;
                         var day = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i);
-
                         if (personContracts.Any() && this_mn_pc.Any())
                         {
                             foreach (var mn in this_mn_pc)
@@ -279,7 +287,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         }
 
                         isHoliday = nonWorkDaysToMonth.Any(x => x.StartDate <= day && day <= x.EndDate);
-                      
+                        var hasAnyHolidayToCurrentday = nonWorkDaysToMonth.Any(x => x.StartDate <= day);
+                        switch (day.DayOfWeek)
+                        {
+                            case DayOfWeek.Sunday:
+                            case DayOfWeek.Saturday when graph.Key == "five_day":
+                                di.Type = ReportDayType.REST;
+                                break;
+                        }
 
                         defaultCount = day.DayOfWeek switch
                         {
@@ -292,7 +307,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             DayOfWeek.Sunday => graph.Sunday,
                             _ => defaultCount
                         };
-
+                        if (hasAnyHolidayToCurrentday)
+                        {
+                            holidayCount++;
+                        }
                         if (isHoliday)
                         {
                             di.Type = ReportDayType.HOLIDAY;
@@ -305,7 +323,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             defaultCount = 0;
                         }
 
-                        var vac = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.NextWorkDate > day).Result;
+                        var vac = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.ToDate.AddDays(holidayCount) >= day).Result;
                         var vacDay = vac.Count();
                         if (!isHoliday && vacDay > 0)
                         {
@@ -333,26 +351,46 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             defaultCount = 0;
                         }
 
-                        switch (day.DayOfWeek)
-                        {
-                            case DayOfWeek.Sunday:
-                            case DayOfWeek.Saturday when graph.Key == "five_day":
-                                di.Type = ReportDayType.REST;
-                                break;
-                        }
-
                     }
                     catch
                     {
                         isActive = false;
                     }
 
-                    var el = calendarList.FirstOrDefault(x => x.Month == model.ReportDate.Month.ToString() && x.Day == i);
-                    if (el != null)
+
+                    var editedCalendarList = calendarList.FirstOrDefault(x => x.Month == CalendarConstant.Month[model.ReportDate.Month - 1] && x.Day == i);
+                    if (editedCalendarList != null)
                     {
-                        mod.DayList.Add(new DayItem() { Number = el.Number, Day = i, Type = di.Type });
-                        mod.TotalHour += el.Number;
-                        //mod.TotalDay++;
+                        if (editedCalendarList.Number > 0)
+                        {
+
+                            if (exactday.DayOfWeek == DayOfWeek.Sunday || exactday.DayOfWeek == DayOfWeek.Saturday)
+                            {
+                                if (di.Type == ReportDayType.REST)
+                                {
+                                    mod.DayList.Add(new DayItem() { Number = editedCalendarList.Number, Day = i, Type = ReportDayType.NORMAL });
+                                    mod.TotalHour += editedCalendarList.Number;
+                                }
+                            }
+                            else
+                            {
+                                mod.DayList.Add(new DayItem() { Number = editedCalendarList.Number, Day = i, Type = di.Type });
+                                mod.TotalHour += editedCalendarList.Number;
+                            }
+                        }
+                        else
+                        {
+
+                            if (di.Type == ReportDayType.NORMAL)
+                            {
+                                mod.DayList.Add(new DayItem() { Number = editedCalendarList.Number, Day = i, Type = ReportDayType.REST });
+                                mod.TotalHour += editedCalendarList.Number;
+                            }
+                            else
+                            {
+                                mod.DayList.Add(new DayItem { Number = defaultCount, Day = i, Type = di.Type });
+                            }
+                        }
                     }
                     else
                     {
@@ -361,12 +399,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             mod.TotalHour += defaultCount;
                             //mod.TotalDay++;
                         }
+
                         mod.DayList.Add(new DayItem { Number = defaultCount, Day = i, Type = di.Type });
                     }
 
 
                 }
                 modelResult.Add(mod);
+            Label1:;
             }
 
             return View(modelResult);
@@ -674,7 +714,15 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             }
 
                             isHoliday = nonWorkDaysToMonth.Any(x => x.StartDate <= day && day <= x.EndDate);
-                           
+                            if (day.DayOfWeek == DayOfWeek.Sunday)
+                            {
+                                di.Type = ReportDayType.REST;
+                            }
+                            if (day.DayOfWeek == DayOfWeek.Saturday && graph.Key == "five_day")
+                            {
+                                di.Type = ReportDayType.REST;
+                            }
+
 
                             switch (day.DayOfWeek)
                             {
@@ -705,11 +753,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             {
                                 var type_vac = vac.FirstOrDefault().VacationType.Key;
 
-                                di.Type = type_vac==VacationTypeConst.LABOR ? ReportDayType.MAIN_VACATION :
+                                di.Type = type_vac == VacationTypeConst.LABOR ? ReportDayType.MAIN_VACATION :
                                     (type_vac == VacationTypeConst.WITHOUT_PRICE ? ReportDayType.WITHOUT_PRICE_VACATION :
                                      (type_vac == VacationTypeConst.PREGNANCY ? ReportDayType.MOTHER_VACATION :
                                     (type_vac == VacationTypeConst.SOCIAL ? ReportDayType.SOCIAL_VACATION :
-                                     (type_vac == VacationTypeConst.EDU ? ReportDayType.EDU_VACATION: ""))));
+                                     (type_vac == VacationTypeConst.EDU ? ReportDayType.EDU_VACATION : ""))));
                                 default_count = 0;
                                 mod.VacDay++;
                             }
@@ -731,14 +779,6 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                     break;
                                 }
 
-                            }
-                            if (day.DayOfWeek == DayOfWeek.Sunday)
-                            {
-                                di.Type = ReportDayType.REST;
-                            }
-                            if (day.DayOfWeek == DayOfWeek.Saturday && graph.Key == "five_day")
-                            {
-                                di.Type = ReportDayType.REST;
                             }
 
 

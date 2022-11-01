@@ -49,10 +49,10 @@
                     <label class="floatLabel">Sənəd növü: </label>
                     <select id="DocumentType" name="DocumentType" class="form-control">
                         @{
-                          var cntr =  ViewBag.contractTypes as List<ContractType>;
-                           string key = ViewBag.docType;
+                            var cntr = ViewBag.contractTypes as List<ContractType>;
+                            string key = ViewBag.docType;
                         }
-                        <option value="" >Hamısı</option>
+                        <option value="">Hamısı</option>
                         @if (ViewBag.docType == null)
                         {
                             <option value="" selected disabled hidden>Seçim edin</option>
@@ -128,7 +128,7 @@
                 'position': 'relative',
                 'top': '30px',
                 'margin-left': '15px',
-                'z-index': '2147483647',
+                'z-index': '3',
             });
             $('div.dt-buttons button').css({
                 'background-image': 'linear-gradient(to bottom, #28c76f 0%,#28c76f 100%)',
@@ -140,7 +140,7 @@
                 'position': 'relative',
                 'top': '30px',
                 'margin-left': '15px',
-                'z-index': '2147483647',
+                'z-index': '3',
                 'display': "inline-block"
             });
             $('#contractTable_filter').css({
