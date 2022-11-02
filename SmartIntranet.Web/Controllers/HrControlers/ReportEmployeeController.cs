@@ -258,11 +258,10 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 for (var i = 1; i <= 31; i++)
                 {
-                    DateTime exactday = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i);
+                   
                     var defaultCount = 0;
                     var isActive = true;
                     var isHoliday = false;
-                    int holidayCount = 0;
                     var di = new DayItem();
                     try
                     {
@@ -287,7 +286,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                         }
 
                         isHoliday = nonWorkDaysToMonth.Any(x => x.StartDate <= day && day <= x.EndDate);
-                        var hasAnyHolidayToCurrentday = nonWorkDaysToMonth.Any(x => x.StartDate <= day);
+                        var hasAnyHolidayToCurrentdayCount = nonWorkDaysToMonth.Where(x => x.StartDate <= day).Count();
                         switch (day.DayOfWeek)
                         {
                             case DayOfWeek.Sunday:
@@ -307,10 +306,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             DayOfWeek.Sunday => graph.Sunday,
                             _ => defaultCount
                         };
-                        if (hasAnyHolidayToCurrentday)
-                        {
-                            holidayCount++;
-                        }
+
                         if (isHoliday)
                         {
                             di.Type = ReportDayType.HOLIDAY;
@@ -323,7 +319,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                             defaultCount = 0;
                         }
 
-                        var vac = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.ToDate.AddDays(holidayCount) >= day).Result;
+                        var vac = _vacationContractService.GetAllIncCompAsync(x => x.UserId == item.Id && !x.IsDeleted && x.FromDate <= day && x.ToDate.AddDays(hasAnyHolidayToCurrentdayCount) > day).Result;
                         var vacDay = vac.Count();
                         if (!isHoliday && vacDay > 0)
                         {
@@ -363,7 +359,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     {
                         if (editedCalendarList.Number > 0)
                         {
-
+                            DateTime exactday = new DateTime(model.ReportDate.Year, model.ReportDate.Month, i);
                             if (exactday.DayOfWeek == DayOfWeek.Sunday || exactday.DayOfWeek == DayOfWeek.Saturday)
                             {
                                 if (di.Type == ReportDayType.REST)
