@@ -8,7 +8,9 @@ namespace SmartIntranet.Business.ValidationRules.FluentValidation
         public WorkCalendarUpdateValidator()
         {
             RuleFor(I => I.Number).NotNull().WithMessage("İş saatı boş ola bilməz")
-               .GreaterThan(-1).LessThan(25).WithMessage("İş saatı 0 dan kiçik 24 dən böyük ola bilməz");
+                //.LessThanOrEqualTo(24).WithMessage("İş saatı 0 dan kiçik 24 dən böyük ola bilməz")
+                //.GreaterThanOrEqualTo(0);
+                .InclusiveBetween(0, 24).WithMessage("İş saatı 0 dan kiçik 24 dən böyük ola bilməz");
         }
     }
 }

@@ -176,8 +176,8 @@ namespace SmartIntranet.Business.Extension
             services.AddTransient<IValidator<WorkGraphicAddDto>, WorkGraphicAddValidator>();
             services.AddTransient<IValidator<WorkGraphicUpdateDto>, WorkGraphicUpdateValidator>();
 
-            //services.AddTransient<IValidator<WorkCalendarAddDto>, WorkCalendarAddValidator>();
-            //services.AddTransient<IValidator<WorkCalendarUpdateDto>, WorkCalendarUpdateValidator>();
+            services.AddTransient<IValidator<WorkCalendarAddDto>, WorkCalendarAddValidator>();
+            services.AddTransient<IValidator<WorkCalendarUpdateDto>, WorkCalendarUpdateValidator>();
 
             services.AddTransient<IValidator<ContractAddDto>, ContractAddValidator>();
             services.AddTransient<IValidator<ContractUpdateDto>, ContractUpdateValidator>();

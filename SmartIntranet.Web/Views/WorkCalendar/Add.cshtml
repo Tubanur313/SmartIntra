@@ -22,9 +22,9 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Dəyər: </label>
-                        <input type="text" class="form-control" asp-for="Number" min="0" max="24" autocomplete="off">
+                        <input type="number" class="form-control" asp-for="Number" >
                         <span asp-validation-for="Number" class="text-danger"></span>
-                        <span class="messages"></span>
+                        @*<span class="messages"></span>*@
                     </div>
                 </div>
 
