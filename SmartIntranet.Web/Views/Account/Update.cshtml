@@ -101,7 +101,7 @@
                             </div>
                         </div>
                     </div>
- 
+
 
                     <div class="row">
 
@@ -418,8 +418,8 @@
                 </div>
 
                 <div class="tab-pane" id="home4" role="tabpanel">
+                    <input id="rowCount" type="hidden" value="@Model.UserExperiences.Count" />
                     <div id="row-box">
-                        <input id="rowCount" type="hidden" value="@Model.UserExperiences.Count" />
                         @for (var i = 0; i < Model.UserExperiences.Count; i++)
                         {
                             <div class="row user-experiences-old" data-index="@i">
@@ -636,7 +636,6 @@
         let dateArray = [];
 
         $('.custom-date').each(function () {
-            //console.log($('.custom-date'))
             $(this).datepicker({
                 format: "dd.mm.yyyy"
             })
@@ -702,7 +701,6 @@
                 e.preventDefault();
             }
             if (PositionId.trim() === "") {
-                console.log(PositionId.trim())
                 $('.PositionId').text($('#PositionId').data("val-required")).removeClass("d-none");
                 e.preventDefault();
             }
@@ -820,8 +818,6 @@
                         startYear = year;
                     }
                     if (startMonth != startWorkMonth || startDay != startWorkDay) {
-                        console.log(startMonth + " - " + startWorkMonth);
-                        console.log(startDay + " - " + startWorkDay);
                         toastr.error(" Ay və gün işə başlama tarixindəki ilə eyni olmalıdı !", "Xəta!");
                         valid = false;
                         return valid;
@@ -856,31 +852,31 @@
             });
         })
 
-        $("#addRow").click(function () {
+        $("#addRow").unbind().click(function (e) {
             let rowCount = parseInt($("#rowCount").val());
             rowCount++;
             $("#rowCount").val(rowCount);
             let html = `<div class="row">
-                                                    <div class="col-sm-5">
-                                                        <div class="form-group">
-                                                            <label class="floatLabel"> Yer: </label>
-                                                            <input type="text" class="form-control user-experience-place" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-5" >
-                                                        <div class="form-group">
-                                                            <label class="floatLabel"> Tarix: </label>
-                                                            <div class="input-group input-daterange mb-0">
-                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control user-experience-start experience-history experienceStart-${rowCount - 1}" autocomplete="off">
-                                                                <div class="input-group-addon">to</div>
-                                                                <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control user-experience-end experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-2 text-right">
-                                                        Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
-                                                    </div>
-                                                </div>`
+                               <div class="col-sm-5">
+                                   <div class="form-group">
+                                       <label class="floatLabel"> Yer: </label>
+                                       <input type="text" class="form-control user-experience-place" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
+                                   </div>
+                               </div>
+                               <div class="col-sm-5" >
+                                   <div class="form-group">
+                                       <label class="floatLabel"> Tarix: </label>
+                                       <div class="input-group input-daterange mb-0">
+                                           <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control user-experience-start experience-history experienceStart-${rowCount - 1}" autocomplete="off">
+                                           <div class="input-group-addon">to</div>
+                                           <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control user-experience-end experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="col-sm-2 text-right">
+                                   Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
+                               </div>
+                           </div>`
             $('#row-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -903,26 +899,26 @@
             rowCount++;
             $("#vacCount").val(rowCount);
             let html = `<div class="row">
-                                                                    <div class="col-sm-5" >
-                                                                        <div class="form-group">
-                                                                            <label class="floatLabel"> Tarix: </label>
-                                                                            <div class="input-group input-daterange mb-0">
-                                                                                <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
-                                                                                <div class="input-group-addon">to</div>
-                                                                                <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-5">
-                                                                        <div class="form-group">
-                                                                            <label class="floatLabel"> Qalıq gün: </label>
-                                                                            <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
-                                                                        </div>
-                                                                    </div>
-                                                                     <div class="col-sm-2 text-right">
-                                                                         Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
-                                                                    </div>
-                                                                </div>`
+                            <div class="col-sm-5" >
+                                    <div class="form-group">
+                                        <label class="floatLabel"> Tarix: </label>
+                                        <div class="input-group input-daterange mb-0">
+                                            <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label class="floatLabel"> Qalıq gün: </label>
+                                        <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
+                                    </div>
+                                </div>
+                                 <div class="col-sm-2 text-right">
+                                     Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
+                                </div>
+                            </div>`
             $('#vac-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -946,41 +942,40 @@
                 let rowCount = parseInt($("#rowCount").val());
                 rowCount--;
                 $("#rowCount").val(rowCount);
-                console.log(rowCount)
                 $(this).parent().parent().remove();
                 setNames();
             })
         }
 
         function setNames() {
-            
-             var seen = {};
-             $('.user-experiences-old').each(function() {
+
+            var seen = {};
+            $('.user-experiences-old').each(function () {
                 var name = $(this).attr('data-index');
                 if (seen[name])
                     $(this).remove();
                 else
                     seen[name] = true;
-             });
+            });
 
-             var countPlace = $('.user-experiences-old').length - 1;
-             var countStart = $('.user-experiences-old').length - 1;;
-             var countEnd = $('.user-experiences-old').length - 1;;
+            var countPlace = $('.user-experiences-old').length - 1;
+            var countStart = $('.user-experiences-old').length - 1;;
+            var countEnd = $('.user-experiences-old').length - 1;;
 
-             $('.user-experience-place').each(function () {
-                 countPlace++;
-                 $(this).attr("name", `UserExperiences[${countPlace}].Place`)
-             });
+            $('.user-experience-place').each(function () {
+                countPlace++;
+                $(this).attr("name", `UserExperiences[${countPlace}].Place`)
+            });
 
-             $('.user-experience-start').each(function () {
-                 countStart++;
-                 $(this).attr("name", `UserExperiences[${countStart}].ExperienceStart`)
-             })
+            $('.user-experience-start').each(function () {
+                countStart++;
+                $(this).attr("name", `UserExperiences[${countStart}].ExperienceStart`)
+            })
 
-             $('.user-experience-end').each(function () {
-                 countEnd++;
-                 $(this).attr("name", `UserExperiences[${countEnd}].ExperienceEnd`)
-             })
+            $('.user-experience-end').each(function () {
+                countEnd++;
+                $(this).attr("name", `UserExperiences[${countEnd}].ExperienceEnd`)
+            })
         }
 
         $("#Profile").change(function (e) {
