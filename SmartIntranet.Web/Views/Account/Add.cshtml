@@ -165,7 +165,7 @@
                                 <input type="text" placeholder="+994 __-___-__-__" class="form-control" asp-for="HomePhoneNumber" autocomplete="off">
                                 <span class="messages"></span>
                             </div>
-                        </div>  
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floatLabel"> Şəxsi nömrə: </label>
@@ -173,7 +173,7 @@
                                 <span class="messages"></span>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -479,8 +479,8 @@
                 <div class="tab-pane" id="vacationRemain" role="tabpanel">
                     <div class="form-group">
 
+                        <input id="vacCount" type="hidden" value="0" />
                         <div id="vac-box">
-                            <input id="vacCount" type="hidden" value="0" />
                         </div>
                         <div class="row">
                             <div class="col-12 text-right">
@@ -578,23 +578,20 @@
             setDate('disable');
             setDate('old');
         }
-        function removeDay() {
-            $('.removeVacDay').click(function () {
-                let rowCount = parseInt($("#vacCount").val());
-                rowCount--;
-                $("#vacCount").val(rowCount);
-                $(this).parent().parent().remove();
-            })
-        }
-        function removeExp() {
-            $('.removeExp').click(function () {
-                let rowCount = parseInt($(".rowCount").val());
-                rowCount--;
-                $(".rowCount").val(rowCount);
-                $(this).parent().parent().remove();
-                setNames();
-            })
-        }
+        $(document).on('click', '.removeVacDay', function () {
+            let rowCount = parseInt($("#vacCount").val());
+            rowCount--;
+            $("#vacCount").val(rowCount);
+            $(this).parent().parent().remove();
+            setNamesVacDay();
+        })
+        $(document).on('click', '.removeExp', function () {
+            let rowCount = parseInt($(".rowCount").val());
+            rowCount--;
+            $(".rowCount").val(rowCount);
+            $(this).parent().parent().remove();
+            setNamesExp();
+        })
         function checkRemainCount(e) {
             let isEmpty = false;
             $(".remain-count").each(function (i, el) {
@@ -720,31 +717,31 @@
             return valid;
         }
 
-        $( "#addRow").unbind().click(function (e) {
+        $("#addRow").unbind().click(function (e) {
             let rowCount = parseInt($(".rowCount").val());
             rowCount++;
             $(".rowCount").val(rowCount);
             let html = `<div class="row">
-                               <div class="col-sm-5">
-                                   <div class="form-group">
-                                       <label class="floatLabel"> Yer: </label>
-                                       <input type="text" class="form-control user-experience-place" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
-                                   </div>
-                               </div>
-                               <div class="col-sm-5" >
-                                   <div class="form-group">
-                                       <label class="floatLabel"> Tarix: </label>
-                                       <div class="input-group input-daterange mb-0">
-                                           <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control user-experience-start experience-history experienceStart-${rowCount - 1}" autocomplete="off">
-                                           <div class="input-group-addon">to</div>
-                                           <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control user-experience-end experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
+                                       <div class="col-sm-5">
+                                           <div class="form-group">
+                                               <label class="floatLabel"> Yer: </label>
+                                               <input type="text" class="form-control user-experience-place" name="UserExperiences[${rowCount - 1}].Place" autocomplete="off">
+                                           </div>
                                        </div>
-                                   </div>
-                               </div>
-                               <div class="col-sm-2 text-right">
-                                   Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
-                               </div>
-                           </div>`
+                                       <div class="col-sm-5" >
+                                           <div class="form-group">
+                                               <label class="floatLabel"> Tarix: </label>
+                                               <div class="input-group input-daterange mb-0">
+                                                   <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceStart" class="form-control user-experience-start experience-history experienceStart-${rowCount - 1}" autocomplete="off">
+                                                   <div class="input-group-addon">to</div>
+                                                   <input type="text" maxlength=10 name="UserExperiences[${rowCount - 1}].ExperienceEnd" class="form-control user-experience-end experience-history experienceEnd-${rowCount - 1}" autocomplete="off">
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="col-sm-2 text-right">
+                                           Sil: <button type="button" class="btn btn-outline-danger removeExp" data-bs-toggle="tooltip" data-bs-placement="top" title="İş stajı"><i class="icofont icofont-close m-0"></i></button>
+                                       </div>
+                                   </div>`
             $('#row-box').append(html);
 
             $('.input-daterange').datepicker({
@@ -755,37 +752,34 @@
             $('.input-daterange').change(function () {
                 getUserVacationDay();
             });
-            removeExp();
         });
 
-        function setNames() {
+        function setNamesExp() {
 
-            var seen = {};
-            $('.user-experiences-old').each(function () {
-                var name = $(this).attr('data-index');
-                if (seen[name])
-                    $(this).remove();
-                else
-                    seen[name] = true;
+            $('.user-experience-place').each(function (index) {
+                $(this).attr("name", `UserExperiences[${index}].Place`)
             });
 
-            var countPlace = $('.user-experiences-old').length - 1;
-            var countStart = $('.user-experiences-old').length - 1;;
-            var countEnd = $('.user-experiences-old').length - 1;;
-
-            $('.user-experience-place').each(function () {
-                countPlace++;
-                $(this).attr("name", `UserExperiences[${countPlace}].Place`)
-            });
-
-            $('.user-experience-start').each(function () {
-                countStart++;
-                $(this).attr("name", `UserExperiences[${countStart}].ExperienceStart`)
+            $('.user-experience-start').each(function (index) {
+                $(this).attr("name", `UserExperiences[${index}].ExperienceStart`)
             })
 
-            $('.user-experience-end').each(function () {
-                countEnd++;
-                $(this).attr("name", `UserExperiences[${countEnd}].ExperienceEnd`)
+            $('.user-experience-end').each(function (index) {
+                $(this).attr("name", `UserExperiences[${index}].ExperienceEnd`)
+            })
+        }        
+        function setNamesVacDay() {
+
+            $('.vacation-remain-count').each(function (index) {
+                $(this).attr("name", `UserVacationRemains[${index}].RemainCount`)
+            });
+
+            $('.vacation-remain-start').each(function (index) {
+                $(this).attr("name", `UserVacationRemains[${index}].FromDate`)
+            })
+
+            $('.vacation-remain-end').each(function (index) {
+                $(this).attr("name", `UserVacationRemains[${index}].ToDate`)
             })
         }
         //$(document).on("change", $(`input[name*='UserExperiences[${rowCount - 1}].ExperienceEnd']`), function () {
@@ -821,32 +815,31 @@
             rowCount++;
             $("#vacCount").val(rowCount);
             let html = `<div class="row">
-                            <div class="col-sm-5" >
-                                    <div class="form-group">
-                                        <label class="floatLabel"> Tarix: </label>
-                                        <div class="input-group input-daterange mb-0">
-                                            <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain start new" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain end new" autocomplete="off">
+                                    <div class="col-sm-5" >
+                                            <div class="form-group">
+                                                <label class="floatLabel"> Tarix: </label>
+                                                <div class="input-group input-daterange mb-0">
+                                                    <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].FromDate" class="form-control vacation-remain vacation-remain-start new" autocomplete="off">
+                                                    <div class="input-group-addon">to</div>
+                                                    <input type="text" maxlength=10 name="UserVacationRemains[${rowCount - 1}].ToDate" class="form-control vacation-remain vacation-remain-end new" autocomplete="off">
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-5">
-                                    <div class="form-group">
-                                        <label class="floatLabel"> Qalıq gün: </label>
-                                        <input type="number" class="form-control remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
-                                    </div>
-                                </div>
-                                 <div class="col-sm-2 text-right">
-                                     Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
-                                </div>
-                            </div>`
+                                        <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <label class="floatLabel"> Qalıq gün: </label>
+                                                    <input type="number" class="form-control vacation-remain-count remain-count" name="UserVacationRemains[${rowCount - 1}].RemainCount" autocomplete="off">
+                                            </div>
+                                        </div>
+                                         <div class="col-sm-2 text-right">
+                                             Sil: <button type="button" class="btn btn-outline-danger  removeVacDay" data-bs-toggle="tooltip" data-bs-placement="top" title="Məzuniyyət qalığı"><i class="icofont icofont-close m-0"></i></button>
+                                        </div>
+                                    </div>`
             $('#vac-box').append(html);
 
             $('.input-daterange').datepicker({
                 format: "dd.mm.yyyy"
             });
-            removeDay()
         });
 
 
@@ -874,122 +867,122 @@
 
         $("#PhoneNumber").on("focus", function () {
             $("#PhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
-        });        
+        });
         $("#HomePhoneNumber").on("focus", function () {
             $("#HomePhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
-        });        
+        });
         $("#PersonalPhoneNumber").on("focus", function () {
             $("#PersonalPhoneNumber").mask("+\994\ __-___-__-__", { clearMaskOnLostFocus: false, placeholder: "+994 __-___-__-__" });
         });
 
         $.ajax({
-                url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
-                type: "Get",
-                data: "",
-                dataType: "json",
-                cache: false,
-                success: function (data) {
-                    var tree = $('#DepartmentId').combotree({
-                        prompt: 'Seçim edin'
-                    });
-                    tree.combotree('disable')
-                    var tre = $('#PositionId').combotree({
-                        prompt: 'Seçim edin'
-                    });
-                    tre.combotree('disable')
+            url: `@Url.Action("GetCompanyTreeBySignInUser","Account")`,
+            type: "Get",
+            data: "",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                var tree = $('#DepartmentId').combotree({
+                    prompt: 'Seçim edin'
+                });
+                tree.combotree('disable')
+                var tre = $('#PositionId').combotree({
+                    prompt: 'Seçim edin'
+                });
+                tre.combotree('disable')
 
-                    $('#CompanyId').combotree({
-                        data: data,
-                        prompt: 'Seçim edin',
-                        onClick: function (node) {
-                            $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
-                            $.ajax({
-                                url: `@Url.Action("GetDepartmentTree","Account")`,
-                                type: "Get",
-                                data: {
-                                    companyId: node.id,
-                                },
-                                dataType: "json",
-                                cache: false,
-                                success: function (data) {
-                                    if (data.length > 0) {
-                                        var tre = $('#DepartmentId').combotree({
-                                            data: data,
-                                            prompt: 'Seçim edin'
-                                        });
+                $('#CompanyId').combotree({
+                    data: data,
+                    prompt: 'Seçim edin',
+                    onClick: function (node) {
+                        $('.CompanyId').text($('#CompanyId').data("val-required")).addClass("d-none")
+                        $.ajax({
+                            url: `@Url.Action("GetDepartmentTree","Account")`,
+                            type: "Get",
+                            data: {
+                                companyId: node.id,
+                            },
+                            dataType: "json",
+                            cache: false,
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    var tre = $('#DepartmentId').combotree({
+                                        data: data,
+                                        prompt: 'Seçim edin'
+                                    });
 
-                                        var tree = $('#PositionId').combotree({
-                                            prompt: 'Seçim edin'
-                                        });
-                                        tree.combotree('disable')
-                                        $('#DepartmentId').combotree({
-                                            data: data,
-                                            prompt: 'Seçim edin',
-                                            onClick: function (node) {
-                                                $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
-                                                $.ajax({
-                                                    url: `@Url.Action("GetPositionTree","Account")`,
-                                                    type: "Get",
-                                                    data: {
-                                                        departmentId: node.id,
-                                                    },
-                                                    dataType: "json",
-                                                    cache: false,
-                                                    success: function (data) {
+                                    var tree = $('#PositionId').combotree({
+                                        prompt: 'Seçim edin'
+                                    });
+                                    tree.combotree('disable')
+                                    $('#DepartmentId').combotree({
+                                        data: data,
+                                        prompt: 'Seçim edin',
+                                        onClick: function (node) {
+                                            $('.DepartmentId').text($('#DepartmentId').data("val-required")).addClass("d-none")
+                                            $.ajax({
+                                                url: `@Url.Action("GetPositionTree","Account")`,
+                                                type: "Get",
+                                                data: {
+                                                    departmentId: node.id,
+                                                },
+                                                dataType: "json",
+                                                cache: false,
+                                                success: function (data) {
 
-                                                        if (data.length > 0) {
-                                                            var tree = $('#PositionId').combotree({
-                                                                data: data,
-                                                                prompt: 'Seçim edin',
-                                                                onClick: () => {
-                                                                    $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
-                                                                }
-                                                            });
-                                                            tree.combotree('enable')
-                                                            $('#PositionId').combotree('setValue', '')
-                                                        }
-                                                        else {
-                                                            var tre = $('#PositionId').combotree({
-                                                                prompt: 'Yoxdur !',
-                                                            });
-                                                            tre.combotree('disable')
-                                                            tre.combotree('setValue', '')
-                                                        }
-                                                    },
-                                                    error: function (data) {
-                                                        toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                                    if (data.length > 0) {
+                                                        var tree = $('#PositionId').combotree({
+                                                            data: data,
+                                                            prompt: 'Seçim edin',
+                                                            onClick: () => {
+                                                                $('.PositionId').text($('#PositionId').data("val-required")).addClass("d-none")
+                                                            }
+                                                        });
+                                                        tree.combotree('enable')
+                                                        $('#PositionId').combotree('setValue', '')
                                                     }
-                                                })
-                                            }
-                                        })
-                                        tre.combotree('enable')
-                                    }
-                                    else {
-                                        var tree = $('#DepartmentId').combotree({
-                                            prompt: 'Yoxdur !',
-                                        });
-                                        tree.combotree('disable')
-                                        tree.combotree('setValue', '')
-                                        var tre = $('#PositionId').combotree({
-                                            prompt: 'Yoxdur !',
-                                        });
-                                        tre.combotree('disable')
-                                        tre.combotree('setValue', '')
-                                    }
-                                },
-                                error: function (data) {
-                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                                    else {
+                                                        var tre = $('#PositionId').combotree({
+                                                            prompt: 'Yoxdur !',
+                                                        });
+                                                        tre.combotree('disable')
+                                                        tre.combotree('setValue', '')
+                                                    }
+                                                },
+                                                error: function (data) {
+                                                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                                                }
+                                            })
+                                        }
+                                    })
+                                    tre.combotree('enable')
                                 }
-                            })
-                        }
-                    })
+                                else {
+                                    var tree = $('#DepartmentId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    tree.combotree('disable')
+                                    tree.combotree('setValue', '')
+                                    var tre = $('#PositionId').combotree({
+                                        prompt: 'Yoxdur !',
+                                    });
+                                    tre.combotree('disable')
+                                    tre.combotree('setValue', '')
+                                }
+                            },
+                            error: function (data) {
+                                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                            }
+                        })
+                    }
+                })
 
 
-                },
-                error: function (data) {
-                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
-                }
-            });
+            },
+            error: function (data) {
+                toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+            }
+        });
 
     });
 
