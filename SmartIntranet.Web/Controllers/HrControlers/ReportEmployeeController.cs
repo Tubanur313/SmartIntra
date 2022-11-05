@@ -367,6 +367,11 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                     mod.DayList.Add(new DayItem() { Number = editedCalendarList.Number, Day = i, Type = ReportDayType.NORMAL });
                                     mod.TotalHour += editedCalendarList.Number;
                                 }
+                                else
+                                {
+                                    mod.DayList.Add(new DayItem() { Number = editedCalendarList.Number, Day = i, Type = di.Type });
+                                    mod.TotalHour += editedCalendarList.Number;
+                                }
                             }
                             else
                             {
