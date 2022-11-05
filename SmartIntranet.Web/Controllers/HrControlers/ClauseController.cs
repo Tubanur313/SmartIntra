@@ -14,6 +14,9 @@ using SmartIntranet.Core.Extensions;
 using SmartIntranet.Core.Utilities.Messages;
 using SmartIntranet.Entities.Concrete.IntraHr;
 using SmartIntranet.DTO.DTOs.CompanyDto;
+using SmartIntranet.DTO.DTOs.ContractDto;
+using SmartIntranet.Business.Interfaces.Membership;
+using SmartIntranet.DTO.DTOs.AppUserDto;
 
 namespace SmartIntranet.Web.Controllers.HrControlers
 {
@@ -29,18 +32,30 @@ namespace SmartIntranet.Web.Controllers.HrControlers
         [Authorize(Policy = "clause.list")]
         public async Task<IActionResult> List(string success, string error)
         {
-            var companies = _map.Map<ICollection<CompanyListDto>>(_userCompService.GetAllIncAsync(GetSignInUserId()).Result.Select(x => x.Company).ToArray());
-            var data = (await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted)).Where(x => companies.Any(y => y.Id == x.CompanyId));
+            var userComp = await _userCompService.FirstOrDefault(GetSignInUserId());
+            if (userComp is null)
+            {
+                return View(new List<ClauseListDto>());
+            }
+            var data = await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted && x.CompanyId == userComp.CompanyId);
             var model = _map.Map<ICollection<ClauseListDto>>(data);
             if (model.Any())
             {
                 TempData["success"] = success;
                 TempData["error"] = error;
+                ViewBag.CompId = userComp.CompanyId;
                 return View(_map.Map<ICollection<ClauseListDto>>(model).OrderByDescending(x => x.UpdateDate > x.CreatedDate ? x.UpdateDate : x.CreatedDate).ToList());
             }
             return View(new List<ClauseListDto>());
         }
-
+        [HttpPost]
+        [Authorize(Policy = "clause.list")]
+        public async Task<IActionResult> List(int CompId)
+        {
+            ViewBag.CompId = CompId;
+            var model = await _clauseService.GetAllIncCompAsync(x => !x.IsDeleted && x.CompanyId == CompId);
+            return View(_map.Map<List<ClauseListDto>>(model));
+        }
         [HttpGet]
         [Authorize(Policy = "clause.add")]
         public IActionResult Add()

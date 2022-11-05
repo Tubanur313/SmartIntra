@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+<link rel="stylesheet" type="text/css" href="~/files/lib/jquery-easyui-1.10.4/themes/bootstrap/easyui.css">
 <!-- Page-header start -->
 <div class="page-header">
     <div class="row justify-content-between">
@@ -15,6 +16,23 @@
             </div>
         </div>
     </div>
+    <form asp-action="List" method="post" class="card-block">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="floatLabel">   Şirkət: </label>
+                    <div style="margin-bottom:20px">
+                        <input type="text" class="form-control" id="CompId" name="CompId" value="@ViewBag.CompId" style="width:100%">
+                    </div>
+                </div>
+                <div class="offset-sm-3 col-sm-3 mt-4">
+                    <button type="submit" class="btn btn-outline-success btn-round btn-block">
+                        Təsdiqlə
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 <!-- Page-header end -->
 <!-- Page body start -->
@@ -40,4 +58,26 @@
 @section CrudJs{
     <!-- delete_ajax-->
     <script src="~/files/lib/cust_ajax/delete_ajax.js"></script>
+    <script type="text/javascript" src="~/files/lib/jquery-easyui-1.10.4/jquery.easyui.min.js"></script>
+    <script class="removable" type="text/javascript">
+        $(document).ready(function ($) {
+
+            $.ajax({
+                url: `@Url.Action("GetCompanyTreeBySignInUser", "Account")`,
+                type: "Get",
+                data: "",
+                dataType: "json",
+                cache: false,
+                success: function (data) {
+                    $('#CompId').combotree({
+                        data: data,
+                        prompt: 'Seçim edin',
+                    })
+                },
+                error: function (data) {
+                    toastr.error("Gözlənilməz xəta baş verdi", "Xəta!");
+                }
+            });
+        });
+    </script>
 }
