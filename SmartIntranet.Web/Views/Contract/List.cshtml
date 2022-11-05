@@ -121,8 +121,13 @@
                 },
                 dom: 'Blfrtip',
                 buttons: [
-                    'excel'
-                ]
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    }
+                ],
             });
             $('div.dt-buttons').css({
                 'position': 'relative',

@@ -468,7 +468,9 @@ namespace SmartIntranet.Business.DependencyResolvers.Automapper
             #endregion
 
             #region PersonalContract-PersonalContractDto
-            CreateMap<PersonalContractAddDto, PersonalContract>().ReverseMap();
+            CreateMap<PersonalContractAddDto, PersonalContract>()
+                .ForMember(u => u.Salary, opt => opt.MapFrom(src => Convert.ToString(src.Salary)));
+            CreateMap<PersonalContract, PersonalContractAddDto>();
             CreateMap<PersonalContractListDto, PersonalContract>().ReverseMap();
             CreateMap<PersonalContractUpdateDto, PersonalContract>().ReverseMap();
             CreateMap<ContractListDto, PersonalContract>().ReverseMap();

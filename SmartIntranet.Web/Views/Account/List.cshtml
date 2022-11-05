@@ -85,7 +85,12 @@
                 "ordering": false,
                 paging: true,
                 buttons: [
-                    'excel'
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    }
                 ],
                 //responsive:true,
                 "fnDrawCallback": function () {
