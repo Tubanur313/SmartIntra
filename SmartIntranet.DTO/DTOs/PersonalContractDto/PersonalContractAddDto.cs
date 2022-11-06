@@ -12,7 +12,7 @@ namespace SmartIntranet.DTO.DTOs.PersonalContractDto
         public int VacationExtraType { get; set; } // experience 0 , nature 1, child 2
         public int? PositionId { get; set; }
         public int? DepartmentId { get; set; }
-        public double? Salary { get; set; }
+        public string Salary { get; set; }
         public int UserId { get; set; }
         public int? WorkGraphicId { get; set; }
         public int? LastWorkGraphicId { get; set; }

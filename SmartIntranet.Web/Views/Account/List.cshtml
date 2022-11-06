@@ -74,20 +74,24 @@
     <script class="removable" type="text/javascript">
         $(document).ready(function ($) {
 
-            $("#closeBtn").click(function()
-            {
-                location.reload();
-            });
+            //$("#closeBtn").click(function () {
+            //    window.location.reload(false);
+            //});
 
-           var table = $('#usertable').DataTable({
+            var table = $('#usertable').DataTable({
                 "searching": true,
                 //"sDom": '<"top"i>rt<"bottom"flp><"clear">',
                 dom: 'Blfrt<"toolbar">p',
                 "ordering": false,
                 paging: true,
-                    buttons: [
-                        'excel'
-                    ],
+                buttons: [
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        }
+                    }
+                ],
                 //responsive:true,
                 "fnDrawCallback": function () {
                     $('[data-toggle="tooltip"]').tooltip();
@@ -97,7 +101,7 @@
                 'position': 'relative',
                 'top': '30px',
                 'margin-left': '15px',
-                'z-index': '2147483647',
+                'z-index': '3',
             });
             $('div.dt-buttons button').css({
                 'background-image': 'linear-gradient(to bottom, #28c76f 0%,#28c76f 100%)',
@@ -109,7 +113,7 @@
                 'position': 'relative',
                 'top': '30px',
                 'margin-left': '15px',
-                'z-index': '2147483647',
+                'z-index': '3',
                 'display': "inline-block"
             });
             $('#usertable_filter').css({

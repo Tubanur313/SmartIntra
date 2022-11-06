@@ -13,96 +13,103 @@
                                 <th>Ay</th>
                                 <th>Gün</th>
                                 <th>Saat</th>
-                                <th>1</th>
-                                <th>2</th>
-                                <th>3</th>
-                                <th>4</th>
-                                <th>5</th>
-                                <th>6</th>
-                                <th>7</th>
-                                <th>8</th>
-                                <th>9</th>
-                                <th>10</th>
-                                <th>11</th>
-                                <th>12</th>
-                                <th>13</th>
-                                <th>14</th>
-                                <th>15</th>
-                                <th>16</th>
-                                <th>17</th>
-                                <th>18</th>
-                                <th>19</th>
-                                <th>20</th>
-                                <th>21</th>
-                                <th>22</th>
-                                <th>23</th>
-                                <th>24</th>
-                                <th>25</th>
-                                <th>26</th>
-                                <th>27</th>
-                                <th>28</th>
-                                <th>29</th>
-                                <th>30</th>
-                                <th>31</th>
+                                <th class="text-center">1</th>
+                                <th class="text-center">2</th>
+                                <th class="text-center">3</th>
+                                <th class="text-center">4</th>
+                                <th class="text-center">5</th>
+                                <th class="text-center">6</th>
+                                <th class="text-center">7</th>
+                                <th class="text-center">8</th>
+                                <th class="text-center">9</th>
+                                <th class="text-center">10</th>
+                                <th class="text-center">11</th>
+                                <th class="text-center">12</th>
+                                <th class="text-center">13</th>
+                                <th class="text-center">14</th>
+                                <th class="text-center">15</th>
+                                <th class="text-center">16</th>
+                                <th class="text-center">17</th>
+                                <th class="text-center">18</th>
+                                <th class="text-center">19</th>
+                                <th class="text-center">20</th>
+                                <th class="text-center">21</th>
+                                <th class="text-center">22</th>
+                                <th class="text-center">23</th>
+                                <th class="text-center">24</th>
+                                <th class="text-center">25</th>
+                                <th class="text-center">26</th>
+                                <th class="text-center">27</th>
+                                <th class="text-center">28</th>
+                                <th class="text-center">29</th>
+                                <th class="text-center">30</th>
+                                <th class="text-center">31</th>
                             </tr>
 
                             @foreach (var item in Model)
                             {
-                        <tr>
-                            <td>
-                                @item.Month
-                            </td>
+                                <tr>
+                                    <td>
+                                        @item.Month
+                                    </td>
 
-                            <td>
-                                @item.TotalDay
-                            </td>
-                            <td style="border-right: 0.9px solid black">
-                                @item.TotalHour
-                            </td>
-                            @foreach (var day in item.DayList)
-                            {
+                                    <td>
+                                        @item.TotalDay
+                                    </td>
+                                    <td style="border-right: 0.9px solid black">
+                                        @item.TotalHour
+                                    </td>
+                                    @foreach (var day in item.DayList)
+                                    {
 
-                                @if (day.IsActive)
-                                {
-                                    <td style="background-color:@day.Type" class="c-hover">
-
-                                        @if (day.Id == 0)
+                                        @if (day.IsActive)
                                         {
+                                            <td style="background-color:@day.Type" class="c-hover">
 
-                                            <button onclick="showInPopup('@Url.Action("Add","WorkCalendar",new {number=day.Number, month=item.Month, day=day.Day, workGraphicId=ViewBag.id, nonWorkingYearId = ViewBag.year_id},Context.Request.Scheme)','Gün əlavə et')"
-                                                    class="btn btn-default waves-effect md-trigger c-btn-focus">
-
-                                                @if (day.Number != 0)
+                                                @if (day.Id == 0)
                                                 {
-                                                    @day.Number
+
+                                                    <button onclick="showInPopup('@Url.Action("Add","WorkCalendar",new {number=day.Number, month=item.Month, day=day.Day, workGraphicId=ViewBag.id, nonWorkingYearId = ViewBag.year_id},Context.Request.Scheme)','Gün əlavə et')"
+                                            class="btn btn-default waves-effect md-trigger c-btn-focus">
+
+                                                        @if (day.Number != 0)
+                                                        {
+                                                            @day.Number
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>&emsp;</span>
+                                                        }
+                                                    </button>
+
                                                 }
                                                 else
                                                 {
-                                                    <span>&emsp;</span>
-                                                }
-                                            </button>
 
+                                                    <button onclick="showInPopup('@Url.Action("Update","WorkCalendar",new {id=day.Id, number=day.Number, month=item.Month,  day=day.Day, workGraphicId=ViewBag.id, nonWorkingYearId = ViewBag.year_id },Context.Request.Scheme)','Gün əlavə et')"
+                                            class="w-100 text-left btn  btn-default waves-effect md-trigger">
+                                                        @if (day.Number != 0)
+                                                        {
+                                                            @day.Number
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>&emsp;</span>
+                                                        }
+                                                    </button>
+
+                                                }
+                                            </td>
                                         }
                                         else
                                         {
-
-                                            <button onclick="showInPopup('@Url.Action("Update","WorkCalendar",new {id=day.Id, number=day.Number, month=item.Month,  day=day.Day, workGraphicId=ViewBag.id, nonWorkingYearId = ViewBag.year_id },Context.Request.Scheme)','Gün əlavə et')"
-                                                    class="w-100 text-left btn  btn-default waves-effect md-trigger">
-                                                @day.Number
-                                            </button>
-
+                                            <td style="background-color: gray"></td>
                                         }
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td style="background-color: gray"></td>
-                                }
-                            }
+                                    }
 
-                        </tr>
+                                </tr>
                             }
-                            </table>
+                        </table>
                     </div>
                 </div>
             </div>        <!-- Job description card end -->

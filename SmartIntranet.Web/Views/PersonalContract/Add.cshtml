@@ -88,7 +88,7 @@
                 <div id="salary_div" class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Maaş: </label>
-                        <input class="form-control" asp-for="Salary" autocomplete="off">
+                        <input type="text" asp-for="Salary" placeholder="0,00" class="form-control autonumber" data-a-sep="" data-a-dec=",">
                     </div>
                 </div>
                 <div class="col-sm-6" id="place_div">
@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6" id="graphic_div">
-                    <label class="floatLabel">  İstehsalat təqvimi: </label>
+                    <label class="floatLabel">  İş qrafiki: </label>
                     <select asp-for="WorkGraphicId" class="form-control">
                         <option value="" disabled selected hidden>Seçim edin</option>
                         @foreach (var item in ViewBag.workGraphics)
@@ -224,7 +224,11 @@
 </div>
 
 @await Html.PartialAsync("_ValidationScriptsPartial")
-
+<!-- Masking js -->
+<script src="~/files/assets/pages/form-masking/inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/jquery.inputmask.js"></script>
+<script src="~/files/assets/pages/form-masking/autoNumeric.js"></script>
+<script src="~/files/assets/pages/form-masking/form-mask.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -280,7 +284,7 @@
                 e.preventDefault();
             }
             else if (type == 'WORK_GRAPHIC' && !workGraphicId) {
-                toastr.error(" İstehsalat təqvimi boş ola bilməz !", "Xəta!");
+                toastr.error(" İş qrafiki boş ola bilməz !", "Xəta!");
                 e.preventDefault();
             }
             else if (type == 'WORK_GRAPHIC' && !clauseId) {

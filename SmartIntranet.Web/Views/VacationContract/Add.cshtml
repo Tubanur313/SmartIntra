@@ -205,8 +205,7 @@
                         startYear = year;
                     }
                     if (startMonth != startWorkMonth || startDay != startWorkDay) {
-                        console.log(startMonth + " - " + startWorkMonth);
-                        console.log(startDay + " - " + startWorkDay);
+
                         toastr.error(" Ay və gün işə başlama tarixindəki ilə eyni olmalıdı !", "Xəta!");
                          valid = false;
                          return valid;
@@ -325,8 +324,6 @@
             var to_date = $("#ToDate").val();
             to_date = new Date(to_date.split('.')[2], to_date.split('.')[1]-1, to_date.split('.')[0]);
             if (date != null && date != "" && to_date != null && to_date != "") {
-                console.log(to_date);
-                console.log(date);
                 var diff = to_date.getTime() - date.getTime();
                 var days = diff / 1000 / 60 / 60 / 24;
                 days += 1;

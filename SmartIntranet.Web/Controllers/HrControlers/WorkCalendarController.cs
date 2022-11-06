@@ -90,6 +90,14 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     var el = list.FirstOrDefault(x => x.Month == item.Month && x.Day == i);
                     if (el != null)
                     {
+                        if (el.Number == 0)
+                        {
+                            color = CalendarConstant.DayColor[2];
+                        }
+                        else
+                        {
+                            color = CalendarConstant.DayColor[0];
+                        }
                         item.DayList.Add(new DayType() { Id = el.Id, Number = el.Number, Day = i , Type = color, IsActive = isActive });
                         item.TotalHour += el.Number;
                         item.TotalDay++;
