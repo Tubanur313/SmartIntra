@@ -418,7 +418,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                     if (el.CommandDate <= end_interval)
                                     {
                                         double before_day_count = Math.Round((double)((el.CommandDate - fromDateTmp).TotalDays) * (int)el.LastMainVacationDay) / 365;
-                                        new_count += (int)before_day_count;
+                                        new_count += (int)Math.Round(before_day_count);
                                         fromDateTmp = el.CommandDate;
                                         main_day = (int)el.VacationDay;
                                     }
@@ -426,13 +426,13 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                                 }
 
                                 double after_day_count = Math.Round((double)((end_interval - fromDateTmp).TotalDays) * main_day) / 365;
-                                new_count += (int)after_day_count;
+                                new_count += (int)Math.Round(after_day_count);
                                 new_count += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                             }
                             else
                             {
                                 double after_day_count = Math.Round((double)((end_interval - start_interval).TotalDays) * usr.VacationMainDay) / 365;
-                                new_count += (int)after_day_count;
+                                new_count += (int)Math.Round(after_day_count);
                                 new_count += usr.VacationExtraNature + usr.VacationExtraExperience + usr.VacationExtraChild;
                             }
                             result_remain_model.VacationCount = new_count;

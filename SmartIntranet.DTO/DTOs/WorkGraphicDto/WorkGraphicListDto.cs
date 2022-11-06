@@ -8,12 +8,12 @@ namespace SmartIntranet.DTO.DTOs.WorkGraphicDto
         public int Id { get; set; }
         public string Name { get; set; }
         public string Key { get; set; }
-        public int Monday { get; set; }
-        public int Tuesday { get; set; }
-        public int Wednesday { get; set; }
-        public int Thursday { get; set; }
-        public int Friday { get; set; }
-        public int Saturday { get; set; }
+        public decimal Monday { get; set; }
+        public decimal Tuesday { get; set; }
+        public decimal Wednesday { get; set; }
+        public decimal Thursday { get; set; }
+        public decimal Friday { get; set; }
+        public decimal Saturday { get; set; }
         public int Sunday { get; set; }
         public DateTime WorkStart { get; set; }
         public DateTime WorkEnd { get; set; }

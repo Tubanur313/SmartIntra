@@ -251,7 +251,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 }
                 for (var i = 1; i <= 31; i++)
                 {
-                    var defaultCount = 0;
+                    double defaultCount = 0;
                     var isActive = true;
                     var isHoliday = false;
                     var di = new DayItem();
@@ -644,7 +644,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
 
                     for (int i = 1; i <= 31; i++)
                     {
-                        var default_count = 0;
+                        double default_count = 0;
                         bool isActive = true;
                         bool isHoliday = false;
                         DayItem di = new DayItem();
@@ -807,7 +807,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                     day_cell_34.SetCellValue(item.TotalDay);
                     var day_cell_35 = row.CreateCell(35, CellType.String);
                     day_cell_35.CellStyle = style;
-                    day_cell_35.SetCellValue(item.TotalHour);
+                    day_cell_35.SetCellValue((double)item.TotalHour);
                     var day_cell_36 = row.CreateCell(36, CellType.String);
                     day_cell_36.CellStyle = style;
                     day_cell_36.SetCellValue(item.VacDay);

@@ -3,7 +3,7 @@
     public class DayItem
     {
         public string Type { get; set; }
-        public int Number { get; set; }
+        public double Number { get; set; }
         public int Day { get; set; }
     }
 }

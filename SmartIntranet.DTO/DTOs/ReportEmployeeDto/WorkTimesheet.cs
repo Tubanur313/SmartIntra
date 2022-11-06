@@ -15,7 +15,7 @@ namespace SmartIntranet.DTO.DTOs.ReportEmployeeDto
         public DateTime ReportUpdateDate { get; set; }
         public int TotalDay { get; set; }
         public int WorkedTotalDay { get; set; }
-        public int TotalHour { get; set; }
+        public double TotalHour { get; set; }
         public int VacDay { get; set; }
         public int ExtraHours { get; set; }
         public int Sickdays { get; set; }

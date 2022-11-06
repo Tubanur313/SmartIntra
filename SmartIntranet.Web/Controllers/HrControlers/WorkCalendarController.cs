@@ -50,7 +50,7 @@ namespace SmartIntranet.Web.Controllers.HrControlers
                 item.Month = CalendarConstant.Month[m];
                 for(int i=1; i<=31; i++)
                 {
-                    var default_count = 0;
+                    double default_count = 0;
                     var color = CalendarConstant.DayColor[0];
                     bool isActive = true;
                     bool isHoliday = false;
