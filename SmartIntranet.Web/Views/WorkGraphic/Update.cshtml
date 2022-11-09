@@ -72,7 +72,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Bazar artəsi iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Monday" autocomplete="off">
+                        <input type="text" class="form-control remove-number" asp-for="Monday" autocomplete="off">
                         <span asp-validation-for="Monday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -80,7 +80,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Çərşənbə axşamı iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Tuesday">
+                        <input type="text" class="form-control remove-number" asp-for="Tuesday">
                         <span asp-validation-for="Tuesday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -93,7 +93,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Çərşənbə iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Wednesday" autocomplete="off">
+                        <input type="text" class="form-control remove-number" asp-for="Wednesday" autocomplete="off">
                         <span asp-validation-for="Wednesday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -101,7 +101,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Cümə axşamı iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Thursday">
+                        <input type="text" class="form-control remove-number" asp-for="Thursday">
                         <span asp-validation-for="Thursday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -115,7 +115,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Cümə iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Friday" autocomplete="off">
+                        <input type="text" class="form-control remove-number" asp-for="Friday" autocomplete="off">
                         <span asp-validation-for="Friday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -123,7 +123,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Şənbə iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Saturday">
+                        <input type="text" class="form-control remove-number" asp-for="Saturday">
                         <span asp-validation-for="Saturday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -136,7 +136,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="floatLabel">  Bazar iş saatı: </label>
-                        <input type="number" class="form-control" asp-for="Sunday" autocomplete="off">
+                        <input type="text" class="form-control remove-number" asp-for="Sunday" autocomplete="off">
                         <span asp-validation-for="Sunday" class="text-danger"></span>
                         <span class="messages"></span>
                     </div>
@@ -159,11 +159,9 @@
 <script>
     $(document).ready(function () {
 
-       //$('.input-daterange input').each(function () {
-       //     $(this).datetimepicker({
-       //         format: "HH:mm"
-       //     });
-       // });
+        $('.remove-number').each(function () {
+            $(this).rules("remove", "number");
+        })
 
         $("form").submit( function(e) {
             let names = JSON.parse($(".names").val());
